@@ -1,16 +1,17 @@
-import type { CustomerUserError, UserError } from '@/shopify/storefront';
+import type { CustomerUserError, UserError } from '@/modules/shopify/storefront';
 import type { FormActionResult } from '@/types/formActions';
 
-import type { ZodError } from 'zod';
+import { flattenError } from 'zod';
 
 /**
  * Converts Zod validation errors to standardized form action result format
  */
 export function zodErrorsToFormActionResult<T extends Record<string, string | string[]>>(
-  zodError: ZodError,
+  zodError: Parameters<typeof flattenError>[0],
 ): FormActionResult<T> {
+  const { fieldErrors } = flattenError(zodError);
   return {
-    fieldErrors: zodError.formErrors.fieldErrors as T,
+    fieldErrors: fieldErrors as T,
   };
 }
 

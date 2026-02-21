@@ -4,15 +4,15 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { updateUserAction } from '@/actions/usersActions';
-import FormFieldError from '@/components/FormFieldError';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import { userFeedback } from '@/data/userFeedback';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/shopify/storefront';
+import type { CustomerUserError } from '@/modules/shopify/storefront';
+import FormFieldError from '@/ui/components/FormFieldError';
+import { Button } from '@/ui/components/ui/button';
+import { Checkbox } from '@/ui/components/ui/checkbox';
+import { Input } from '@/ui/components/ui/input';
+import { Label } from '@/ui/components/ui/label';
 
 const SubmitButton = () => {
   const status = useFormStatus();

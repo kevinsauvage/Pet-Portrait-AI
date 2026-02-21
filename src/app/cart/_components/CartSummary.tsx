@@ -1,10 +1,10 @@
 'use client';
 
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import CheckoutButton from '@/components/CheckoutButton';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import CheckoutButton from '@/ui/components/CheckoutButton';
+import { Card, CardContent, CardFooter } from '@/ui/components/ui/card';
+import { Separator } from '@/ui/components/ui/separator';
 import { formatPrice } from '@/utils/format';
 
 const CartSummary = () => {

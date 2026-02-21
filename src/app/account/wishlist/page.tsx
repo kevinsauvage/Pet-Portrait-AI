@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import NoFavoriteIllustration from '@/assets/NoFavoriteIllustration.png';
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import EmptyState from '@/components/EmptyState';
-import ProductsList from '@/components/ProductsList';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import seo from '@/data/seo';
-import { WishlistService } from '@/services/wishlist.service';
+import { WishlistService } from '@/modules/wishlist';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import EmptyState from '@/ui/components/EmptyState';
+import ProductsList from '@/ui/components/ProductsList';
+import { Button } from '@/ui/components/ui/button';
+import { Card, CardContent } from '@/ui/components/ui/card';
 
 import BackButton from '../_components/BackButton';
 

@@ -1,5 +1,5 @@
-import ListDisplay from '@/components/ListDisplay';
-import { Skeleton } from '@/components/ui/skeleton';
+import ListDisplay from '@/ui/components/ListDisplay';
+import { Skeleton } from '@/ui/components/ui/skeleton';
 
 const Loading = () => {
   return (

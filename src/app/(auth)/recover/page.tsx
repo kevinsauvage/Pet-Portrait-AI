@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import AuthShell from '@/app/(auth)/_components/AuthShell';
-import config from '@/config';
+import config from '@/core/config';
 import seo from '@/data/seo';
 
 import RecoverForm from './_components/RecoverForm';

@@ -1,4 +1,4 @@
-import { CartService } from '@/services/cart.service';
+import { CartService } from '@/modules/cart';
 import {
   createErrorResponse,
   createSuccessResponse,

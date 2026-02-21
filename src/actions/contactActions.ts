@@ -4,6 +4,7 @@ import type { FormActionResult } from '@/types/formActions';
 import { zodErrorsToFormActionResult } from '@/utils/form-actions';
 
 import nodemailer from 'nodemailer';
+import { flattenError } from 'zod';
 import { z } from 'zod';
 
 const { EMAIL_ADDRESS, EMAIL_PASSWORD } = process.env;
@@ -41,8 +42,8 @@ export const contactAction = async (
 ): Promise<FormActionResult<ContactFieldErrors> & ContactFieldErrors> => {
   const formData = contactSchema.safeParse(input);
   if (!formData.success) {
-    const fieldErrors = formData.error.formErrors.fieldErrors as ContactFieldErrors;
-    return { ...zodErrorsToFormActionResult(formData.error), ...fieldErrors };
+    const { fieldErrors } = flattenError(formData.error);
+    return { ...zodErrorsToFormActionResult(formData.error), ...(fieldErrors as ContactFieldErrors) };
   }
 
   const { name, email, message } = formData.data;

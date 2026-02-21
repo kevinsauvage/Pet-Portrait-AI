@@ -1,28 +1,25 @@
-
 const siteMetadata = {
   about: {
     short:
       process.env.NEXT_PUBLIC_SITE_ABOUT_SHORT ||
-      'CRISP is a fashion brand made for unisex use with an irreverent style. It started with jewelry, but has scaled up to something bigger and the reason for that is that we are fashion lovers.Our goal is to give you the best quality at an affordable price.',
+      'PetPortrait AI transforms your beloved pets into stunning, museum-quality artwork using cutting-edge AI. Upload a photo, choose a style, and receive a one-of-a-kind portrait — printed on premium canvas, poster, or as a digital download.',
   },
   companyName:
-    process.env.NEXT_PUBLIC_SITE_NAME ||
-    process.env.NEXT_PUBLIC_BASE_URL?.replace(/^https?:\/\//, '').split('/')[0] ||
-    'Example',
-  email: process.env.NEXT_PUBLIC_SITE_EMAIL || 'yourName@example.com',
-  facebook: process.env.NEXT_PUBLIC_SITE_FACEBOOK || 'https://www.facebook.com/example.page',
-  instagram: process.env.NEXT_PUBLIC_SITE_INSTAGRAM || 'https://www.instagram.com/example.page',
-  linkedin: process.env.NEXT_PUBLIC_SITE_LINKEDIN || 'https://www.linkedin.com/in/example.page',
-  phoneNumber: process.env.NEXT_PUBLIC_SITE_PHONE || '(xxx) xxx-xxxx',
+    process.env.NEXT_PUBLIC_SITE_NAME || 'PetPortrait AI',
+  email: process.env.NEXT_PUBLIC_SITE_EMAIL || 'hello@petportraitai.com',
+  facebook: process.env.NEXT_PUBLIC_SITE_FACEBOOK || 'https://www.facebook.com/petportraitai',
+  instagram: process.env.NEXT_PUBLIC_SITE_INSTAGRAM || 'https://www.instagram.com/petportraitai',
+  linkedin: process.env.NEXT_PUBLIC_SITE_LINKEDIN || 'https://www.linkedin.com/company/petportraitai',
+  phoneNumber: process.env.NEXT_PUBLIC_SITE_PHONE || '',
   siteLogo:
     process.env.NEXT_PUBLIC_SITE_LOGO ||
-    `${process.env.NEXT_PUBLIC_BASE_URL || 'https://example.com'}/images/logo.png`,
+    `${process.env.NEXT_PUBLIC_BASE_URL || 'https://petportraitai.com'}/images/logo.png`,
   siteLogoSquare:
     process.env.NEXT_PUBLIC_SITE_LOGO_SQUARE ||
-    `${process.env.NEXT_PUBLIC_BASE_URL || 'https://example.com'}/images/logox200.png`,
-  siteUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://example.com',
-  twitter: process.env.NEXT_PUBLIC_SITE_TWITTER || 'https://twitter.com/example.page',
-  twitterHandle: process.env.NEXT_PUBLIC_SITE_TWITTER_HANDLE || '@example',
+    `${process.env.NEXT_PUBLIC_BASE_URL || 'https://petportraitai.com'}/images/logox200.png`,
+  siteUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://petportraitai.com',
+  twitter: process.env.NEXT_PUBLIC_SITE_TWITTER || 'https://twitter.com/petportraitai',
+  twitterHandle: process.env.NEXT_PUBLIC_SITE_TWITTER_HANDLE || '@petportraitai',
 };
 
 export default siteMetadata;

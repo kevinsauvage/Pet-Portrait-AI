@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import EmptyState from '@/components/EmptyState';
-import ListingHeader from '@/components/ListingHeader';
-import PageInfoPagination from '@/components/PageInfoPagination';
-import ProductEdgeList from '@/components/ProductsEdgeList';
-import { Button } from '@/components/ui/button';
-import { storefrontSdk } from '@/shopify';
-import { adjustPaginationVariables, parseFiltersQuery } from '@/shopify/helpers';
-import { ProductCollectionSortKeys } from '@/shopify/storefront';
+import { storefrontSdk } from '@/modules/shopify';
+import { adjustPaginationVariables, parseFiltersQuery } from '@/modules/shopify/helpers';
+import { ProductCollectionSortKeys } from '@/modules/shopify/storefront';
+import EmptyState from '@/ui/components/EmptyState';
+import ListingHeader from '@/ui/components/ListingHeader';
+import PageInfoPagination from '@/ui/components/PageInfoPagination';
+import ProductEdgeList from '@/ui/components/ProductsEdgeList';
+import { Button } from '@/ui/components/ui/button';
 
 import Filters from '../_components/Filters';
 import Sort from '../_components/Sort';

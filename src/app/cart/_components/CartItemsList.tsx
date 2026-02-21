@@ -1,9 +1,9 @@
 'use client';
 
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import { Card, CardContent, CardFooter } from '@/ui/components/ui/card';
+import { Separator } from '@/ui/components/ui/separator';
 
 import LineItem from './LineItem';
 

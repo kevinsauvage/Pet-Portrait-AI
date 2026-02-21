@@ -1,9 +1,9 @@
 import { type NextRequest } from 'next/server';
 
 import { delCookieAction } from '@/actions/cookiesActions';
-import config from '@/config';
+import config from '@/core/config';
 import { clearShopifyToken, getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/shopify';
+import { storefrontSdk } from '@/modules/shopify';
 import { createSuccessResponse, handleApiError, safeLogError } from '@/utils/api-responses';
 
 export const dynamic = 'force-dynamic';

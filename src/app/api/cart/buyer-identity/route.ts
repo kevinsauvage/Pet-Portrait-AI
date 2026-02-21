@@ -1,9 +1,9 @@
 import { type NextRequest } from 'next/server';
 
-import { CartService } from '@/services/cart.service';
-import { storefrontSdk } from '@/shopify';
-import { adjustPaginationVariables } from '@/shopify/helpers';
-import type { CartBuyerIdentityInput, GetCustomerQuery } from '@/shopify/storefront';
+import { CartService } from '@/modules/cart';
+import { storefrontSdk } from '@/modules/shopify';
+import { adjustPaginationVariables } from '@/modules/shopify/helpers';
+import type { CartBuyerIdentityInput, GetCustomerQuery } from '@/modules/shopify/storefront';
 import {
   createErrorResponse,
   createSuccessResponse,

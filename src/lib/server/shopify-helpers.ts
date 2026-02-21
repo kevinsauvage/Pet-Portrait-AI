@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 
-import config from '@/config';
-import { storefrontSdk } from '@/shopify';
-import type { CustomerAccessToken } from '@/shopify/storefront';
+import config from '@/core/config';
+import { storefrontSdk } from '@/modules/shopify';
+import type { CustomerAccessToken } from '@/modules/shopify/storefront';
 import { safeLogError } from '@/utils/api-responses';
 import { getSecureCookieOptions } from '@/utils/cookie-security';
 

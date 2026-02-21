@@ -1,4 +1,4 @@
-import type { ImageFieldsFragment } from '@/shopify/storefront';
+import type { ImageFieldsFragment } from '@/modules/shopify/storefront';
 
 /**
  * Converts Shopify image URL to optimized format with WebP/AVIF support

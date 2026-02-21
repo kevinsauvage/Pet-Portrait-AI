@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import type { CartUserError, CustomerUserError, UserError } from '@/shopify/storefront';
+import type { CartUserError, CustomerUserError, UserError } from '@/modules/shopify/storefront';
+
+import * as Sentry from '@sentry/nextjs';
 
 export type ApiErrorResponse = {
   error: string;
@@ -28,6 +30,8 @@ export const HTTP_STATUS = {
   UNPROCESSABLE_ENTITY: 422,
   TOO_MANY_REQUESTS: 429,
   INTERNAL_SERVER_ERROR: 500,
+  BAD_GATEWAY: 502,
+  SERVICE_UNAVAILABLE: 503,
 } as const;
 
 const NO_CACHE_HEADERS = {
@@ -54,8 +58,8 @@ export function safeLogError(context: string, error: unknown): void {
 
   console.error(`[${context}]`, errorMessage);
 
-  if (process.env.NODE_ENV === 'development' && error instanceof Error && error.stack) {
-    console.error(`[${context}] Stack:`, error.stack);
+  if (error instanceof Error && process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.captureException(error, { tags: { context } });
   }
 }
 
@@ -121,7 +125,10 @@ const ERROR_STATUS_MAP: Array<[RegExp, number]> = [
   [/\b(validation|invalid)\b/i, HTTP_STATUS.BAD_REQUEST],
 ];
 
-export function getErrorStatus(error: unknown, defaultStatus = HTTP_STATUS.INTERNAL_SERVER_ERROR): number {
+export function getErrorStatus(
+  error: unknown,
+  defaultStatus = HTTP_STATUS.INTERNAL_SERVER_ERROR,
+): number {
   if (!(error instanceof Error)) return defaultStatus;
 
   const message = error.message.toLowerCase();
@@ -140,4 +147,3 @@ export function handleApiError(context: string, error: unknown, defaultMessage: 
     status,
   });
 }
-

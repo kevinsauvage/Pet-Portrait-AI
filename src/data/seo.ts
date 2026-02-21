@@ -2,95 +2,107 @@ const seo = {
   account: {
     addresses: {
       description:
-        'The customer addresses page displays a list of saved addresses for quick and easy access. Add, edit, or delete addresses as needed.',
-      title: 'My addresses',
+        'Manage your saved shipping addresses for quick and easy checkout on your next pet portrait order.',
+      title: 'My Addresses',
     },
     description:
-      'On the user account page, manage your personal information, update your password and view your account activity all in one place.',
-
+      'Manage your PetPortrait AI account — view orders, track portrait deliveries, update your details, and access your wishlist.',
     logout: {
-      title: 'Sign out',
+      title: 'Sign Out',
     },
     orders: {
       description:
-        'The orders page is where you can view your purchase history, track current orders, and manage returns or cancellations. Stay up-to-date on your orders',
-      title: 'My orders',
+        'Track your pet portrait orders, view order history, and check delivery status. Every portrait is crafted with care.',
+      title: 'My Orders',
     },
-
-    title: 'My account',
-
+    title: 'My Account',
     update: {
       description:
-        'Update your user information quickly and easily with our user info update form page. Change your name, email, phone number, and more in just a few clicks.',
-      title: 'My details',
+        'Update your account details — name, email, and preferences for your PetPortrait AI experience.',
+      title: 'My Details',
     },
-
     wishlist: {
       description:
-        'Create a wishlist of your favorite items for future purchases. Our wishlist page makes it easy to save and track items you love. Start building your wishlist now.',
+        'Save your favorite portrait styles and products to your wishlist for future orders.',
       title: 'Wishlist',
     },
   },
   cart: {
     description:
-      'Browse and manage items in your cart with ease. Our cart page makes it simple to view and adjust your order before checkout. Start shopping now.',
+      'Review your pet portrait selections before checkout. Adjust quantities, apply discounts, and complete your order.',
     title: 'Cart',
   },
+  create: {
+    description:
+      'Upload a photo of your pet and let our AI create a stunning, one-of-a-kind portrait. Choose from dozens of artistic styles.',
+    title: 'Create Your Pet Portrait',
+  },
+  gallery: {
+    description:
+      'Browse our gallery of AI-generated pet portraits. See the incredible transformations from photo to artwork.',
+    title: 'Portrait Gallery',
+  },
   home: {
-    description: 'Description',
-    title: 'Home',
+    description:
+      'Turn your pet photos into stunning AI-generated artwork. Choose from canvas, poster, or digital prints. Free shipping on all orders.',
+    title: 'PetPortrait AI — Custom AI Pet Portraits',
   },
   login: {
     description:
-      'Login to your account with ease. Our login page is secure and user-friendly, providing quick access to your personal information and order history. Start shopping now.',
-    title: 'Login',
+      'Sign in to your PetPortrait AI account to track orders, manage portraits, and access exclusive features.',
+    title: 'Sign In',
   },
   pages: {
     contact: {
       description:
-        'Get in touch with us through our contact page. Our team is here to help answer your questions, provide assistance, or listen to your feedback. Contact us now.',
-      title: 'Contact',
+        'Have a question about your pet portrait? Our team is here to help. Reach out and we\'ll get back to you within 24 hours.',
+      title: 'Contact Us',
     },
     privacy: {
       description:
-        "Protecting your privacy is our top priority. Our privacy page outlines how we collect and use your personal information to ensure it's safe and secure. Read more now.",
-      title: 'Privacy',
+        'Learn how PetPortrait AI protects your privacy and handles your personal data and pet photos.',
+      title: 'Privacy Policy',
     },
     refund: {
       description:
-        'We want you to be completely satisfied with your purchase. Our refund policy page outlines our policies and procedures for returns, exchanges, and refunds. Read more now.',
-      title: 'Refund',
+        'Not satisfied with your portrait? Read our refund and satisfaction guarantee policy.',
+      title: 'Refund Policy',
     },
     shipping: {
       description:
-        'Our shipping policy page provides information about our shipping methods, delivery times, and fees. Find out how we ship our products to ensure you receive them on time. Read more now.',
-      title: 'Shipping',
+        'Free shipping on all canvas and poster orders. Digital downloads delivered instantly. Learn about our shipping methods and timelines.',
+      title: 'Shipping Policy',
     },
     terms: {
       description:
-        'Our terms and conditions page outlines the legal agreement between you and our company when using our website. It includes important information about the use of our website, payment, shipping, and more. Read more now.',
-      title: 'Terms and Conditions',
+        'Terms and conditions for using PetPortrait AI, including portrait licensing, delivery, and refund policies.',
+      title: 'Terms & Conditions',
     },
   },
   recover: {
     description:
-      'Forgot your password? No problem. Our password recovery page makes it easy to reset your password and regain access to your account. Enter your email to get started.',
-    title: 'Password recovery',
+      'Forgot your password? Reset it quickly and get back to creating beautiful pet portraits.',
+    title: 'Password Recovery',
   },
   register: {
     description:
-      'Create an account to access exclusive deals and faster checkout. Our registration page is simple and secure, so sign up today and start shopping.',
-    title: 'Registration',
+      'Create a PetPortrait AI account to save your portraits, track orders, and unlock exclusive member pricing.',
+    title: 'Create Account',
   },
   reset: {
     description:
-      'Reset your password quickly and securely. Enter your new password and follow the instructions to complete the reset process.',
+      'Set a new password for your PetPortrait AI account.',
     title: 'Reset Password',
   },
   search: {
     description:
-      "Looking for something specific? Our search page makes it easy to find what you're looking for. Enter your search terms and browse through relevant results quickly. Start searching now.",
+      'Search our collection of portrait styles, products, and inspiration for your next pet portrait.',
     title: 'Search',
+  },
+  styles: {
+    description:
+      'Explore our curated collection of AI portrait styles — from renaissance oil paintings to modern pop art. Find the perfect look for your pet.',
+    title: 'Portrait Styles',
   },
 };
 

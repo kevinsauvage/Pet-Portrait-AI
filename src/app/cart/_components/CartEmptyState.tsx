@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import EmptyState from '@/components/EmptyState';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import EmptyState from '@/ui/components/EmptyState';
+import { Button } from '@/ui/components/ui/button';
+import { Card, CardContent } from '@/ui/components/ui/card';
 
 const CartEmptyState = () => {
   return (

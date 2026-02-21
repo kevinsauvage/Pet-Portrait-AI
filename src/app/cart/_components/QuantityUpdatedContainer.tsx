@@ -1,7 +1,7 @@
 'use client';
 
-import QuantityUpdater from '@/components/QuantityUpdater';
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import QuantityUpdater from '@/ui/components/QuantityUpdater';
 
 const QuantityUpdatedContainer = ({
   originalQuantity,

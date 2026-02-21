@@ -1,7 +1,7 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import { Badge } from '@/ui/components/ui/badge';
 
 import { ShoppingCart } from 'lucide-react';
 

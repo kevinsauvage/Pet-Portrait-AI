@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import config from '@/config';
-import type { GetCustomerOrdersQuery } from '@/shopify/storefront';
+import config from '@/core/config';
+import type { GetCustomerOrdersQuery } from '@/modules/shopify/storefront';
+import { Button } from '@/ui/components/ui/button';
+import { Card, CardContent } from '@/ui/components/ui/card';
 import { formatPrice } from '@/utils/format';
 
 import { ArrowRight, Package } from 'lucide-react';

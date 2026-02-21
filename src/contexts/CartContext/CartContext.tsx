@@ -3,17 +3,23 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { createCartAction } from '@/actions/cartActions';
-import cartMock from '@/mocks/cart';
-import type { CartFieldsFragment } from '@/shopify/storefront';
+import cartMock from '@/modules/cart/mocks/cart';
+import type { CartFieldsFragment } from '@/modules/shopify/storefront';
 import { api } from '@/utils/api-client';
 
 import { toast } from 'sonner';
 
 type CartResponse = { data: CartFieldsFragment; message?: string };
 
+export type CartLineAttribute = { key: string; value: string };
+
 interface CartContextType {
   cart: CartFieldsFragment;
-  handleAddToCart: (variantId: string, quantity?: number) => Promise<void>;
+  handleAddToCart: (
+    variantId: string,
+    quantity?: number,
+    attributes?: CartLineAttribute[],
+  ) => Promise<void>;
   handleQuantityChange: (id: string, quantity: number) => Promise<void>;
   removeFromCart: (lineItemId: string) => Promise<void>;
   updateDiscountCodes: (discountCodes: string[]) => Promise<void>;
@@ -118,7 +124,7 @@ export const CartProvider = ({
   );
 
   const handleAddToCart = useCallback(
-    async (variantId: string, quantity = 1) => {
+    async (variantId: string, quantity = 1, attributes?: CartLineAttribute[]) => {
       if (!variantId) {
         console.error('Missing variant ID');
         return;
@@ -126,7 +132,13 @@ export const CartProvider = ({
 
       try {
         const response = await api.patch<CartResponse>(buildCartLinesUrl(), {
-          addLines: [{ merchandiseId: variantId, quantity }],
+          addLines: [
+            {
+              merchandiseId: variantId,
+              quantity,
+              ...(attributes?.length ? { attributes } : {}),
+            },
+          ],
           operation: 'add',
         });
         handleResponse(response);

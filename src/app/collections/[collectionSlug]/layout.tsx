@@ -1,7 +1,7 @@
-import Breadcrumbs from '@/components/Breadcrumbs';
-import PageBanner from '@/components/PageBanner';
-import { storefrontSdk } from '@/shopify';
-import type { GetMenuByHandleQuery } from '@/shopify/storefront';
+import { storefrontSdk } from '@/modules/shopify';
+import type { GetMenuByHandleQuery } from '@/modules/shopify/storefront';
+import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import PageBanner from '@/ui/components/PageBanner';
 
 import CollectionNav from '../_components/CollectionNav';
 

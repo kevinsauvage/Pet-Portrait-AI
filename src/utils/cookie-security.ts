@@ -1,4 +1,4 @@
-import config from '@/config';
+import config from '@/core/config';
 
 export function getCookieDomain(): string | undefined {
   if (process.env.NODE_ENV === 'development') {

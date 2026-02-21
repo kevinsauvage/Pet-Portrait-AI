@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { updateAddressAction } from '@/actions/addressesActions';
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import config from '@/config';
+import config from '@/core/config';
 import seo from '@/data/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/shopify';
+import { storefrontSdk } from '@/modules/shopify';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import { Button } from '@/ui/components/ui/button';
+import { Card, CardContent } from '@/ui/components/ui/card';
 
 import { ArrowLeft } from 'lucide-react';
 

@@ -4,12 +4,12 @@ import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { recoverPasswordAction } from '@/actions/authActions';
-import FormFieldError from '@/components/FormFieldError';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/shopify/storefront';
+import type { CustomerUserError } from '@/modules/shopify/storefront';
+import FormFieldError from '@/ui/components/FormFieldError';
+import { Button } from '@/ui/components/ui/button';
+import { Input } from '@/ui/components/ui/input';
+import { Label } from '@/ui/components/ui/label';
 
 import Form from '../../_components/Form';
 

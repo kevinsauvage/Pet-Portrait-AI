@@ -1,10 +1,11 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import appConfig from '@/core/config';
+import { DEFAULTS } from '@/core/config/constants';
+import { getStandardCookieOptions } from '@/utils/cookie-security';
+
 import { setDelegateTokenAction } from './actions/delegateTokenActions';
-import { DEFAULTS } from './config/constants';
-import { getStandardCookieOptions } from './utils/cookie-security';
-import globalConfig from './config';
 
 async function proxy(request: NextRequest) {
   const { nextUrl, cookies, headers, url } = request;
@@ -15,24 +16,30 @@ async function proxy(request: NextRequest) {
   const userIp = headers.get('x-forwarded-for')?.split(',')[0] || DEFAULTS.ip;
 
   const cookieOptions = getStandardCookieOptions({ httpOnly: false });
-  response.cookies.set(globalConfig.cookies.userIp, userIp, cookieOptions);
-  response.cookies.set(globalConfig.cookies.url, url, cookieOptions);
-  response.cookies.set(globalConfig.cookies.searchParams, searchParams.toString(), cookieOptions);
+  response.cookies.set(appConfig.cookies.userIp, userIp, cookieOptions);
+  response.cookies.set(appConfig.cookies.url, url, cookieOptions);
+  response.cookies.set(appConfig.cookies.searchParams, searchParams.toString(), cookieOptions);
 
-  await setDelegateTokenAction();
+  try {
+    await setDelegateTokenAction();
+  } catch (error) {
+    console.error(
+      '[Middleware] delegate token failed:',
+      error instanceof Error ? error.message : String(error),
+    );
+  }
 
-  const cookieShopify = cookies.get(globalConfig.cookies.shopifyToken);
+  const cookieShopify = cookies.get(appConfig.cookies.shopifyToken);
 
-  if (!cookieShopify && pathname.startsWith(globalConfig.routes.account)) {
-    return NextResponse.redirect(new URL(globalConfig.routes.login, url));
+  if (!cookieShopify && pathname.startsWith(appConfig.routes.account)) {
+    return NextResponse.redirect(new URL(appConfig.routes.login, url));
   }
 
   if (
     cookieShopify &&
-    (pathname.startsWith(globalConfig.routes.login) ||
-      pathname.startsWith(globalConfig.routes.register))
+    (pathname.startsWith(appConfig.routes.login) || pathname.startsWith(appConfig.routes.register))
   ) {
-    return NextResponse.redirect(new URL(globalConfig.routes.account, url));
+    return NextResponse.redirect(new URL(appConfig.routes.account, url));
   }
 
   return response;

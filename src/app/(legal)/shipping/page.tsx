@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
-import Breadcrumbs from '@/components/Breadcrumbs';
-import PageBanner from '@/components/PageBanner';
-import config from '@/config';
+import config from '@/core/config';
 import seo from '@/data/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { storefrontSdk } from '@/shopify';
+import { storefrontSdk } from '@/modules/shopify';
+import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import PageBanner from '@/ui/components/PageBanner';
 
 import MainContent from '../_components/MainContent';
 

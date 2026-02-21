@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import config from '@/config';
+import config from '@/core/config';
 
 import { toast } from 'sonner';
 

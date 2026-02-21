@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import config from '@/config';
+import config from '@/core/config';
+import { Button } from '@/ui/components/ui/button';
 
 import { ArrowLeft } from 'lucide-react';
 

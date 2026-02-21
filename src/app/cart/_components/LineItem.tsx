@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import OptimizedImage from '@/components/OptimizedImage';
-import config from '@/config';
-import { type CartFieldsFragment } from '@/shopify/storefront';
+import config from '@/core/config';
+import { type CartFieldsFragment } from '@/modules/shopify/storefront';
+import OptimizedImage from '@/ui/components/OptimizedImage';
 import { formatPrice } from '@/utils/format';
 
 import CartRemove from './CartRemove';
@@ -10,10 +10,18 @@ import QuantityUpdatedContainer from './QuantityUpdatedContainer';
 
 type CartLineNode = CartFieldsFragment['lines']['edges'][number]['node'];
 
+function getAttribute(node: CartLineNode, key: string): string | undefined {
+  const attrs = node.attributes;
+  return attrs?.find((a) => a.key === key)?.value ?? undefined;
+}
+
 const LineItem: React.FC<{
   node: CartLineNode;
 }> = ({ node }) => {
   if (!('merchandise' in node)) return null;
+
+  const artworkUrl = getAttribute(node, 'final_artwork_url');
+  const displayImage = artworkUrl ?? node.merchandise.image?.medium;
 
   const unitPrice =
     typeof node.merchandise.price.amount === 'string'
@@ -46,9 +54,9 @@ const LineItem: React.FC<{
       {/* Product Image & Info */}
       <div className="flex gap-4 flex-1 min-w-0">
         <Link href={productHandle} className="shrink-0 hover:opacity-80 transition-opacity">
-          {node.merchandise.image?.medium ? (
+          {displayImage ? (
             <OptimizedImage
-              src={String(node.merchandise.image.medium)}
+              src={String(displayImage)}
               alt={node.merchandise.product.title}
               width={120}
               height={120}

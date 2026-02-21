@@ -1,6 +1,6 @@
 'use client';
 
-import type { ProductFieldsFragment } from '@/shopify/storefront';
+import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
 import { api } from '@/utils/api-client';
 
 type WishlistResponse = {

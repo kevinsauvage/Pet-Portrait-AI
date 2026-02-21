@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import ProductsList from '@/components/ProductsList';
-import { Button } from '@/components/ui/button';
-import config from '@/config';
-import type { ProductFieldsFragment } from '@/shopify/storefront';
+import config from '@/core/config';
+import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import ProductsList from '@/ui/components/ProductsList';
+import { Button } from '@/ui/components/ui/button';
 
 import HomeSection from './HomeSection';
 

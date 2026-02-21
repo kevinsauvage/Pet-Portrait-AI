@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import EmptyState from '@/components/EmptyState';
-import PageInfoPagination from '@/components/PageInfoPagination';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import config from '@/config';
+import config from '@/core/config';
 import seo from '@/data/seo';
 import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { adjustPaginationVariables } from '@/shopify/helpers';
-import { storefrontSdk } from '@/shopify/index';
-import { LanguageCode, OrderSortKeys } from '@/shopify/storefront';
+import { storefrontSdk } from '@/modules/shopify';
+import { adjustPaginationVariables } from '@/modules/shopify/helpers';
+import { LanguageCode, OrderSortKeys } from '@/modules/shopify/storefront';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import EmptyState from '@/ui/components/EmptyState';
+import PageInfoPagination from '@/ui/components/PageInfoPagination';
+import { Button } from '@/ui/components/ui/button';
+import { Card, CardContent } from '@/ui/components/ui/card';
 
 import BackButton from '../_components/BackButton';
 import Orders from '../_components/Orders';

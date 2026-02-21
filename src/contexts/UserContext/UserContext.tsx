@@ -3,8 +3,8 @@
 import { createContext, useCallback, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import config from '@/config';
-import type { GetCustomerQuery, ProductFieldsFragment } from '@/shopify/storefront';
+import config from '@/core/config';
+import type { GetCustomerQuery, ProductFieldsFragment } from '@/modules/shopify/storefront';
 import { addToWishlist, removeFromWishlist } from '@/utils/wishlist-client';
 
 import { toast } from 'sonner';

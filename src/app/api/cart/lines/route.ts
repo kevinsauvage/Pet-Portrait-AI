@@ -1,8 +1,8 @@
 import { type NextRequest } from 'next/server';
 
-import { CartService } from '@/services/cart.service';
-import { storefrontSdk } from '@/shopify';
-import { adjustPaginationVariables } from '@/shopify/helpers';
+import { CartService } from '@/modules/cart';
+import { storefrontSdk } from '@/modules/shopify';
+import { adjustPaginationVariables } from '@/modules/shopify/helpers';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -21,13 +21,13 @@ const DEFAULT_PAGINATION = {
 };
 
 function getPaginationParams(searchParams: URLSearchParams) {
+  const int = (key: string, fallback: number) => {
+    const val = searchParams.get(key);
+    return val ? Number.parseInt(val, 10) : fallback;
+  };
   return {
-    first: searchParams.get('first')
-      ? Number.parseInt(searchParams.get('first') || '', 10)
-      : DEFAULT_PAGINATION.first,
-    last: searchParams.get('last')
-      ? Number.parseInt(searchParams.get('last') || '', 10)
-      : DEFAULT_PAGINATION.last,
+    first: int('first', DEFAULT_PAGINATION.first),
+    last: int('last', DEFAULT_PAGINATION.last),
     after: searchParams.get('after') || DEFAULT_PAGINATION.after,
     before: searchParams.get('before') || DEFAULT_PAGINATION.before,
   };
@@ -44,7 +44,11 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { lines, operation = 'update' } = body as {
       lines?: Array<{ id: string; quantity: number }>;
-      addLines?: Array<{ merchandiseId: string; quantity: number }>;
+      addLines?: Array<{
+        merchandiseId: string;
+        quantity?: number;
+        attributes?: Array<{ key: string; value: string }>;
+      }>;
       operation?: 'update' | 'add';
     };
 
@@ -62,9 +66,21 @@ export async function PATCH(request: NextRequest) {
     let userErrors;
 
     if (operation === 'add' && body.addLines) {
+      const cartLines = body.addLines.map(
+        (line: {
+          merchandiseId: string;
+          quantity?: number;
+          attributes?: Array<{ key: string; value: string }>;
+        }) => ({
+          merchandiseId: line.merchandiseId,
+          quantity: line.quantity ?? 1,
+          ...(line.attributes?.length ? { attributes: line.attributes } : {}),
+        }),
+      );
+
       const addLineResponse = await storefrontSdk('no-store').cartLinesAdd({
         cartId,
-        lines: body.addLines,
+        lines: cartLines,
         ...paginationVars,
       });
 

@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   compiler: {
@@ -38,9 +39,9 @@ const nextConfig: NextConfig = {
           "default-src 'self'",
           "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-          "img-src 'self' data: blob: https://cdn.shopify.com https://res.cloudinary.com https://www.googletagmanager.com https://www.google-analytics.com",
+          "img-src 'self' data: blob: https://cdn.shopify.com https://res.cloudinary.com https://utfs.io https://*.ufs.sh https://images.unsplash.com https://www.googletagmanager.com https://www.google-analytics.com",
           "font-src 'self' data: https://fonts.gstatic.com https://cdn.shopify.com",
-          "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.myshopify.com https://*.shopifycdn.com https://vercel.live",
+          "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.myshopify.com https://*.shopifycdn.com https://vercel.live https://uploadthing.com https://*.uploadthing.com",
           "frame-src 'self' https://www.googletagmanager.com https://vercel.live",
           "object-src 'none'",
           "base-uri 'self'",
@@ -81,10 +82,28 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.shopify.com',
         protocol: 'https',
       },
+      {
+        hostname: 'utfs.io',
+        protocol: 'https',
+      },
+      {
+        hostname: 'ufs.sh',
+        protocol: 'https',
+      },
+      {
+        hostname: 'images.unsplash.com',
+        protocol: 'https',
+      },
     ],
     unoptimized: true,
   },
   reactStrictMode: true,
 };
 
-export default nextConfig;
+export default process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? withSentryConfig(nextConfig, {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      silent: !process.env.CI,
+    })
+  : nextConfig;

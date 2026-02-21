@@ -2,11 +2,11 @@
 
 import { useRef, useState } from 'react';
 
-import FormFieldError from '@/components/FormFieldError';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import FormFieldError from '@/ui/components/FormFieldError';
+import { Button } from '@/ui/components/ui/button';
+import { Input } from '@/ui/components/ui/input';
+import { Label } from '@/ui/components/ui/label';
 
 const CouponCodeForm = () => {
   const { cart, updateDiscountCodes } = useCartContext();

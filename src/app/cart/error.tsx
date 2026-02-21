@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
-import EmptyState from '@/components/EmptyState';
-import { Button } from '@/components/ui/button';
+import EmptyState from '@/ui/components/EmptyState';
+import { Button } from '@/ui/components/ui/button';
 
 const CartError = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => {
   useEffect(() => {

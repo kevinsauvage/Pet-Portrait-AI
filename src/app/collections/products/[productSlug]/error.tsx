@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
-import EmptyState from '@/components/EmptyState';
-import { Button } from '@/components/ui/button';
-import config from '@/config';
+import config from '@/core/config';
+import EmptyState from '@/ui/components/EmptyState';
+import { Button } from '@/ui/components/ui/button';
 
 const ProductError = ({
   error,

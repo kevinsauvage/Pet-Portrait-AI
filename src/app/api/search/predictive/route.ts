@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server';
 
-import { storefrontSdk } from '@/shopify';
+import { storefrontSdk } from '@/modules/shopify';
 import {
   createErrorResponse,
   createSuccessResponse,

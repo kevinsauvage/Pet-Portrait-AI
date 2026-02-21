@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import type { GetMenuByHandleQuery } from '@/shopify/storefront';
+import type { GetMenuByHandleQuery } from '@/modules/shopify/storefront';
+import { Button } from '@/ui/components/ui/button';
 
 const CollectionNav = ({
   items,

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-import config from '@/config';
+import config from '@/core/config';
 
 /**
  * Server-side URL helpers

@@ -2,12 +2,13 @@
 
 import { redirect } from 'next/navigation';
 
-import config from '@/config';
+import config from '@/core/config';
 import { userFeedback } from '@/data/userFeedback';
-import { AuthService } from '@/services/auth.service';
+import { AuthService } from '@/modules/auth';
 import type { FormActionResult } from '@/types/formActions';
 import { zodErrorsToFormActionResult } from '@/utils/form-actions';
 
+import { flattenError } from 'zod';
 import { z } from 'zod';
 
 const registerSchema = z
@@ -44,8 +45,8 @@ export async function registerAction(
 ): Promise<FormActionResult<RegisterFieldErrors> & RegisterFieldErrors> {
   const result = registerSchema.safeParse(input);
   if (!result?.success) {
-    const fieldErrors = result.error.formErrors.fieldErrors as RegisterFieldErrors;
-    return { ...zodErrorsToFormActionResult(result.error), ...fieldErrors };
+    const { fieldErrors } = flattenError(result.error);
+    return { ...zodErrorsToFormActionResult(result.error), ...(fieldErrors as RegisterFieldErrors) };
   }
 
   const { email, password, firstName, lastName } = result.data;
@@ -82,8 +83,9 @@ export async function loginAction(
 ): Promise<FormActionResult<LoginFieldErrors> & LoginFieldErrors> {
   const result = loginSchema.safeParse(input);
   if (!result?.success) {
-    const fieldErrors = result.error.formErrors.fieldErrors as LoginFieldErrors;
-    return { ...zodErrorsToFormActionResult(result.error), ...fieldErrors };
+    const { fieldErrors } = flattenError(result.error);
+    const loginFieldErrors = fieldErrors as LoginFieldErrors;
+    return { ...zodErrorsToFormActionResult(result.error), ...loginFieldErrors };
   }
 
   const { email, password, redirectUrl } = result.data;
@@ -112,8 +114,8 @@ export const recoverPasswordAction = async (
 ): Promise<FormActionResult<RecoverFieldErrors> & RecoverFieldErrors> => {
   const result = recoverSchema.safeParse(input);
   if (!result.success) {
-    const fieldErrors = result.error.formErrors.fieldErrors as RecoverFieldErrors;
-    return { ...zodErrorsToFormActionResult(result.error), ...fieldErrors };
+    const { fieldErrors } = flattenError(result.error);
+    return { ...zodErrorsToFormActionResult(result.error), ...(fieldErrors as RecoverFieldErrors) };
   }
 
   const { email } = result.data;
@@ -143,8 +145,8 @@ export const resetPasswordAction = async (
 ): Promise<FormActionResult<ResetFieldErrors> & ResetFieldErrors> => {
   const result = resetSchema.safeParse(input);
   if (!result.success) {
-    const fieldErrors = result.error.formErrors.fieldErrors as ResetFieldErrors;
-    return { ...zodErrorsToFormActionResult(result.error), ...fieldErrors };
+    const { fieldErrors } = flattenError(result.error);
+    return { ...zodErrorsToFormActionResult(result.error), ...(fieldErrors as ResetFieldErrors) };
   }
 
   const { password, resetUrl } = result.data;

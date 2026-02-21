@@ -1,5 +1,5 @@
 import { clearShopifyToken, getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/shopify';
+import { storefrontSdk } from '@/modules/shopify';
 import { safeLogError } from '@/utils/api-responses';
 
 

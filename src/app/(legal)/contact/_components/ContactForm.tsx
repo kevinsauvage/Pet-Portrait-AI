@@ -4,13 +4,13 @@ import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { contactAction } from '@/actions/contactActions';
-import FormFieldError from '@/components/FormFieldError';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/shopify/storefront';
+import type { CustomerUserError } from '@/modules/shopify/storefront';
+import FormFieldError from '@/ui/components/FormFieldError';
+import { Button } from '@/ui/components/ui/button';
+import { Input } from '@/ui/components/ui/input';
+import { Label } from '@/ui/components/ui/label';
+import { Textarea } from '@/ui/components/ui/textarea';
 
 const SubmitButton = () => {
   const status = useFormStatus();

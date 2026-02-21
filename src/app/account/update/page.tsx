@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 
 import AccountStats from '@/app/account/_components/AccountStats';
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import { Card, CardContent } from '@/components/ui/card';
 import seo from '@/data/seo';
 import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { WishlistService } from '@/services/wishlist.service';
-import { storefrontSdk } from '@/shopify/index';
-import { LanguageCode, OrderSortKeys } from '@/shopify/storefront';
+import { storefrontSdk } from '@/modules/shopify';
+import { LanguageCode, OrderSortKeys } from '@/modules/shopify/storefront';
+import { WishlistService } from '@/modules/wishlist';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import { Card, CardContent } from '@/ui/components/ui/card';
 import { getUser } from '@/utils/users';
 
 import BackButton from '../_components/BackButton';

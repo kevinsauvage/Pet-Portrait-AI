@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import AuthShell from '@/app/(auth)/_components/AuthShell';
-import config from '@/config';
+import config from '@/core/config';
 import seo from '@/data/seo';
 
 import ResetForm from './_components/ResetPasswordForm';

@@ -1,5 +1,5 @@
-import type { SelectedOption } from '@/shopify/admin';
-import type { FilterValue } from '@/shopify/storefront';
+import type { SelectedOption } from '@/modules/shopify/admin';
+import type { FilterValue } from '@/modules/shopify/storefront';
 
 export const isOptionSelected = (
   name: string,

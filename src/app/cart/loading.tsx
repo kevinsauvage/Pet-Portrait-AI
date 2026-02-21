@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import PageBanner from '@/components/PageBanner';
-import ProductCardSkeleton from '@/components/ProductCardSkeleton';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import PageBanner from '@/ui/components/PageBanner';
+import ProductCardSkeleton from '@/ui/components/ProductCardSkeleton';
+import { Card, CardContent, CardFooter } from '@/ui/components/ui/card';
+import { Separator } from '@/ui/components/ui/separator';
+import { Skeleton } from '@/ui/components/ui/skeleton';
 
 import { ChevronLeft, ShoppingCart } from 'lucide-react';
 

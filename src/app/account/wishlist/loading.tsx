@@ -1,7 +1,7 @@
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import ListDisplay from '@/components/ListDisplay';
-import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import ListDisplay from '@/ui/components/ListDisplay';
+import { Card, CardContent } from '@/ui/components/ui/card';
+import { Skeleton } from '@/ui/components/ui/skeleton';
 
 const Loading = () => {
   return (

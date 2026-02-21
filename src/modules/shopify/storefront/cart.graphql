@@ -1,0 +1,193 @@
+mutation cartAttributesUpdate(
+  $attributes: [AttributeInput!]!
+  $cartId: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartAttributesUpdate(attributes: $attributes, cartId: $cartId) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartBuyerIdentityUpdate(
+  $buyerIdentity: CartBuyerIdentityInput!
+  $cartId: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartBuyerIdentityUpdate(buyerIdentity: $buyerIdentity, cartId: $cartId) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartCreate(
+  $cartInput: CartInput
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartCreate(input: $cartInput) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartDiscountCodesUpdate(
+  $cartId: ID!
+  $discountCodes: [String!]!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartLinesAdd(
+  $cartId: ID!
+  $lines: [CartLineInput!]!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartLinesAdd(cartId: $cartId, lines: $lines) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartLinesRemove(
+  $cartId: ID!
+  $lineIds: [ID!]!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartLinesUpdate(
+  $cartId: ID!
+  $lines: [CartLineUpdateInput!]!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartLinesUpdate(cartId: $cartId, lines: $lines) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+mutation cartNoteUpdate(
+  $cartId: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $note: String!
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cartNoteUpdate(cartId: $cartId, note: $note) {
+    cart {
+      ...CartFields
+    }
+    userErrors {
+      ...CartUserErrors
+    }
+    warnings {
+      message
+    }
+  }
+}
+
+query getCart(
+  $cartId: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $language: LanguageCode
+) @inContext(language: $language) {
+  cart(id: $cartId) {
+    ...CartFields
+  }
+}
+
+query checkoutURL($cartId: ID!, $language: LanguageCode) @inContext(language: $language) {
+  cart(id: $cartId) {
+    checkoutUrl
+  }
+}

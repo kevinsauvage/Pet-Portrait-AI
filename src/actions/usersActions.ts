@@ -1,12 +1,13 @@
 'use server';
 
-import config from '@/config';
-import { UserService } from '@/services/user.service';
+import config from '@/core/config';
+import { UserService } from '@/modules/user';
 import type { FormActionResult } from '@/types/formActions';
 import { zodErrorsToFormActionResult } from '@/utils/form-actions';
 
 import { delCookieAction } from './cookiesActions';
 
+import { flattenError } from 'zod';
 import { z } from 'zod';
 
 const userSchema = z.object({
@@ -35,8 +36,8 @@ export async function updateUserAction(
   const result = userSchema.safeParse(input);
 
   if (!result?.success) {
-    const fieldErrors = result.error.formErrors.fieldErrors as UpdateUserFieldErrors;
-    return { ...zodErrorsToFormActionResult(result.error), ...fieldErrors };
+    const { fieldErrors } = flattenError(result.error);
+    return { ...zodErrorsToFormActionResult(result.error), ...(fieldErrors as UpdateUserFieldErrors) };
   }
 
   const { email, firstName, lastName, acceptsMarketing, company, phone } = result.data;

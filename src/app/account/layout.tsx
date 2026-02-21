@@ -1,7 +1,7 @@
-import Breadcrumbs from '@/components/Breadcrumbs';
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import PageBanner from '@/components/PageBanner';
-import { Card, CardContent } from '@/components/ui/card';
+import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import PageBanner from '@/ui/components/PageBanner';
+import { Card, CardContent } from '@/ui/components/ui/card';
 
 import AccountNavigation from './_components/AccountNavigation';
 import AccountNavigationSheet from './_components/AccountNavigationSheet';

@@ -3,18 +3,18 @@
 import Link from 'next/link';
 
 import { deleteAddressAction, setDefaultAddressAction } from '@/actions/addressesActions';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import config from '@/core/config';
+import type { MailingAddress } from '@/modules/shopify/storefront';
+import { Badge } from '@/ui/components/ui/badge';
+import { Button } from '@/ui/components/ui/button';
+import { Card, CardContent } from '@/ui/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import config from '@/config';
-import type { MailingAddress } from '@/shopify/storefront';
+} from '@/ui/components/ui/dropdown-menu';
 
 import { Edit, Heart, MoreVerticalIcon, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';

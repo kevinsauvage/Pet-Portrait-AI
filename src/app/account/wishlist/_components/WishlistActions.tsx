@@ -3,16 +3,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Button } from '@/components/ui/button';
+import useCartContext from '@/contexts/CartContext/useCartContext';
+import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import { Button } from '@/ui/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import useCartContext from '@/contexts/CartContext/useCartContext';
-import type { ProductFieldsFragment } from '@/shopify/storefront';
+} from '@/ui/components/ui/dropdown-menu';
 import { removeFromWishlist } from '@/utils/wishlist-client';
 
 import { Heart, ShoppingCart, Trash2 } from 'lucide-react';

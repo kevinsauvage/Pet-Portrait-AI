@@ -4,9 +4,9 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { resetPasswordAction } from '@/actions/authActions';
-import { Button } from '@/components/ui/button';
 import { userFeedback } from '@/data/userFeedback';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
+import { Button } from '@/ui/components/ui/button';
 
 import Form from '../../_components/Form';
 import PasswordField from '../../_components/PasswordField';

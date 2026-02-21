@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { accountNav } from '@/config';
+import { accountNav } from '@/core/config';
 import { cn } from '@/utils/cn';
 
 import { BookText, BookUser, Heart, LogOut, Package, User } from 'lucide-react';

@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { DEFAULTS } from '@/config/constants';
+import { DEFAULTS } from '@/core/config/constants';
 import type {
   OrderFieldsFragment,
   OrderFinancialStatus,
   OrderFulfillmentStatus,
-} from '@/shopify/storefront';
+} from '@/modules/shopify/storefront';
+import { Badge } from '@/ui/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/ui/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/ui/components/ui/collapsible';
 import { formatPrice } from '@/utils/format';
 
 import { ChevronDown, ChevronUp, Package } from 'lucide-react';

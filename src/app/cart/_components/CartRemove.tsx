@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 
-import SpinnerLoader from '@/components/SpinnerLoader';
+import useCartContext from '@/contexts/CartContext/useCartContext';
+import SpinnerLoader from '@/ui/components/SpinnerLoader';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,15 +14,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+} from '@/ui/components/ui/alert-dialog';
+import { Button } from '@/ui/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import useCartContext from '@/contexts/CartContext/useCartContext';
+} from '@/ui/components/ui/tooltip';
 
 import { Trash2 } from 'lucide-react';
 

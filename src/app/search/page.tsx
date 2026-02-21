@@ -1,25 +1,25 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import Breadcrumbs from '@/components/Breadcrumbs';
-import EmptyState from '@/components/EmptyState';
-import ListingHeader from '@/components/ListingHeader';
-import PageBanner from '@/components/PageBanner';
-import PageInfoPagination from '@/components/PageInfoPagination';
-import ProductsList from '@/components/ProductsList';
-import Search from '@/components/Search';
-import { Button } from '@/components/ui/button';
-import config from '@/config';
+import config from '@/core/config';
 import seo from '@/data/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { storefrontSdk } from '@/modules/shopify';
 import {
   adjustPaginationVariables,
   buildShopifySearchQuery,
   parseFiltersQuery,
-} from '@/shopify/helpers';
-import { storefrontSdk } from '@/shopify/index';
-import type { ProductFieldsFragment, SearchProductsQuery } from '@/shopify/storefront';
-import { SearchSortKeys } from '@/shopify/storefront';
+} from '@/modules/shopify/helpers';
+import type { ProductFieldsFragment, SearchProductsQuery } from '@/modules/shopify/storefront';
+import { SearchSortKeys } from '@/modules/shopify/storefront';
+import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import EmptyState from '@/ui/components/EmptyState';
+import ListingHeader from '@/ui/components/ListingHeader';
+import PageBanner from '@/ui/components/PageBanner';
+import PageInfoPagination from '@/ui/components/PageInfoPagination';
+import ProductsList from '@/ui/components/ProductsList';
+import Search from '@/ui/components/Search';
+import { Button } from '@/ui/components/ui/button';
 
 import Filters from '../collections/_components/Filters';
 import Sort from '../collections/_components/Sort';

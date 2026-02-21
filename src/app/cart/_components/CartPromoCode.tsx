@@ -1,7 +1,7 @@
 'use client';
 
-import CardHeaderPattern from '@/components/CardHeaderPattern';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import { Card, CardContent, CardFooter } from '@/ui/components/ui/card';
 
 import CouponCodeForm from './CouponCodeForm';
 import DiscountCodes from './DiscountCodes';

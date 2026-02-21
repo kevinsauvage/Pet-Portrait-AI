@@ -1,7 +1,7 @@
-import ListDisplay from '@/components/ListDisplay';
-import PageBanner from '@/components/PageBanner';
-import SectionTitle from '@/components/SectionTitle';
-import { Skeleton } from '@/components/ui/skeleton';
+import ListDisplay from '@/ui/components/ListDisplay';
+import PageBanner from '@/ui/components/PageBanner';
+import SectionTitle from '@/ui/components/SectionTitle';
+import { Skeleton } from '@/ui/components/ui/skeleton';
 
 const Loading = () => {
   return (

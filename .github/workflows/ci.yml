@@ -45,8 +45,9 @@ jobs:
       - name: Run codegen (if env vars available)
         run: yarn codegen
         env:
-          SHOPIFY_STORE_FRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STORE_FRONT_ACCESS_TOKEN }}
-          SHOPIFY_STORE_FRONT_ADMIN_TOKEN: ${{ secrets.SHOPIFY_STORE_FRONT_ADMIN_TOKEN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+          SHOPIFY_ADMIN_URL: ${{ secrets.SHOPIFY_ADMIN_URL }}
+          NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL }}
         continue-on-error: true
-        # Note: Codegen requires Shopify API tokens. If secrets are not configured,
-        # this step will be skipped without failing the build.
+        # Codegen derives Storefront token via Admin API; no separate Storefront token needed.

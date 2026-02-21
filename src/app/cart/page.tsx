@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import PageBanner from '@/components/PageBanner';
 import seo from '@/data/seo';
-import { CartService } from '@/services/cart.service';
+import { CartService } from '@/modules/cart';
+import PageBanner from '@/ui/components/PageBanner';
 
 import CartEmptyState from './_components/CartEmptyState';
 import CartHeader from './_components/CartHeader';

@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server';
 
-import { WISHLIST_MAX_ITEMS,WishlistService } from '@/services/wishlist.service';
+import { WISHLIST_MAX_ITEMS, WishlistService } from '@/modules/wishlist';
 import {
   createErrorResponse,
   createSuccessResponse,

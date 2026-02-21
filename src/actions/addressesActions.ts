@@ -2,8 +2,8 @@
 
 import { redirect } from 'next/navigation';
 
-import config from '@/config';
-import { AddressService } from '@/services/address.service';
+import config from '@/core/config';
+import { AddressService } from '@/modules/address';
 import { zodErrorsToFormActionResult } from '@/utils/form-actions';
 
 import { z } from 'zod';
