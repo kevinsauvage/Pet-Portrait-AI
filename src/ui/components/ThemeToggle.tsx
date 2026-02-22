@@ -19,16 +19,16 @@ const ThemeToggle = () => {
       <DropdownMenuTrigger asChild className="flex items-center justify-center">
         <button
           aria-label="toggle theme"
-          className="cursor-pointer flex items-center justify-center min-h-11 min-w-11"
+          className="cursor-pointer flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted transition-colors"
         >
           <Sun
-            size={30}
-            strokeWidth={1}
+            size={20}
+            strokeWidth={1.5}
             className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:absolute dark:scale-0"
           />
           <Moon
-            size={30}
-            strokeWidth={1}
+            size={20}
+            strokeWidth={1.5}
             className="rotate-90 scale-0 transition-all absolute dark:relative dark:rotate-0 dark:scale-100"
           />
         </button>

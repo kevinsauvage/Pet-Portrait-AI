@@ -13,43 +13,43 @@ const UserButtons = ({ className }: { className?: string }) => {
   const { cart } = useCartContext();
 
   return (
-    <div className={`hidden md:flex md:items-center md:order-3 gap-2 lg:gap-4 ${className}`}>
+    <div className={`hidden md:flex md:items-center md:order-3 gap-1.5 lg:gap-2 ${className}`}>
       <ThemeToggle />
       <Link
         aria-label="Search"
-        className="group cursor-pointer flex items-center justify-center min-h-11 min-w-11"
+        className="group cursor-pointer flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted transition-colors"
         href={config.routes.search}
       >
         <Search
-          size={30}
-          strokeWidth={1}
+          size={20}
+          strokeWidth={1.5}
           className="hidden md:block text-secondary group-hover:text-primary transition-colors"
         />
       </Link>
 
       <Link
         aria-label={'User account'}
-        className="group cursor-pointer flex items-center justify-center min-h-11 min-w-11"
+        className="group cursor-pointer flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted transition-colors"
         href={config.routes.account}
       >
         <User
-          size={30}
-          strokeWidth={1}
+          size={20}
+          strokeWidth={1.5}
           className="hidden md:block text-secondary group-hover:text-primary transition-colors"
         />
       </Link>
 
       <Link
-        className="group relative cursor-pointer flex items-center justify-center min-h-11 min-w-11"
+        className="group relative cursor-pointer flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted transition-colors"
         href={config.routes.cart}
         aria-label={'Toggle Checkout'}
       >
         <ShoppingBag
-          size={30}
-          strokeWidth={1}
+          size={20}
+          strokeWidth={1.5}
           className="text-secondary group-hover:text-primary transition-colors"
         />
-        <Badge className="absolute -top-3 -right-3 rounded-full text-caption-sm font-bold bg-red-800 text-white">
+        <Badge className="absolute -top-1 -right-1 rounded-full text-[10px] leading-none font-bold bg-red-700 text-white px-1.5 py-0.5 min-w-[18px] text-center">
           {cart?.totalQuantity || 0}
         </Badge>
       </Link>
