@@ -13,6 +13,8 @@ type ProductSectionProps = {
   viewAllLink?: string;
   viewAllLabel?: string;
   className?: string;
+  id?: string;
+  description?: string;
 };
 
 const ProductSection = ({
@@ -21,6 +23,8 @@ const ProductSection = ({
   viewAllLink = config.routes.collection,
   viewAllLabel = 'View all products',
   className,
+  id,
+  description,
 }: ProductSectionProps) => {
   if (!products || products.length === 0) {
     return null;
@@ -28,8 +32,10 @@ const ProductSection = ({
 
   return (
     <HomeSection
+      id={id}
       title={title}
       className={className}
+      description={description}
       action={
         <Button variant="ghost" size="sm" asChild>
           <Link href={viewAllLink}>{viewAllLabel}</Link>
@@ -42,4 +48,3 @@ const ProductSection = ({
 };
 
 export default ProductSection;
-

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import type { Filter } from '@/infra/shopify/storefront';
@@ -52,6 +52,26 @@ const Filters = ({
   const pathname = usePathname();
   const router = useRouter();
 
+  const getMinMaxPrice = useCallback((): [number, number] | undefined => {
+    const priceRangeFilter = filters?.find((filter) => filter.type === FILTER_TYPE.priceRange);
+    if (!priceRangeFilter || !priceRangeFilter.values?.[0]) {
+      return undefined;
+    }
+    const input = priceRangeFilter.values[0].input as string;
+    if (!input) return undefined;
+
+    try {
+      const parsedInput = JSON.parse(input) as { price?: { min?: number; max?: number } };
+      const min = parsedInput?.price?.min ?? 0;
+      const max = parsedInput?.price?.max ?? 200;
+      return [min, max];
+    } catch {
+      return undefined;
+    }
+  }, [filters]);
+
+  const defaultPriceRange = useMemo(() => getMinMaxPrice() ?? [0, 200], [getMinMaxPrice]);
+
   const isSelected = useCallback(
     (filterId: string, input: string) =>
       selectedFilters?.some((filter) => filter.input === input && filter.filterId === filterId),
@@ -81,6 +101,8 @@ const Filters = ({
   const resetFilters = () => {
     const newSearchParameters = new URLSearchParams(query);
     newSearchParameters.delete('filters');
+    setSelectedFilters([]);
+    setPriceRange(defaultPriceRange);
     router.push(`${pathname}?${newSearchParameters.toString()}`);
   };
 
@@ -100,6 +122,7 @@ const Filters = ({
     }
 
     router.push(`${pathname}?${newSearchParameters.toString()}`);
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -115,51 +138,40 @@ const Filters = ({
           item.filterId !== undefined && item.input !== undefined,
       );
 
-    setTimeout(() => {
-      setSelectedFilters(f || []);
-    }, 0);
+    setSelectedFilters(f || []);
   }, [query.filters]);
 
-  const getMinMaxPrice = useCallback((): [number, number] | undefined => {
-    const priceRangeFilter = filters?.find((filter) => filter.type === FILTER_TYPE.priceRange);
-    if (!priceRangeFilter || !priceRangeFilter.values?.[0]) {
-      return undefined;
-    }
-    const input = priceRangeFilter.values[0].input as string;
-    if (!input) return undefined;
-
-    try {
-      const parsedInput = JSON.parse(input) as { price?: { min?: number; max?: number } };
-      const min = parsedInput?.price?.min ?? 0;
-      const max = parsedInput?.price?.max ?? 200;
-      return [min, max];
-    } catch {
-      return undefined;
-    }
-  }, [filters]);
-
   useEffect(() => {
-    const priceRange_ = getMinMaxPrice();
-    if (priceRange_) {
-      setTimeout(() => {
-        setPriceRange(priceRange_);
-      }, 0);
-    }
-  }, [getMinMaxPrice]);
+    setPriceRange(defaultPriceRange);
+  }, [defaultPriceRange]);
+
+  const activeCount = selectedFilters.length + (priceRange ? 1 : 0);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="secondary">
-          <p className="hidden md:block">Filters</p>
+        <Button variant="secondary" className="gap-2">
+          <span className="hidden md:inline">Filters</span>
           <FilterIcon className="h-4 w-4" />
+          {activeCount > 0 && (
+            <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+              {activeCount}
+            </span>
+          )}
           <span className="sr-only">Open filters</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Filters</SheetTitle>
-          <SheetDescription>Select filters to narrow down your search results.</SheetDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <SheetTitle>Filters</SheetTitle>
+              <SheetDescription>Select filters to narrow down your search results.</SheetDescription>
+            </div>
+            <Button variant="ghost" size="sm" onClick={resetFilters} className="-mt-1">
+              Reset
+            </Button>
+          </div>
         </SheetHeader>
         <div className="px-4">
           <Accordion
@@ -176,9 +188,9 @@ const Filters = ({
                   {filter.type === FILTER_TYPE.priceRange && (
                     <div className="space-y-4 py-2">
                       <Slider
-                        defaultValue={[getMinMaxPrice()?.[0] || 0, getMinMaxPrice()?.[1] || 200]}
-                        max={getMinMaxPrice()?.[1] || 200}
-                        min={getMinMaxPrice()?.[0] || 0}
+                        defaultValue={[defaultPriceRange[0], defaultPriceRange[1]]}
+                        max={defaultPriceRange[1]}
+                        min={defaultPriceRange[0]}
                         step={0.1}
                         value={priceRange}
                         onValueChange={handlePriceChange}

@@ -32,64 +32,67 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
   const Component = asListItem ? 'li' : 'div';
 
   return (
-    <Component className="relative group overflow-hidden rounded-sm transition-all hover:shadow-lg">
-      <ProductCardActions product={product} productId={id} />
+    <Component className="group relative">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+        <ProductCardActions product={product} productId={id} />
 
-      <Link
-        className="block cursor-pointer"
-        href={`${config.routes.collection}/products/${handle}`}
-        scroll
-      >
-        <div className="relative overflow-hidden aspect-square">
-          <OptimizedImage
-            src={primaryImage?.medium || primaryImage?.small || primaryImage?.src || ''}
-            alt={primaryImage?.altText || title}
-            width={500}
-            height={500}
-            blurDataURL={primaryImage?.blurDataURL}
-            priority={priority}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw"
-            quality={75}
-            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-            aria-label={`Image of ${title}`}
-          />
+        <Link
+          className="flex h-full flex-col"
+          href={`${config.routes.collection}/products/${handle}`}
+          scroll
+          aria-label={`View details for ${title}`}
+        >
+          <div className="relative overflow-hidden aspect-square bg-muted/40">
+            <OptimizedImage
+              src={primaryImage?.medium || primaryImage?.small || primaryImage?.src || ''}
+              alt={primaryImage?.altText || title}
+              width={520}
+              height={520}
+              blurDataURL={primaryImage?.blurDataURL}
+              priority={priority}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw"
+              quality={75}
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            />
 
-          {/* Discount Badge */}
-          {compareAtPrice && price?.amount !== compareAtPrice?.amount && (
-            <Badge
-              variant="destructive"
-              className="absolute left-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-destructive/95 border-2 border-white/20"
-            >
-              -{isWhatPercentOf(Number(price?.amount), Number(compareAtPrice?.amount))}%
-            </Badge>
-          )}
+            {compareAtPrice && price?.amount !== compareAtPrice?.amount && (
+              <Badge
+                variant="destructive"
+                className="absolute left-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-destructive/95 border-2 border-white/20"
+              >
+                -{isWhatPercentOf(Number(price?.amount), Number(compareAtPrice?.amount))}%
+              </Badge>
+            )}
 
-          {/* Availability Indicators */}
-          {isSoldOut && (
-            <Badge
-              variant="destructive"
-              className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-destructive/95 border-2 border-white/20"
-            >
-              Sold Out
-            </Badge>
-          )}
-          {lowStock && !isSoldOut && (
-            <Badge
-              variant="secondary"
-              className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-secondary/95 border-2 border-white/20"
-            >
-              Low Stock
-            </Badge>
-          )}
-        </div>
-
-        <div className="py-4">
-          <h3 className="text-heading-4 mb-2 line-clamp-2">{title}</h3>
-          <div>
-            <Price compareAtPrice={compareAtPrice} priceRange={priceRange} price={price} />
+            {isSoldOut && (
+              <Badge
+                variant="destructive"
+                className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-destructive/95 border-2 border-white/20"
+              >
+                Sold Out
+              </Badge>
+            )}
+            {lowStock && !isSoldOut && (
+              <Badge
+                variant="secondary"
+                className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-secondary/95 border-2 border-white/20"
+              >
+                Low Stock
+              </Badge>
+            )}
           </div>
-        </div>
-      </Link>
+
+          <div className="flex flex-1 flex-col gap-3 px-4 pb-5 pt-4">
+            <div className="space-y-1">
+              <h3 className="text-heading-4 line-clamp-2 leading-snug">{title}</h3>
+              <p className="text-body-sm text-muted-foreground">Custom pet portrait on premium paper</p>
+            </div>
+            <div>
+              <Price compareAtPrice={compareAtPrice} priceRange={priceRange} price={price} />
+            </div>
+          </div>
+        </Link>
+      </article>
     </Component>
   );
 };

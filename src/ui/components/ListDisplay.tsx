@@ -1,26 +1,38 @@
+import { cn } from '@/lib/cn';
+
 import ProductCardSkeleton from './ProductCardSkeleton';
+
+type ListDisplayProps = {
+  children: React.ReactNode;
+  layout?: 'grid' | 'list';
+  loading?: boolean;
+  ariaLabel?: string;
+  className?: string;
+};
 
 const ListDisplay = ({
   children,
   layout = 'grid',
   loading = false,
-}: {
-  children: React.ReactNode;
-  layout?: 'grid' | 'list';
-  loading?: boolean;
-}) => {
+  ariaLabel,
+  className,
+}: ListDisplayProps) => {
   return (
     <ul
+      aria-label={ariaLabel}
       aria-busy={loading}
       aria-live={loading ? 'polite' : undefined}
-      className={`gap-4 md:gap-6 lg:gap-8 ${
+      data-layout={layout}
+      className={cn(
+        'gap-4 md:gap-6 lg:gap-8',
         layout === 'grid'
-          ? 'grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]  '
-          : 'flex flex-col'
-      }`}
+          ? 'grid grid-cols-1 min-[520px]:grid-cols-2 xl:grid-cols-4'
+          : 'flex flex-col',
+        className,
+      )}
     >
       {loading
-        ? Array.from({ length: 6 }).map((_, index) => (
+        ? Array.from({ length: 8 }).map((_, index) => (
             <ProductCardSkeleton key={`skeleton-product-${index + 1}`} />
           ))
         : children}

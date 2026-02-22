@@ -3,26 +3,32 @@ import ListDisplay from '@/ui/components/ListDisplay';
 
 import ProductCardDefault from './ProductCardDefault';
 
+type ProductsListProps = {
+  products: ProductFieldsFragment[];
+  layout?: 'grid' | 'list';
+  loading?: boolean;
+  ariaLabel?: string;
+  className?: string;
+};
+
 const ProductsList = ({
   products,
   layout = 'grid',
   loading,
-}: {
-  products: ProductFieldsFragment[];
-  layout?: 'grid' | 'list';
-  loading?: boolean;
-}) => {
+  ariaLabel = 'Products',
+  className,
+}: ProductsListProps) => {
   const hasProducts = Array.isArray(products) && products.length > 0;
+  if (!hasProducts && !loading) {
+    return null;
+  }
+
   return (
-    hasProducts && (
-      <div className="mb-12">
-        <ListDisplay layout={layout} loading={loading}>
-          {products.map((product, index) => (
-            <ProductCardDefault product={product} key={product.id} priority={index < 5} />
-          ))}
-        </ListDisplay>
-      </div>
-    )
+    <ListDisplay layout={layout} loading={loading} ariaLabel={ariaLabel} className={className}>
+      {products.map((product, index) => (
+        <ProductCardDefault product={product} key={product.id} priority={index < 5} />
+      ))}
+    </ListDisplay>
   );
 };
 

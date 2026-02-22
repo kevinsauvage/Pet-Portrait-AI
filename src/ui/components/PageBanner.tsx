@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 type PageBannerProps = {
   title: string;
   description?: string;
+  eyebrow?: string;
   children?: React.ReactNode;
   className?: string;
   ctaLabel?: string;
@@ -18,6 +19,7 @@ type PageBannerProps = {
 const PageBanner = ({
   title,
   description,
+  eyebrow,
   children,
   className,
   ctaLabel,
@@ -25,47 +27,72 @@ const PageBanner = ({
   secondaryCtaLabel,
   secondaryCtaHref,
 }: PageBannerProps) => (
-  <div
+  <section
+    aria-labelledby="page-banner-title"
     className={cn(
-      'relative overflow-hidden',
+      'relative isolate overflow-hidden',
       'bg-linear-to-br from-amber-50/90 via-orange-50/80 to-yellow-50/90',
       'dark:from-amber-950/40 dark:via-background dark:to-amber-950/20',
       className,
     )}
   >
     <div
-      className="absolute inset-0 opacity-[0.04] dark:opacity-[0.03]"
+      className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-radial-[circle_at_center] from-primary/15 via-primary/0 to-transparent blur-3xl"
+      aria-hidden="true"
+    />
+    <div
+      className="pointer-events-none absolute inset-0 opacity-[0.05] dark:opacity-[0.04]"
       style={{
         backgroundImage: 'radial-gradient(circle at 25% 25%, currentColor 1px, transparent 1px)',
         backgroundSize: '20px 20px',
       }}
+      aria-hidden="true"
     />
-    <div className="container mx-auto flex flex-col items-center justify-center text-center py-16 md:py-24 lg:py-32 px-4 md:px-6 space-y-6 md:space-y-8 relative">
-      <h1 className="text-display md:text-[3.5rem] md:leading-[1.15] max-w-4xl font-bold tracking-tight">
-        {title}
-      </h1>
-      {description && (
-        <p className="text-body-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          {description}
-        </p>
-      )}
-      {(ctaLabel || secondaryCtaLabel) && (
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          {ctaLabel && ctaHref && (
-            <Button size="lg" asChild className="text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow">
-              <Link href={ctaHref}>{ctaLabel}</Link>
-            </Button>
-          )}
-          {secondaryCtaLabel && secondaryCtaHref && (
-            <Button variant="outline" size="lg" asChild className="text-base px-8 py-6">
-              <Link href={secondaryCtaHref}>{secondaryCtaLabel}</Link>
-            </Button>
-          )}
-        </div>
-      )}
-      {children}
+
+    <div className="container mx-auto flex flex-col items-center justify-center text-center px-4 md:px-6 py-16 md:py-24 lg:py-32 relative">
+      <div className="max-w-4xl space-y-6 md:space-y-7">
+        {eyebrow && (
+          <p className="text-caption-sm uppercase tracking-[0.2em] text-muted-foreground">
+            {eyebrow}
+          </p>
+        )}
+        <h1
+          id="page-banner-title"
+          className="text-display md:text-[3.75rem] md:leading-[1.1] font-semibold tracking-tight"
+        >
+          {title}
+        </h1>
+        {description && (
+          <p className="text-body-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            {description}
+          </p>
+        )}
+        {(ctaLabel || secondaryCtaLabel) && (
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            {ctaLabel && ctaHref && (
+              <Button
+                size="lg"
+                asChild
+                className="text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <Link href={ctaHref} aria-label={ctaLabel}>
+                  {ctaLabel}
+                </Link>
+              </Button>
+            )}
+            {secondaryCtaLabel && secondaryCtaHref && (
+              <Button variant="outline" size="lg" asChild className="text-base px-8 py-6">
+                <Link href={secondaryCtaHref} aria-label={secondaryCtaLabel}>
+                  {secondaryCtaLabel}
+                </Link>
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+      {children && <div className="mt-10 w-full max-w-5xl">{children}</div>}
     </div>
-  </div>
+  </section>
 );
 
 export default PageBanner;

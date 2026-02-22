@@ -9,6 +9,8 @@ type HomeSectionProps = {
   className?: string;
   titleClassName?: string;
   action?: ReactNode;
+  id?: string;
+  description?: string;
 };
 
 const HomeSection = ({
@@ -17,11 +19,22 @@ const HomeSection = ({
   className,
   titleClassName,
   action,
+  id,
+  description,
 }: HomeSectionProps) => {
+  const titleId = id ? `${id}-title` : undefined;
+
   return (
-    <section className={cn('py-8 md:py-12', className)}>
-      <div className="flex items-center justify-between gap-4 mb-6 md:mb-8">
-        <SectionTitle className={titleClassName}>{title}</SectionTitle>
+    <section className={cn('py-10 md:py-14', className)} aria-labelledby={titleId}>
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-6 md:mb-8">
+        <div className="space-y-2">
+          <SectionTitle id={titleId} className={cn('tracking-tight', titleClassName)}>
+            {title}
+          </SectionTitle>
+          {description && (
+            <p className="text-body-sm text-muted-foreground max-w-2xl">{description}</p>
+          )}
+        </div>
         {action && <div className="shrink-0">{action}</div>}
       </div>
       {children}
@@ -30,4 +43,3 @@ const HomeSection = ({
 };
 
 export default HomeSection;
-

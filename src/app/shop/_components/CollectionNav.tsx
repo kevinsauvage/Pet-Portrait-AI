@@ -8,9 +8,11 @@ import { Button } from '@/ui/components/ui/button';
 const CollectionNav = ({
   items,
   collectionSlug,
+  ariaLabel = 'Collections navigation',
 }: {
   items: GetMenuByHandleQuery['menu'] | null | undefined;
   collectionSlug: string;
+  ariaLabel?: string;
 }) => {
   const menuItems = (items?.items || []) as Array<{
     id: string;
@@ -19,34 +21,35 @@ const CollectionNav = ({
   }>;
 
   return (
-    <div className="container mx-auto">
-      <nav>
-        <ul className="flex items-center flex-wrap gap-4">
+    <div className="container mx-auto px-4 md:px-6">
+      <nav aria-label={ariaLabel}>
+        <ul className="flex items-center gap-3 overflow-x-auto pb-2 -mx-1 px-1">
           {Array.isArray(menuItems) &&
-            menuItems.map(
-              (menuItem) =>
-                typeof menuItem.url === 'string' && (
-                  <li key={menuItem.id}>
-                    <Button
-                      variant={
-                        menuItem?.url?.toLowerCase().includes(collectionSlug?.toLowerCase())
-                          ? 'default'
-                          : 'secondary'
-                      }
-                      asChild
-                    >
-                      <Link
-                        href={
-                          new URL(menuItem?.url).pathname +
-                          new URL(menuItem?.url).searchParams.toString()
-                        }
-                      >
-                        {menuItem?.title}
-                      </Link>
-                    </Button>
-                  </li>
-                ),
-            )}
+            menuItems.map((menuItem) => {
+              if (typeof menuItem.url !== 'string') return null;
+
+              let href = menuItem.url;
+              try {
+                const parsed = new URL(menuItem.url);
+                href = parsed.pathname + parsed.searchParams.toString();
+              } catch {
+                href = menuItem.url;
+              }
+
+              const isActive = menuItem.url
+                ?.toLowerCase()
+                .includes(collectionSlug?.toLowerCase());
+
+              return (
+                <li key={menuItem.id} className="shrink-0">
+                  <Button variant={isActive ? 'default' : 'secondary'} size="sm" asChild>
+                    <Link href={href} aria-current={isActive ? 'page' : undefined}>
+                      {menuItem?.title}
+                    </Link>
+                  </Button>
+                </li>
+              );
+            })}
         </ul>
       </nav>
     </div>

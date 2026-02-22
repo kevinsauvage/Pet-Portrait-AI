@@ -17,43 +17,32 @@ const PageInfoPagination = async ({
 }) => {
   const previousPath = await getPreviousPath(pageInfo, searchParameters);
   const nextPath = await getNextPath(pageInfo, searchParameters);
+
   return (
     <div className="flex items-center justify-between gap-2">
-      <Link
-        href={previousPath}
-        className={pageInfo.hasPreviousPage ? '' : 'cursor-not-allowed'}
-        aria-disabled={!pageInfo.hasPreviousPage}
-        aria-label="Previous Page"
-      >
-        <Button
-          disabled={!pageInfo.hasPreviousPage}
-          variant="secondary"
-          size="default"
-          asChild={false}
-          aria-disabled={!pageInfo.hasPreviousPage}
-          aria-label="Previous Page"
-        >
+      {pageInfo.hasPreviousPage ? (
+        <Button variant="secondary" asChild>
+          <Link href={previousPath} aria-label="Previous Page">
+            Previous
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="secondary" disabled aria-disabled>
           Previous
         </Button>
-      </Link>
+      )}
 
-      <Link
-        href={nextPath}
-        className={pageInfo.hasNextPage ? '' : 'cursor-not-allowed'}
-        aria-disabled={!pageInfo.hasNextPage}
-        aria-label="Next Page"
-      >
-        <Button
-          disabled={!pageInfo.hasNextPage}
-          variant="secondary"
-          size="default"
-          asChild={false}
-          aria-disabled={!pageInfo.hasNextPage}
-          aria-label="Next Page"
-        >
+      {pageInfo.hasNextPage ? (
+        <Button variant="secondary" asChild>
+          <Link href={nextPath} aria-label="Next Page">
+            Next
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="secondary" disabled aria-disabled>
           Next
         </Button>
-      </Link>
+      )}
     </div>
   );
 };
