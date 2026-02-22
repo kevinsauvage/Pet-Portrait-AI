@@ -9,12 +9,14 @@ const Loading = () => {
   return (
     <div>
       <PageBanner title={seo.search.title} description={seo.search.description}>
-        <Breadcrumbs />
-        <Skeleton className="h-10 w-full max-w-md mx-auto" />
+        <div className="space-y-6">
+          <Breadcrumbs />
+          <Skeleton className="h-10 w-full max-w-md mx-auto" />
+        </div>
       </PageBanner>
-      <div className="container mx-auto mb-8 px-4">
+      <div className="container mx-auto mb-8 px-4 md:px-6">
         <ListingHeader>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Skeleton className="h-10 w-32" />
             <Skeleton className="h-10 w-32" />
           </div>

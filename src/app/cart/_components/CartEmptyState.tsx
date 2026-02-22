@@ -6,8 +6,8 @@ import { Card, CardContent } from '@/ui/components/ui/card';
 
 const CartEmptyState = () => {
   return (
-    <Card>
-      <CardContent className="py-8 md:py-12">
+    <Card className="border-dashed bg-card/70">
+      <CardContent className="py-10 md:py-14">
         <EmptyState
           variant="cart"
           image={{
@@ -16,18 +16,16 @@ const CartEmptyState = () => {
             height: 200,
           }}
           title="Your cart is empty"
-          subtitle="Add items to your cart to get started. Browse our collections to find products you'll love."
+          subtitle="Add items to your cart to get started. Browse our collections to find products you’ll love."
           altText="Empty shopping cart"
           primaryAction={
-            <Link href="/">
-              <Button size="lg" className="min-w-[200px]">
-                Start Shopping
-              </Button>
-            </Link>
+            <Button size="lg" className="min-w-[200px]" asChild>
+              <Link href="/shop">Start Shopping</Link>
+            </Button>
           }
           secondaryAction={
-            <Link href="/shop" className="link">
-              Browse collections
+            <Link href="/gallery" className="link">
+              Browse gallery
             </Link>
           }
         />

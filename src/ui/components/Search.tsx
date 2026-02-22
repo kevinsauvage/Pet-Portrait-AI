@@ -16,6 +16,7 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
   const [results, setResults] = useState<PredictiveSearchQuery['predictiveSearch'] | null>(null);
   const reference = useRef<HTMLDivElement | null>(null);
   useOnClickOutside(reference as RefObject<HTMLElement>, () => setResults(null));
+  const resultsId = 'predictive-search-results';
 
   const handleChange = useCallback(async (value: string) => {
     if (value?.trim().length < 2) {
@@ -60,13 +61,15 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
     <div className="relative w-full max-w-lg mx-auto" ref={reference}>
       <SearchForm
         searchQuery={searchValue}
+        resultsId={resultsId}
+        resultsOpen={Boolean(results)}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setSearchValue(event.target.value);
           debouncedHandleChange(event.target.value);
         }}
       />
 
-      {results && <SearchResults results={results} />}
+      {results && <SearchResults id={resultsId} results={results} />}
     </div>
   );
 };

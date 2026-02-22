@@ -3,7 +3,6 @@ import Link from 'next/link';
 import type { PredictiveSearchQuery } from '@/infra/shopify/storefront';
 import { formatPrice } from '@/lib/format';
 
-import { Button } from './ui/button';
 import OptimizedImage from './OptimizedImage';
 
 import { Search } from 'lucide-react';
@@ -50,31 +49,30 @@ const Product = ({ product }: { product: ProductSearchItem }) => {
     <Link
       key={handle}
       href={`/shop/products/${handle}`}
-      className="flex items-center gap-2 p-2 rounded hover:bg-muted overflow-hidden"
+      role="option"
+      className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
-      <Button variant="ghost" className="w-full justify-start gap-3 rounded-none" role="option">
-        <OptimizedImage
-          src={image.small}
-          alt={image.altText || ''}
-          width={48}
-          height={48}
-          quality={75}
-          sizes="48px"
-          className="rounded-lg aspect-square object-contain"
-        />
-        <div className="flex flex-col items-start">
-          <span className="text-body font-semibold">{title}</span>
+      <OptimizedImage
+        src={image.small}
+        alt={image.altText || ''}
+        width={48}
+        height={48}
+        quality={75}
+        sizes="48px"
+        className="rounded-lg aspect-square object-contain"
+      />
+      <div className="flex flex-col items-start">
+        <span className="text-body font-semibold">{title}</span>
 
-          {priceRange?.minVariantPrice && (
-            <span className="text-body-sm text-secondary">
-              {formatPrice(
-                priceRange.minVariantPrice.amount,
-                priceRange.minVariantPrice.currencyCode,
-              )}
-            </span>
-          )}
-        </div>
-      </Button>
+        {priceRange?.minVariantPrice && (
+          <span className="text-body-sm text-secondary">
+            {formatPrice(
+              priceRange.minVariantPrice.amount,
+              priceRange.minVariantPrice.currencyCode,
+            )}
+          </span>
+        )}
+      </div>
     </Link>
   );
 };
@@ -84,16 +82,11 @@ const Query = ({ query }: { query: { text: string } }) => {
     <Link
       key={query.text}
       href={`/search?searchQuery=${query.text}`}
-      className="block hover:bg-muted px-2 rounded"
+      role="option"
+      className="flex items-center gap-2 rounded-lg px-3 py-2 text-body font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
-      <Button
-        variant="ghost"
-        className="w-full justify-start rounded-none text-body font-medium"
-        role="option"
-      >
-        <Search className="mr-2 h-4 w-4 text-secondary" />
-        {query.text}
-      </Button>
+      <Search className="h-4 w-4 text-secondary" />
+      {query.text}
     </Link>
   );
 };
@@ -104,8 +97,10 @@ const SectionTitle = ({ title }: { title: string }) => {
 
 const SearchResults = ({
   results,
+  id,
 }: {
   results: PredictiveSearchQuery['predictiveSearch'] | null | undefined;
+  id?: string;
 }) => {
   if (!results) {
     return null;
@@ -123,7 +118,12 @@ const SearchResults = ({
   }
 
   return (
-    <div className="absolute border z-50 w-full mt-2 shadow-lg text-start overflow-hidden bg-background rounded-lg animate-fadeSlideDown">
+    <div
+      id={id}
+      role="listbox"
+      aria-label="Search suggestions"
+      className="absolute z-50 w-full mt-2 rounded-xl border border-border bg-background shadow-lg text-start overflow-hidden animate-fadeSlideDown"
+    >
       <div className="p-2">
         {queries.length > 0 && (
           <>

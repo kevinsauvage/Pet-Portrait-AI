@@ -31,24 +31,10 @@ const PageBanner = ({
     aria-labelledby="page-banner-title"
     className={cn(
       'relative isolate overflow-hidden',
-      'bg-linear-to-br from-amber-50/90 via-orange-50/80 to-yellow-50/90',
-      'dark:from-amber-950/40 dark:via-background dark:to-amber-950/20',
+
       className,
     )}
   >
-    <div
-      className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-radial-[circle_at_center] from-primary/15 via-primary/0 to-transparent blur-3xl"
-      aria-hidden="true"
-    />
-    <div
-      className="pointer-events-none absolute inset-0 opacity-[0.05] dark:opacity-[0.04]"
-      style={{
-        backgroundImage: 'radial-gradient(circle at 25% 25%, currentColor 1px, transparent 1px)',
-        backgroundSize: '20px 20px',
-      }}
-      aria-hidden="true"
-    />
-
     <div className="container mx-auto flex flex-col items-center justify-center text-center px-4 md:px-6 py-16 md:py-24 lg:py-32 relative">
       <div className="max-w-4xl space-y-6 md:space-y-7">
         {eyebrow && (

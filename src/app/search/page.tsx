@@ -81,8 +81,10 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
   return (
     <div>
       <PageBanner title={seo.search.title} description={seo.search.description}>
-        <Breadcrumbs />
-        <Search searchQuery={searchParameters.searchQuery} />
+        <div className="space-y-6">
+          <Breadcrumbs />
+          <Search searchQuery={searchParameters.searchQuery} />
+        </div>
       </PageBanner>
       {products.length > 0 ? (
         <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 space-y-6">
@@ -93,7 +95,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
             />
             <Filters filters={filters} query={searchParameters} />
           </ListingHeader>
-          <ProductsList layout="grid" products={products} />
+          <ProductsList layout="grid" products={products} ariaLabel="Search results" />
           <PageInfoPagination pageInfo={pageInfo} searchParameters={searchParameters} />
         </div>
       ) : (

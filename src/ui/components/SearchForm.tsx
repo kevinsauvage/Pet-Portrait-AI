@@ -6,8 +6,8 @@ import { useFormStatus } from 'react-dom';
 import { searchAction } from '@/domains/search/actions';
 
 import { Input } from './ui/input';
+import { Label } from './ui/label';
 
-import { Label } from '@radix-ui/react-dropdown-menu';
 import { Search } from 'lucide-react';
 
 const SubmitButton = ({ ...properties }: React.ComponentProps<'button'>) => {
@@ -28,9 +28,13 @@ const SubmitButton = ({ ...properties }: React.ComponentProps<'button'>) => {
 const SearchForm = ({
   searchQuery,
   onChange,
+  resultsId,
+  resultsOpen = false,
 }: {
   searchQuery: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
+  resultsId?: string;
+  resultsOpen?: boolean;
 }) => {
   const [value, setValue] = useState(searchQuery || '');
   const [, action] = useActionState(() => searchAction(value), undefined);
@@ -46,21 +50,30 @@ const SearchForm = ({
 
   return (
     <form action={action} className="relative w-full max-w-2xl mx-auto">
-      <Label aria-label="Search" className="flex items-center">
+      <Label htmlFor="search-input" className="sr-only">
+        Search products
+      </Label>
+      <div className="relative">
         <Input
-          className="py-7 pl-8 pr-11"
-          type="text"
+          id="search-input"
+          className="py-7 pl-10 pr-11"
+          type="search"
           name="searchQuery"
-          placeholder="Search"
-          aria-label="Search"
+          placeholder="Search products, styles, or collections"
+          aria-label="Search products"
+          aria-controls={resultsId}
+          aria-expanded={resultsOpen}
+          aria-autocomplete="list"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
+          enterKeyHint="search"
           onChange={handleChange}
           value={value}
         />
-      </Label>
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      </div>
       <SubmitButton />
     </form>
   );

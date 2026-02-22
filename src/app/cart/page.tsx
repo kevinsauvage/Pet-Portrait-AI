@@ -26,10 +26,15 @@ const CartPage = async () => {
   const isEmpty = !cart?.lines?.edges || cart.lines.edges.length === 0;
 
   return (
-    <div className="py-8 md:py-12 max-w-7xl mx-auto px-4 md:px-6">
-      <PageBanner title="Your Cart" className="w-full pb-4 md:pb-6">
+    <div className="py-10 md:py-14 max-w-7xl mx-auto px-4 md:px-6">
+      <PageBanner
+        eyebrow="Checkout"
+        title="Your Cart"
+        description="Review your order, apply discounts, and complete your purchase."
+        className="w-full pb-6"
+      >
         {!isEmpty && (
-          <div className="flex items-center justify-between gap-4 w-full flex-wrap">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
             <Link
               href="/shop"
               className="group flex items-center text-body-sm text-secondary hover:text-primary transition-colors"
@@ -46,7 +51,7 @@ const CartPage = async () => {
         <CartEmptyState />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <CartItemsList />
           </div>
 

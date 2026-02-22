@@ -71,7 +71,10 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
       </head>
-      <body className="relative bg-background min-h-screen flex flex-col">
+      <body className="relative bg-background min-h-screen">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-radial-[circle_at_center] from-primary/12 via-primary/0 to-transparent blur-3xl" />
+        </div>
         <GtmScript />
         <CookieBanner />
         <ThemeProvider
@@ -82,10 +85,12 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         >
           <CartProvider initialCart={initialCart}>
             <UserProvider user={user} userWishlist={userWishlist}>
-              <Header headerMenu={headerMenu?.menu || null} />
-              <main className="flex-1">{children}</main>
-              <Toaster richColors />
-              <Footer menuItems={footerMenu?.menu?.items} />
+              <div className="relative z-10 flex min-h-screen flex-col">
+                <Header headerMenu={headerMenu?.menu || null} />
+                <main className="flex-1">{children}</main>
+                <Toaster richColors />
+                <Footer menuItems={footerMenu?.menu?.items} />
+              </div>
             </UserProvider>
           </CartProvider>
         </ThemeProvider>
