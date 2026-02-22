@@ -14,7 +14,8 @@
     "lint:css": "stylelint **/*.{scss,css}",
     "lint:css:fix": "stylelint --fix **/*.{scss,css}",
     "codegen": "ts-node --project ./src/infra/shopify/tsconfig.codegen.json bin/run-codegen.ts",
-    "codegen:watch": "ts-node --project ./src/infra/shopify/tsconfig.codegen.json --transpile-only --esm bin/run-codegen.ts --watch"
+    "codegen:watch": "ts-node --project ./src/infra/shopify/tsconfig.codegen.json --transpile-only --esm bin/run-codegen.ts --watch",
+    "seed:shopify": "ts-node -r tsconfig-paths/register --project ./src/infra/shopify/tsconfig.codegen.json bin/seed-shopify.ts"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^6.1.1",

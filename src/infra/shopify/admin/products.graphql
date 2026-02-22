@@ -25,3 +25,25 @@ query getProducts($first: Int!, $after: String) {
     }
   }
 }
+mutation productCreate($product: ProductCreateInput!, $media: [CreateMediaInput!]) {
+  productCreate(product: $product, media: $media) {
+    product {
+      id
+      title
+      handle
+      variants(first: 10) {
+        edges {
+          node {
+            id
+            title
+            sku
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

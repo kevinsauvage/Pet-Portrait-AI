@@ -1,0 +1,42 @@
+mutation collectionCreate($input: CollectionInput!) {
+  collectionCreate(input: $input) {
+    collection {
+      id
+      title
+      handle
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+mutation collectionAddProducts($id: ID!, $productIds: [ID!]!) {
+  collectionAddProducts(id: $id, productIds: $productIds) {
+    collection {
+      id
+      title
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+query getCollections($first: Int!, $after: String) {
+  collections(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        title
+        handle
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
