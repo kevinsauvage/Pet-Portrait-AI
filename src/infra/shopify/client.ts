@@ -52,6 +52,7 @@ const defaultWrapper: SdkFunctionWrapper = async (
   try {
     return await action(extraHeader);
   } catch (error) {
+    console.log('🚀 ~ defaultWrapper ~ error:', error);
     safeLogError(`GraphQL request - ${operationName}`, {
       operationType,
       variables,
