@@ -10,6 +10,4 @@
 2. Add durable rate limiting and abuse protection.
 3. Wire up observability (Sentry + structured logs).
 
-## P3 - Cleanup
-
-1. Remove or populate empty `next-sitemap.config.js`.
+4. Remove or populate empty `next-sitemap.config.js`.
