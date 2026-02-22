@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import seo from '@/data/seo';
-import { CartService } from '@/modules/cart';
+import seo from '@/core/config/seo';
+import { CartService } from '@/domains/cart/services/cart.service';
 import PageBanner from '@/ui/components/PageBanner';
 
 import CartEmptyState from './_components/CartEmptyState';

@@ -1,4 +1,4 @@
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import ListDisplay from '@/ui/components/ListDisplay';
 import ListingHeader from '@/ui/components/ListingHeader';

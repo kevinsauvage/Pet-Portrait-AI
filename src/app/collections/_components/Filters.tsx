@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import type { Filter } from '@/modules/shopify/storefront';
+import type { Filter } from '@/infra/shopify/storefront';
 import {
   Accordion,
   AccordionContent,
@@ -25,7 +25,7 @@ import { Slider } from '@/ui/components/ui/slider';
 
 import { FilterIcon } from 'lucide-react';
 
-// IMPORTANT: do not import runtime enums from `@/modules/shopify/storefront` in client components.
+// IMPORTANT: do not import runtime enums from `@/infra/shopify/storefront` in client components.
 // The generated Storefront SDK pulls in `graphql-request`/`graphql-tag` and will bloat the client bundle.
 const FILTER_TYPE = {
   boolean: 'BOOLEAN',

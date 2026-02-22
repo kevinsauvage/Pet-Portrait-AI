@@ -1,7 +1,7 @@
 import type * as React from 'react';
 
+import { cn } from '@/lib/cn';
 import { CardHeader } from '@/ui/components/ui/card';
-import { cn } from '@/utils/cn';
 
 type CardHeaderPatternProps = {
   title: React.ReactNode;

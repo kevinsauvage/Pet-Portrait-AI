@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
 import { Button } from './ui/button';
 import QuickBuy from './QuickBuy';

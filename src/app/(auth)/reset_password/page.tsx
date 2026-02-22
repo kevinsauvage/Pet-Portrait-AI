@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import AuthShell from '@/app/(auth)/_components/AuthShell';
 import config from '@/core/config';
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
 
 import ResetForm from './_components/ResetPasswordForm';
 

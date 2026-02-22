@@ -5,9 +5,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import useOnClickOutside from '@/hooks/useClickOutside';
-import type { PredictiveSearchQuery } from '@/modules/shopify/storefront';
+import type { PredictiveSearchQuery } from '@/infra/shopify/storefront';
+import debounce from '@/lib/debounce';
 import SearchForm from '@/ui/components/SearchForm';
-import debounce from '@/utils/debounce';
 
 const SearchResults = dynamic(() => import('@/ui/components/SearchResults'));
 

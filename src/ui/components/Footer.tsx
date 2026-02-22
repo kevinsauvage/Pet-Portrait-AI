@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import siteMetadata from '@/data/siteMetadata';
-import type { GetMenuByHandleQuery } from '@/modules/shopify/storefront';
+import siteMetadata from '@/core/config/siteMetadata';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 
 type MenuItem = NonNullable<GetMenuByHandleQuery['menu']>['items'][number];
 
@@ -89,19 +89,20 @@ const Footer = ({ menuItems }: FooterProps) => {
             </ul>
             {Array.isArray(menuItems) && menuItems.length > 0 && (
               <ul className="space-y-2.5 mt-4">
-                {menuItems.flatMap((item) =>
-                  item.items?.map((element) =>
-                    typeof element?.url === 'string' ? (
-                      <li key={element.id}>
-                        <Link
-                          href={new URL(element.url).pathname}
-                          className="text-body-sm text-secondary hover:text-foreground transition-colors"
-                        >
-                          {element.title}
-                        </Link>
-                      </li>
-                    ) : null,
-                  ) ?? [],
+                {menuItems.flatMap(
+                  (item) =>
+                    item.items?.map((element) =>
+                      typeof element?.url === 'string' ? (
+                        <li key={element.id}>
+                          <Link
+                            href={new URL(element.url).pathname}
+                            className="text-body-sm text-secondary hover:text-foreground transition-colors"
+                          >
+                            {element.title}
+                          </Link>
+                        </li>
+                      ) : null,
+                    ) ?? [],
                 )}
               </ul>
             )}

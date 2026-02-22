@@ -3,7 +3,7 @@
 import { startTransition, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/cn';
 
 import { Skeleton } from './ui/skeleton';
 

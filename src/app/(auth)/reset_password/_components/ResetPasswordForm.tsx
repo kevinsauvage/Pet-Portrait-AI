@@ -3,8 +3,8 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { resetPasswordAction } from '@/actions/authActions';
-import { userFeedback } from '@/data/userFeedback';
+import { userFeedback } from '@/core/config/userFeedback';
+import { resetPasswordAction } from '@/domains/auth/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
 import { Button } from '@/ui/components/ui/button';
 

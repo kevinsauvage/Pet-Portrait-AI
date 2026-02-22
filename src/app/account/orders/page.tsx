@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
-import seo from '@/data/seo';
-import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/modules/shopify';
-import { adjustPaginationVariables } from '@/modules/shopify/helpers';
-import { LanguageCode, OrderSortKeys } from '@/modules/shopify/storefront';
+import seo from '@/core/config/seo';
+import { getShopifyToken } from '@/infra/shopify/server';
+import { storefrontSdk } from '@/infra/shopify/client';
+import { adjustPaginationVariables } from '@/infra/shopify/helpers';
+import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';

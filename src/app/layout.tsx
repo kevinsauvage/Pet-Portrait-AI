@@ -4,18 +4,18 @@ import { Inter } from 'next/font/google';
 import { CartProvider } from '@/contexts/CartContext/CartContext';
 import { UserProvider } from '@/contexts/UserContext/UserContext';
 import config from '@/core/config';
-import seo from '@/data/seo';
-import siteMetadata from '@/data/siteMetadata';
-import { CartService } from '@/modules/cart';
-import { storefrontSdk } from '@/modules/shopify';
-import { WishlistService } from '@/modules/wishlist';
+import seo from '@/core/config/seo';
+import siteMetadata from '@/core/config/siteMetadata';
+import { CartService } from '@/domains/cart/services/cart.service';
+import { getUser } from '@/domains/user/get-user';
+import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { storefrontSdk } from '@/infra/shopify/client';
 import CookieBanner from '@/ui/components/CookieBanner';
 import Footer from '@/ui/components/Footer';
 import GtmScript from '@/ui/components/GtmScript';
 import Header from '@/ui/components/Header';
 import { ThemeProvider } from '@/ui/components/theme-provider';
 import { Toaster } from '@/ui/components/ui/sonner';
-import { getUser } from '@/utils/users';
 
 import '../globals.css';
 

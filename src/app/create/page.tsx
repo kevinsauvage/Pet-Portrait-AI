@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import PageBanner from '@/ui/components/PageBanner';
 

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 import config from '@/core/config';
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
+import { storefrontSdk } from '@/infra/shopify/client';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { storefrontSdk } from '@/modules/shopify';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import PageBanner from '@/ui/components/PageBanner';
 

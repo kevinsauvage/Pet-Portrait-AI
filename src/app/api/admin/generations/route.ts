@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import {
   getFailedGenerations,
   getGenerationLogs,
-} from '@/lib/admin/generation-store';
+} from '@/domains/ai/generation-store';
 
 export const dynamic = 'force-dynamic';
 

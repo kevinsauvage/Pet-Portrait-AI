@@ -1,5 +1,5 @@
-import type { MoneyV2, ProductFieldsFragment } from '@/modules/shopify/storefront';
-import { formatPrice } from '@/utils/format';
+import type { MoneyV2, ProductFieldsFragment } from '@/infra/shopify/storefront';
+import { formatPrice } from '@/lib/format';
 
 import { Badge } from './ui/badge';
 

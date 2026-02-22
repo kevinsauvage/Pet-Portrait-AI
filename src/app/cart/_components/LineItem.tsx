@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import { type CartFieldsFragment } from '@/modules/shopify/storefront';
+import { type CartFieldsFragment } from '@/infra/shopify/storefront';
+import { formatPrice } from '@/lib/format';
 import OptimizedImage from '@/ui/components/OptimizedImage';
-import { formatPrice } from '@/utils/format';
 
 import CartRemove from './CartRemove';
 import QuantityUpdatedContainer from './QuantityUpdatedContainer';

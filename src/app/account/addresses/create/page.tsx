@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { createAddressAction } from '@/actions/addressesActions';
 import config from '@/core/config';
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
+import { createAddressAction } from '@/domains/address/actions';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Button } from '@/ui/components/ui/button';

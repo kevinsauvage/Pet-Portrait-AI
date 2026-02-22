@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import NoFavoriteIllustration from '@/assets/NoFavoriteIllustration.png';
-import seo from '@/data/seo';
-import { WishlistService } from '@/modules/wishlist';
+import seo from '@/core/config/seo';
+import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
 import ProductsList from '@/ui/components/ProductsList';

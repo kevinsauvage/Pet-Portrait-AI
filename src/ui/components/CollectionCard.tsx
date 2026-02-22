@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import config from '@/core/config';
-import type { CollectionsQuery } from '@/modules/shopify/storefront';
+import type { CollectionsQuery } from '@/infra/shopify/storefront';
 
 import { Button } from './ui/button';
 

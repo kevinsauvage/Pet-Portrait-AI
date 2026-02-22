@@ -4,10 +4,10 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { useCart } from '@/contexts/CartContext/useCart';
-import { useUploadThing } from '@/lib/uploadthing/uploadthing';
-import { AI_ART_STYLES, type ArtStyleId } from '@/modules/ai/ai-portrait/types';
-import { validateImageDimensions } from '@/modules/ai/ai-portrait/validation';
-import { api } from '@/utils/api-client';
+import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
+import { validateImageDimensions } from '@/domains/ai/ai-portrait/validation';
+import { api } from '@/infra/http/api-client';
+import { useUploadThing } from '@/infra/upload/uploadthing';
 
 import StepAddToCart from './StepAddToCart';
 import StepGenerating from './StepGenerating';

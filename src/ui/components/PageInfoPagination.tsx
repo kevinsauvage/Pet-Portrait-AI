@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { getNextPath, getPreviousPath } from '@/modules/shopify/helpers';
-import type { PageInfo } from '@/modules/shopify/storefront';
+import { getNextPath, getPreviousPath } from '@/infra/shopify/helpers';
+import type { PageInfo } from '@/infra/shopify/storefront';
 import { Button } from '@/ui/components/ui/button';
 
 const PageInfoPagination = async ({

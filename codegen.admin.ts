@@ -1,4 +1,4 @@
-import { getCodegenToken } from './src/modules/shopify/tokens/codegen-token';
+import { getCodegenToken } from './src/infra/shopify/tokens/codegen-token';
 
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
@@ -8,7 +8,7 @@ const getAdminSchemaUrl = (): string => {
   if (!url) {
     throw new Error(
       'Missing SHOPIFY_ADMIN_URL environment variable. ' +
-        'Set it to your Shopify Admin API endpoint (e.g., https://your-store.myshopify.com/admin/api/2025-01/graphql.json)',
+        'Set it to your Shopify Admin API endpoint (e.g., https://your-store.myshopify.com/admin/api/2026-01/graphql.json)',
     );
   }
 
@@ -28,9 +28,9 @@ async function createCodegenConfig(): Promise<CodegenConfig> {
       fragmentMasking: false,
       gqlTagName: 'gql',
     },
-    documents: 'src/modules/shopify/admin/**/*.graphql',
+    documents: 'src/infra/shopify/admin/**/*.graphql',
     generates: {
-      'src/modules/shopify/admin/index.ts': {
+      'src/infra/shopify/admin/index.ts': {
         plugins: ['typescript', 'typescript-operations', 'typescript-graphql-request'],
         config: {
           scalars: {

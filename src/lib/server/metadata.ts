@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import siteMetadata from '@/data/siteMetadata';
+import siteMetadata from '@/core/config/siteMetadata';
 
 /**
  * Get base URL for the application
@@ -96,4 +96,3 @@ export function generateMetadata({
     },
   };
 }
-

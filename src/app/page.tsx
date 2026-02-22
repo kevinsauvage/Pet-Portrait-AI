@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
+import { storefrontSdk } from '@/infra/shopify/client';
+import { CollectionSortKeys, ProductSortKeys } from '@/infra/shopify/storefront/index';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { storefrontSdk } from '@/modules/shopify';
-import { CollectionSortKeys, ProductSortKeys } from '@/modules/shopify/storefront/index';
 import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
 import PageBanner from '@/ui/components/PageBanner';
 

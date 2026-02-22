@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';

@@ -3,8 +3,8 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
-import { mapShopifyImagesToImageFields } from '@/utils/images';
+import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
 import { Badge } from './ui/badge';
 import OptimizedImage from './OptimizedImage';

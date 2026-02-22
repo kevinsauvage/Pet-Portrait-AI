@@ -1,5 +1,5 @@
-import { storefrontSdk } from '@/modules/shopify';
-import type { GetMenuByHandleQuery } from '@/modules/shopify/storefront';
+import { storefrontSdk } from '@/infra/shopify/client';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import PageBanner from '@/ui/components/PageBanner';
 

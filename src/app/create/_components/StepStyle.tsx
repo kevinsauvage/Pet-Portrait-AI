@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { AI_ART_STYLES, type ArtStyleId } from '@/modules/ai/ai-portrait/types';
+import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
 import { Button } from '@/ui/components/ui/button';
 
 import { motion } from 'framer-motion';

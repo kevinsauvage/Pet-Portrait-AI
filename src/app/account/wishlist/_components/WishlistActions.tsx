@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import { removeFromWishlist } from '@/domains/wishlist/client';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import { Button } from '@/ui/components/ui/button';
 import {
   DropdownMenu,
@@ -13,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/components/ui/dropdown-menu';
-import { removeFromWishlist } from '@/utils/wishlist-client';
 
 import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';

@@ -1,5 +1,5 @@
+import { cn } from '@/lib/cn';
 import { Skeleton } from '@/ui/components/ui/skeleton';
-import { cn } from '@/utils/cn';
 
 type ProductCardSkeletonProps = {
   /**

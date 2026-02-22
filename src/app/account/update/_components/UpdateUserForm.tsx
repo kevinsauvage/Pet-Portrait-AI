@@ -3,11 +3,11 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { updateUserAction } from '@/actions/usersActions';
 import useUserContext from '@/contexts/UserContext/useUserContext';
-import { userFeedback } from '@/data/userFeedback';
+import { userFeedback } from '@/core/config/userFeedback';
+import { updateUserAction } from '@/domains/user/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/modules/shopify/storefront';
+import type { CustomerUserError } from '@/infra/shopify/storefront';
 import FormFieldError from '@/ui/components/FormFieldError';
 import { Button } from '@/ui/components/ui/button';
 import { Checkbox } from '@/ui/components/ui/checkbox';

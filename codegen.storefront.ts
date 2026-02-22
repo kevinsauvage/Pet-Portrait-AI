@@ -1,4 +1,4 @@
-import { getCodegenStorefrontToken } from './src/modules/shopify/tokens/codegen-token';
+import { getCodegenStorefrontToken } from './src/infra/shopify/tokens/codegen-token';
 
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
@@ -7,7 +7,7 @@ function getStorefrontSchemaUrl(): string {
   if (!url) {
     throw new Error(
       'Missing NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL. ' +
-        'Set it to your Storefront API endpoint (e.g., https://your-store.myshopify.com/api/2025-01/graphql.json)',
+        'Set it to your Storefront API endpoint (e.g., https://your-store.myshopify.com/api/2026-01/graphql.json)',
     );
   }
   return url;
@@ -17,9 +17,9 @@ async function createStorefrontCodegenConfig(): Promise<CodegenConfig> {
   const storefrontSchemaUrl = getStorefrontSchemaUrl();
   const accessToken = await getCodegenStorefrontToken();
   return {
-    documents: 'src/modules/shopify/storefront/**/*.graphql',
+    documents: 'src/infra/shopify/storefront/**/*.graphql',
     generates: {
-      'src/modules/shopify/storefront/index.ts': {
+      'src/infra/shopify/storefront/index.ts': {
         config: {
           scalars: {
             Color: 'string',

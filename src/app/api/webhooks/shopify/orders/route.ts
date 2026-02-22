@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server';
 
-import { createErrorResponse, createSuccessResponse, HTTP_STATUS } from '@/utils/api-responses';
+import { createErrorResponse, createSuccessResponse, HTTP_STATUS } from '@/core/utils/api-responses';
 
 import { createHmac } from 'crypto';
 

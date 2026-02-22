@@ -1,13 +1,13 @@
 import { type NextRequest } from 'next/server';
 
-import { WISHLIST_MAX_ITEMS, WishlistService } from '@/modules/wishlist';
 import {
   createErrorResponse,
   createSuccessResponse,
   handleApiError,
   HTTP_STATUS,
-} from '@/utils/api-responses';
-import { getUser } from '@/utils/users';
+} from '@/core/utils/api-responses';
+import { getUser } from '@/domains/user/get-user';
+import { WISHLIST_MAX_ITEMS, WishlistService } from '@/domains/wishlist/services/wishlist.service';
 
 export const dynamic = 'force-dynamic';
 

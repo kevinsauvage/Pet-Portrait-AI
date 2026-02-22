@@ -4,15 +4,15 @@ import { redirect } from 'next/navigation';
 
 import AccountStats from '@/app/account/_components/AccountStats';
 import config from '@/core/config';
-import seo from '@/data/seo';
-import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/modules/shopify';
-import { LanguageCode, OrderSortKeys } from '@/modules/shopify/storefront';
-import { WishlistService } from '@/modules/wishlist';
+import seo from '@/core/config/seo';
+import { getUser } from '@/domains/user/get-user';
+import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { getShopifyToken } from '@/infra/shopify/server';
+import { storefrontSdk } from '@/infra/shopify/client';
+import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
-import { getUser } from '@/utils/users';
 
 import RecentOrdersPreview from './_components/RecentOrdersPreview';
 import UserFullName from './_components/UserFullName';

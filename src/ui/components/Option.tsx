@@ -1,4 +1,4 @@
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import { Button } from '@/ui/components/ui/button';
 
 type OptionValues = ProductFieldsFragment['options'][number]['optionValues'][number];

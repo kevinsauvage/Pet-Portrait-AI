@@ -1,12 +1,12 @@
 import { type NextRequest } from 'next/server';
 
-import { WishlistService } from '@/modules/wishlist';
 import {
   createErrorResponse,
   createSuccessResponse,
   HTTP_STATUS,
-} from '@/utils/api-responses';
-import { getUser } from '@/utils/users';
+} from '@/core/utils/api-responses';
+import { getUser } from '@/domains/user/get-user';
+import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 
 export const dynamic = 'force-dynamic';
 

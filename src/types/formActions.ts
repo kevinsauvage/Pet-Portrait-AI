@@ -1,4 +1,4 @@
-import type { CustomerUserError, UserError } from '@/modules/shopify/storefront';
+import type { CustomerUserError, UserError } from '@/infra/shopify/storefront';
 
 /**
  * Standardized return type for all form actions

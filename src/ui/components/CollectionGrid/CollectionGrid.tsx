@@ -1,4 +1,4 @@
-import type { CollectionsQuery } from '@/modules/shopify/storefront';
+import type { CollectionsQuery } from '@/infra/shopify/storefront';
 import CollectionCard from '@/ui/components/CollectionCard';
 
 const CollectionGrid = ({

@@ -1,13 +1,13 @@
 import { type NextRequest } from 'next/server';
 
-import { generatePetPortraitVariations } from '@/actions/ai-portrait.actions';
-import { type ArtStyleId, isValidStyleId, validStyleIdsLabel } from '@/modules/ai/ai-portrait/types';
 import {
   createErrorResponse,
   createSuccessResponse,
   handleApiError,
   HTTP_STATUS,
-} from '@/utils/api-responses';
+} from '@/core/utils/api-responses';
+import { generatePetPortraitVariations } from '@/domains/ai/actions';
+import { type ArtStyleId, isValidStyleId, validStyleIdsLabel } from '@/domains/ai/ai-portrait/types';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import type { GetMenuByHandleQuery } from '@/modules/shopify/storefront';
+import { getShopifyToken } from '@/infra/shopify/server';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Logo from '@/ui/components/Logo';
 import UserButtons from '@/ui/components/UserButtons';
 

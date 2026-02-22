@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import useProductSelection from '@/hooks/useProductSelection';
-import type { GetProductByHandleQuery } from '@/modules/shopify/storefront';
+import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
+import { formatPrice } from '@/lib/format';
 import QuantityUpdater from '@/ui/components/QuantityUpdater';
-import { formatPrice } from '@/utils/format';
 
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

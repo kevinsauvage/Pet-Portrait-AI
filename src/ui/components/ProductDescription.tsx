@@ -1,6 +1,6 @@
-import type { GetProductByHandleQuery } from '@/modules/shopify/storefront';
-import { cn } from '@/utils/cn';
-import { mapShopifyImagesToImageFields } from '@/utils/images';
+import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
+import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
+import { cn } from '@/lib/cn';
 
 import { Badge } from './ui/badge';
 import PhotoGallery from './PhotoGallery';

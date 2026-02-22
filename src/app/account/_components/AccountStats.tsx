@@ -3,8 +3,8 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
+import { cn } from '@/lib/cn';
 import { Card, CardContent } from '@/ui/components/ui/card';
-import { cn } from '@/utils/cn';
 
 import { Calendar, Heart, MapPin, Package } from 'lucide-react';
 

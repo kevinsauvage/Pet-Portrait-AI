@@ -2,7 +2,7 @@
 
 import type * as React from 'react';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/cn';
 
 import { Drawer as DrawerPrimitive } from 'vaul';
 

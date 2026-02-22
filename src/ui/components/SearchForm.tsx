@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { searchAction } from '@/actions/searchActions';
+import { searchAction } from '@/domains/search/actions';
 
 import { Input } from './ui/input';
 
@@ -33,7 +33,7 @@ const SearchForm = ({
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }) => {
   const [value, setValue] = useState(searchQuery || '');
-  const [, action] = useActionState(() => searchAction(value), searchQuery);
+  const [, action] = useActionState(() => searchAction(value), undefined);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);

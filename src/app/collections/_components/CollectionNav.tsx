@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import type { GetMenuByHandleQuery } from '@/modules/shopify/storefront';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import { Button } from '@/ui/components/ui/button';
 
 const CollectionNav = ({

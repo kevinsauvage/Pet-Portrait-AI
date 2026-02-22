@@ -3,9 +3,8 @@ import { NextResponse } from 'next/server';
 
 import appConfig from '@/core/config';
 import { DEFAULTS } from '@/core/config/constants';
-import { getStandardCookieOptions } from '@/utils/cookie-security';
-
-import { setDelegateTokenAction } from './actions/delegateTokenActions';
+import { getStandardCookieOptions } from '@/core/utils/cookie-security';
+import { setDelegateTokenAction } from '@/infra/shopify/actions';
 
 async function proxy(request: NextRequest) {
   const { nextUrl, cookies, headers, url } = request;

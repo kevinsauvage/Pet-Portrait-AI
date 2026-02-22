@@ -2,11 +2,11 @@
 
 import { useId, useState } from 'react';
 
+import { cn } from '@/lib/cn';
 import FormFieldError from '@/ui/components/FormFieldError';
 import { Button } from '@/ui/components/ui/button';
 import { Input } from '@/ui/components/ui/input';
 import { Label } from '@/ui/components/ui/label';
-import { cn } from '@/utils/cn';
 
 import { Eye, EyeOff } from 'lucide-react';
 

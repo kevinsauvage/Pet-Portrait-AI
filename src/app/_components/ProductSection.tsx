@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import ProductsList from '@/ui/components/ProductsList';
 import { Button } from '@/ui/components/ui/button';
 

@@ -1,4 +1,4 @@
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import ListDisplay from '@/ui/components/ListDisplay';
 
 import ProductCardDefault from './ProductCardDefault';

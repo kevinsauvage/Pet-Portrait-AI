@@ -7,10 +7,10 @@ import Link from 'next/link';
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import config from '@/core/config';
 import useProductSelection from '@/hooks/useProductSelection';
-import type { ProductFieldsFragment } from '@/modules/shopify/storefront';
-import { cn } from '@/utils/cn';
-import { formatPrice } from '@/utils/format';
-import { mapShopifyImagesToImageFields } from '@/utils/images';
+import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
+import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
+import { cn } from '@/lib/cn';
+import { formatPrice } from '@/lib/format';
 
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

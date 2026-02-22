@@ -6,6 +6,8 @@ import Link from 'next/link';
 import config from '@/core/config';
 import { withGtag } from '@/lib/client/analytics';
 import { getCookieFront, setCookieFront } from '@/lib/client/cookies';
+import type { originalSettingsType } from '@/lib/consents';
+import { transformedSettings } from '@/lib/consents';
 import { Button } from '@/ui/components/ui/button';
 import { Checkbox } from '@/ui/components/ui/checkbox';
 import {
@@ -17,8 +19,6 @@ import {
   DialogTrigger,
 } from '@/ui/components/ui/dialog';
 import { Label } from '@/ui/components/ui/label';
-import type { originalSettingsType } from '@/utils/consents';
-import { transformedSettings } from '@/utils/consents';
 
 import { Settings } from 'lucide-react';
 

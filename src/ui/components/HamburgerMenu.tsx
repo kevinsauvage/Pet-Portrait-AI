@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import config from '@/core/config';
-import type { GetMenuByHandleQuery, MenuItem } from '@/modules/shopify/storefront';
+import type { GetMenuByHandleQuery, MenuItem } from '@/infra/shopify/storefront';
+import { cn } from '@/lib/cn';
 import {
   Sheet,
   SheetContent,
@@ -14,7 +15,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/ui/components/ui/sheet';
-import { cn } from '@/utils/cn';
 
 import {
   ChevronDown,

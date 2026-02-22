@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next';
 
 import { sitemap as sitemapConfig } from '@/core/config';
+import { getStorefrontAccessToken } from '@/infra/shopify/tokens/storefront-token';
 import { getBaseUrl } from '@/lib/server/metadata';
-import { getStorefrontAccessToken } from '@/modules/shopify/tokens/storefront-token';
 
 import { GraphQLClient } from 'graphql-request';
 import gql from 'graphql-tag';

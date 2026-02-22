@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
+import { AI_ART_STYLES } from '@/domains/ai/ai-portrait/types';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { AI_ART_STYLES } from '@/modules/ai/ai-portrait/types';
 import PageBanner from '@/ui/components/PageBanner';
 import { Button } from '@/ui/components/ui/button';
 

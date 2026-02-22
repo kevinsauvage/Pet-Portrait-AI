@@ -8,11 +8,11 @@ import type {
   OrderFieldsFragment,
   OrderFinancialStatus,
   OrderFulfillmentStatus,
-} from '@/modules/shopify/storefront';
+} from '@/infra/shopify/storefront';
+import { formatPrice } from '@/lib/format';
 import { Badge } from '@/ui/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/ui/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/ui/components/ui/collapsible';
-import { formatPrice } from '@/utils/format';
 
 import { ChevronDown, ChevronUp, Package } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';

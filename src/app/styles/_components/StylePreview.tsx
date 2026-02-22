@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { ArtStyle } from '@/modules/ai/ai-portrait/types';
+import type { ArtStyle } from '@/domains/ai/ai-portrait/types';
 import { Button } from '@/ui/components/ui/button';
 
 type StylePreviewProps = {

@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import type { GetCustomerOrdersQuery } from '@/modules/shopify/storefront';
+import type { GetCustomerOrdersQuery } from '@/infra/shopify/storefront';
+import { formatPrice } from '@/lib/format';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
-import { formatPrice } from '@/utils/format';
 
 import { ArrowRight, Package } from 'lucide-react';
 

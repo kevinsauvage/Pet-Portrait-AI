@@ -1,15 +1,15 @@
 import { type NextRequest } from 'next/server';
 
-import { CartService } from '@/modules/cart';
-import { storefrontSdk } from '@/modules/shopify';
-import { adjustPaginationVariables } from '@/modules/shopify/helpers';
 import {
   createErrorResponse,
   createSuccessResponse,
   handleApiError,
   HTTP_STATUS,
   mapShopifyUserErrors,
-} from '@/utils/api-responses';
+} from '@/core/utils/api-responses';
+import { CartService } from '@/domains/cart/services/cart.service';
+import { storefrontSdk } from '@/infra/shopify/client';
+import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 
 export const dynamic = 'force-dynamic';
 

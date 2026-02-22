@@ -2,10 +2,10 @@
 
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { createCartAction } from '@/actions/cartActions';
-import cartMock from '@/modules/cart/mocks/cart';
-import type { CartFieldsFragment } from '@/modules/shopify/storefront';
-import { api } from '@/utils/api-client';
+import { createCartAction } from '@/domains/cart/actions';
+import cartMock from '@/domains/cart/mocks/cart';
+import { api } from '@/infra/http/api-client';
+import type { CartFieldsFragment } from '@/infra/shopify/storefront';
 
 import { toast } from 'sonner';
 

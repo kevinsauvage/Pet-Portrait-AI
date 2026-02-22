@@ -4,17 +4,17 @@ import { redirect } from 'next/navigation';
 
 import NoAddressIllustration from '@/assets/NoAddressIllustration.png';
 import config from '@/core/config';
-import seo from '@/data/seo';
-import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/modules/shopify';
-import { adjustPaginationVariables } from '@/modules/shopify/helpers';
-import type { MailingAddress } from '@/modules/shopify/storefront';
+import seo from '@/core/config/seo';
+import { getUser } from '@/domains/user/get-user';
+import { adjustPaginationVariables } from '@/infra/shopify/helpers';
+import { getShopifyToken } from '@/infra/shopify/server';
+import { storefrontSdk } from '@/infra/shopify/client';
+import type { MailingAddress } from '@/infra/shopify/storefront';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
-import { getUser } from '@/utils/users';
 
 import BackButton from '../_components/BackButton';
 

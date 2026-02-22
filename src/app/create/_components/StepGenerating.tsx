@@ -1,6 +1,6 @@
 'use client';
 
-import { AI_ART_STYLES, type ArtStyleId } from '@/modules/ai/ai-portrait/types';
+import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
 
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';

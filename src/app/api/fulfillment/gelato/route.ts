@@ -1,12 +1,12 @@
 import { type NextRequest } from 'next/server';
 
-import { GELATO_PRODUCT_UIDS } from '@/modules/ai/ai-portrait/products';
 import {
   createErrorResponse,
   createSuccessResponse,
   handleApiError,
   HTTP_STATUS,
-} from '@/utils/api-responses';
+} from '@/core/utils/api-responses';
+import { GELATO_PRODUCT_UIDS } from '@/domains/ai/ai-portrait/products';
 
 export const dynamic = 'force-dynamic';
 

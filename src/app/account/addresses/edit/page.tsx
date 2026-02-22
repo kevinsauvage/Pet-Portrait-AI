@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { updateAddressAction } from '@/actions/addressesActions';
 import config from '@/core/config';
-import seo from '@/data/seo';
+import seo from '@/core/config/seo';
+import { updateAddressAction } from '@/domains/address/actions';
+import { getShopifyToken } from '@/infra/shopify/server';
+import { storefrontSdk } from '@/infra/shopify/client';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { getShopifyToken } from '@/lib/server/shopify-helpers';
-import { storefrontSdk } from '@/modules/shopify';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';

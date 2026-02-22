@@ -1,8 +1,8 @@
 import type * as React from 'react';
 
+import { cn } from '@/lib/cn';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Card, CardContent } from '@/ui/components/ui/card';
-import { cn } from '@/utils/cn';
 
 type AuthShellProps = {
   title: string;

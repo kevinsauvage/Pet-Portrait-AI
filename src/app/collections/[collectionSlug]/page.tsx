@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { storefrontSdk } from '@/modules/shopify';
-import { adjustPaginationVariables, parseFiltersQuery } from '@/modules/shopify/helpers';
-import { ProductCollectionSortKeys } from '@/modules/shopify/storefront';
+import { storefrontSdk } from '@/infra/shopify/client';
+import { adjustPaginationVariables, parseFiltersQuery } from '@/infra/shopify/helpers';
+import { ProductCollectionSortKeys } from '@/infra/shopify/storefront';
 import EmptyState from '@/ui/components/EmptyState';
 import ListingHeader from '@/ui/components/ListingHeader';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';

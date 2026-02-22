@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import HomeSection from '@/app/_components/HomeSection';
+import { storefrontSdk } from '@/infra/shopify/client';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { storefrontSdk } from '@/modules/shopify';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import ProductDescription from '@/ui/components/ProductDescription';
 import ProductRecommendations from '@/ui/components/ProductRecommendations';

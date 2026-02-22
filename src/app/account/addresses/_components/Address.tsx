@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 
-import { deleteAddressAction, setDefaultAddressAction } from '@/actions/addressesActions';
 import config from '@/core/config';
-import type { MailingAddress } from '@/modules/shopify/storefront';
+import { deleteAddressAction, setDefaultAddressAction } from '@/domains/address/actions';
+import type { MailingAddress } from '@/infra/shopify/storefront';
 import { Badge } from '@/ui/components/ui/badge';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';

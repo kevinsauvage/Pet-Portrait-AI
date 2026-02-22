@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import config from '@/core/config';
-import { AI_PORTRAIT_PRODUCTS } from '@/modules/ai/ai-portrait/products';
+import { AI_PORTRAIT_PRODUCTS } from '@/domains/ai/ai-portrait/products';
 import { Badge } from '@/ui/components/ui/badge';
 import { Button } from '@/ui/components/ui/button';
 

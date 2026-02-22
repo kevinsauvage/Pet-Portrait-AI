@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import type { PredictiveSearchQuery } from '@/modules/shopify/storefront';
-import { formatPrice } from '@/utils/format';
+import type { PredictiveSearchQuery } from '@/infra/shopify/storefront';
+import { formatPrice } from '@/lib/format';
 
 import { Button } from './ui/button';
 import OptimizedImage from './OptimizedImage';

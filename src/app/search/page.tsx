@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import config from '@/core/config';
-import seo from '@/data/seo';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import { storefrontSdk } from '@/modules/shopify';
+import seo from '@/core/config/seo';
+import { storefrontSdk } from '@/infra/shopify/client';
 import {
   adjustPaginationVariables,
   buildShopifySearchQuery,
   parseFiltersQuery,
-} from '@/modules/shopify/helpers';
-import type { ProductFieldsFragment, SearchProductsQuery } from '@/modules/shopify/storefront';
-import { SearchSortKeys } from '@/modules/shopify/storefront';
+} from '@/infra/shopify/helpers';
+import type { ProductFieldsFragment, SearchProductsQuery } from '@/infra/shopify/storefront';
+import { SearchSortKeys } from '@/infra/shopify/storefront';
+import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import EmptyState from '@/ui/components/EmptyState';
 import ListingHeader from '@/ui/components/ListingHeader';

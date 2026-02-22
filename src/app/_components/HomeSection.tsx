@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { cn } from '@/lib/cn';
 import SectionTitle from '@/ui/components/SectionTitle';
-import { cn } from '@/utils/cn';
 
 type HomeSectionProps = {
   title: string;

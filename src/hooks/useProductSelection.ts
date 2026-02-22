@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
-import type { GetProductByHandleQuery, ProductFieldsFragment } from '@/modules/shopify/storefront';
+import type { GetProductByHandleQuery, ProductFieldsFragment } from '@/infra/shopify/storefront';
 type OptionValues = ProductFieldsFragment['options'][number]['optionValues'][number];
 
 type SelectedProductOptionType = {

@@ -1,10 +1,10 @@
-import { CartService } from '@/modules/cart';
 import {
   createErrorResponse,
   createSuccessResponse,
   handleApiError,
   HTTP_STATUS,
-} from '@/utils/api-responses';
+} from '@/core/utils/api-responses';
+import { CartService } from '@/domains/cart/services/cart.service';
 
 export const dynamic = 'force-dynamic';
 
