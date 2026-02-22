@@ -1,1 +1,1 @@
-export { adminClient,adminSdk, storefrontSdk } from '../client';
+export { adminClient, adminSdk, storefrontSdk } from '../client';

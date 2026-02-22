@@ -15,7 +15,6 @@ const ADMIN_URL = process.env.SHOPIFY_ADMIN_URL;
 const SHOPIFY_URL = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL;
 
 if (!SHOPIFY_URL) throw new Error('Missing NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL');
-if (!ADMIN_URL) throw new Error('Missing SHOPIFY_ADMIN_URL');
 
 const createStorefrontClient = (cacheOption: 'default' | 'no-store' = 'default') => {
   return new GraphQLClient(SHOPIFY_URL, {
@@ -67,14 +66,25 @@ export const storefrontSdk = (cacheOption: 'default' | 'no-store' = 'default') =
   return getStorefrontSdk(client, defaultWrapper);
 };
 
-export const adminClient = new GraphQLClient(ADMIN_URL, {
-  fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
-    const token = await getAdminAccessToken();
-    const headers = new Headers(init?.headers);
-    headers.set('Content-Type', 'application/json');
-    headers.set('X-Shopify-Access-Token', token);
-    return fetchWithRetry(input, { ...init, headers });
-  },
-});
+let cachedAdminClient: GraphQLClient | null = null;
 
-export const adminSdk = () => getAdminSdk(adminClient, defaultWrapper);
+const getAdminClient = () => {
+  if (cachedAdminClient) return cachedAdminClient;
+  if (!ADMIN_URL) {
+    throw new Error('Missing SHOPIFY_ADMIN_URL');
+  }
+  cachedAdminClient = new GraphQLClient(ADMIN_URL, {
+    fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+      const token = await getAdminAccessToken();
+      const headers = new Headers(init?.headers);
+      headers.set('Content-Type', 'application/json');
+      headers.set('X-Shopify-Access-Token', token);
+      return fetchWithRetry(input, { ...init, headers });
+    },
+  });
+  return cachedAdminClient;
+};
+
+export const adminClient = () => getAdminClient();
+
+export const adminSdk = () => getAdminSdk(getAdminClient(), defaultWrapper);

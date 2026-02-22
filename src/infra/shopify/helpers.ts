@@ -17,6 +17,7 @@ export const adjustPaginationVariables = ({
   after,
   before,
   first,
+  last,
   ...rest
 }: PaginationVariables): PaginationVariables => {
   const variables: PaginationVariables = {
@@ -24,7 +25,7 @@ export const adjustPaginationVariables = ({
     after: after || undefined, // Cursor for next page
     before: before || undefined, // Cursor for previous page
     first: after ? first || 10 : undefined, // Forward pagination
-    last: before ? first || 10 : undefined, // Backward pagination
+    last: before ? last || 10 : undefined, // Backward pagination
   };
 
   if (!after && !before) {
@@ -37,17 +38,23 @@ export const adjustPaginationVariables = ({
 export const parseFiltersQuery = (filters: string | Array<string> | undefined): ProductFilter[] => {
   if (!filters) return [];
 
+  const safeParseFilter = (value: string): ProductFilter | undefined => {
+    try {
+      const [, jsonPart] = value.split(/:(.+)/);
+      if (!jsonPart) return undefined;
+      return JSON.parse(jsonPart) as ProductFilter;
+    } catch {
+      return undefined;
+    }
+  };
+
   if (!Array.isArray(filters) && typeof filters === 'string') {
-    const [, jsonPart] = filters.split(/:(.+)/);
-    return [JSON.parse(jsonPart || '') as ProductFilter];
+    const parsed = safeParseFilter(filters);
+    return parsed ? [parsed] : [];
   }
 
   return filters
-    .map((item): ProductFilter | undefined => {
-      const [, jsonPart] = item.split(/:(.+)/);
-      if (!jsonPart) return undefined;
-      return JSON.parse(jsonPart) as ProductFilter;
-    })
+    .map((item) => safeParseFilter(item))
     .filter((filter): filter is ProductFilter => filter !== undefined);
 };
 
@@ -97,7 +104,10 @@ export const getNextPath = async (
   }
 
   const currentUrl = await getCurrentUrlWithoutParameters();
-  const newSearchParameters = new URLSearchParams(searchParameters);
+  const newSearchParameters = new URLSearchParams();
+  if (searchParameters.after) newSearchParameters.set('after', searchParameters.after);
+  if (searchParameters.before) newSearchParameters.set('before', searchParameters.before);
+  if (searchParameters.sort_key) newSearchParameters.set('sort_key', searchParameters.sort_key);
   if (pageInfo.endCursor) {
     newSearchParameters.set('after', pageInfo.endCursor);
   }
@@ -118,7 +128,10 @@ export const getPreviousPath = async (
     return '';
   }
   const currentUrl = await getCurrentUrlWithoutParameters();
-  const newSearchParameters = new URLSearchParams(searchParameters);
+  const newSearchParameters = new URLSearchParams();
+  if (searchParameters.after) newSearchParameters.set('after', searchParameters.after);
+  if (searchParameters.before) newSearchParameters.set('before', searchParameters.before);
+  if (searchParameters.sort_key) newSearchParameters.set('sort_key', searchParameters.sort_key);
   if (pageInfo.startCursor) {
     newSearchParameters.set('before', pageInfo.startCursor);
   }
