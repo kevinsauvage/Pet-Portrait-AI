@@ -2,9 +2,10 @@
 
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useSearchParams } from 'next/navigation';
 
 import { useCart } from '@/contexts/CartContext/useCart';
-import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
+import { AI_ART_STYLES, type ArtStyleId, isValidStyleId } from '@/domains/ai/ai-portrait/types';
 import { validateImageDimensions } from '@/domains/ai/ai-portrait/validation';
 import { api } from '@/infra/http/api-client';
 import { useUploadThing } from '@/infra/upload/uploadthing';
@@ -35,6 +36,10 @@ const STEPS: { id: WizardStep; label: string }[] = [
 ];
 
 export default function CreateWizard() {
+  const searchParams = useSearchParams();
+  const styleFromUrl = searchParams.get('style');
+  const preselectedStyleId = isValidStyleId(styleFromUrl) ? (styleFromUrl as ArtStyleId) : null;
+
   const [step, setStep] = useState<WizardStep>('upload');
   const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
   const [selectedStyleId, setSelectedStyleId] = useState<ArtStyleId | null>(null);
@@ -89,7 +94,7 @@ export default function CreateWizard() {
         { originalPhotoUrl, styleId },
       )
       .then((res) => {
-        const {data} = res;
+        const { data } = res;
         if (!data?.urls) throw new Error('Invalid response');
         setArtwork(data);
         setStep('select');
@@ -188,6 +193,7 @@ export default function CreateWizard() {
               originalPhotoUrl={originalPhotoUrl}
               onSelect={handleStyleSelect}
               onBack={() => setStep('upload')}
+              preselectedStyleId={preselectedStyleId}
             />
           </motion.div>
         )}

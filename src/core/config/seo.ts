@@ -99,6 +99,11 @@ const seo = {
       'Search our collection of portrait styles, products, and inspiration for your next pet portrait.',
     title: 'Search',
   },
+  shop: {
+    description:
+      'Browse product collections — canvas prints, posters, and digital pet portraits. Find the perfect format for your AI-generated artwork.',
+    title: 'Shop',
+  },
   styles: {
     description:
       'Explore our curated collection of AI portrait styles — from renaissance oil paintings to modern pop art. Find the perfect look for your pet.',

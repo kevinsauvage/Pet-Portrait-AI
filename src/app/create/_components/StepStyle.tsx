@@ -12,9 +12,15 @@ interface StepStyleProps {
   originalPhotoUrl: string;
   onSelect: (styleId: ArtStyleId) => void;
   onBack: () => void;
+  preselectedStyleId?: ArtStyleId | null;
 }
 
-export default function StepStyle({ originalPhotoUrl, onSelect, onBack }: StepStyleProps) {
+export default function StepStyle({
+  originalPhotoUrl,
+  onSelect,
+  onBack,
+  preselectedStyleId,
+}: StepStyleProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -58,7 +64,9 @@ export default function StepStyle({ originalPhotoUrl, onSelect, onBack }: StepSt
                 >
                   <button
                     onClick={() => onSelect(style.id)}
-                    className="w-full flex items-center gap-4 p-4 rounded-xl border bg-card hover:border-primary hover:shadow-md transition-all text-left group"
+                    className={`w-full flex items-center gap-4 p-4 rounded-xl border bg-card hover:border-primary hover:shadow-md transition-all text-left group ${
+                      preselectedStyleId === style.id ? 'ring-2 ring-primary border-primary' : ''
+                    }`}
                   >
                     <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0">
                       <Image

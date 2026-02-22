@@ -29,7 +29,7 @@ const FEATURES = [
   {
     icon: Palette,
     title: 'Pick a Style',
-    description: 'Renaissance, watercolor, pop art — over 20 artistic styles to choose from.',
+    description: 'Renaissance, watercolor, pop art — 8 artistic styles to choose from.',
   },
   {
     icon: Truck,
