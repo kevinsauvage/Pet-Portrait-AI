@@ -68,9 +68,15 @@ export async function POST(request: NextRequest) {
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000';
+    const fulfillmentSecret = process.env.FULFILLMENT_API_SECRET;
     const response = await fetch(`${baseUrl}/api/fulfillment/gelato`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(fulfillmentSecret
+          ? { Authorization: `Bearer ${fulfillmentSecret}` }
+          : {}),
+      },
       body: JSON.stringify({
         orderId: String(order.id),
         lineItems: podItems,

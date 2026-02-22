@@ -133,6 +133,11 @@ cp .env.example .env
 - Browser flows receive a signed session cookie from the middleware when visiting `/create` (no header needed).
 - Server-to-server calls can send `Authorization: Bearer <token>` or `x-api-key`.
 
+**Internal fulfillment protection (recommended in production):**
+
+- Set `FULFILLMENT_API_SECRET` to protect `/api/fulfillment/gelato`.
+- `/api/webhooks/shopify/orders` will send it automatically via `Authorization: Bearer <token>`.
+
 For detailed AI portrait setup (Shopify products, Gelato POD, webhooks), see [README-AI-PET-PORTRAIT.md](./README-AI-PET-PORTRAIT.md).
 
 ### Development Commands

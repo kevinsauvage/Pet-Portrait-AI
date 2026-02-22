@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { isApiAuthConfigured, isApiAuthorized } from '@/core/utils/api-auth';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -21,6 +22,21 @@ function getProperty(
 }
 
 export async function POST(request: NextRequest) {
+  if (!isApiAuthConfigured('FULFILLMENT_API_SECRET') && process.env.NODE_ENV === 'production') {
+    return createErrorResponse('Fulfillment auth not configured', {
+      status: HTTP_STATUS.SERVICE_UNAVAILABLE,
+    });
+  }
+
+  if (
+    isApiAuthConfigured('FULFILLMENT_API_SECRET') &&
+    !isApiAuthorized(request.headers, 'FULFILLMENT_API_SECRET')
+  ) {
+    return createErrorResponse('Unauthorized', {
+      status: HTTP_STATUS.UNAUTHORIZED,
+    });
+  }
+
   if (!GELATO_API_KEY) {
     return createErrorResponse('Gelato API not configured', {
       status: HTTP_STATUS.SERVICE_UNAVAILABLE,
