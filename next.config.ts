@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
   headers() {
     const isProduction = process.env.NODE_ENV === 'production';
 
+    const scriptSrc = [
+      "'self'",
+      "'unsafe-inline'",
+      ...(isProduction ? [] : ["'unsafe-eval'"]),
+      'https://www.googletagmanager.com',
+      'https://www.google-analytics.com',
+      'https://vercel.live',
+    ];
+
     const securityHeaders = [
       {
         key: 'X-Content-Type-Options',
@@ -37,7 +46,7 @@ const nextConfig: NextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live",
+          `script-src ${scriptSrc.join(' ')}`,
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
           "img-src 'self' data: blob: https://cdn.shopify.com https://res.cloudinary.com https://utfs.io https://*.ufs.sh https://images.unsplash.com https://www.googletagmanager.com https://www.google-analytics.com",
           "font-src 'self' data: https://fonts.gstatic.com https://cdn.shopify.com",
