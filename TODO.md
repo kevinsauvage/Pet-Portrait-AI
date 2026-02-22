@@ -1,41 +1,41 @@
-# Project TODO (prioritized)
+# Production Readiness TODO
 
-Legend:
+## P0 - Must Fix Before Production
+1. Lock down admin UI and admin APIs.
+2. Protect expensive/abusable endpoints.
+3. Secure Gelato fulfillment endpoint.
+4. Replace in-memory AI generation logs with durable storage.
+5. Enforce environment validation on startup.
+6. Ensure `NEXT_PUBLIC_BASE_URL` is set in production.
 
-- **P0**: correctness/security issues (fix before production)
-- **P1**: high-impact improvements (strongly recommended)
-- **P2**: quality/performance/SEO improvements
-- **P3**: polish / nice-to-have
+## P1 - Strongly Recommended
+1. Implement Gelato tracking sync (or disable cleanly).
+2. Tighten CSP for production.
+3. Add durable rate limiting and abuse protection.
+4. Wire up observability (Sentry + structured logs).
 
-## P0 — Correctness & security
+## P2 - Quality/Performance/SEO
+1. Enable Next/Image optimization if hosting supports it.
+2. Add CI for lint/typecheck/build/tests.
+3. Verify sitemap and robots in production.
 
-- **Harden Shopify Admin usage**
-  - Validate `SHOPIFY_STORE_FRONT_ADMIN_TOKEN` + `SHOPIFY_ADMIN_URL` when Admin features are used
-  - Make failures explicit (avoid silent empty-string endpoint usage)
+## P3 - Cleanup
+1. Remove or populate empty `next-sitemap.config.js`.
 
-## P1 — Product integrity & core UX
-
-- **Improve error handling patterns**
-  - Replace `throw` inside loops / server actions with structured error returns where possible
-  - Add consistent error boundary messaging for common failures (Shopify/API/cookies)
-- **Sitemap coverage**
-  - Add dynamic URLs (collections, products) using Shopify data (and include lastModified if available)
-
-## P2 — DX, tests, CI/CD
-
-- **Add automated tests**
-  - Unit tests for utils/helpers (cart helpers, cookies, consents)
-  - Integration tests for server actions (auth/cart) with mocked Shopify SDK
-  - E2E smoke tests (home → collection → product → add to cart → checkout start)
-- **Add CI pipeline**
-  - Run `lint`, `lint-ts`, `lint:css`, and tests on PRs
-  - Add caching for dependencies + codegen where appropriate
-- **Env validation**
-  - Add a small env schema (Zod) and validate on boot for both server-only and public env vars
-
-## P3 — Performance, SEO, maintainability polish
-
-- **Next/Image configuration**
-  - Revisit `images.unoptimized: true` (enable optimization if hosting supports it)
-- **Observability**
-  - Add structured logging (request ids, operation names) and optional error reporting (Sentry, etc.)
+## Notes (Key Files)
+1. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/admin/page.tsx`
+2. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/admin/generations/route.ts`
+3. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/admin/regenerate/route.ts`
+4. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/ai/generate/route.ts`
+5. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/infra/rate-limit/rate-limit.ts`
+6. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/infra/upload/core.ts`
+7. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/uploadthing/route.ts`
+8. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/fulfillment/gelato/route.ts`
+9. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/webhooks/shopify/orders/route.ts`
+10. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/domains/ai/generation-store.ts`
+11. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/core/config/validation.ts`
+12. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/next.config.ts`
+13. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/api/cron/sync-gelato-tracking/route.ts`
+14. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/sitemap.tsx`
+15. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/src/app/robots.ts`
+16. `/Users/ksauvage/Documents/Perso/nextjs-strapi-ecommerce/next-sitemap.config.js`

@@ -121,6 +121,11 @@ cp .env.example .env
 
 **Required:** `NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`, `SHOPIFY_CLIENT_ID`, `SHOPIFY_CLIENT_SECRET`, `SHOPIFY_ADMIN_URL`, `OPENAI_API_KEY`, `UPLOADTHING_TOKEN`, `UPLOADTHING_SECRET`.
 
+**Admin protection (required in production):**
+
+- Set `ADMIN_BASIC_USER` and `ADMIN_BASIC_PASSWORD` to protect `/admin` and `/api/admin/*` with HTTP Basic auth.
+- Or set `ADMIN_SECRET` and send `Authorization: Bearer <token>` for admin access.
+
 For detailed AI portrait setup (Shopify products, Gelato POD, webhooks), see [README-AI-PET-PORTRAIT.md](./README-AI-PET-PORTRAIT.md).
 
 ### Development Commands

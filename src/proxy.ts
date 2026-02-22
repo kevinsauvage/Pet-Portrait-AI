@@ -3,12 +3,35 @@ import { NextResponse } from 'next/server';
 
 import appConfig from '@/core/config';
 import { DEFAULTS } from '@/core/config/constants';
+import {
+  createAdminMisconfiguredResponse,
+  createAdminUnauthorizedResponse,
+  isAdminAuthConfigured,
+  isAdminAuthorized,
+} from '@/core/utils/admin-auth';
 import { getStandardCookieOptions } from '@/core/utils/cookie-security';
 import { setDelegateTokenAction } from '@/infra/shopify/actions';
 
 async function proxy(request: NextRequest) {
   const { nextUrl, cookies, headers, url } = request;
   const { searchParams, pathname } = nextUrl;
+
+  const isAdminRoute = pathname.startsWith(appConfig.routes.admin);
+  const isAdminApiRoute = pathname.startsWith('/api/admin');
+
+  if (isAdminRoute || isAdminApiRoute) {
+    if (!isAdminAuthConfigured() && process.env.NODE_ENV === 'production') {
+      return createAdminMisconfiguredResponse();
+    }
+
+    if (!isAdminAuthorized(headers)) {
+      return createAdminUnauthorizedResponse();
+    }
+
+    if (isAdminApiRoute) {
+      return NextResponse.next();
+    }
+  }
 
   const response = NextResponse.next();
 
@@ -48,6 +71,8 @@ export default proxy;
 
 export const config = {
   matcher: [
+    '/admin/:path*',
+    '/api/admin/:path*',
     /*
      * Match all request paths except for the ones starting with:
      * - api (API routes)
