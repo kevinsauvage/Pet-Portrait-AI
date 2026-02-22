@@ -1,8 +1,8 @@
 import { handleCustomerUserErrors, handleUserErrors } from '@/core/utils/form-actions';
 import { getUser } from '@/domains/user/get-user';
 import { api } from '@/infra/http/api-client';
-import { setShopifyToken } from '@/infra/shopify/server';
 import { storefrontSdk } from '@/infra/shopify/client';
+import { setShopifyToken } from '@/infra/shopify/server';
 import type { CustomerAccessToken } from '@/infra/shopify/storefront';
 
 type LoginInput = {

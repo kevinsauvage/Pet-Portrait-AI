@@ -154,8 +154,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [
       ...baseSitemap,
-      ...collections.map((c) => toEntry(c, '/collections', 'daily', 0.8)),
-      ...products.map((p) => toEntry(p, '/collections/products', 'weekly', 0.7)),
+      ...collections.map((c) => toEntry(c, '/shop', 'daily', 0.8)),
+      ...products.map((p) => toEntry(p, '/shop/products', 'weekly', 0.7)),
     ];
   } catch (error) {
     console.error('Error generating sitemap:', error);

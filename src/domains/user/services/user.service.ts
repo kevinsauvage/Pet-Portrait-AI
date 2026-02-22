@@ -2,8 +2,8 @@ import { revalidatePath } from 'next/cache';
 
 import config from '@/core/config';
 import { handleCustomerUserErrors } from '@/core/utils/form-actions';
-import { getShopifyToken, setShopifyToken } from '@/infra/shopify/server';
 import { storefrontSdk } from '@/infra/shopify/client';
+import { getShopifyToken, setShopifyToken } from '@/infra/shopify/server';
 
 type UpdateUserInput = {
   email: string;

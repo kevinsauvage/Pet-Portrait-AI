@@ -15,7 +15,7 @@ const GalleryGrid = ({ items }: { items: GalleryItem[] }) => {
       {items.map((item, index) => (
         <div
           key={item.id}
-          className="relative group break-inside-avoid overflow-hidden rounded-lg bg-card border shadow-sm hover:shadow-md transition-shadow"
+          className="relative group break-inside-avoid overflow-hidden rounded-2xl bg-card border border-border shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300"
         >
           <div className="relative aspect-square overflow-hidden">
             <Image

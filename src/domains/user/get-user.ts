@@ -1,6 +1,6 @@
 import { safeLogError } from '@/core/utils/api-responses';
-import { clearShopifyToken, getShopifyToken } from '@/infra/shopify/server';
 import { storefrontSdk } from '@/infra/shopify/client';
+import { clearShopifyToken, getShopifyToken } from '@/infra/shopify/server';
 
 export const getUser = async () => {
   const customerAccessToken = await getShopifyToken();

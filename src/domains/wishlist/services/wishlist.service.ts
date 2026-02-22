@@ -2,8 +2,8 @@ import { revalidatePath } from 'next/cache';
 
 import config from '@/core/config';
 import { safeLogError } from '@/core/utils/api-responses';
-import { getShopifyToken } from '@/infra/shopify/server';
 import { adminSdk, storefrontSdk } from '@/infra/shopify/client';
+import { getShopifyToken } from '@/infra/shopify/server';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
 export const WISHLIST_MAX_ITEMS = 100;

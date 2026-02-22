@@ -36,7 +36,7 @@ export async function generateMetadata({
     return generateMetadataUtil({
       title: 'Collection Not Found',
       description: 'Collection not found',
-      url: `/collections/${collectionSlug}`,
+      url: `/shop/${collectionSlug}`,
       noindex: true,
     });
   }
@@ -48,7 +48,7 @@ export async function generateMetadata({
   return generateMetadataUtil({
     title,
     description,
-    url: `/collections/${collectionSlug}`,
+    url: `/shop/${collectionSlug}`,
     image: collectionImage,
   });
 }
@@ -112,7 +112,7 @@ const CollectionSlugPage = async ({
           subtitle="This collection doesn't exist or has been removed. Browse our other collections to find what you're looking for."
           altText="Collection Not Found"
           primaryAction={
-            <Link href="/collections">
+            <Link href="/shop">
               <Button variant="default">Browse Collections</Button>
             </Link>
           }
@@ -167,7 +167,7 @@ const CollectionSlugPage = async ({
           altText="No products found"
           primaryAction={
             <Button variant="default" asChild>
-              <Link href="/collections">Browse All Collections</Link>
+              <Link href="/shop">Browse All Collections</Link>
             </Button>
           }
           secondaryAction={

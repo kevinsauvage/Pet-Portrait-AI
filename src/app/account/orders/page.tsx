@@ -4,9 +4,9 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { getShopifyToken } from '@/infra/shopify/server';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { adjustPaginationVariables } from '@/infra/shopify/helpers';
+import { getShopifyToken } from '@/infra/shopify/server';
 import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
@@ -64,7 +64,7 @@ const Page = async ({
           </Button>
         }
         secondaryAction={
-          <Link href="/collections" className="link">
+          <Link href="/shop" className="link">
             Browse collections
           </Link>
         }
@@ -89,7 +89,7 @@ const Page = async ({
               </Button>
             }
             secondaryAction={
-              <Link href="/collections" className="link">
+              <Link href="/shop" className="link">
                 Browse collections
               </Link>
             }

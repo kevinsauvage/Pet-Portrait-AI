@@ -12,7 +12,11 @@ import type {
 import { formatPrice } from '@/lib/format';
 import { Badge } from '@/ui/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/ui/components/ui/card';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/ui/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/ui/components/ui/collapsible';
 
 import { ChevronDown, ChevronUp, Package } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
@@ -165,7 +169,7 @@ const OrderCard = ({ order }: { order: OrderFieldsFragment }) => {
                             <div className="flex-1 min-w-0">
                               {productHandle && collectionHandle ? (
                                 <Link
-                                  href={`/collections/${collectionHandle}/products/${productHandle}`}
+                                  href={`/shop/${collectionHandle}/products/${productHandle}`}
                                   className="font-medium hover:underline line-clamp-1"
                                 >
                                   {item.title}

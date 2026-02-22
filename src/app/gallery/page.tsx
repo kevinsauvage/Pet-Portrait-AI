@@ -65,8 +65,8 @@ const GalleryPage = () => {
       <div className="container mx-auto px-4 py-12 md:py-16">
         <GalleryGrid items={GALLERY_ITEMS} />
 
-        <div className="mt-16 text-center">
-          <Button size="lg" asChild className="px-8 py-6 text-base shadow-lg">
+        <div className="mt-16 md:mt-20 text-center">
+          <Button size="lg" asChild className="px-8 py-6 text-base shadow-lg hover:shadow-xl transition-shadow">
             <Link href="/create">Create Your Portrait</Link>
           </Button>
         </div>

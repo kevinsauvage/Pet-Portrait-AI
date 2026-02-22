@@ -28,19 +28,24 @@ const PageBanner = ({
   <div
     className={cn(
       'relative overflow-hidden',
-      'bg-linear-to-br from-amber-50 via-orange-50 to-yellow-50',
-      'dark:from-amber-950/30 dark:via-background dark:to-background',
+      'bg-linear-to-br from-amber-50/90 via-orange-50/80 to-yellow-50/90',
+      'dark:from-amber-950/40 dark:via-background dark:to-amber-950/20',
       className,
     )}
   >
-    <div className="absolute inset-0 opacity-[0.03]" style={{
-      backgroundImage: 'radial-gradient(circle at 25% 25%, currentColor 1px, transparent 1px)',
-      backgroundSize: '24px 24px',
-    }} />
+    <div
+      className="absolute inset-0 opacity-[0.04] dark:opacity-[0.03]"
+      style={{
+        backgroundImage: 'radial-gradient(circle at 25% 25%, currentColor 1px, transparent 1px)',
+        backgroundSize: '20px 20px',
+      }}
+    />
     <div className="container mx-auto flex flex-col items-center justify-center text-center py-16 md:py-24 lg:py-32 px-4 md:px-6 space-y-6 md:space-y-8 relative">
-      <h1 className="text-display md:text-[3.5rem] md:leading-16 max-w-4xl">{title}</h1>
+      <h1 className="text-display md:text-[3.5rem] md:leading-[1.15] max-w-4xl font-bold tracking-tight">
+        {title}
+      </h1>
       {description && (
-        <p className="text-body-lg text-secondary max-w-2xl mx-auto leading-relaxed">
+        <p className="text-body-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           {description}
         </p>
       )}

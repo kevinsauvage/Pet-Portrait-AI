@@ -26,7 +26,7 @@ const CartEmptyState = () => {
             </Link>
           }
           secondaryAction={
-            <Link href="/collections" className="link">
+            <Link href="/shop" className="link">
               Browse collections
             </Link>
           }
@@ -37,4 +37,3 @@ const CartEmptyState = () => {
 };
 
 export default CartEmptyState;
-

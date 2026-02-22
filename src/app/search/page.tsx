@@ -21,8 +21,8 @@ import ProductsList from '@/ui/components/ProductsList';
 import Search from '@/ui/components/Search';
 import { Button } from '@/ui/components/ui/button';
 
-import Filters from '../collections/_components/Filters';
-import Sort from '../collections/_components/Sort';
+import Filters from '../shop/_components/Filters';
+import Sort from '../shop/_components/Sort';
 
 export const revalidate = 300;
 
@@ -60,7 +60,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
     sortKey: SearchSortKeys[sortKey] || SearchSortKeys.Relevance,
   });
 
-  const {pageInfo} = response.search;
+  const { pageInfo } = response.search;
   const filters = response.search.productFilters;
 
   const products = response.search?.edges.map((edge) => ({
@@ -105,7 +105,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
             altText="No search results"
             primaryAction={
               <Button variant="default" asChild>
-                <Link href="/collections">Browse Collections</Link>
+                <Link href="/shop">Browse Collections</Link>
               </Button>
             }
             secondaryAction={

@@ -3,8 +3,8 @@ import { revalidatePath } from 'next/cache';
 import config from '@/core/config';
 import { safeLogError } from '@/core/utils/api-responses';
 import { handleCustomerUserErrors } from '@/core/utils/form-actions';
-import { getShopifyToken } from '@/infra/shopify/server';
 import { storefrontSdk } from '@/infra/shopify/client';
+import { getShopifyToken } from '@/infra/shopify/server';
 
 type AddressInput = {
   address1: string;

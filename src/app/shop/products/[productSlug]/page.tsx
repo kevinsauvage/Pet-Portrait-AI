@@ -33,7 +33,7 @@ export async function generateMetadata({
     return generateMetadataUtil({
       title: 'Product Not Found',
       description: 'Product not found',
-      url: `/collections/products/${productSlug}`,
+      url: `/shop/products/${productSlug}`,
       noindex: true,
     });
   }
@@ -44,7 +44,7 @@ export async function generateMetadata({
   return generateMetadataUtil({
     title,
     description,
-    url: `/collections/products/${productSlug}`,
+    url: `/shop/products/${productSlug}`,
     type: 'website',
   });
 }
@@ -77,7 +77,7 @@ const ProductPage = async ({ params }: PageProperties) => {
     recommendations?.productRecommendations && recommendations.productRecommendations.length > 0;
 
   return (
-    <div className="min-h-[calc(100vh-76px)]">  
+    <div className="min-h-[calc(100vh-76px)]">
       <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
         <Breadcrumbs lastElement={title} />
       </div>

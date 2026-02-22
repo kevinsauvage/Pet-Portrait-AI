@@ -38,7 +38,7 @@ const Wishlist = async () => {
               </Button>
             }
             secondaryAction={
-              <Link href="/collections" className="link">
+              <Link href="/shop" className="link">
                 Browse collections
               </Link>
             }
