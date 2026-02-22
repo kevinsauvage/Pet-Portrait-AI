@@ -2,7 +2,6 @@
 
 ## P0 - Must Fix Before Production
 
-3. Secure Gelato fulfillment endpoint.
 4. Replace in-memory AI generation logs with durable storage.
 5. Enforce environment validation on startup.
 6. Ensure `NEXT_PUBLIC_BASE_URL` is set in production.

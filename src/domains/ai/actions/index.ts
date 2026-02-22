@@ -1,25 +1,21 @@
 'use server';
 
-import {
-  AI_ART_STYLES,
-  type ArtStyleId,
-  type ArtworkGenerationResult,
-} from '../ai-portrait/types';
-import {
-  logGenerationFailure,
-  logGenerationSuccess,
-} from '../generation-store';
+import { getUploadUrl } from '@/infra/upload/get-upload-url';
+
+import { AI_ART_STYLES, type ArtStyleId, type ArtworkGenerationResult } from '../ai-portrait/types';
+import { logGenerationFailure, logGenerationSuccess } from '../generation-store';
 
 import * as Sentry from '@sentry/nextjs';
 import OpenAI from 'openai';
 import { UTApi, UTFile } from 'uploadthing/server';
 import { v4 as uuidv4 } from 'uuid';
-
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 2000;
 
 function getStylePrompt(styleId: ArtStyleId): string {
-  return AI_ART_STYLES.find((s) => s.id === styleId)?.promptSuffix ?? 'as a beautiful artistic portrait';
+  return (
+    AI_ART_STYLES.find((s) => s.id === styleId)?.promptSuffix ?? 'as a beautiful artistic portrait'
+  );
 }
 
 async function uploadBase64ToStorage(base64Data: string, fileName: string): Promise<string> {
@@ -27,7 +23,7 @@ async function uploadBase64ToStorage(base64Data: string, fileName: string): Prom
   const utapi = new UTApi();
   const file = new UTFile([buffer], `generated_art/${fileName}`, { type: 'image/png' });
   const result = await utapi.uploadFiles([file]);
-  const url = result[0]?.data?.url;
+  const url = getUploadUrl(result[0]?.data);
   if (!url) throw new Error('Failed to upload generated image to storage');
   return url;
 }
@@ -44,7 +40,7 @@ async function generateWithRetry(
       const imageResponse = await fetch(imageUrl); // eslint-disable-line no-await-in-loop
       if (!imageResponse.ok) throw new Error(`Failed to fetch image: ${imageResponse.status}`);
 
-      const response = await openai.images.edit({ // eslint-disable-line no-await-in-loop
+      const response = await openai.images.edit({
         model: 'gpt-image-1',
         image: imageResponse,
         prompt,

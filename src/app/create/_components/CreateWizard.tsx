@@ -8,6 +8,7 @@ import { useCart } from '@/contexts/CartContext/useCart';
 import { AI_ART_STYLES, type ArtStyleId, isValidStyleId } from '@/domains/ai/ai-portrait/types';
 import { validateImageDimensions } from '@/domains/ai/ai-portrait/validation';
 import { api } from '@/infra/http/api-client';
+import { getUploadUrl } from '@/infra/upload/get-upload-url';
 import { useUploadThing } from '@/infra/upload/uploadthing';
 
 import StepAddToCart from './StepAddToCart';
@@ -49,7 +50,7 @@ export default function CreateWizard() {
   const { handleAddToCart } = useCart();
   const { startUpload, isUploading } = useUploadThing('userUpload', {
     onClientUploadComplete: (res) => {
-      const url = res?.[0]?.url;
+      const url = getUploadUrl(res?.[0]);
       if (url) {
         setOriginalPhotoUrl(url);
         setStep('style');

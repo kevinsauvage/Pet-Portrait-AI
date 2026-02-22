@@ -1,8 +1,10 @@
 import type { MetadataRoute } from 'next';
 
 import { COOKIES, LOCAL_STORAGE_KEYS } from './constants';
+import { validateConfig, validateSiteMetadata } from './validation';
 
-export { validateConfig, validateSiteMetadata } from './validation';
+validateConfig();
+validateSiteMetadata();
 
 const config = {
   cookies: COOKIES,
