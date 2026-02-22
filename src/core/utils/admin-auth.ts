@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { timingSafeEqual } from 'crypto';
+import { base64Decode } from '@/core/utils/base64';
+import { safeEqual } from '@/core/utils/secure-compare';
 
 const ADMIN_BASIC_USER = process.env.ADMIN_BASIC_USER?.trim();
 const ADMIN_BASIC_PASSWORD = process.env.ADMIN_BASIC_PASSWORD?.trim();
@@ -20,17 +21,10 @@ export function isAdminAuthConfigured(): boolean {
   return hasBasicAuth() || hasBearerAuth();
 }
 
-function safeEqual(a: string, b: string): boolean {
-  const aBuf = Buffer.from(a);
-  const bBuf = Buffer.from(b);
-  if (aBuf.length !== bBuf.length) return false;
-  return timingSafeEqual(aBuf, bBuf);
-}
-
 function parseBasicAuth(authHeader: string): { user: string; pass: string } | null {
   const token = authHeader.replace(/^Basic\s+/i, '').trim();
   try {
-    const decoded = Buffer.from(token, 'base64').toString('utf8');
+    const decoded = base64Decode(token);
     const separatorIndex = decoded.indexOf(':');
     if (separatorIndex === -1) return null;
     const user = decoded.slice(0, separatorIndex);

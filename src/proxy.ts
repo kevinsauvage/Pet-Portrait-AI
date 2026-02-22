@@ -9,7 +9,10 @@ import {
   isAdminAuthConfigured,
   isAdminAuthorized,
 } from '@/core/utils/admin-auth';
+import { isApiAuthConfigured } from '@/core/utils/api-auth';
+import { issueApiSessionCookie } from '@/core/utils/api-session';
 import { getStandardCookieOptions } from '@/core/utils/cookie-security';
+import { getClientContext } from '@/core/utils/request-identity';
 import { setDelegateTokenAction } from '@/infra/shopify/actions';
 
 async function proxy(request: NextRequest) {
@@ -35,12 +38,22 @@ async function proxy(request: NextRequest) {
 
   const response = NextResponse.next();
 
-  const userIp = headers.get('x-forwarded-for')?.split(',')[0] || DEFAULTS.ip;
+  const userIp = getClientContext(headers, DEFAULTS.ip).ip;
 
   const cookieOptions = getStandardCookieOptions({ httpOnly: false });
   response.cookies.set(appConfig.cookies.userIp, userIp, cookieOptions);
   response.cookies.set(appConfig.cookies.url, url, cookieOptions);
   response.cookies.set(appConfig.cookies.searchParams, searchParams.toString(), cookieOptions);
+
+  const shouldIssueSecuritySession =
+    isApiAuthConfigured('AI_API_SECRET') || isApiAuthConfigured('UPLOADTHING_API_SECRET');
+
+  if (shouldIssueSecuritySession && pathname.startsWith(appConfig.routes.create)) {
+    await Promise.all([
+      issueApiSessionCookie(response, request, 'ai'),
+      issueApiSessionCookie(response, request, 'upload'),
+    ]);
+  }
 
   try {
     await setDelegateTokenAction();

@@ -1,34 +1,41 @@
 import { type NextRequest } from 'next/server';
 
+import { requireApiProtection } from '@/core/utils/api-protection';
 import {
   createErrorResponse,
   createSuccessResponse,
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
+import { getClientContext } from '@/core/utils/request-identity';
 import { generatePetPortraitVariations } from '@/domains/ai/actions';
-import { type ArtStyleId, isValidStyleId, validStyleIdsLabel } from '@/domains/ai/ai-portrait/types';
+import {
+  type ArtStyleId,
+  isValidStyleId,
+  validStyleIdsLabel,
+} from '@/domains/ai/ai-portrait/types';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-function getClientIdentifier(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  return forwarded?.split(',')[0]?.trim() ?? request.headers.get('x-real-ip') ?? 'anonymous';
-}
-
 export async function POST(request: NextRequest) {
   try {
-    const identifier = getClientIdentifier(request);
-    const rateLimit = checkRateLimit(identifier);
+    const { identifier } = getClientContext(request.headers);
+    const rateLimit = checkRateLimit(identifier, { prefix: 'ai' });
     if (!rateLimit.allowed) {
       return createErrorResponse('Too many requests. Please try again later.', {
         status: HTTP_STATUS.TOO_MANY_REQUESTS,
         message: `Retry after ${rateLimit.retryAfter} seconds`,
       });
     }
+
+    const authError = await requireApiProtection(request, {
+      secretEnv: 'AI_API_SECRET',
+      scope: 'ai',
+    });
+    if (authError) return authError;
 
     const body = await request.json();
     const { originalPhotoUrl, styleId } = body as {
@@ -43,10 +50,9 @@ export async function POST(request: NextRequest) {
     }
 
     if (!isValidStyleId(styleId)) {
-      return createErrorResponse(
-        `styleId must be one of: ${validStyleIdsLabel()}`,
-        { status: HTTP_STATUS.BAD_REQUEST },
-      );
+      return createErrorResponse(`styleId must be one of: ${validStyleIdsLabel()}`, {
+        status: HTTP_STATUS.BAD_REQUEST,
+      });
     }
 
     const validation = await validateImageFromUrl(originalPhotoUrl);

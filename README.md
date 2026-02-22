@@ -126,6 +126,13 @@ cp .env.example .env
 - Set `ADMIN_BASIC_USER` and `ADMIN_BASIC_PASSWORD` to protect `/admin` and `/api/admin/*` with HTTP Basic auth.
 - Or set `ADMIN_SECRET` and send `Authorization: Bearer <token>` for admin access.
 
+**Expensive endpoint protection (optional):**
+
+- `AI_API_SECRET` protects `/api/ai/generate`.
+- `UPLOADTHING_API_SECRET` protects `/api/uploadthing`.
+- Browser flows receive a signed session cookie from the middleware when visiting `/create` (no header needed).
+- Server-to-server calls can send `Authorization: Bearer <token>` or `x-api-key`.
+
 For detailed AI portrait setup (Shopify products, Gelato POD, webhooks), see [README-AI-PET-PORTRAIT.md](./README-AI-PET-PORTRAIT.md).
 
 ### Development Commands
