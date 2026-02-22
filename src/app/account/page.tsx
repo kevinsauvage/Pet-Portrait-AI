@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import AccountStats from '@/app/account/_components/AccountStats';
+import AccountStats from '@/ui/components/AccountStats';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { getUser } from '@/domains/user/get-user';

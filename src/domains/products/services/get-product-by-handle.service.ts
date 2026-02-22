@@ -1,5 +1,5 @@
 import type { Product } from '@/domains/products/models';
-import { ShopifyProductRepository } from '@/infra/shopify/repositories/product.repository';
+import { ShopifyProductRepository } from '@/domains/products/repositories/product.repository';
 
 const productRepo = new ShopifyProductRepository();
 

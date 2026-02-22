@@ -8,8 +8,8 @@ import { resetPasswordAction } from '@/domains/auth/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
 import { Button } from '@/ui/components/ui/button';
 
-import Form from '../../_components/Form';
-import PasswordField from '../../_components/PasswordField';
+import Form from '@/ui/components/Form';
+import PasswordField from '@/ui/components/PasswordField';
 
 const initialStates = {
   password: '',

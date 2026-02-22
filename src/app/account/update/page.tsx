@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import AccountStats from '@/app/account/_components/AccountStats';
+import AccountStats from '@/ui/components/AccountStats';
 import seo from '@/core/config/seo';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';

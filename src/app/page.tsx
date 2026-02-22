@@ -9,8 +9,8 @@ import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
 import PageBanner from '@/ui/components/PageBanner';
 import { Button } from '@/ui/components/ui/button';
 
-import HomeSection from './_components/HomeSection';
-import ProductSection from './_components/ProductSection';
+import HomeSection from '@/ui/components/HomeSection';
+import ProductSection from '@/ui/components/ProductSection';
 
 import { Camera, Palette, ShieldCheck, Sparkles, Truck } from 'lucide-react';
 

@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import AuthShell from '@/app/(auth)/_components/AuthShell';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-
-import LoginForm from './_components/LoginForm';
+import AuthShell from '@/ui/components/AuthShell';
+import LoginForm from '@/ui/components/LoginForm';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.login.title,

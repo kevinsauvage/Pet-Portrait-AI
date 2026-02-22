@@ -4,11 +4,11 @@ This document describes the `src/` layout after the domains + infra migration.
 
 ## Overview
 
-- **domains/** — Domain logic (auth, user, address, cart, ai, contact, search, wishlist, orders, products). Each domain exposes a single public API via `index.ts` and uses `actions/`, `services/`, `validation/`, etc.
+- **domains/** — Domain logic (auth, user, address, cart, ai, contact, search, wishlist, orders, products). Domains use `actions/`, `services/`, `validation/`, `models/`, `repositories/`, `mappers/` when applicable.
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
 - **core/** — App-wide config, errors, types, and shared utils (api-responses, form-actions, cookie-security).
 - **lib/** — Pure helpers and app infra: format, html, arrays, debounce, cn, consents, cookies (server actions), client (cookies, analytics), server (metadata).
-- **ui/** — Presentational components, layouts, primitives.
+- **ui/** — Presentational components, layouts, primitives, and shared app UI building blocks (auth shell/forms, shared sections).
 - **app/** — Next.js App Router (pages, layouts, API routes).
 
 ---
@@ -32,7 +32,7 @@ src/
 │   ├── cart/
 │   ├── contact/
 │   ├── orders/             # services/, models/, repositories/
-│   ├── products/           # services/, models/, repositories/
+│   ├── products/           # services/, models/, repositories/, mappers/
 │   ├── search/
 │   ├── user/
 │   └── wishlist/           # client.ts, services/, index.ts
@@ -65,11 +65,11 @@ src/
 
 Each domain has:
 
-- **actions/** — Server actions (`"use server"`), re-exported from `index.ts`.
+- **actions/** — Server actions (`"use server"`), re-exported from `index.ts` when present.
 - **services/** — Business logic (no framework).
 - **validation/** — Zod schemas (when applicable).
-- **models/**, **repositories/** — When the domain has data types or external access.
-- **index.ts** — Single public API (services, actions, validation exports).
+- **models/**, **repositories/**, **mappers/** — When the domain has data types, external access, or adapter logic.
+- **index.ts** — Public API when the domain chooses to expose one.
 
 Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config`, `@/core/utils`), **lib** (`@/lib/cookies`), and **types** — not from other domains when avoidable.
 
@@ -77,7 +77,7 @@ Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config
 
 ## Infra
 
-- **infra/shopify** — Storefront + Admin SDK, token/URL helpers, images, product-options. Used by domains (address, user, auth, cart, wishlist, products, etc.) and app.
+- **infra/shopify** — Storefront + Admin SDK, token/URL helpers, images, product-options. Used by domains (address, user, auth, cart, wishlist, products, etc.) and app. Product mappers/repositories live in the products domain.
 - **infra/upload** — Uploadthing (used by create flow).
 - **infra/email** — Email sending (e.g. order confirmation).
 - **infra/http** — Shared API client for client-side calls (wishlist, cart context, create wizard).

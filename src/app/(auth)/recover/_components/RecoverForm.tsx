@@ -11,7 +11,7 @@ import { Button } from '@/ui/components/ui/button';
 import { Input } from '@/ui/components/ui/input';
 import { Label } from '@/ui/components/ui/label';
 
-import Form from '../../_components/Form';
+import Form from '@/ui/components/Form';
 
 const SubmitButton = () => {
   const status = useFormStatus();

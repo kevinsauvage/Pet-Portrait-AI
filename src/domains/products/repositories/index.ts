@@ -1,1 +1,1 @@
-export { ShopifyProductRepository } from '@/infra/shopify/repositories/product.repository';
+export { ShopifyProductRepository } from '@/domains/products/repositories/product.repository';

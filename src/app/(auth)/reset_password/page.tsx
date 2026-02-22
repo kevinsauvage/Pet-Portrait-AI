@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import AuthShell from '@/app/(auth)/_components/AuthShell';
+import AuthShell from '@/ui/components/AuthShell';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 
