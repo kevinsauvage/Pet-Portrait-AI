@@ -1,6 +1,6 @@
+import { mapShopifyProductToDomain } from '@/domains/products/mappers/product-mapper';
 import type { Product } from '@/domains/products/models';
 import { storefrontSdk } from '@/infra/shopify/client';
-import { mapShopifyProductToDomain } from '@/domains/products/mappers/product-mapper';
 import type { ProductSortKeys } from '@/infra/shopify/storefront';
 
 export class ShopifyProductRepository {

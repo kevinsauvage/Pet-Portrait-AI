@@ -1,10 +1,10 @@
+import AccountNavigation from '@/ui/components/AccountNavigation';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import PageBanner from '@/ui/components/PageBanner';
 import { Card, CardContent } from '@/ui/components/ui/card';
 
-import AccountNavigation from './_components/AccountNavigation';
-import AccountNavigationSheet from './_components/AccountNavigationSheet';
+import AccountNavigationSheet from '../../ui/components/AccountNavigationSheet';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

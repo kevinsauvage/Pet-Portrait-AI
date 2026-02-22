@@ -5,11 +5,11 @@ import seo from '@/core/config/seo';
 import { CartService } from '@/domains/cart/services/cart.service';
 import PageBanner from '@/ui/components/PageBanner';
 
-import CartEmptyState from './_components/CartEmptyState';
-import CartHeader from './_components/CartHeader';
-import CartItemsList from './_components/CartItemsList';
-import CartPromoCode from './_components/CartPromoCode';
-import CartSummary from './_components/CartSummary';
+import CartEmptyState from '../../ui/components/CartEmptyState';
+import CartHeader from '../../ui/components/CartHeader';
+import CartItemsList from '../../ui/components/CartItemsList';
+import CartPromoCode from '../../ui/components/CartPromoCode';
+import CartSummary from '../../ui/components/CartSummary';
 
 import { ChevronLeft } from 'lucide-react';
 

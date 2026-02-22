@@ -6,7 +6,7 @@ import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata'
 import PageBanner from '@/ui/components/PageBanner';
 import { Button } from '@/ui/components/ui/button';
 
-import GalleryGrid from './_components/GalleryGrid';
+import GalleryGrid from '../../ui/components/GalleryGrid';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.gallery.title,

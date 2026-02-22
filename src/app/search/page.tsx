@@ -14,15 +14,14 @@ import { SearchSortKeys } from '@/infra/shopify/storefront';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import EmptyState from '@/ui/components/EmptyState';
+import Filters from '@/ui/components/Filters';
 import ListingHeader from '@/ui/components/ListingHeader';
 import PageBanner from '@/ui/components/PageBanner';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import ProductsList from '@/ui/components/ProductsList';
 import Search from '@/ui/components/Search';
+import Sort from '@/ui/components/Sort';
 import { Button } from '@/ui/components/ui/button';
-
-import Filters from '../shop/_components/Filters';
-import Sort from '../shop/_components/Sort';
 
 export const revalidate = 300;
 

@@ -7,13 +7,12 @@ import { userFeedback } from '@/core/config/userFeedback';
 import { registerAction } from '@/domains/auth/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
 import type { CustomerUserError } from '@/infra/shopify/storefront';
+import Form from '@/ui/components/Form';
 import FormFieldError from '@/ui/components/FormFieldError';
+import PasswordField from '@/ui/components/PasswordField';
 import { Button } from '@/ui/components/ui/button';
 import { Input } from '@/ui/components/ui/input';
 import { Label } from '@/ui/components/ui/label';
-
-import Form from '@/ui/components/Form';
-import PasswordField from '@/ui/components/PasswordField';
 
 const SubmitButton = () => {
   const status = useFormStatus();

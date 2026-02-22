@@ -6,10 +6,9 @@ import { useFormStatus } from 'react-dom';
 import { userFeedback } from '@/core/config/userFeedback';
 import { resetPasswordAction } from '@/domains/auth/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import { Button } from '@/ui/components/ui/button';
-
 import Form from '@/ui/components/Form';
 import PasswordField from '@/ui/components/PasswordField';
+import { Button } from '@/ui/components/ui/button';
 
 const initialStates = {
   password: '',

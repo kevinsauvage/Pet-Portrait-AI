@@ -6,7 +6,7 @@ import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata'
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import PageBanner from '@/ui/components/PageBanner';
 
-import ContactForm from './_components/ContactForm';
+import ContactForm from '../../../ui/components/ContactForm';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.pages.contact.title,

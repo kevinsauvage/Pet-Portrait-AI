@@ -5,13 +5,12 @@ import { storefrontSdk } from '@/infra/shopify/client';
 import { adjustPaginationVariables, parseFiltersQuery } from '@/infra/shopify/helpers';
 import { ProductCollectionSortKeys } from '@/infra/shopify/storefront';
 import EmptyState from '@/ui/components/EmptyState';
+import Filters from '@/ui/components/Filters';
 import ListingHeader from '@/ui/components/ListingHeader';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import ProductEdgeList from '@/ui/components/ProductsEdgeList';
+import Sort from '@/ui/components/Sort';
 import { Button } from '@/ui/components/ui/button';
-
-import Filters from '../_components/Filters';
-import Sort from '../_components/Sort';
 
 export const revalidate = 3600; // Revalidate every hour
 

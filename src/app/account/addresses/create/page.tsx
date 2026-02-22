@@ -18,7 +18,7 @@ export const metadata: Metadata = generateMetadataUtil({
   noindex: true, // Private page, don't index
 });
 
-import AddressFormUI from '../_components/AddressForm';
+import AddressFormUI from '@/ui/components/AddressForm';
 
 const CreateAddresses = () => {
   return (

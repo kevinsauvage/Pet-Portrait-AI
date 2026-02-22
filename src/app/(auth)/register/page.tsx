@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import AuthShell from '@/ui/components/AuthShell';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import AuthShell from '@/ui/components/AuthShell';
 
-import RegisterForm from './_components/RegisterForm';
+import RegisterForm from '../../../ui/components/RegisterForm';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.register.title,

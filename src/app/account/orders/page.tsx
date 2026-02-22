@@ -8,14 +8,14 @@ import { storefrontSdk } from '@/infra/shopify/client';
 import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 import { getShopifyToken } from '@/infra/shopify/server';
 import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
+import BackButton from '@/ui/components/BackButton';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
 
-import BackButton from '../_components/BackButton';
-import Orders from '../_components/Orders';
+import Orders from '../../../ui/components/Orders';
 
 export const dynamic = 'force-dynamic'; // Orders are user-specific
 

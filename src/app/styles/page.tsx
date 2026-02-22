@@ -7,7 +7,7 @@ import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata'
 import PageBanner from '@/ui/components/PageBanner';
 import { Button } from '@/ui/components/ui/button';
 
-import StylePreview from './_components/StylePreview';
+import StylePreview from '../../ui/components/StylePreview';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.styles.title,
@@ -32,7 +32,11 @@ const StylesPage = () => {
         </div>
 
         <div className="mt-16 md:mt-20 text-center">
-          <Button size="lg" asChild className="px-8 py-6 text-base shadow-lg hover:shadow-xl transition-shadow">
+          <Button
+            size="lg"
+            asChild
+            className="px-8 py-6 text-base shadow-lg hover:shadow-xl transition-shadow"
+          >
             <Link href="/create">Create Your Portrait</Link>
           </Button>
         </div>

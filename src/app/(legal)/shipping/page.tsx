@@ -5,9 +5,8 @@ import seo from '@/core/config/seo';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import MainContent from '@/ui/components/MainContent';
 import PageBanner from '@/ui/components/PageBanner';
-
-import MainContent from '../_components/MainContent';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.pages.shipping.title,

@@ -3,7 +3,7 @@ import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import PageBanner from '@/ui/components/PageBanner';
 
-import CollectionNav from '../_components/CollectionNav';
+import CollectionNav from '../../../ui/components/CollectionNav';
 
 const findRecursiveMenuItem = (
   items: GetMenuByHandleQuery['menu'] | null | undefined,

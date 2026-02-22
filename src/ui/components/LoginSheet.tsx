@@ -1,5 +1,5 @@
-import LoginForm from '@/ui/components/LoginForm';
 import config from '@/core/config';
+import LoginForm from '@/ui/components/LoginForm';
 
 import {
   Sheet,

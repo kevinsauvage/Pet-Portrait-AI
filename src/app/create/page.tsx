@@ -5,7 +5,7 @@ import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import PageBanner from '@/ui/components/PageBanner';
 
-import CreateWizard from './_components/CreateWizard';
+import CreateWizard from '../../ui/components/CreateWizard';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.title,

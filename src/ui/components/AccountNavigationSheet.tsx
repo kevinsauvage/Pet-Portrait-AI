@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import AccountNavigation from '@/ui/components/AccountNavigation';
 import { Button } from '@/ui/components/ui/button';
 import {
   Sheet,
@@ -11,8 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/ui/components/ui/sheet';
-
-import AccountNavigation from './AccountNavigation';
 
 import { User } from 'lucide-react';
 

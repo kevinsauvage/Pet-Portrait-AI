@@ -1,6 +1,6 @@
 import type { Product } from '@/domains/products/models';
-import { storefrontSdk } from '@/infra/shopify/client';
 import { ShopifyProductRepository } from '@/domains/products/repositories/product.repository';
+import { storefrontSdk } from '@/infra/shopify/client';
 
 const productRepo = new ShopifyProductRepository();
 

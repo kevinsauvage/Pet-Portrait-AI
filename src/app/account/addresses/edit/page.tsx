@@ -21,7 +21,7 @@ export const metadata: Metadata = generateMetadataUtil({
   noindex: true, // Private page, don't index
 });
 
-import AddressForm from '../_components/AddressForm';
+import AddressForm from '@/ui/components/AddressForm';
 
 type PageProperties = {
   searchParams: Promise<{

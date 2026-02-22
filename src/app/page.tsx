@@ -6,11 +6,10 @@ import { storefrontSdk } from '@/infra/shopify/client';
 import { CollectionSortKeys, ProductSortKeys } from '@/infra/shopify/storefront/index';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
-import PageBanner from '@/ui/components/PageBanner';
-import { Button } from '@/ui/components/ui/button';
-
 import HomeSection from '@/ui/components/HomeSection';
+import PageBanner from '@/ui/components/PageBanner';
 import ProductSection from '@/ui/components/ProductSection';
+import { Button } from '@/ui/components/ui/button';
 
 import { Camera, Palette, ShieldCheck, Sparkles, Truck } from 'lucide-react';
 
@@ -154,7 +153,7 @@ const Home = async () => {
           <ProductSection
             id="best-selling"
             title="Most Loved Portraits"
-            description="Fan favorites that customers reorder for every new pet." 
+            description="Fan favorites that customers reorder for every new pet."
             products={bestSellingProducts}
             viewAllLabel="View all portraits"
           />
@@ -164,7 +163,7 @@ const Home = async () => {
           <ProductSection
             id="new-arrivals"
             title="Fresh Off the Easel"
-            description="New releases, trending styles, and limited drops from the studio." 
+            description="New releases, trending styles, and limited drops from the studio."
             products={newArrivalProducts}
             viewAllLabel="See new arrivals"
           />
@@ -174,11 +173,15 @@ const Home = async () => {
       <section className="py-16 md:py-24 bg-linear-to-b from-secondary/10 via-background to-secondary/30">
         <div className="container mx-auto px-4 md:px-6">
           <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-10 md:p-14 text-center shadow-sm">
-            <div className="absolute -right-20 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
+            <div
+              className="absolute -right-20 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl"
+              aria-hidden="true"
+            />
             <div className="relative space-y-6 max-w-2xl mx-auto">
               <h2 className="text-heading-2 tracking-tight">Ready to Create?</h2>
               <p className="text-body-lg text-secondary">
-                Join thousands of pet owners who have turned their beloved companions into timeless art.
+                Join thousands of pet owners who have turned their beloved companions into timeless
+                art.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-3">
                 <Button asChild size="lg" className="px-8 py-6 text-base">

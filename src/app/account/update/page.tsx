@@ -1,18 +1,17 @@
 import type { Metadata } from 'next';
 
-import AccountStats from '@/ui/components/AccountStats';
 import seo from '@/core/config/seo';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { getShopifyToken } from '@/infra/shopify/server';
 import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
+import AccountStats from '@/ui/components/AccountStats';
+import BackButton from '@/ui/components/BackButton';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Card, CardContent } from '@/ui/components/ui/card';
 
-import BackButton from '../_components/BackButton';
-
-import UpdateUserForm from './_components/UpdateUserForm';
+import UpdateUserForm from '../../../ui/components/UpdateUserForm';
 
 export const dynamic = 'force-dynamic';
 

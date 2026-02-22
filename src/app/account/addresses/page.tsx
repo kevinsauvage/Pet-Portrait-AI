@@ -10,15 +10,14 @@ import { storefrontSdk } from '@/infra/shopify/client';
 import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 import { getShopifyToken } from '@/infra/shopify/server';
 import type { MailingAddress } from '@/infra/shopify/storefront';
+import BackButton from '@/ui/components/BackButton';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
 
-import BackButton from '../_components/BackButton';
-
-import Address from './_components/Address';
+import Address from '../../../ui/components/Address';
 
 import { Plus } from 'lucide-react';
 

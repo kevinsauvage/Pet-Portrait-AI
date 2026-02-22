@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import AccountStats from '@/ui/components/AccountStats';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { getUser } from '@/domains/user/get-user';
@@ -10,12 +9,13 @@ import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { getShopifyToken } from '@/infra/shopify/server';
 import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
+import AccountStats from '@/ui/components/AccountStats';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
 
-import RecentOrdersPreview from './_components/RecentOrdersPreview';
-import UserFullName from './_components/UserFullName';
+import RecentOrdersPreview from '../../ui/components/RecentOrdersPreview';
+import UserFullName from '../../ui/components/UserFullName';
 
 export const dynamic = 'force-dynamic'; // Account data is user-specific
 
