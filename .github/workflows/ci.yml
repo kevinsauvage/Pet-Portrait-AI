@@ -39,9 +39,9 @@ jobs:
       - name: Run Stylelint
         run: yarn lint:css
 
-      # TODO: Add test step when tests are implemented
-      # - name: Run tests
-      #   run: yarn test
+      - name: Run tests
+        run: yarn test
+
       - name: Run codegen (if env vars available)
         run: yarn codegen
         env:
