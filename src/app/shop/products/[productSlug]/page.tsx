@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -9,6 +10,13 @@ import ProductDescription from '@/ui/components/ProductDescription';
 import ProductRecommendations from '@/ui/components/ProductRecommendations';
 
 export const revalidate = 3600;
+
+const getProductByHandle = cache(async (handle: string) => {
+  return storefrontSdk().getProductByHandle({
+    handle,
+    identifiers: [],
+  });
+});
 
 type parametersType = {
   genre: string;
@@ -23,11 +31,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { productSlug } = await params;
 
-  const productResponse = await storefrontSdk().getProductSeoByHandle({
-    handle: productSlug,
-  });
-
-  const { product } = productResponse;
+  const { product } = await getProductByHandle(productSlug);
 
   if (!product) {
     return generateMetadataUtil({
@@ -39,7 +43,13 @@ export async function generateMetadata({
   }
 
   const title = product.seo?.title || product.title || 'Product';
-  const description = product.seo?.description || product.description || 'Product';
+  const description =
+    product.seo?.description ||
+    product.descriptionHtml
+      ?.replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim() ||
+    'Product';
 
   return generateMetadataUtil({
     title,
@@ -56,12 +66,7 @@ type PageProperties = {
 const ProductPage = async ({ params }: PageProperties) => {
   const parameters = await params;
 
-  const productResponse = await storefrontSdk().getProductByHandle({
-    handle: parameters.productSlug,
-    identifiers: [],
-  });
-
-  const { product } = productResponse;
+  const { product } = await getProductByHandle(parameters.productSlug);
 
   if (!product) {
     notFound();

@@ -39,19 +39,20 @@ const FEATURES = [
 ] as const;
 
 const Home = async () => {
+  const storefront = storefrontSdk();
   const [collections, bestSelling, newArrival] = await Promise.all([
-    storefrontSdk().collections({
+    storefront.collections({
       first: 100,
       firstProducts: 1,
       identifiers: [{ key: 'featured', namespace: 'custom' }],
       sortKey: CollectionSortKeys?.Relevance,
     }),
-    storefrontSdk().getProducts({
+    storefront.getProducts({
       first: 8,
       identifiers: [],
       sortKey: ProductSortKeys.BestSelling,
     }),
-    storefrontSdk().getProducts({
+    storefront.getProducts({
       first: 8,
       identifiers: [],
       sortKey: ProductSortKeys.CreatedAt,
@@ -84,9 +85,12 @@ const Home = async () => {
               Three simple steps to a portrait your pet deserves.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
             {FEATURES.map((feature, index) => (
-              <div key={feature.title} className="flex flex-col items-center text-center space-y-4">
+              <div
+                key={feature.title}
+                className="flex flex-col items-center text-center space-y-4 rounded-2xl border border-border/60 bg-card/80 p-6 md:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
                   <feature.icon className="w-7 h-7 text-primary" strokeWidth={1.5} />
                 </div>

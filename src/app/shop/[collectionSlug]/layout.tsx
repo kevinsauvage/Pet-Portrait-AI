@@ -39,15 +39,14 @@ const Layout = async ({
 }) => {
   const { collectionSlug } = await params;
 
-  const responseMenu = await storefrontSdk().getMenuByHandle({
-    handle: `main-menu`,
-  });
-
-  const response = await storefrontSdk().collection({
-    first: 1,
-    handle: collectionSlug,
-    identifiers: [],
-  });
+  const [responseMenu, response] = await Promise.all([
+    storefrontSdk().getMenuByHandle({ handle: `main-menu` }),
+    storefrontSdk().collection({
+      first: 1,
+      handle: collectionSlug,
+      identifiers: [],
+    }),
+  ]);
 
   const { title, description } = response.collection || {};
 

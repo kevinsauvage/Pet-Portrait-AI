@@ -11,6 +11,8 @@ const ListDisplay = ({
 }) => {
   return (
     <ul
+      aria-busy={loading}
+      aria-live={loading ? 'polite' : undefined}
       className={`gap-4 md:gap-6 lg:gap-8 ${
         layout === 'grid'
           ? 'grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]  '
