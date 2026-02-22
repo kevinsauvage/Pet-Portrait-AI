@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import config from '@/core/config';
+import { canPurchase, isInventoryTracked, isLowStock } from '@/domains/products/utils/inventory';
 import useProductSelection from '@/hooks/useProductSelection';
 import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
@@ -141,7 +142,7 @@ const QuickBuyContent = ({ product, onClose }: QuickBuyContentProps) => {
                   Sold Out
                 </Badge>
               )}
-              {quantityAvailable && quantityAvailable < 5 && availableForSale && (
+              {isLowStock(quantityAvailable) && availableForSale && (
                 <Badge variant="secondary" className="px-2.5 py-1">
                   Only {quantityAvailable} left
                 </Badge>
@@ -270,13 +271,17 @@ const QuickBuyContent = ({ product, onClose }: QuickBuyContentProps) => {
                   size="icon"
                   className="h-10 w-10 rounded-l-none"
                   onClick={() => handleChangeInput(quantity + 1)}
-                  disabled={quantityAvailable ? quantity >= quantityAvailable : false}
+                  disabled={
+                    isInventoryTracked(quantityAvailable)
+                      ? quantity >= (quantityAvailable ?? 0)
+                      : false
+                  }
                   aria-label="Increase quantity"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
-              {quantityAvailable && (
+              {isInventoryTracked(quantityAvailable) && (
                 <span className="text-body-sm text-secondary">{quantityAvailable} available</span>
               )}
             </div>
@@ -290,7 +295,11 @@ const QuickBuyContent = ({ product, onClose }: QuickBuyContentProps) => {
             className="flex-1 h-12 text-body-lg font-semibold gap-2"
             size="lg"
             disabled={
-              !availableForSale || (quantityAvailable ? quantity > quantityAvailable : false)
+              !canPurchase({
+                availableForSale,
+                quantityAvailable,
+                quantity,
+              })
             }
             onClick={handleAddToCartAndClose}
           >

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
+import { canPurchase, isInventoryTracked } from '@/domains/products/utils/inventory';
 import useProductSelection from '@/hooks/useProductSelection';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
 import { formatPrice } from '@/lib/format';
@@ -206,7 +207,7 @@ const ProductDescriptionClient = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-label font-medium">Quantity</h3>
-                {quantityAvailable !== null && quantityAvailable !== undefined && (
+                {isInventoryTracked(quantityAvailable) && (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -221,7 +222,7 @@ const ProductDescriptionClient = ({
               </div>
               <QuantityUpdater
                 originalQuantity={quantity || 1}
-                quantityAvailable={quantityAvailable ?? 0}
+                quantityAvailable={quantityAvailable ?? null}
                 productId={productId}
                 disabled={!availableForSale}
                 onChange={(_id, q) => {
@@ -237,7 +238,13 @@ const ProductDescriptionClient = ({
         <Button
           className="flex-1 gap-2"
           size="lg"
-          disabled={!availableForSale || (quantityAvailable ?? 0) < quantity}
+          disabled={
+            !canPurchase({
+              availableForSale,
+              quantityAvailable,
+              quantity,
+            })
+          }
           onClick={handleAddToCart}
         >
           <ShoppingBag className="h-5 w-5" color="currentColor" />

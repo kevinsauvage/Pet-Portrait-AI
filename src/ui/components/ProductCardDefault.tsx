@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
+import { isLowStock } from '@/domains/products/utils/inventory';
 import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
@@ -25,7 +26,7 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
   const productImages = mapShopifyImagesToImageFields(images?.edges);
   const primaryImage = productImages?.[0];
 
-  const isLowStock = quantityAvailable && quantityAvailable < 5 && availableForSale;
+  const lowStock = isLowStock(quantityAvailable) && availableForSale;
   const isSoldOut = !availableForSale;
 
   const Component = asListItem ? 'li' : 'div';
@@ -72,7 +73,7 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
               Sold Out
             </Badge>
           )}
-          {isLowStock && !isSoldOut && (
+          {lowStock && !isSoldOut && (
             <Badge
               variant="secondary"
               className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-secondary/95 border-2 border-white/20"

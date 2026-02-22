@@ -135,7 +135,7 @@ async function seed() {
     // 0. Check scopes
     console.log('🔍 Checking access scopes...');
     try {
-      const scopeResult: any = await adminClient.request(ACCESS_SCOPES_QUERY);
+      const scopeResult: any = await adminClient().request(ACCESS_SCOPES_QUERY);
       console.log('🚀 ~ seed ~ scopeResult:', scopeResult);
       const scopes = scopeResult.currentAppInstallation.accessScopes.map((s: any) => s.handle);
       console.log('✅ Current Scopes:', scopes.join(', '));
@@ -153,12 +153,21 @@ async function seed() {
     // 1. Ensure Collections
     console.log('📦 Ensuring collections exist...');
     const collectionsToEnsure = [
-      { title: 'AI Pet Portraits', descriptionHtml: 'Beautiful AI-generated portraits of your pets.' },
-      { title: 'Best Sellers', descriptionHtml: 'Our most popular AI pet portraits.' },
-      { title: 'New Arrivals', descriptionHtml: 'The latest styles in pet portraiture.' },
+      {
+        title: 'Personalized Favourites',
+        descriptionHtml: 'Customer-loved pet portrait gifts and best-loved styles.',
+      },
+      { title: 'Wall Art', descriptionHtml: 'Canvas and poster prints for your home or studio.' },
+      { title: 'Phone Cases', descriptionHtml: 'Protect your phone with a custom pet portrait.' },
+      { title: 'Mugs & Bottle', descriptionHtml: 'Daily sips with your favorite pet artwork.' },
+      { title: 'Tote Bags', descriptionHtml: 'Carry your pet portrait everywhere.' },
+      { title: 'Calendars', descriptionHtml: 'A year of pet portraits, month by month.' },
+      { title: 'Holiday Season', descriptionHtml: 'Gift-ready portraits for the holidays.' },
     ];
 
-    const collectionsResult: any = await adminClient.request(GET_COLLECTIONS_QUERY, { first: 50 });
+    const collectionsResult: any = await adminClient().request(GET_COLLECTIONS_QUERY, {
+      first: 50,
+    });
     const existingCollections = collectionsResult.collections.edges.map((e: any) => e.node);
     const collectionIds: Record<string, string> = {};
 
@@ -166,7 +175,7 @@ async function seed() {
       let id = existingCollections.find((c: any) => c.title === col.title)?.id;
       if (!id) {
         console.log(`🔨 Creating "${col.title}" collection...`);
-        const result: any = await adminClient.request(COLLECTION_CREATE_MUTATION, { input: col });
+        const result: any = await adminClient().request(COLLECTION_CREATE_MUTATION, { input: col });
         if (result.collectionCreate.userErrors.length > 0) {
           console.error(`❌ Error creating "${col.title}":`, result.collectionCreate.userErrors);
           continue;
@@ -197,7 +206,9 @@ async function seed() {
         descriptionHtml: 'Premium canvas print, multiple sizes. Shipped via Gelato.',
         productType: 'Physical',
         imageUrl: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1080',
-        options: [{ name: 'Size', values: [{ name: '12x12' }, { name: '16x20' }, { name: '24x24' }] }],
+        options: [
+          { name: 'Size', values: [{ name: '12x12' }, { name: '16x20' }, { name: '24x24' }] },
+        ],
         variants: [
           { sku: 'CANVAS-12X12', price: '49.00', optionValue: '12x12' },
           { sku: 'CANVAS-16X20', price: '79.00', optionValue: '16x20' },
@@ -209,7 +220,9 @@ async function seed() {
         descriptionHtml: 'High-quality art print. Shipped via Gelato.',
         productType: 'Physical',
         imageUrl: 'https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=1080',
-        options: [{ name: 'Size', values: [{ name: '12x12' }, { name: '16x20' }, { name: '24x24' }] }],
+        options: [
+          { name: 'Size', values: [{ name: '12x12' }, { name: '16x20' }, { name: '24x24' }] },
+        ],
         variants: [
           { sku: 'POSTER-12X12', price: '29.00', optionValue: '12x12' },
           { sku: 'POSTER-16X20', price: '49.00', optionValue: '16x20' },
@@ -220,7 +233,7 @@ async function seed() {
 
     for (const pData of productsData) {
       console.log(`🎁 Creating "${pData.title}"...`);
-      const productResult: any = await adminClient.request(PRODUCT_CREATE_MUTATION, {
+      const productResult: any = await adminClient().request(PRODUCT_CREATE_MUTATION, {
         product: {
           title: pData.title,
           descriptionHtml: pData.descriptionHtml,
@@ -252,19 +265,21 @@ async function seed() {
         if (pData.variants && pData.variants.length > 0) {
           // Update first variant
           const firstV = pData.variants[0]!;
-          await adminClient.request(PRODUCT_VARIANTS_BULK_UPDATE_MUTATION, {
+          await adminClient().request(PRODUCT_VARIANTS_BULK_UPDATE_MUTATION, {
             productId: pid,
-            variants: [{
-              id: firstVariantId,
-              price: firstV.price,
-              inventoryItem: { sku: firstV.sku },
-            }],
+            variants: [
+              {
+                id: firstVariantId,
+                price: firstV.price,
+                inventoryItem: { sku: firstV.sku },
+              },
+            ],
           });
           // Create other variants
           if (pData.variants.length > 1) {
-            await adminClient.request(PRODUCT_VARIANTS_BULK_CREATE_MUTATION, {
+            await adminClient().request(PRODUCT_VARIANTS_BULK_CREATE_MUTATION, {
               productId: pid,
-              variants: pData.variants.slice(1).map(v => ({
+              variants: pData.variants.slice(1).map((v) => ({
                 optionValues: [{ optionName: 'Size', name: v.optionValue! }],
                 price: v.price,
                 inventoryItem: { sku: v.sku },
@@ -273,14 +288,16 @@ async function seed() {
           }
         } else {
           // Digital product single variant
-          await adminClient.request(PRODUCT_VARIANTS_BULK_UPDATE_MUTATION, {
+          await adminClient().request(PRODUCT_VARIANTS_BULK_UPDATE_MUTATION, {
             productId: pid,
-            variants: [{
-              id: firstVariantId,
-              price: pData.price,
-              inventoryPolicy: pData.inventoryPolicy,
-              inventoryItem: { sku: pData.sku },
-            }],
+            variants: [
+              {
+                id: firstVariantId,
+                price: pData.price,
+                inventoryPolicy: pData.inventoryPolicy,
+                inventoryItem: { sku: pData.sku },
+              },
+            ],
           });
         }
       }
@@ -292,12 +309,15 @@ async function seed() {
       for (const colTitle of Object.keys(collectionIds)) {
         const id = collectionIds[colTitle];
         console.log(`🔗 Linking products to "${colTitle}"...`);
-        const addResult: any = await adminClient.request(COLLECTION_ADD_PRODUCTS_MUTATION, {
+        const addResult: any = await adminClient().request(COLLECTION_ADD_PRODUCTS_MUTATION, {
           id,
           productIds: createdProductIds,
         });
         if (addResult.collectionAddProducts.userErrors.length > 0) {
-          console.error(`❌ Error adding to "${colTitle}":`, addResult.collectionAddProducts.userErrors);
+          console.error(
+            `❌ Error adding to "${colTitle}":`,
+            addResult.collectionAddProducts.userErrors,
+          );
         } else {
           console.log(`✅ Products linked to "${colTitle}".`);
         }

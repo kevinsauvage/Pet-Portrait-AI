@@ -41,7 +41,7 @@ const LineItem: React.FC<{
   );
   const finalPrice = totalPrice - totalDiscount > 0 ? totalPrice - totalDiscount : 0;
   const hasDiscount = finalPrice < totalPrice;
-  const {currencyCode} = node.merchandise.price;
+  const { currencyCode } = node.merchandise.price;
 
   // Get product handle for link
   const productHandle =
@@ -108,7 +108,7 @@ const LineItem: React.FC<{
         <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
           <QuantityUpdatedContainer
             originalQuantity={node.quantity}
-            quantityAvailable={node.merchandise.quantityAvailable ?? 0}
+            quantityAvailable={node.merchandise.quantityAvailable ?? null}
             id={node.id}
             disabled={finalPrice <= 0}
           />

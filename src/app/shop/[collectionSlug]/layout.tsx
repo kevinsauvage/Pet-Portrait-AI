@@ -35,9 +35,9 @@ const Layout = async ({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ collectionSlug: string }>;
+  params: { collectionSlug: string };
 }) => {
-  const { collectionSlug } = await params;
+  const { collectionSlug } = params;
 
   const [responseMenu, response] = await Promise.all([
     storefrontSdk().getMenuByHandle({ handle: `main-menu` }),

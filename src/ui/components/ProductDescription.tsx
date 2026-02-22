@@ -1,3 +1,4 @@
+import { isLowStock } from '@/domains/products/utils/inventory';
 import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
 import { cn } from '@/lib/cn';
@@ -15,7 +16,7 @@ type ProductDescriptionProps = {
 const ProductDescription = ({ product, isModal, className }: ProductDescriptionProps) => {
   if (!product) return null;
 
-  const {images} = product;
+  const { images } = product;
   const descriptionHtml: string =
     typeof product.descriptionHtml === 'string' ? product.descriptionHtml : '';
 
@@ -65,7 +66,7 @@ const ProductDescription = ({ product, isModal, className }: ProductDescriptionP
           </Badge>
         )}
 
-        {quantityAvailable && quantityAvailable < 5 && availableForSale && (
+        {isLowStock(quantityAvailable) && availableForSale && (
           <Badge
             variant="secondary"
             className="absolute right-4 top-4 z-10 px-3 py-1.5 text-body-sm font-medium shadow-md"

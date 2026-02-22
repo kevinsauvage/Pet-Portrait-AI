@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 
+import { isInventoryTracked } from '@/domains/products/utils/inventory';
 import SpinnerLoader from '@/ui/components/SpinnerLoader';
 
 import { Button } from './ui/button';
@@ -16,7 +17,7 @@ const QuantityUpdater = ({
   disabled,
 }: {
   originalQuantity: number;
-  quantityAvailable: number;
+  quantityAvailable: number | null;
   productId: string;
   disabled?: boolean;
   onChange:
@@ -39,7 +40,9 @@ const QuantityUpdater = ({
   }, [onChange, productId, quantity]);
 
   const addOne = useCallback(async () => {
-    if (quantity >= quantityAvailable) return;
+    if (isInventoryTracked(quantityAvailable) && quantity >= (quantityAvailable ?? 0)) {
+      return;
+    }
     const newQuantity = quantity + 1;
     setQuantity(newQuantity);
     setLoading(true);
@@ -74,7 +77,11 @@ const QuantityUpdater = ({
         onClick={() => {
           addOne();
         }}
-        disabled={loading || disabled || originalQuantity >= quantityAvailable}
+        disabled={
+          loading ||
+          disabled ||
+          (isInventoryTracked(quantityAvailable) && originalQuantity >= (quantityAvailable ?? 0))
+        }
         aria-label="Increase quantity"
       >
         {loading ? <SpinnerLoader size="sm" /> : <Plus className="h-3 w-3" />}

@@ -32,15 +32,33 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/app/*": ["./src/app/*"],
-      "@/domains/*": ["./src/domains/*"],
-      "@/infra/*": ["./src/infra/*"],
-      "@/core/*": ["./src/core/*"],
-      "@/ui/*": ["./src/ui/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/assets/*": ["./src/assets/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/app/*": [
+        "./src/app/*"
+      ],
+      "@/domains/*": [
+        "./src/domains/*"
+      ],
+      "@/infra/*": [
+        "./src/infra/*"
+      ],
+      "@/core/*": [
+        "./src/core/*"
+      ],
+      "@/ui/*": [
+        "./src/ui/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/assets/*": [
+        "./src/assets/*"
+      ]
     }
   },
   "include": [
@@ -56,6 +74,9 @@
   "exclude": [
     "node_modules",
     "codegen.admin.ts",
-    "codegen.storefront.ts"
+    "codegen.storefront.ts",
+    "src/infra/shopify/admin/index.ts",
+    "src/infra/shopify/storefront/index.ts",
+    ".next"
   ]
 }
