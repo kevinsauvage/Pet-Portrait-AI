@@ -1,4 +1,4 @@
-import { ProductCollectionSortKeys, SearchSortKeys } from './storefront';
+import { ProductCollectionSortKeys } from '@/infra/shopify/storefront';
 
 export const COLLECTION_SORT_OPTIONS = [
   {
@@ -16,16 +16,5 @@ export const COLLECTION_SORT_OPTIONS = [
   {
     label: 'New Arrivals',
     name: ProductCollectionSortKeys.Created,
-  },
-] as const;
-
-export const SEARCH_SORT_OPTIONS = [
-  {
-    label: 'Relevance',
-    name: SearchSortKeys.Relevance,
-  },
-  {
-    label: 'Price, low to high',
-    name: SearchSortKeys.Price,
   },
 ] as const;

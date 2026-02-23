@@ -2,11 +2,9 @@ import { type NextRequest } from 'next/server';
 
 import { createErrorResponse, createSuccessResponse, HTTP_STATUS } from '@/core/utils/api-responses';
 import {
-  createGelatoFulfillmentOrder,
-  getPrintableLineItems,
-  type ShopifyLineItem,
-  type ShopifyShippingAddress,
-} from '@/domains/orders/services/gelato-fulfillment.service';
+  fulfillGelatoFromShopifyOrder,
+  type ShopifyOrderWebhookPayload,
+} from '@/domains/orders/services';
 import { verifyShopifyWebhook } from '@/infra/shopify/webhooks';
 
 export const dynamic = 'force-dynamic';
@@ -24,42 +22,22 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const order = JSON.parse(body) as {
-      id: number;
-      line_items?: ShopifyLineItem[];
-      shipping_address?: ShopifyShippingAddress;
-    };
+    const order = JSON.parse(body) as ShopifyOrderWebhookPayload;
+    const fulfillment = await fulfillGelatoFromShopifyOrder(order);
 
-    const podItems = getPrintableLineItems(order.line_items ?? []);
-
-    if (!podItems.length) {
-      return createSuccessResponse({ received: true, podOrders: 0 });
-    }
-
-    if (!order.shipping_address) {
+    if (fulfillment.skippedReason === 'missing_shipping_address') {
       console.error('Gelato fulfillment skipped: missing shipping address.');
-      return createSuccessResponse({ received: true, podOrders: 0 });
     }
 
-    try {
-      const fulfillmentResult = await createGelatoFulfillmentOrder({
-        orderId: String(order.id),
-        lineItems: podItems,
-        shippingAddress: order.shipping_address,
-      });
-
-      if (!fulfillmentResult.ok) {
-        console.error(
-          'Gelato fulfillment failed:',
-          fulfillmentResult.status,
-          fulfillmentResult.errorText,
-        );
-      }
-    } catch (error) {
-      console.error('Gelato fulfillment failed:', error);
+    if (fulfillment.gelatoError) {
+      console.error(
+        'Gelato fulfillment failed:',
+        fulfillment.gelatoError.status ?? 'unknown',
+        fulfillment.gelatoError.message,
+      );
     }
 
-    return createSuccessResponse({ received: true, podOrders: podItems.length });
+    return createSuccessResponse({ received: true, podOrders: fulfillment.podOrders });
   } catch (error) {
     console.error('Shopify orders webhook error:', error);
     return createErrorResponse('Webhook processing failed', {

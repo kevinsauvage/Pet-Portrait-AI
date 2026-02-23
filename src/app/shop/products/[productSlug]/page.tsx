@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import config from '@/core/config';
 import { getProductDetails, getProductSeo } from '@/domains/products/services/product-details.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
@@ -8,7 +9,7 @@ import HomeSection from '@/ui/components/HomeSection';
 import ProductDescription from '@/ui/components/ProductDescription';
 import ProductRecommendations from '@/ui/components/ProductRecommendations';
 
-export const revalidate = 3600;
+export const revalidate = config.constants.revalidate.product;
 
 type parametersType = {
   genre: string;

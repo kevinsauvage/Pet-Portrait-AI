@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next';
 
-import { sitemap as sitemapConfig } from '@/core/config';
+import config, { sitemap as sitemapConfig } from '@/core/config';
 import { fetchShopifySitemapEntries } from '@/infra/shopify/sitemap';
 import { getBaseUrl } from '@/lib/server/metadata';
 
 export const dynamic = 'force-static';
-export const revalidate = 3600;
+export const revalidate = config.constants.revalidate.catalog;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl();

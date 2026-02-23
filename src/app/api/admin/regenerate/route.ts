@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server';
 
-import { isAdminAuthConfigured, isAdminAuthorized } from '@/core/utils/admin-auth';
+import { requireAdminAuth } from '@/core/utils/admin-auth';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -18,17 +18,8 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
-  if (!isAdminAuthConfigured() && process.env.NODE_ENV === 'production') {
-    return createErrorResponse('Admin auth not configured', {
-      status: HTTP_STATUS.SERVICE_UNAVAILABLE,
-    });
-  }
-
-  if (!isAdminAuthorized(request.headers)) {
-    return createErrorResponse('Unauthorized', {
-      status: HTTP_STATUS.UNAUTHORIZED,
-    });
-  }
+  const authError = requireAdminAuth(request.headers);
+  if (authError) return authError;
 
   try {
     const body = await request.json();

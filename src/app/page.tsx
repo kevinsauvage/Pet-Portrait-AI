@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { getHomePageData } from '@/domains/home/services/home.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
@@ -11,7 +12,7 @@ import ProductSection from '@/ui/components/ProductSection';
 import { Button } from '@/ui/components/ui/button';
 import { HOME_FEATURES, HOME_HERO_PERKS } from '@/ui/content/marketing';
 
-export const revalidate = 3600;
+export const revalidate = config.constants.revalidate.catalog;
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.home.title,

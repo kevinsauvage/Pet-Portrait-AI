@@ -5,3 +5,8 @@ export {
   getPrintableLineItems,
 } from './gelato-fulfillment.service';
 export { OrderTrackingService } from './order-tracking.service';
+export {
+  fulfillGelatoFromShopifyOrder,
+  type ShopifyOrderFulfillmentOutcome,
+  type ShopifyOrderWebhookPayload,
+} from './shopify-orders-webhook.service';

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import config from '@/core/config';
+import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/constants/sort-options';
 import {
   getCollectionPageData,
   getCollectionSeo,
 } from '@/domains/collections/services/collections.service';
-import { COLLECTION_SORT_OPTIONS } from '@/infra/shopify/sort-options';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import EmptyState from '@/ui/components/EmptyState';
 import Filters from '@/ui/components/Filters';
@@ -15,7 +16,7 @@ import ProductEdgeList from '@/ui/components/ProductsEdgeList';
 import Sort from '@/ui/components/Sort';
 import { Button } from '@/ui/components/ui/button';
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = config.constants.revalidate.catalog;
 
 type parametersType = { collectionSlug: string };
 
@@ -102,9 +103,7 @@ const CollectionSlugPage = async ({
     <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 space-y-6">
       <ListingHeader>
         <Sort
-          query={
-            searchParameters?.sort_key ? searchParameters : { sort_key: sortKey }
-          }
+          query={searchParameters?.sort_key ? searchParameters : { sort_key: sortKey }}
           sortingOptions={COLLECTION_SORT_OPTIONS}
         />
         <Filters filters={filters} query={safeSearchParameters} />

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { createErrorResponse, HTTP_STATUS } from '@/core/utils/api-responses';
 import { base64Decode } from '@/core/utils/base64';
 import { safeEqual } from '@/core/utils/secure-compare';
 
@@ -67,4 +68,20 @@ export function createAdminUnauthorizedResponse(): NextResponse {
 
 export function createAdminMisconfiguredResponse(): NextResponse {
   return new NextResponse('Admin auth not configured', { status: 503 });
+}
+
+export function requireAdminAuth(headers: Headers) {
+  if (!isAdminAuthConfigured() && process.env.NODE_ENV === 'production') {
+    return createErrorResponse('Admin auth not configured', {
+      status: HTTP_STATUS.SERVICE_UNAVAILABLE,
+    });
+  }
+
+  if (!isAdminAuthorized(headers)) {
+    return createErrorResponse('Unauthorized', {
+      status: HTTP_STATUS.UNAUTHORIZED,
+    });
+  }
+
+  return null;
 }

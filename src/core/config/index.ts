@@ -14,6 +14,7 @@ const config = {
     cookieExpiryDays: 182,
     delegateTokenExpirySeconds: 23 * 60 * 60,
     revalidate: {
+      catalog: 3600,
       search: 300,
       product: 3600,
       shopify: 600,

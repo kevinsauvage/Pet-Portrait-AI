@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { SEARCH_SORT_OPTIONS } from '@/domains/search/constants/sort-options';
 import { type SearchParameters, searchProducts } from '@/domains/search/services/search.service';
-import { SEARCH_SORT_OPTIONS } from '@/infra/shopify/sort-options';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import EmptyState from '@/ui/components/EmptyState';
@@ -17,7 +17,7 @@ import Search from '@/ui/components/Search';
 import Sort from '@/ui/components/Sort';
 import { Button } from '@/ui/components/ui/button';
 
-export const revalidate = 300;
+export const revalidate = config.constants.revalidate.search;
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.search.title,
