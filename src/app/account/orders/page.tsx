@@ -4,18 +4,14 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables } from '@/infra/shopify/helpers';
-import { getShopifyToken } from '@/infra/shopify/server';
-import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
+import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import BackButton from '@/ui/components/BackButton';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
+import Orders from '@/ui/components/Orders';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
-
-import Orders from '../../../ui/components/Orders';
 
 export const dynamic = 'force-dynamic'; // Orders are user-specific
 
@@ -31,25 +27,15 @@ const Page = async ({
 }) => {
   const searchParameters = await searchParams;
 
-  const shopifyToken = await getShopifyToken();
+  const response = await CustomerOrdersService.getCustomerOrders({
+    first: 5,
+    after: searchParameters.after || undefined,
+    before: searchParameters.before || undefined,
+  });
 
-  if (!shopifyToken) {
+  if (!response) {
     redirect(config.routes.login);
   }
-
-  const response = await storefrontSdk('no-store').getCustomerOrders({
-    customerAccessToken: shopifyToken,
-    first: 5,
-    ...adjustPaginationVariables({
-      after: searchParameters.after || undefined,
-      before: searchParameters.before || undefined,
-      first: 5,
-      last: undefined,
-    }),
-    identifiers: [],
-    language: LanguageCode.En,
-    sortKey: OrderSortKeys.ProcessedAt,
-  });
 
   if (response?.customer?.orders === undefined) {
     return (

@@ -4,18 +4,16 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { AddressService } from '@/domains/address/services/address.service';
+import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { getShopifyToken } from '@/infra/shopify/server';
-import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
 import AccountStats from '@/ui/components/AccountStats';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
+import RecentOrdersPreview from '@/ui/components/RecentOrdersPreview';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
-
-import RecentOrdersPreview from '../../ui/components/RecentOrdersPreview';
-import UserFullName from '../../ui/components/UserFullName';
+import UserFullName from '@/ui/components/UserFullName';
 
 export const dynamic = 'force-dynamic'; // Account data is user-specific
 
@@ -58,43 +56,28 @@ const AccountCardCTA = ({
 };
 
 const Page = async () => {
-  const shopifyToken = await getShopifyToken();
   const user = await getUser();
 
-  if (!shopifyToken || !user) {
+  if (!user) {
     redirect(config.routes.login);
   }
 
   // Fetch stats in parallel
   const [ordersResponse, addressesResponse, wishlist] = await Promise.all([
-    storefrontSdk('no-store').getCustomerOrders({
-      customerAccessToken: shopifyToken,
-      first: 1,
-      identifiers: [],
-      language: LanguageCode.En,
-      sortKey: OrderSortKeys.ProcessedAt,
-    }),
-    storefrontSdk('no-store').getCustomerAddresses({
-      customerAccessToken: shopifyToken,
-      first: 1,
-    }),
+    CustomerOrdersService.getCustomerOrders({ first: 3 }),
+    AddressService.getCustomerAddresses({ first: 1 }),
     WishlistService.getWishlist(),
   ]);
+
+  if (!ordersResponse || !addressesResponse) {
+    redirect(config.routes.login);
+  }
 
   const ordersCount = Number(ordersResponse?.customer?.orders?.totalCount || 0);
   const addressesCount = addressesResponse?.customer?.addresses?.edges?.length || 0;
   const wishlistCount = wishlist?.length || 0;
 
-  // Fetch recent orders for preview
-  const recentOrdersResponse = await storefrontSdk('no-store').getCustomerOrders({
-    customerAccessToken: shopifyToken,
-    first: 3,
-    identifiers: [],
-    language: LanguageCode.En,
-    sortKey: OrderSortKeys.ProcessedAt,
-  });
-
-  const recentOrders = recentOrdersResponse?.customer?.orders?.edges || [];
+  const recentOrders = ordersResponse?.customer?.orders?.edges || [];
 
   return (
     <div className="space-y-6">

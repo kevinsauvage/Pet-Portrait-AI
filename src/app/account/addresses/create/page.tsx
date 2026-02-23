@@ -5,6 +5,7 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { createAddressAction } from '@/domains/address/actions';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import AddressFormUI from '@/ui/components/AddressForm';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
@@ -17,8 +18,6 @@ export const metadata: Metadata = generateMetadataUtil({
   url: '/account/addresses/create',
   noindex: true, // Private page, don't index
 });
-
-import AddressFormUI from '@/ui/components/AddressForm';
 
 const CreateAddresses = () => {
   return (

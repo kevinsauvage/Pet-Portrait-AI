@@ -7,7 +7,7 @@ import {
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
 import { getUser } from '@/domains/user/get-user';
-import { WISHLIST_MAX_ITEMS, WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,33 +38,23 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const currentWishlistIds = await WishlistService.getWishlistIds();
+    const result = await WishlistService.addProductWithValidation(productId, user.id);
 
-    if (currentWishlistIds.includes(productId)) {
-      return createErrorResponse('Product already in wishlist', {
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
+    if (!result.success) {
+      const status =
+        result.reason === 'duplicate' || result.reason === 'max'
+          ? HTTP_STATUS.BAD_REQUEST
+          : HTTP_STATUS.INTERNAL_SERVER_ERROR;
 
-    if (currentWishlistIds.length >= WISHLIST_MAX_ITEMS) {
-      return createErrorResponse('Wishlist is full', {
-        message: `Wishlist is full. Maximum ${WISHLIST_MAX_ITEMS} items allowed.`,
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
-
-    const result = await WishlistService.addProduct(productId, user.id);
-
-    if (!result.success || result.data === undefined) {
-      return createErrorResponse("Couldn't add product to user wishlist", {
-        message: result.message || "Couldn't add product to user wishlist",
-        status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      return createErrorResponse('Failed to add product to wishlist', {
+        message: result.message,
+        status,
       });
     }
 
     const wishlist = await WishlistService.getWishlist();
     return createSuccessResponse(wishlist, {
-      message: 'Product correctly added to wishlist',
+      message: result.message,
       noCache: true,
     });
   } catch (error) {

@@ -8,8 +8,6 @@ import {
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
 import { CartService } from '@/domains/cart/services/cart.service';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 
 export const dynamic = 'force-dynamic';
 
@@ -59,42 +57,27 @@ export async function PATCH(request: NextRequest) {
       });
     }
 
-    const pagination = getPaginationParams(request.nextUrl.searchParams);
-    const paginationVars = adjustPaginationVariables(pagination);
-
     let cart;
     let userErrors;
 
     if (operation === 'add' && body.addLines) {
-      const cartLines = body.addLines.map(
-        (line: {
-          merchandiseId: string;
-          quantity?: number;
-          attributes?: Array<{ key: string; value: string }>;
-        }) => ({
-          merchandiseId: line.merchandiseId,
-          quantity: line.quantity ?? 1,
-          ...(line.attributes?.length ? { attributes: line.attributes } : {}),
-        }),
+      const response = await CartService.addLines(
+        cartId,
+        body.addLines,
+        getPaginationParams(request.nextUrl.searchParams),
       );
 
-      const addLineResponse = await storefrontSdk('no-store').cartLinesAdd({
-        cartId,
-        lines: cartLines,
-        ...paginationVars,
-      });
-
-      cart = addLineResponse?.cartLinesAdd?.cart;
-      userErrors = addLineResponse?.cartLinesAdd?.userErrors;
+      cart = response?.cart;
+      userErrors = response?.userErrors;
     } else if (lines) {
-      const updateLinesResponse = await storefrontSdk('no-store').cartLinesUpdate({
+      const response = await CartService.updateLines(
         cartId,
         lines,
-        ...paginationVars,
-      });
+        getPaginationParams(request.nextUrl.searchParams),
+      );
 
-      cart = updateLinesResponse?.cartLinesUpdate?.cart;
-      userErrors = updateLinesResponse?.cartLinesUpdate?.userErrors;
+      cart = response?.cart;
+      userErrors = response?.userErrors;
     }
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
@@ -137,14 +120,13 @@ export async function DELETE(request: NextRequest) {
       return createErrorResponse('Missing line item ID', { status: HTTP_STATUS.BAD_REQUEST });
     }
 
-    const pagination = getPaginationParams(searchParams);
-    const removeLinesResponse = await storefrontSdk('no-store').cartLinesRemove({
+    const response = await CartService.removeLines(
       cartId,
-      lineIds: [lineItemId],
-      ...adjustPaginationVariables(pagination),
-    });
+      [lineItemId],
+      getPaginationParams(searchParams),
+    );
 
-    const { cart, userErrors } = removeLinesResponse?.cartLinesRemove || {};
+    const { cart, userErrors } = response || {};
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {

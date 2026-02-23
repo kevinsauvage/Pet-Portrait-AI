@@ -4,7 +4,9 @@ import config from '@/core/config';
 import { safeLogError } from '@/core/utils/api-responses';
 import { handleCustomerUserErrors } from '@/core/utils/form-actions';
 import { storefrontSdk } from '@/infra/shopify/client';
+import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 import { getShopifyToken } from '@/infra/shopify/server';
+import type { GetCustomerAddressesQuery } from '@/infra/shopify/storefront';
 
 type AddressInput = {
   address1: string;
@@ -20,9 +22,32 @@ type AddressInput = {
   zip: string;
 };
 
+type AddressPagination = {
+  first?: number;
+  after?: string;
+  before?: string;
+};
+
 export class AddressService {
   private static readonly UNAUTHENTICATED_ERROR = 'User not authenticated';
   private static readonly DEFAULT_ERROR = 'Something went wrong';
+
+  static async getCustomerAddresses(
+    pagination: AddressPagination = { first: 6 },
+    customerAccessToken?: string,
+  ): Promise<GetCustomerAddressesQuery | null> {
+    const token = customerAccessToken ?? (await getShopifyToken());
+    if (!token) return null;
+
+    return storefrontSdk('no-store').getCustomerAddresses({
+      customerAccessToken: token,
+      ...adjustPaginationVariables({
+        after: pagination.after,
+        before: pagination.before,
+        first: pagination.first ?? 6,
+      }),
+    });
+  }
 
   static async createAddress(input: AddressInput) {
     const customerAccessToken = await getShopifyToken();

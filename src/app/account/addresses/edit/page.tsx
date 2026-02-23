@@ -5,9 +5,13 @@ import { redirect } from 'next/navigation';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { updateAddressAction } from '@/domains/address/actions';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { getShopifyToken } from '@/infra/shopify/server';
+import { AddressService } from '@/domains/address/services/address.service';
+import {
+  findAddressById,
+  mapAddressNodeToFormData,
+} from '@/domains/address/utils/address-utils';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import AddressForm from '@/ui/components/AddressForm';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
@@ -21,8 +25,6 @@ export const metadata: Metadata = generateMetadataUtil({
   noindex: true, // Private page, don't index
 });
 
-import AddressForm from '@/ui/components/AddressForm';
-
 type PageProperties = {
   searchParams: Promise<{
     id: string;
@@ -30,72 +32,6 @@ type PageProperties = {
   }>;
 };
 
-const normalizeAddressId = (id: string | null | undefined): string => {
-  return id?.split('?')[0] || '';
-};
-
-const mapAddressNodeToFormData = (addressNode: {
-  id?: string | null;
-  address1?: string | null;
-  address2?: string | null;
-  city?: string | null;
-  company?: string | null;
-  country?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  phone?: string | null;
-  province?: string | null;
-  zip?: string | null;
-}) => ({
-  address1: addressNode.address1 ?? '',
-  address2: addressNode.address2 ?? undefined,
-  city: addressNode.city ?? '',
-  company: addressNode.company ?? undefined,
-  country: addressNode.country ?? '',
-  firstName: addressNode.firstName ?? '',
-  id: addressNode.id ?? '',
-  lastName: addressNode.lastName ?? '',
-  phone: addressNode.phone ?? undefined,
-  province: addressNode.province ?? undefined,
-  zip: addressNode.zip ?? '',
-});
-
-type AddressNode = {
-  id?: string | null;
-  address1?: string | null;
-  address2?: string | null;
-  city?: string | null;
-  company?: string | null;
-  country?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  phone?: string | null;
-  province?: string | null;
-  zip?: string | null;
-};
-
-const findAddressById = (
-  addresses:
-    | {
-        edges?: Array<{
-          node: AddressNode;
-        }>;
-      }
-    | null
-    | undefined,
-  id: string,
-) => {
-  if (!addresses?.edges || addresses.edges.length === 0) {
-    return null;
-  }
-
-  const normalizedId = normalizeAddressId(id);
-  const node = addresses.edges
-    .map((item) => item.node)
-    .find((n) => normalizeAddressId(n.id) === normalizedId);
-
-  return node || null;
-};
 
 const EditAddress = async ({ searchParams }: PageProperties) => {
   const searchParameters = await searchParams;
@@ -105,15 +41,10 @@ const EditAddress = async ({ searchParams }: PageProperties) => {
     redirect(config.routes.addresses);
   }
 
-  const customerAccessToken = await getShopifyToken();
-  if (!customerAccessToken) {
+  const response = await AddressService.getCustomerAddresses({ first: 100 });
+  if (!response) {
     redirect(config.routes.login);
   }
-
-  const response = await storefrontSdk('no-store').getCustomerAddresses({
-    customerAccessToken,
-    first: 100,
-  });
 
   const addressNode = findAddressById(response?.customer?.addresses, id);
   if (!addressNode) {

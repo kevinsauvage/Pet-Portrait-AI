@@ -8,8 +8,6 @@ import {
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
 import { CartService } from '@/domains/cart/services/cart.service';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 import type { CartBuyerIdentityInput, GetCustomerQuery } from '@/infra/shopify/storefront';
 
 export const dynamic = 'force-dynamic';
@@ -48,18 +46,14 @@ export async function PATCH(request: NextRequest) {
       phone: user.phone,
     } as CartBuyerIdentityInput;
 
-    const updateResponse = await storefrontSdk('no-store').cartBuyerIdentityUpdate({
-      buyerIdentity,
-      cartId,
-      ...adjustPaginationVariables({
-        after: after || '',
-        before: before || '',
-        first: first || 0,
-        last: last || 0,
-      }),
+    const response = await CartService.updateBuyerIdentity(cartId, buyerIdentity, {
+      after: after || '',
+      before: before || '',
+      first: first || 0,
+      last: last || 0,
     });
 
-    const { cart, userErrors } = updateResponse?.cartBuyerIdentityUpdate || {};
+    const { cart, userErrors } = response || {};
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {

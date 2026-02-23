@@ -174,6 +174,42 @@ export class WishlistService {
     return this.updateWishlist(newIds, userId);
   }
 
+  static async addProductWithValidation(productId: string, userId: string) {
+    const currentIds = await this.getWishlistIds();
+
+    if (currentIds.includes(productId)) {
+      return {
+        success: false,
+        reason: 'duplicate',
+        message: 'Product already in wishlist',
+      } as const;
+    }
+
+    if (currentIds.length >= WISHLIST_MAX_ITEMS) {
+      return {
+        success: false,
+        reason: 'max',
+        message: `Wishlist is full. Maximum ${WISHLIST_MAX_ITEMS} items allowed.`,
+      } as const;
+    }
+
+    const result = await this.addProduct(productId, userId);
+
+    if (!result.success || result.data === undefined) {
+      return {
+        success: false,
+        reason: 'update_failed',
+        message: result.message || "Couldn't add product to user wishlist",
+      } as const;
+    }
+
+    return {
+      success: true,
+      wishlistIds: result.data,
+      message: 'Product correctly added to wishlist',
+    } as const;
+  }
+
   static revalidate(): void {
     revalidatePath(config.routes.wishlist);
     revalidatePath('/', 'layout');

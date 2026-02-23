@@ -1,9 +1,12 @@
+import config from '@/core/config';
+import { safeLogError } from '@/core/utils/api-responses';
 import { handleCustomerUserErrors, handleUserErrors } from '@/core/utils/form-actions';
 import { getUser } from '@/domains/user/get-user';
 import { api } from '@/infra/http/api-client';
 import { storefrontSdk } from '@/infra/shopify/client';
-import { setShopifyToken } from '@/infra/shopify/server';
+import { clearShopifyToken, getShopifyToken, setShopifyToken } from '@/infra/shopify/server';
 import type { CustomerAccessToken } from '@/infra/shopify/storefront';
+import { delCookieAction } from '@/lib/cookies/actions';
 
 type LoginInput = {
   email: string;
@@ -127,6 +130,22 @@ export class AuthService {
     await setShopifyToken(customerAccessToken);
 
     return { success: true, customerAccessToken };
+  }
+
+  static async logout() {
+    const token = await getShopifyToken();
+    if (token) {
+      try {
+        await storefrontSdk('no-store').customerAccessTokenDelete({
+          customerAccessToken: token,
+        });
+      } catch (error) {
+        safeLogError('AuthService.logout - token deletion', error);
+      }
+    }
+
+    await clearShopifyToken();
+    await delCookieAction(config.cookies.delegateToken);
   }
 
   private static async updateCartBuyerIdentity(

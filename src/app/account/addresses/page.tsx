@@ -5,19 +5,16 @@ import { redirect } from 'next/navigation';
 import NoAddressIllustration from '@/assets/NoAddressIllustration.png';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { AddressService } from '@/domains/address/services/address.service';
+import { isDefaultAddress, mapAddressEdgesToList } from '@/domains/address/utils/address-utils';
 import { getUser } from '@/domains/user/get-user';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables } from '@/infra/shopify/helpers';
-import { getShopifyToken } from '@/infra/shopify/server';
-import type { MailingAddress } from '@/infra/shopify/storefront';
+import Address from '@/ui/components/Address';
 import BackButton from '@/ui/components/BackButton';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import EmptyState from '@/ui/components/EmptyState';
 import PageInfoPagination from '@/ui/components/PageInfoPagination';
 import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
-
-import Address from '../../../ui/components/Address';
 
 import { Plus } from 'lucide-react';
 
@@ -34,31 +31,20 @@ const Addresses = async ({
   searchParams: Promise<{ after?: string; before?: string; sort_key?: string }>;
 }) => {
   const searchParameters = await searchParams;
-  const customerAccessToken = await getShopifyToken();
+  const response = await AddressService.getCustomerAddresses({
+    after: searchParameters.after || undefined,
+    before: searchParameters.before || undefined,
+    first: 6,
+  });
 
-  if (!customerAccessToken) {
+  if (!response) {
     redirect(config.routes.login);
   }
 
-  const response = await storefrontSdk('no-store').getCustomerAddresses({
-    ...adjustPaginationVariables({
-      after: searchParameters.after || undefined,
-      before: searchParameters.before || undefined,
-      first: 6,
-    }),
-    customerAccessToken,
-  });
-
-  const addresses =
-    response?.customer?.addresses?.edges?.map((edge) => ({
-      ...edge.node,
-    })) || [];
+  const addresses = mapAddressEdgesToList(response?.customer?.addresses);
 
   const pageInfo = response?.customer?.addresses.pageInfo;
   const user = await getUser();
-
-  const isDefault = (address: MailingAddress) =>
-    address.id?.split('?')?.[0] === user?.defaultAddress?.id?.split('?')?.[0];
 
   const hasAddresses = Array.isArray(addresses) && addresses.length > 0;
 
@@ -111,7 +97,11 @@ const Addresses = async ({
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 gap-4">
           {addresses.map((item) => (
-            <Address key={item.id} address={item} isDefault={isDefault(item)} />
+            <Address
+              key={item.id}
+              address={item}
+              isDefault={isDefaultAddress(item, user?.defaultAddress?.id)}
+            />
           ))}
         </div>
         <PageInfoPagination pageInfo={pageInfo} searchParameters={searchParameters} />

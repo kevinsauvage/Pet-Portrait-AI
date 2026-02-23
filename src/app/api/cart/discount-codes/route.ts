@@ -8,7 +8,6 @@ import {
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
 import { CartService } from '@/domains/cart/services/cart.service';
-import { storefrontSdk } from '@/infra/shopify/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,14 +31,8 @@ export async function PATCH(request: NextRequest) {
       });
     }
 
-    const updateDiscountCodesResponse = await storefrontSdk('no-store').cartDiscountCodesUpdate({
-      cartId,
-      discountCodes,
-      first: 100,
-    });
-
-    const { cart, userErrors, warnings } =
-      updateDiscountCodesResponse?.cartDiscountCodesUpdate || {};
+    const response = await CartService.updateDiscountCodes(cartId, discountCodes, { first: 100 });
+    const { cart, userErrors, warnings } = response || {};
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {

@@ -1,17 +1,15 @@
 import type { Metadata } from 'next';
 
 import seo from '@/core/config/seo';
+import { AddressService } from '@/domains/address/services/address.service';
+import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { getShopifyToken } from '@/infra/shopify/server';
-import { LanguageCode, OrderSortKeys } from '@/infra/shopify/storefront';
 import AccountStats from '@/ui/components/AccountStats';
 import BackButton from '@/ui/components/BackButton';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import { Card, CardContent } from '@/ui/components/ui/card';
-
-import UpdateUserForm from '../../../ui/components/UpdateUserForm';
+import UpdateUserForm from '@/ui/components/UpdateUserForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,26 +19,12 @@ export const metadata: Metadata = {
 };
 
 const Page = async () => {
-  const shopifyToken = await getShopifyToken();
   const user = await getUser();
 
   // Fetch stats in parallel
   const [ordersResponse, addressesResponse, wishlist] = await Promise.all([
-    shopifyToken
-      ? storefrontSdk('no-store').getCustomerOrders({
-          customerAccessToken: shopifyToken,
-          first: 1,
-          identifiers: [],
-          language: LanguageCode.En,
-          sortKey: OrderSortKeys.ProcessedAt,
-        })
-      : Promise.resolve(null),
-    shopifyToken
-      ? storefrontSdk('no-store').getCustomerAddresses({
-          customerAccessToken: shopifyToken,
-          first: 1,
-        })
-      : Promise.resolve(null),
+    CustomerOrdersService.getCustomerOrders({ first: 1 }),
+    AddressService.getCustomerAddresses({ first: 1 }),
     WishlistService.getWishlist(),
   ]);
 
