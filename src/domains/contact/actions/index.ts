@@ -1,7 +1,7 @@
 'use server';
 
+import type { FormActionResult } from '@/core/types/form-actions';
 import { zodErrorsToFormActionResult } from '@/core/utils/form-actions';
-import type { FormActionResult } from '@/types/formActions';
 
 import { type ContactInput,contactSchema } from '../validation';
 

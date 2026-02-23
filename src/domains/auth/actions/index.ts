@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import { userFeedback } from '@/core/config/userFeedback';
+import type { FormActionResult } from '@/core/types/form-actions';
 import { zodErrorsToFormActionResult } from '@/core/utils/form-actions';
-import type { FormActionResult } from '@/types/formActions';
 
 import { AuthService } from '../services/auth.service';
 import {

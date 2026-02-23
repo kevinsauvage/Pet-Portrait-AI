@@ -1,9 +1,9 @@
 'use server';
 
 import config from '@/core/config';
+import type { FormActionResult } from '@/core/types/form-actions';
 import { zodErrorsToFormActionResult } from '@/core/utils/form-actions';
 import { delCookieAction } from '@/lib/cookies/actions';
-import type { FormActionResult } from '@/types/formActions';
 
 import { UserService } from '../services/user.service';
 import { type UpdateUserInput,userSchema } from '../validation';
