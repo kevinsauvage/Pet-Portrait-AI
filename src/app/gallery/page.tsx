@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import GalleryGrid from '@/ui/components/media/GalleryGrid';
+import StyleGallery from '@/ui/components/media/StyleGallery';
 import PageBanner from '@/ui/components/shared/PageBanner';
 import { GALLERY_ITEMS } from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
@@ -31,10 +31,9 @@ const GalleryPage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <div className="space-y-2">
-              <h2 className="text-heading-3 tracking-tight">Featured Styles</h2>
+              <h2 className="text-heading-3 tracking-tight">Style Gallery</h2>
               <p className="text-body-sm text-muted-foreground max-w-2xl">
-                Each portrait is custom crafted with our studio-grade AI and printed on premium
-                materials.
+                Filter by style, pet type, and theme to explore the full range of portraits.
               </p>
             </div>
             <Button variant="ghost" size="sm" asChild>
@@ -42,7 +41,7 @@ const GalleryPage = () => {
             </Button>
           </div>
 
-          <GalleryGrid items={GALLERY_ITEMS} ariaLabel="Featured portraits" />
+          <StyleGallery items={GALLERY_ITEMS} ariaLabel="Featured portraits" />
 
           <div className="mt-16 md:mt-20">
             <div className="rounded-3xl border border-border/60 bg-card p-10 md:p-12 text-center shadow-sm">

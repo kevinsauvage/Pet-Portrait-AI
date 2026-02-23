@@ -3,10 +3,11 @@ import Image from 'next/image';
 import { cn } from '@/lib/cn';
 import { Badge } from '@/ui/primitives/badge';
 
-type GalleryItem = {
+export type GalleryItem = {
   id: string;
   style: string;
   petType: string;
+  theme: string;
   image: string;
 };
 
@@ -37,7 +38,7 @@ const GalleryGrid = ({ items, ariaLabel = 'Gallery', className }: GalleryGridPro
           <div className="relative aspect-square overflow-hidden">
             <Image
               src={item.image}
-              alt={`${item.style} portrait of a ${item.petType}`}
+              alt={`${item.style} ${item.theme} portrait of a ${item.petType}`}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -47,9 +48,14 @@ const GalleryGrid = ({ items, ariaLabel = 'Gallery', className }: GalleryGridPro
           </div>
           <div className="p-4 flex items-center justify-between gap-2">
             <span className="text-body-sm font-medium text-foreground">{item.petType}</span>
-            <Badge variant="secondary" className="text-caption-sm">
-              {item.style}
-            </Badge>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Badge variant="secondary" className="text-caption-sm">
+                {item.style}
+              </Badge>
+              <Badge variant="outline" className="text-caption-sm">
+                {item.theme}
+              </Badge>
+            </div>
           </div>
         </li>
       ))}
