@@ -6,8 +6,9 @@ import seo from '@/core/config/seo';
 import { getAllCollections } from '@/domains/collections/services/collections.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/catalog/CollectionGrid';
+import HowItWorks from '@/ui/components/shared/HowItWorks';
 import PageBanner from '@/ui/components/shared/PageBanner';
-import { SHOP_PERKS } from '@/ui/content/marketing';
+import { SHOP_HOW_IT_WORKS, SHOP_PERKS } from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
 
 import { ImageIcon, Palette, ShoppingBag } from 'lucide-react';
@@ -48,6 +49,14 @@ const CollectionsPage = async () => {
           ))}
         </div>
       </PageBanner>
+
+      <HowItWorks
+        id="shop-how-it-works"
+        title="Customize and order in minutes"
+        description="Quick steps to personalize your portrait and get it delivered."
+        steps={SHOP_HOW_IT_WORKS}
+        className="bg-muted/30"
+      />
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">

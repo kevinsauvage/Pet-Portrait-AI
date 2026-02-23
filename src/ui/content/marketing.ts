@@ -8,24 +8,6 @@ import {
   Truck,
 } from 'lucide-react';
 
-export const HOME_FEATURES = [
-  {
-    icon: Camera,
-    title: 'Upload a Photo',
-    description: 'Snap a picture of your furry friend or choose from your gallery.',
-  },
-  {
-    icon: Palette,
-    title: 'Pick a Style',
-    description: 'Renaissance, watercolor, pop art — 8 artistic styles to choose from.',
-  },
-  {
-    icon: Truck,
-    title: 'Get It Delivered',
-    description: 'Printed on premium canvas or poster, shipped free to your door.',
-  },
-] as const;
-
 export const HOME_HERO_PERKS = [
   { icon: Sparkles, label: 'Museum-grade prints' },
   { icon: ShieldCheck, label: 'Satisfaction guaranteed' },
@@ -36,6 +18,60 @@ export const SHOP_PERKS = [
   { label: 'Museum-grade materials', icon: Sparkles },
   { label: 'Multiple print sizes', icon: ImageIcon },
   { label: 'Fast worldwide shipping', icon: ShoppingBag },
+] as const;
+
+export const CREATE_HOW_IT_WORKS = [
+  {
+    icon: Camera,
+    title: 'Upload a Photo',
+    description: 'Choose a clear, well-lit photo of your pet.',
+    time: '30 seconds',
+  },
+  {
+    icon: Palette,
+    title: 'Pick a Style',
+    description: 'Select from 8 artistic styles tailored to pets.',
+    time: '1 minute',
+  },
+  {
+    icon: Sparkles,
+    title: 'AI Generates Options',
+    description: 'We create 6 portraits for you to review.',
+    time: '1-2 minutes',
+  },
+  {
+    icon: ShoppingBag,
+    title: 'Choose Format & Checkout',
+    description: 'Select canvas, poster, or digital download.',
+    time: '2 minutes',
+  },
+] as const;
+
+export const SHOP_HOW_IT_WORKS = [
+  {
+    icon: ImageIcon,
+    title: 'Browse Collections',
+    description: 'Find the print format that fits your space.',
+    time: '1 minute',
+  },
+  {
+    icon: Camera,
+    title: 'Add Your Photo',
+    description: 'Upload your pet photo for personalization.',
+    time: '1 minute',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Review & Approve',
+    description: 'Confirm the preview before you check out.',
+    time: '1-2 minutes',
+  },
+  {
+    icon: Truck,
+    title: 'Checkout & Delivery',
+    description: 'Complete your order and track delivery.',
+    time: '2 minutes',
+  },
 ] as const;
 
 export const GALLERY_ITEMS = [
