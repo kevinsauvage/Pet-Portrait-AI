@@ -157,6 +157,7 @@ export class AuthService {
 
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
+        // eslint-disable-next-line no-await-in-loop
         const response = await api.patch('/api/cart/buyer-identity', {
           customerAccessToken: token,
           user: {

@@ -5,8 +5,8 @@ import seo from '@/core/config/seo';
 import { getShippingPolicy } from '@/domains/legal/services/policies.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
-import MainContent from '@/ui/layouts/MainContent';
 import PageBanner from '@/ui/components/shared/PageBanner';
+import MainContent from '@/ui/layouts/MainContent';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.pages.shipping.title,

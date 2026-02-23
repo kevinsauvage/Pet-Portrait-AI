@@ -24,6 +24,11 @@ type EmptyStateProps = {
   variant?: 'default' | 'cart' | 'search' | 'wishlist' | 'orders' | 'addresses' | 'error';
 };
 
+const animationClasses = {
+  visible: 'opacity-100 translate-y-0',
+  hidden: 'opacity-0 translate-y-4',
+};
+
 const EmptyState = ({
   primaryAction,
   secondaryAction,
@@ -48,7 +53,7 @@ const EmptyState = ({
   return (
     <div
       className={`flex flex-col items-center justify-center h-full transition-all duration-500 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        isVisible ? animationClasses.visible : animationClasses.hidden
       }`}
     >
       <div
@@ -67,7 +72,7 @@ const EmptyState = ({
       </div>
       <div
         className={`text-center transition-all duration-500 delay-300 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          isVisible ? animationClasses.visible : animationClasses.hidden
         }`}
       >
         <h2 className="text-heading-3 mb-2 px-4">{title}</h2>
@@ -98,7 +103,7 @@ const EmptyState = ({
         {(primaryAction || secondaryAction) && (
           <div
             className={`flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto px-4 transition-all duration-500 delay-500 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              isVisible ? animationClasses.visible : animationClasses.hidden
             }`}
           >
             {primaryAction && (

@@ -241,7 +241,7 @@ export default function CreateWizard() {
             <StepAddToCart
               selectedArtworkUrl={selectedArtworkUrl}
               artwork={artwork}
-              originalPhotoUrl={originalPhotoUrl!}
+              originalPhotoUrl={originalPhotoUrl ?? ''}
               onAddToCart={handleAddToCartWithArtwork}
             />
           </motion.div>
