@@ -4,8 +4,7 @@ import Link from 'next/link';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import AuthShell from '@/ui/components/AuthShell';
-
-import RecoverForm from '../../../ui/components/RecoverForm';
+import RecoverForm from '@/ui/components/RecoverForm';
 
 export const metadata: Metadata = {
   description: seo.recover.description,

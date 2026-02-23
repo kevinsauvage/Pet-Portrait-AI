@@ -8,28 +8,9 @@ import {
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
 import { CartService } from '@/domains/cart/services/cart.service';
+import { getCartPaginationParams } from '@/domains/cart/utils/pagination';
 
 export const dynamic = 'force-dynamic';
-
-const DEFAULT_PAGINATION = {
-  first: 100,
-  last: 0,
-  after: '',
-  before: '',
-};
-
-function getPaginationParams(searchParams: URLSearchParams) {
-  const int = (key: string, fallback: number) => {
-    const val = searchParams.get(key);
-    return val ? Number.parseInt(val, 10) : fallback;
-  };
-  return {
-    first: int('first', DEFAULT_PAGINATION.first),
-    last: int('last', DEFAULT_PAGINATION.last),
-    after: searchParams.get('after') || DEFAULT_PAGINATION.after,
-    before: searchParams.get('before') || DEFAULT_PAGINATION.before,
-  };
-}
 
 export async function PATCH(request: NextRequest) {
   const cartId = await CartService.getCartId();
@@ -64,7 +45,7 @@ export async function PATCH(request: NextRequest) {
       const response = await CartService.addLines(
         cartId,
         body.addLines,
-        getPaginationParams(request.nextUrl.searchParams),
+        getCartPaginationParams(request.nextUrl.searchParams),
       );
 
       cart = response?.cart;
@@ -73,7 +54,7 @@ export async function PATCH(request: NextRequest) {
       const response = await CartService.updateLines(
         cartId,
         lines,
-        getPaginationParams(request.nextUrl.searchParams),
+        getCartPaginationParams(request.nextUrl.searchParams),
       );
 
       cart = response?.cart;
@@ -123,7 +104,7 @@ export async function DELETE(request: NextRequest) {
     const response = await CartService.removeLines(
       cartId,
       [lineItemId],
-      getPaginationParams(searchParams),
+      getCartPaginationParams(searchParams),
     );
 
     const { cart, userErrors } = response || {};

@@ -10,8 +10,7 @@ import HomeSection from '@/ui/components/HomeSection';
 import PageBanner from '@/ui/components/PageBanner';
 import ProductSection from '@/ui/components/ProductSection';
 import { Button } from '@/ui/components/ui/button';
-
-import { Camera, Palette, ShieldCheck, Sparkles, Truck } from 'lucide-react';
+import { HOME_FEATURES, HOME_HERO_PERKS } from '@/ui/content/marketing';
 
 export const revalidate = 3600;
 
@@ -20,30 +19,6 @@ export const metadata: Metadata = generateMetadataUtil({
   description: seo.home.description,
   url: '/',
 });
-
-const FEATURES = [
-  {
-    icon: Camera,
-    title: 'Upload a Photo',
-    description: 'Snap a picture of your furry friend or choose from your gallery.',
-  },
-  {
-    icon: Palette,
-    title: 'Pick a Style',
-    description: 'Renaissance, watercolor, pop art — 8 artistic styles to choose from.',
-  },
-  {
-    icon: Truck,
-    title: 'Get It Delivered',
-    description: 'Printed on premium canvas or poster, shipped free to your door.',
-  },
-] as const;
-
-const HERO_PERKS = [
-  { icon: Sparkles, label: 'Museum-grade prints' },
-  { icon: ShieldCheck, label: 'Satisfaction guaranteed' },
-  { icon: Truck, label: 'Free worldwide shipping' },
-] as const;
 
 const Home = async () => {
   const storefront = storefrontSdk();
@@ -85,7 +60,7 @@ const Home = async () => {
         secondaryCtaHref="/gallery"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-left">
-          {HERO_PERKS.map((perk) => (
+          {HOME_HERO_PERKS.map((perk) => (
             <div
               key={perk.label}
               className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/70 px-4 py-3 shadow-sm"
@@ -113,7 +88,7 @@ const Home = async () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
-            {FEATURES.map((feature, index) => (
+            {HOME_FEATURES.map((feature, index) => (
               <div
                 key={feature.title}
                 className="group flex flex-col items-start text-left space-y-4 rounded-2xl border border-border/70 bg-card/80 p-6 md:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"

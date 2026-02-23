@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
@@ -8,10 +7,10 @@ import { AddressService } from '@/domains/address/services/address.service';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import AccountCardCTA from '@/ui/components/AccountCardCTA';
 import AccountStats from '@/ui/components/AccountStats';
 import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
 import RecentOrdersPreview from '@/ui/components/RecentOrdersPreview';
-import { Button } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
 import UserFullName from '@/ui/components/UserFullName';
 
@@ -20,39 +19,6 @@ export const dynamic = 'force-dynamic'; // Account data is user-specific
 export const metadata: Metadata = {
   description: seo.account.description,
   title: seo.account.title,
-};
-
-const AccountCardCTA = ({
-  title,
-  description,
-  buttonText,
-  buttonLink,
-  icon,
-}: {
-  title: string;
-  description: string;
-  buttonText: string;
-  buttonLink: string;
-  icon?: React.ReactNode;
-}) => {
-  return (
-    <Card className="transition-all hover:shadow-md">
-      <CardContent className="p-4 md:p-6">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            {icon && <div className="text-secondary">{icon}</div>}
-            <h3 className="text-heading-4">{title}</h3>
-            <p className="text-body-sm text-secondary">{description}</p>
-          </div>
-          <Button variant="secondary" size="sm" asChild className="w-full sm:w-auto">
-            <Link href={buttonLink} scroll>
-              {buttonText}
-            </Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
 };
 
 const Page = async () => {

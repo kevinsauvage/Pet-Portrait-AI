@@ -8,8 +8,9 @@ import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata'
 import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
 import PageBanner from '@/ui/components/PageBanner';
 import { Button } from '@/ui/components/ui/button';
+import { SHOP_PERKS } from '@/ui/content/marketing';
 
-import { ImageIcon, Palette, ShoppingBag, Sparkles } from 'lucide-react';
+import { ImageIcon, Palette, ShoppingBag } from 'lucide-react';
 
 export const revalidate = 3600;
 
@@ -41,11 +42,7 @@ const CollectionsPage = async () => {
         secondaryCtaHref="/gallery"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-left">
-          {[
-            { label: 'Museum-grade materials', icon: Sparkles },
-            { label: 'Multiple print sizes', icon: ImageIcon },
-            { label: 'Fast worldwide shipping', icon: ShoppingBag },
-          ].map((item) => (
+          {SHOP_PERKS.map((item) => (
             <div
               key={item.label}
               className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/70 px-4 py-3 shadow-sm"

@@ -3,55 +3,16 @@ import Link from 'next/link';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import GalleryGrid from '@/ui/components/GalleryGrid';
 import PageBanner from '@/ui/components/PageBanner';
 import { Button } from '@/ui/components/ui/button';
-
-import GalleryGrid from '../../ui/components/GalleryGrid';
+import { GALLERY_ITEMS } from '@/ui/content/marketing';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.gallery.title,
   description: seo.gallery.description,
   url: '/gallery',
 });
-
-const GALLERY_ITEMS = [
-  {
-    id: '1',
-    style: 'Pixar',
-    petType: 'Golden Retriever',
-    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600',
-  },
-  {
-    id: '2',
-    style: 'Watercolor',
-    petType: 'Cat',
-    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600',
-  },
-  {
-    id: '3',
-    style: 'Anime',
-    petType: 'Husky',
-    image: 'https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=600',
-  },
-  {
-    id: '4',
-    style: 'Royal',
-    petType: 'Poodle',
-    image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600',
-  },
-  {
-    id: '5',
-    style: 'Cyberpunk',
-    petType: 'German Shepherd',
-    image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600',
-  },
-  {
-    id: '6',
-    style: 'Pixar',
-    petType: 'Cat',
-    image: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600',
-  },
-];
 
 const GalleryPage = () => {
   return (

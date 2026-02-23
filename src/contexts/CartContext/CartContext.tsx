@@ -4,6 +4,7 @@ import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { createCartAction } from '@/domains/cart/actions';
 import cartMock from '@/domains/cart/mocks/cart';
+import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
 import { api } from '@/infra/http/api-client';
 import type { CartFieldsFragment } from '@/infra/shopify/storefront';
 
@@ -33,19 +34,12 @@ export const CartContext = createContext<CartContextType>({
   updateDiscountCodes: async () => {},
 });
 
-const DEFAULT_PAGINATION = {
-  first: 100,
-  last: 0,
-  after: '',
-  before: '',
-};
-
 const buildCartLinesUrl = (params?: { lineItemId?: string }): string => {
   const searchParams = new URLSearchParams({
-    first: String(DEFAULT_PAGINATION.first),
-    last: String(DEFAULT_PAGINATION.last),
-    after: DEFAULT_PAGINATION.after,
-    before: DEFAULT_PAGINATION.before,
+    first: String(DEFAULT_CART_PAGINATION.first),
+    last: String(DEFAULT_CART_PAGINATION.last),
+    after: DEFAULT_CART_PAGINATION.after,
+    before: DEFAULT_CART_PAGINATION.before,
   });
 
   if (params?.lineItemId) {

@@ -8,6 +8,7 @@ import {
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
 import { CartService } from '@/domains/cart/services/cart.service';
+import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,9 @@ export async function PATCH(request: NextRequest) {
       });
     }
 
-    const response = await CartService.updateDiscountCodes(cartId, discountCodes, { first: 100 });
+    const response = await CartService.updateDiscountCodes(cartId, discountCodes, {
+      first: DEFAULT_CART_PAGINATION.first,
+    });
     const { cart, userErrors, warnings } = response || {};
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);

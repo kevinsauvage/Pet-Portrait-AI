@@ -4,9 +4,8 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import ContactForm from '@/ui/components/ContactForm';
 import PageBanner from '@/ui/components/PageBanner';
-
-import ContactForm from '../../../ui/components/ContactForm';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.pages.contact.title,

@@ -1,4 +1,4 @@
-import LogoutClientEffect from '../../../ui/components/LogoutClientEffect';
+import LogoutClientEffect from '@/ui/components/LogoutClientEffect';
 
 const Page = () => {
   return (

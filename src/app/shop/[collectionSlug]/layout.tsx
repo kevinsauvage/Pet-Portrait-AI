@@ -1,10 +1,10 @@
+import config from '@/core/config';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { getMenuItemsForCollection } from '@/infra/shopify/helpers';
 import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
+import CollectionNav from '@/ui/components/CollectionNav';
 import PageBanner from '@/ui/components/PageBanner';
-
-import CollectionNav from '../../../ui/components/CollectionNav';
 
 const Layout = async ({
   children,
@@ -16,7 +16,7 @@ const Layout = async ({
   const { collectionSlug } = params;
 
   const [responseMenu, response] = await Promise.all([
-    storefrontSdk().getMenuByHandle({ handle: `main-menu` }),
+    storefrontSdk().getMenuByHandle({ handle: config.constants.menuHandles.main }),
     storefrontSdk().collection({
       first: 1,
       handle: collectionSlug,
