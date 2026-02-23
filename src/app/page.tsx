@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { CollectionSortKeys, ProductSortKeys } from '@/infra/shopify/storefront/index';
+import { getHomePageData } from '@/domains/home/services/home.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
 import HomeSection from '@/ui/components/HomeSection';
@@ -21,32 +20,7 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 const Home = async () => {
-  const storefront = storefrontSdk();
-  const [collections, bestSelling, newArrival] = await Promise.all([
-    storefront.collections({
-      first: 100,
-      firstProducts: 1,
-      identifiers: [{ key: 'featured', namespace: 'custom' }],
-      sortKey: CollectionSortKeys?.Relevance,
-    }),
-    storefront.getProducts({
-      first: 8,
-      identifiers: [],
-      sortKey: ProductSortKeys.BestSelling,
-    }),
-    storefront.getProducts({
-      first: 8,
-      identifiers: [],
-      sortKey: ProductSortKeys.CreatedAt,
-    }),
-  ]);
-
-  const featuredCollections = collections.collections.edges.filter((collection) =>
-    collection.node.metafields.find((metafield) => metafield?.key === 'featured'),
-  );
-
-  const bestSellingProducts = bestSelling.products.edges.map((edge) => edge.node);
-  const newArrivalProducts = newArrival.products.edges.map((edge) => edge.node);
+  const { featuredCollections, bestSellingProducts, newArrivalProducts } = await getHomePageData();
 
   return (
     <div className="space-y-0">

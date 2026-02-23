@@ -6,20 +6,15 @@ import {
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
-import { storefrontSdk } from '@/infra/shopify/client';
+import { getPredictiveSearch } from '@/domains/search/services/search.service';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get('q');
 
-  if (!query || query.trim().length < 2) {
-    return createSuccessResponse({ predictiveSearch: null });
-  }
-
   try {
-    const response = await storefrontSdk().predictiveSearch({ query: query.trim() });
-
+    const response = await getPredictiveSearch(query || '');
     if (!response) {
       return createSuccessResponse({ predictiveSearch: null });
     }

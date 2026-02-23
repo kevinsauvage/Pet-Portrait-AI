@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
+import { getShippingPolicy } from '@/domains/legal/services/policies.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import MainContent from '@/ui/components/MainContent';
@@ -14,8 +14,7 @@ export const metadata: Metadata = generateMetadataUtil({
   url: config.routes.shipping,
 });
 const ShippingPage = async () => {
-  const response = await storefrontSdk().getShippingPolicy({});
-  const { shippingPolicy } = response?.shop || {};
+  const shippingPolicy = await getShippingPolicy();
   const { title, description } = seo.pages.shipping || {};
 
   return (

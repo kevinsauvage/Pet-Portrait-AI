@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
+import { getTermsOfService } from '@/domains/legal/services/policies.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import MainContent from '@/ui/components/MainContent';
@@ -15,8 +15,7 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 const TermsPage = async () => {
-  const response = await storefrontSdk().getTermsOfService({});
-  const { termsOfService } = response?.shop || {};
+  const termsOfService = await getTermsOfService();
   const { title, description } = seo.pages.terms || {};
   return (
     <div>

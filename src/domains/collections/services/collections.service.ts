@@ -1,0 +1,128 @@
+import config from '@/core/config';
+import { storefrontSdk } from '@/infra/shopify/client';
+import {
+  adjustPaginationVariables,
+  getMenuItemsForCollection,
+  parseFiltersQuery,
+} from '@/infra/shopify/helpers';
+import {
+  type CollectionQuery,
+  CollectionSortKeys,
+  type CollectionsQuery,
+  type GetCollectionSeoByHandleQuery,
+  type GetMenuByHandleQuery,
+  ProductCollectionSortKeys,
+} from '@/infra/shopify/storefront';
+
+type CollectionEdge = CollectionsQuery['collections']['edges'][number];
+
+type CollectionSearchParams = {
+  after?: string;
+  before?: string;
+  filters?: string;
+  sort_key?: string;
+  reverse?: boolean;
+};
+
+type CollectionProducts = NonNullable<CollectionQuery['collection']>['products'];
+
+type CollectionPageData = {
+  collection: CollectionQuery['collection'] | null | undefined;
+  edges: CollectionProducts['edges'];
+  filters: CollectionProducts['filters'];
+  pageInfo: CollectionProducts['pageInfo'];
+  sortKey: ProductCollectionSortKeys;
+};
+
+const DEFAULT_PAGE_INFO: CollectionProducts['pageInfo'] = {
+  endCursor: null,
+  hasNextPage: false,
+  hasPreviousPage: false,
+  startCursor: null,
+};
+
+const resolveSortKey = (sortKey?: string): ProductCollectionSortKeys => {
+  const match = Object.values(ProductCollectionSortKeys).find(
+    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
+  );
+  if (match) return match;
+
+  const matchKey = Object.keys(ProductCollectionSortKeys).find(
+    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
+  ) as keyof typeof ProductCollectionSortKeys | undefined;
+
+  if (matchKey) return ProductCollectionSortKeys[matchKey];
+
+  return ProductCollectionSortKeys.BestSelling;
+};
+
+export async function getAllCollections(): Promise<CollectionEdge[]> {
+  const response = await storefrontSdk().collections({
+    first: 100,
+    firstProducts: 1,
+    identifiers: [],
+    sortKey: CollectionSortKeys.Title,
+  });
+
+  return response.collections.edges;
+}
+
+export async function getCollectionSeo(
+  handle: string,
+): Promise<GetCollectionSeoByHandleQuery['collection'] | null | undefined> {
+  const response = await storefrontSdk().getCollectionSeoByHandle({ handle });
+  return response?.collection;
+}
+
+export async function getCollectionLayoutData(collectionSlug: string): Promise<{
+  collection: CollectionQuery['collection'] | null | undefined;
+  navMenu: GetMenuByHandleQuery['menu'] | null;
+}> {
+  const [responseMenu, responseCollection] = await Promise.all([
+    storefrontSdk().getMenuByHandle({ handle: config.constants.menuHandles.main }),
+    storefrontSdk().collection({
+      first: 1,
+      handle: collectionSlug,
+      identifiers: [],
+    }),
+  ]);
+
+  const navItems = getMenuItemsForCollection(responseMenu?.menu, collectionSlug);
+  const navMenu = { items: navItems } as GetMenuByHandleQuery['menu'];
+
+  return {
+    collection: responseCollection.collection,
+    navMenu,
+  };
+}
+
+export async function getCollectionPageData(
+  handle: string,
+  searchParameters: CollectionSearchParams = {},
+): Promise<CollectionPageData> {
+  const sortKey = resolveSortKey(searchParameters?.sort_key);
+
+  const response = await storefrontSdk().collection({
+    filters: parseFiltersQuery(searchParameters?.filters),
+    ...adjustPaginationVariables({
+      after: searchParameters?.after || undefined,
+      before: searchParameters?.before || undefined,
+      first: 16,
+      last: 16,
+      reverse: searchParameters?.reverse || false,
+    }),
+    handle,
+    identifiers: [],
+    sortKey,
+  });
+
+  const products = response.collection?.products;
+
+  return {
+    collection: response.collection,
+    edges: products?.edges ?? [],
+    filters: products?.filters ?? [],
+    pageInfo: products?.pageInfo ?? DEFAULT_PAGE_INFO,
+    sortKey,
+  };
+}

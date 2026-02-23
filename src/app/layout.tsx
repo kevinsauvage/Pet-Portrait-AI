@@ -3,13 +3,12 @@ import { Inter } from 'next/font/google';
 
 import { CartProvider } from '@/contexts/CartContext/CartContext';
 import { UserProvider } from '@/contexts/UserContext/UserContext';
-import config from '@/core/config';
 import seo from '@/core/config/seo';
 import siteMetadata from '@/core/config/siteMetadata';
 import { CartService } from '@/domains/cart/services/cart.service';
+import { getSiteMenus } from '@/domains/navigation/services/menu.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import { storefrontSdk } from '@/infra/shopify/client';
 import CookieBanner from '@/ui/components/CookieBanner';
 import Footer from '@/ui/components/Footer';
 import GtmScript from '@/ui/components/GtmScript';
@@ -46,16 +45,10 @@ export const metadata: Metadata = {
   },
 };
 
-const handleInitialCart = async () => {
-  const cartId = await CartService.getCartId();
-  return cartId ? CartService.getCart(cartId) : null;
-};
-
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const [headerMenu, footerMenu, initialCart, user, userWishlist] = await Promise.all([
-    storefrontSdk().getMenuByHandle({ handle: config.constants.menuHandles.main }),
-    storefrontSdk().getMenuByHandle({ handle: config.constants.menuHandles.footer }),
-    handleInitialCart(),
+  const [menus, initialCart, user, userWishlist] = await Promise.all([
+    getSiteMenus(),
+    CartService.getExistingCart(),
     getUser(),
     WishlistService.getWishlist(),
   ]);
@@ -86,10 +79,10 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           <CartProvider initialCart={initialCart}>
             <UserProvider user={user} userWishlist={userWishlist}>
               <div className="relative z-10 flex min-h-screen flex-col">
-                <Header headerMenu={headerMenu?.menu || null} />
+                <Header headerMenu={menus.headerMenu} />
                 <main className="flex-1">{children}</main>
                 <Toaster richColors />
-                <Footer menuItems={footerMenu?.menu?.items} />
+                <Footer menuItems={menus.footerMenu?.items} />
               </div>
             </UserProvider>
           </CartProvider>

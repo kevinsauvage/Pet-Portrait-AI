@@ -15,4 +15,13 @@ function processHtml(html: string) {
   return html.replace(/<link[^>]*>/g, '');
 }
 
+export function stripHtmlToText(html: string) {
+  if (!html) return '';
+
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export default processHtml;

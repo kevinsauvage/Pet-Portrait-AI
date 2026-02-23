@@ -4,7 +4,7 @@ This document describes the `src/` layout after the domains + infra migration.
 
 ## Overview
 
-- **domains/** — Domain logic (auth, user, address, cart, ai, contact, search, wishlist, orders, products). Domains use `actions/`, `services/`, `validation/`, `models/`, `repositories/`, `mappers/` when applicable.
+- **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Domains use `actions/`, `services/`, `validation/`, `models/`, `repositories/`, `mappers/` when applicable.
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
 - **core/** — App-wide config, errors, types, and shared utils (api-responses, form-actions, cookie-security).
 - **lib/** — Pure helpers and app infra: format, html, arrays, debounce, cn, consents, cookies (server actions), client (cookies, analytics), server (metadata).
@@ -30,7 +30,11 @@ src/
 │   ├── ai/                  # actions/, services/, models/, ai-portrait/, generation-store, index.ts
 │   ├── auth/
 │   ├── cart/
+│   ├── collections/         # services/
 │   ├── contact/
+│   ├── home/                # services/
+│   ├── legal/               # services/
+│   ├── navigation/          # services/
 │   ├── orders/             # services/, models/, repositories/
 │   ├── products/           # services/, models/, repositories/, mappers/
 │   ├── search/

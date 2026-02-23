@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
-import { CollectionSortKeys } from '@/infra/shopify/storefront/index';
+import { getAllCollections } from '@/domains/collections/services/collections.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
 import PageBanner from '@/ui/components/PageBanner';
@@ -21,14 +20,7 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 const CollectionsPage = async () => {
-  const response = await storefrontSdk().collections({
-    first: 100,
-    firstProducts: 1,
-    identifiers: [],
-    sortKey: CollectionSortKeys?.Title,
-  });
-
-  const collections = response.collections.edges;
+  const collections = await getAllCollections();
 
   return (
     <div>
@@ -64,7 +56,8 @@ const CollectionsPage = async () => {
                 <div className="space-y-2">
                   <h2 className="text-heading-2 tracking-tight">All collections</h2>
                   <p className="text-body-sm text-muted-foreground max-w-2xl">
-                    Signature series, seasonal releases, and premium print formats ready to customize.
+                    Signature series, seasonal releases, and premium print formats ready to
+                    customize.
                   </p>
                 </div>
                 <Button variant="ghost" size="sm" asChild>

@@ -111,6 +111,11 @@ export class CartService {
     return cartId || null;
   }
 
+  static async getExistingCart(): Promise<CartFieldsFragment | null> {
+    const cartId = await this.getCartId();
+    return cartId ? this.getCart(cartId) : null;
+  }
+
   static async addLines(
     cartId: string,
     lines: CartLineAddInput[],

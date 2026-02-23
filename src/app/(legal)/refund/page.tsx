@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
+import { getRefundPolicy } from '@/domains/legal/services/policies.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import MainContent from '@/ui/components/MainContent';
@@ -15,8 +15,7 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 const RefundPage = async () => {
-  const response = await storefrontSdk().getRefundPolicy({});
-  const refundPolicy = response.shop?.refundPolicy;
+  const refundPolicy = await getRefundPolicy();
 
   const { title, description } = seo.pages.refund || {};
 

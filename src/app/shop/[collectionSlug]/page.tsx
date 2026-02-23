@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables, parseFiltersQuery } from '@/infra/shopify/helpers';
+import {
+  getCollectionPageData,
+  getCollectionSeo,
+} from '@/domains/collections/services/collections.service';
 import { COLLECTION_SORT_OPTIONS } from '@/infra/shopify/sort-options';
-import { ProductCollectionSortKeys } from '@/infra/shopify/storefront';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import EmptyState from '@/ui/components/EmptyState';
 import Filters from '@/ui/components/Filters';
@@ -25,11 +26,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { collectionSlug } = await params;
 
-  const collectionResponse = await storefrontSdk().getCollectionSeoByHandle({
-    handle: collectionSlug,
-  });
-
-  const { collection } = collectionResponse || {};
+  const collection = await getCollectionSeo(collectionSlug);
 
   if (!collection) {
     return generateMetadataUtil({
@@ -68,38 +65,14 @@ const CollectionSlugPage = async ({
   const { collectionSlug } = await params;
   const searchParameters = (await searchParams) || {};
 
-  const sortKey = Object.keys(ProductCollectionSortKeys).find(
-    (key) => key.toLowerCase() === searchParameters?.sort_key?.toLowerCase(),
-  ) as keyof typeof ProductCollectionSortKeys;
-
-  const response = await storefrontSdk().collection({
-    filters: parseFiltersQuery(searchParameters?.filters),
-    ...adjustPaginationVariables({
-      after: searchParameters?.after || undefined,
-      before: searchParameters?.before || undefined,
-      first: 16,
-      last: 16,
-      reverse: searchParameters?.reverse || false,
-    }),
-    handle: collectionSlug,
-    identifiers: [],
-    sortKey: ProductCollectionSortKeys[sortKey] || ProductCollectionSortKeys.BestSelling,
-  });
-
-  const { products } = response.collection || {};
-  const { filters, pageInfo, edges } = products || {};
-
-  const safeFilters = filters || [];
-  const safePageInfo = pageInfo || {
-    endCursor: null,
-    hasNextPage: false,
-    hasPreviousPage: false,
-    startCursor: null,
-  };
+  const { edges, filters, pageInfo, sortKey } = await getCollectionPageData(
+    collectionSlug,
+    searchParameters,
+  );
   const safeSearchParameters = {
     after: searchParameters?.after,
     before: searchParameters?.before,
-    sort_key: searchParameters?.sort_key,
+    sort_key: searchParameters?.sort_key ?? sortKey,
   };
 
   if (!edges?.length) {
@@ -130,13 +103,11 @@ const CollectionSlugPage = async ({
       <ListingHeader>
         <Sort
           query={
-            searchParameters?.sort_key
-              ? searchParameters
-              : { sort_key: ProductCollectionSortKeys.BestSelling }
+            searchParameters?.sort_key ? searchParameters : { sort_key: sortKey }
           }
           sortingOptions={COLLECTION_SORT_OPTIONS}
         />
-        <Filters filters={safeFilters} query={safeSearchParameters} />
+        <Filters filters={filters} query={safeSearchParameters} />
       </ListingHeader>
 
       {edges && edges.length > 0 ? (
@@ -159,7 +130,7 @@ const CollectionSlugPage = async ({
           }
         />
       )}
-      <PageInfoPagination pageInfo={safePageInfo} searchParameters={safeSearchParameters} />
+      <PageInfoPagination pageInfo={pageInfo} searchParameters={safeSearchParameters} />
     </div>
   );
 };

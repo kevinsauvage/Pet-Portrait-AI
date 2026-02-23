@@ -1,8 +1,7 @@
-import { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { storefrontSdk } from '@/infra/shopify/client';
+import { getProductDetails, getProductSeo } from '@/domains/products/services/product-details.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import HomeSection from '@/ui/components/HomeSection';
@@ -10,13 +9,6 @@ import ProductDescription from '@/ui/components/ProductDescription';
 import ProductRecommendations from '@/ui/components/ProductRecommendations';
 
 export const revalidate = 3600;
-
-const getProductByHandle = cache(async (handle: string) => {
-  return storefrontSdk().getProductByHandle({
-    handle,
-    identifiers: [],
-  });
-});
 
 type parametersType = {
   genre: string;
@@ -31,9 +23,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { productSlug } = await params;
 
-  const { product } = await getProductByHandle(productSlug);
-
-  if (!product) {
+  const seo = await getProductSeo(productSlug);
+  if (!seo) {
     return generateMetadataUtil({
       title: 'Product Not Found',
       description: 'Product not found',
@@ -42,18 +33,9 @@ export async function generateMetadata({
     });
   }
 
-  const title = product.seo?.title || product.title || 'Product';
-  const description =
-    product.seo?.description ||
-    product.descriptionHtml
-      ?.replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim() ||
-    'Product';
-
   return generateMetadataUtil({
-    title,
-    description,
+    title: seo.title,
+    description: seo.description,
     url: `/shop/products/${productSlug}`,
     type: 'website',
   });
@@ -66,16 +48,11 @@ type PageProperties = {
 const ProductPage = async ({ params }: PageProperties) => {
   const parameters = await params;
 
-  const { product } = await getProductByHandle(parameters.productSlug);
+  const { product, recommendations } = await getProductDetails(parameters.productSlug);
 
   if (!product) {
     notFound();
   }
-
-  const recommendations = await storefrontSdk().productRecommendations({
-    identifiers: [],
-    productId: product.id,
-  });
 
   const title = product?.title;
   const hasRecommendations =

@@ -3,15 +3,8 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { storefrontSdk } from '@/infra/shopify/client';
-import {
-  adjustPaginationVariables,
-  buildShopifySearchQuery,
-  parseFiltersQuery,
-} from '@/infra/shopify/helpers';
+import { type SearchParameters, searchProducts } from '@/domains/search/services/search.service';
 import { SEARCH_SORT_OPTIONS } from '@/infra/shopify/sort-options';
-import type { ProductFieldsFragment, SearchProductsQuery } from '@/infra/shopify/storefront';
-import { SearchSortKeys } from '@/infra/shopify/storefront';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import EmptyState from '@/ui/components/EmptyState';
@@ -32,40 +25,9 @@ export const metadata: Metadata = generateMetadataUtil({
   url: config.routes.search,
 });
 
-type SearchParameters = {
-  searchQuery: string;
-  after?: string;
-  before?: string;
-  sort_key?: string;
-  filters?: string;
-  reverse?: boolean;
-};
-
 const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> }) => {
   const searchParameters = await searchParams;
-
-  const sortKey = Object.keys(SearchSortKeys).find(
-    (key) => key.toLowerCase() === searchParameters.sort_key?.toLowerCase(),
-  ) as keyof typeof SearchSortKeys;
-
-  const response: SearchProductsQuery = await storefrontSdk().searchProducts({
-    ...adjustPaginationVariables({
-      after: searchParameters.after,
-      before: searchParameters.before,
-      first: config.constants.pagination.productsPerPage,
-    }),
-    identifiers: [],
-    productFilters: parseFiltersQuery(searchParameters?.filters),
-    query: buildShopifySearchQuery(searchParameters.searchQuery),
-    sortKey: SearchSortKeys[sortKey] || SearchSortKeys.Relevance,
-  });
-
-  const { pageInfo } = response.search;
-  const filters = response.search.productFilters;
-
-  const products = response.search?.edges.map((edge) => ({
-    ...edge.node,
-  })) as Array<ProductFieldsFragment>;
+  const { products, filters, pageInfo, sortKey } = await searchProducts(searchParameters);
 
   return (
     <div>
@@ -79,7 +41,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
         <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 space-y-6">
           <ListingHeader>
             <Sort
-              query={{ sort_key: searchParameters?.sort_key || SearchSortKeys.Relevance }}
+              query={{ sort_key: searchParameters?.sort_key || sortKey }}
               sortingOptions={SEARCH_SORT_OPTIONS}
             />
             <Filters filters={filters} query={searchParameters} />
