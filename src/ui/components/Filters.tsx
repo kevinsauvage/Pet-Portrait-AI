@@ -47,7 +47,7 @@ const Filters = ({
 }) => {
   const [selectedFilters, setSelectedFilters] = useState<{ filterId: string; input: string }[]>([]);
   const [open, setOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -70,7 +70,10 @@ const Filters = ({
     }
   }, [filters]);
 
-  const defaultPriceRange = useMemo(() => getMinMaxPrice() ?? [0, 200], [getMinMaxPrice]);
+  const defaultPriceRange = useMemo<[number, number]>(
+    () => getMinMaxPrice() ?? [0, 200],
+    [getMinMaxPrice],
+  );
 
   const isSelected = useCallback(
     (filterId: string, input: string) =>
@@ -95,7 +98,8 @@ const Filters = ({
   );
 
   const handlePriceChange = (value: number[]) => {
-    setPriceRange(value);
+    const [min = 0, max = 0] = value;
+    setPriceRange([min, max]);
   };
 
   const resetFilters = () => {

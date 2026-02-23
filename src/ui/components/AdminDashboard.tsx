@@ -198,7 +198,7 @@ export default function AdminDashboard() {
               >
                 Gelato dashboard
               </a>
-              . Tracking sync runs via /api/cron/sync-gelato-tracking.
+              . Gelato manages Shopify tracking sync automatically.
             </p>
           </CardContent>
         </Card>

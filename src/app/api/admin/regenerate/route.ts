@@ -7,12 +7,9 @@ import {
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import { generatePetPortraitVariations } from '@/domains/ai/actions';
-import {
-  type ArtStyleId,
-  isValidStyleId,
-  validStyleIdsLabel,
-} from '@/domains/ai/ai-portrait/types';
+import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -23,24 +20,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { originalPhotoUrl, styleId } = body as {
-      originalPhotoUrl?: string;
-      styleId?: string;
-    };
-
-    if (!originalPhotoUrl || typeof originalPhotoUrl !== 'string') {
-      return createErrorResponse('originalPhotoUrl is required', {
+    const parsedBody = parsePortraitGenerationRequest(body);
+    if (!parsedBody.success) {
+      return createErrorResponse('Invalid request body', {
+        message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
-    if (!isValidStyleId(styleId)) {
-      return createErrorResponse(`styleId must be one of: ${validStyleIdsLabel()}`, {
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
-
-    const result = await generatePetPortraitVariations(originalPhotoUrl, styleId as ArtStyleId);
+    const result = await generatePetPortraitVariations(
+      parsedBody.data.originalPhotoUrl,
+      parsedBody.data.styleId,
+    );
     return createSuccessResponse(result);
   } catch (error) {
     return handleApiError('POST /api/admin/regenerate', error, 'Regeneration failed');

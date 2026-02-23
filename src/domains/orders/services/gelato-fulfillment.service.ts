@@ -81,7 +81,7 @@ export const buildGelatoOrderPayload = (
       files: [
         {
           url: artworkUrl,
-          type: 'default',
+          type: 'default' as const,
         },
       ],
     };

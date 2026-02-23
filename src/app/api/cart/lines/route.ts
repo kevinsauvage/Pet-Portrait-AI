@@ -7,8 +7,13 @@ import {
   HTTP_STATUS,
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import { CartService } from '@/domains/cart/services/cart.service';
 import { getCartPaginationParams } from '@/domains/cart/utils/pagination';
+import {
+  cartLinesOperationSchema,
+  resolveCartLineOperation,
+} from '@/domains/cart/validation';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,19 +26,20 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { lines, operation = 'update' } = body as {
-      lines?: Array<{ id: string; quantity: number }>;
-      addLines?: Array<{
-        merchandiseId: string;
-        quantity?: number;
-        attributes?: Array<{ key: string; value: string }>;
-      }>;
-      operation?: 'update' | 'add';
-    };
-
-    if (!lines && !body.addLines) {
+    const parsedBody = cartLinesOperationSchema.safeParse(body);
+    if (!parsedBody.success) {
       return createErrorResponse('Invalid request body', {
-        message: 'Request body must include either lines or addLines',
+        message: formatZodErrorMessage(parsedBody.error),
+        status: HTTP_STATUS.BAD_REQUEST,
+      });
+    }
+
+    let resolvedOperation;
+    try {
+      resolvedOperation = resolveCartLineOperation(parsedBody.data);
+    } catch (error) {
+      return createErrorResponse('Invalid request body', {
+        message: error instanceof Error ? error.message : 'Invalid cart line operation',
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
@@ -41,19 +47,19 @@ export async function PATCH(request: NextRequest) {
     let cart;
     let userErrors;
 
-    if (operation === 'add' && body.addLines) {
+    if (resolvedOperation.operation === 'add' && resolvedOperation.addLines) {
       const response = await CartService.addLines(
         cartId,
-        body.addLines,
+        resolvedOperation.addLines,
         getCartPaginationParams(request.nextUrl.searchParams),
       );
 
       cart = response?.cart;
       userErrors = response?.userErrors;
-    } else if (lines) {
+    } else if (resolvedOperation.lines) {
       const response = await CartService.updateLines(
         cartId,
-        lines,
+        resolvedOperation.lines,
         getCartPaginationParams(request.nextUrl.searchParams),
       );
 
@@ -63,7 +69,8 @@ export async function PATCH(request: NextRequest) {
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {
-      const errorMsg = operation === 'add' ? 'Failed to add product' : 'Failed to update cart';
+      const errorMsg =
+        resolvedOperation.operation === 'add' ? 'Failed to add product' : 'Failed to update cart';
       return createErrorResponse(errorMsg, {
         userErrors: mappedUserErrors,
         status: HTTP_STATUS.BAD_REQUEST,
@@ -71,7 +78,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (!cart) {
-      const errorMsg = operation === 'add' ? 'Failed to add product' : 'Failed to update cart';
+      const errorMsg =
+        resolvedOperation.operation === 'add' ? 'Failed to add product' : 'Failed to update cart';
       return createErrorResponse(errorMsg, {
         message: 'Cart operation did not return a valid cart',
         status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
@@ -80,7 +88,9 @@ export async function PATCH(request: NextRequest) {
 
     CartService.revalidate();
     const successMsg =
-      operation === 'add' ? 'Product added successfully' : 'Cart updated successfully';
+      resolvedOperation.operation === 'add'
+        ? 'Product added successfully'
+        : 'Cart updated successfully';
     return createSuccessResponse(cart, { message: successMsg, noCache: true });
   } catch (error) {
     return handleApiError('PATCH /api/cart/lines', error, 'Failed to update cart lines');

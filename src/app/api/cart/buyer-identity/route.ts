@@ -7,8 +7,10 @@ import {
   HTTP_STATUS,
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import { CartService } from '@/domains/cart/services/cart.service';
-import type { CartBuyerIdentityInput, GetCustomerQuery } from '@/infra/shopify/storefront';
+import { buildBuyerIdentityInput } from '@/domains/cart/utils/buyer-identity';
+import { cartBuyerIdentitySchema } from '@/domains/cart/validation';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,30 +23,16 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { customerAccessToken, user, first, last, after, before } = body as {
-      customerAccessToken: string;
-      user: GetCustomerQuery['customer'];
-      first?: number;
-      last?: number;
-      after?: string;
-      before?: string;
-    };
-
-    if (!customerAccessToken) {
-      return createErrorResponse('Missing customerAccessToken', {
+    const parsedBody = cartBuyerIdentitySchema.safeParse(body);
+    if (!parsedBody.success) {
+      return createErrorResponse('Invalid request body', {
+        message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
-    if (!user) {
-      return createErrorResponse('Missing user', { status: HTTP_STATUS.BAD_REQUEST });
-    }
-
-    const buyerIdentity = {
-      customerAccessToken,
-      email: user.email,
-      phone: user.phone,
-    } as CartBuyerIdentityInput;
+    const { customerAccessToken, user, first, last, after, before } = parsedBody.data;
+    const buyerIdentity = buildBuyerIdentityInput({ customerAccessToken, user });
 
     const response = await CartService.updateBuyerIdentity(cartId, buyerIdentity, {
       after: after || '',

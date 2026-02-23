@@ -7,8 +7,10 @@ import {
   HTTP_STATUS,
   mapShopifyUserErrors,
 } from '@/core/utils/api-responses';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import { CartService } from '@/domains/cart/services/cart.service';
 import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
+import { cartDiscountCodesSchema } from '@/domains/cart/validation';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,14 +25,15 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { discountCodes } = body as { discountCodes: string[] };
-
-    if (!Array.isArray(discountCodes)) {
+    const parsedBody = cartDiscountCodesSchema.safeParse(body);
+    if (!parsedBody.success) {
       return createErrorResponse('Invalid discount codes format', {
-        message: 'Discount codes must be an array',
+        message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
+
+    const { discountCodes } = parsedBody.data;
 
     const response = await CartService.updateDiscountCodes(cartId, discountCodes, {
       first: DEFAULT_CART_PAGINATION.first,

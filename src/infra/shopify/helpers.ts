@@ -140,8 +140,12 @@ export const getPreviousPath = async (
   return `${currentUrl}?${newSearchParameters.toString()}`;
 };
 
+type Menu = NonNullable<GetMenuByHandleQuery['menu']>;
+type MenuItem = Menu['items'][number];
+type MenuItemWithOptionalItems = Omit<MenuItem, 'items'> & { items?: MenuItem['items'] };
+
 const menuItemContainsSlug = (
-  item: GetMenuByHandleQuery['menu']['items'][number] | null | undefined,
+  item: MenuItemWithOptionalItems | null | undefined,
   collectionSlug: string,
 ): boolean => {
   if (!item) return false;
@@ -152,20 +156,16 @@ const menuItemContainsSlug = (
 
   if (!item.items?.length) return false;
 
-  return item.items.some((child) =>
-    menuItemContainsSlug(
-      { ...child, items: child.items ?? [] } as GetMenuByHandleQuery['menu']['items'][number],
-      collectionSlug,
-    ),
-  );
+  const children = (item.items ?? []) as MenuItemWithOptionalItems[];
+  return children.some((child) => menuItemContainsSlug(child, collectionSlug));
 };
 
 export const getMenuItemsForCollection = (
   menu: GetMenuByHandleQuery['menu'] | null | undefined,
   collectionSlug: string,
-): GetMenuByHandleQuery['menu']['items'] => {
+): Menu['items'] => {
   if (!menu?.items?.length) return [];
 
   const foundItem = menu.items.find((item) => menuItemContainsSlug(item, collectionSlug));
-  return foundItem?.items ?? [];
+  return (foundItem?.items ?? []) as Menu['items'];
 };

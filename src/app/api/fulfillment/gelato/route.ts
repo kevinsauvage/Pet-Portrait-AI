@@ -7,10 +7,11 @@ import {
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import {
   createGelatoFulfillmentOrder,
-  type GelatoFulfillmentRequest,
 } from '@/domains/orders/services/gelato-fulfillment.service';
+import { gelatoFulfillmentRequestSchema } from '@/domains/orders/validation';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,19 +41,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { orderId, lineItems, shippingAddress } = body as GelatoFulfillmentRequest;
-
-    if (!orderId || !lineItems?.length || !shippingAddress) {
+    const parsedBody = gelatoFulfillmentRequestSchema.safeParse(body);
+    if (!parsedBody.success) {
       return createErrorResponse('Missing required fields', {
+        message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
-    const result = await createGelatoFulfillmentOrder({
-      orderId,
-      lineItems,
-      shippingAddress,
-    });
+    const result = await createGelatoFulfillmentOrder(parsedBody.data);
 
     if (!result.ok) {
       console.error('Gelato API error:', result.status, result.errorText);

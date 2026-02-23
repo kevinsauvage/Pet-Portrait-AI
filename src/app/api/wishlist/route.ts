@@ -6,8 +6,10 @@ import {
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { wishlistAddSchema } from '@/domains/wishlist/validation';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,13 +32,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { productId } = body as { productId: string };
-
-    if (!productId || typeof productId !== 'string') {
+    const parsedBody = wishlistAddSchema.safeParse(body);
+    if (!parsedBody.success) {
       return createErrorResponse('Missing or invalid product ID', {
+        message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
+
+    const { productId } = parsedBody.data;
 
     const result = await WishlistService.addProductWithValidation(productId, user.id);
 

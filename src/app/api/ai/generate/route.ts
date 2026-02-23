@@ -8,12 +8,9 @@ import {
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
 import { getClientContext } from '@/core/utils/request-identity';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import { generatePetPortraitVariations } from '@/domains/ai/actions';
-import {
-  type ArtStyleId,
-  isValidStyleId,
-  validStyleIdsLabel,
-} from '@/domains/ai/ai-portrait/types';
+import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
@@ -38,22 +35,15 @@ export async function POST(request: NextRequest) {
     if (authError) return authError;
 
     const body = await request.json();
-    const { originalPhotoUrl, styleId } = body as {
-      originalPhotoUrl?: string;
-      styleId?: string;
-    };
-
-    if (!originalPhotoUrl || typeof originalPhotoUrl !== 'string') {
-      return createErrorResponse('originalPhotoUrl is required', {
+    const parsedBody = parsePortraitGenerationRequest(body);
+    if (!parsedBody.success) {
+      return createErrorResponse('Invalid request body', {
+        message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
-    if (!isValidStyleId(styleId)) {
-      return createErrorResponse(`styleId must be one of: ${validStyleIdsLabel()}`, {
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
+    const { originalPhotoUrl, styleId } = parsedBody.data;
 
     const validation = await validateImageFromUrl(originalPhotoUrl);
     if (!validation.valid) {
@@ -62,7 +52,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const result = await generatePetPortraitVariations(originalPhotoUrl, styleId as ArtStyleId);
+    const result = await generatePetPortraitVariations(originalPhotoUrl, styleId);
     return createSuccessResponse(result);
   } catch (error) {
     return handleApiError('POST /api/ai/generate', error, 'AI portrait generation failed');

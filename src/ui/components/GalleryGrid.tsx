@@ -11,7 +11,7 @@ type GalleryItem = {
 };
 
 type GalleryGridProps = {
-  items: GalleryItem[];
+  items: readonly GalleryItem[];
   ariaLabel?: string;
   className?: string;
 };
