@@ -28,11 +28,7 @@ const PageBanner = ({
 }: PageBannerProps) => (
   <section
     aria-labelledby="page-banner-title"
-    className={cn(
-      'relative isolate overflow-hidden',
-
-      className,
-    )}
+    className={cn('relative isolate overflow-hidden bg-white dark:bg-black', className)}
   >
     <div className="container mx-auto flex flex-col items-center justify-center text-center px-4 md:px-6 py-16 md:py-24 lg:py-32 relative">
       <div className="max-w-4xl space-y-6 md:space-y-7">
