@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export type { GenerationLogEntry } from './generation-log';
+
 export const GenerationRequestSchema = z.object({
   imageUrl: z.string().url(),
   styleId: z.string(),

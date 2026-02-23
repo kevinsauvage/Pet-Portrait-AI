@@ -27,7 +27,7 @@ src/
 │   └── utils/              # api-responses, form-actions, cookie-security
 ├── domains/                # Domain modules
 │   ├── address/            # actions/, services/, validation/, index.ts
-│   ├── ai/                  # actions/, services/, models/, ai-portrait/, generation-store, index.ts
+│   ├── ai/                  # actions/, services/, models/, repositories/, ai-portrait/, index.ts
 │   ├── auth/
 │   ├── cart/
 │   ├── collections/         # services/

@@ -39,7 +39,7 @@ src/
     auth/                 # actions/, services/, validation/
     user/                 # get-user, actions/, services/, validation/
     cart/                 # actions/, services/, mocks/
-    ai/                   # actions/, ai-portrait/, generation-store, services/
+    ai/                   # actions/, ai-portrait/, repositories/, services/
     contact/              # actions/, validation/
     search/               # actions/
     wishlist/             # client.ts, services/

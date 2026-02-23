@@ -1,17 +1,6 @@
-/**
- * In-memory generation log store for admin dashboard.
- * For production, replace with a database or Sentry.
- */
+import 'server-only';
 
-export interface GenerationLogEntry {
-  id: string;
-  styleId: string;
-  generationId: string;
-  timestamp: string;
-  status: 'success' | 'failed';
-  error?: string;
-  originalPhotoUrl?: string;
-}
+import type { GenerationLogEntry } from '@/domains/ai/models/generation-log';
 
 const MAX_ENTRIES = 500;
 const store: GenerationLogEntry[] = [];
@@ -40,6 +29,23 @@ export function logGenerationFailure(
 
 export function getGenerationLogs(limit = 100): GenerationLogEntry[] {
   return store.slice(0, limit);
+}
+
+export function getGenerationSnapshot(limit = 100): {
+  logs: GenerationLogEntry[];
+  failedCount: number;
+  totalCount: number;
+} {
+  const logs = store.slice(0, limit);
+  let failedCount = 0;
+  for (const entry of logs) {
+    if (entry.status === 'failed') failedCount += 1;
+  }
+  return {
+    logs,
+    failedCount,
+    totalCount: logs.length,
+  };
 }
 
 export function getFailedGenerations(): GenerationLogEntry[] {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { requireAdminAuth } from '@/core/utils/admin-auth';
-import { getFailedGenerations, getGenerationLogs } from '@/domains/ai/generation-store';
+import { getAdminGenerationSnapshot } from '@/domains/ai/services/admin-dashboard.service';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,11 +9,10 @@ export async function GET(request: Request) {
   const authError = requireAdminAuth(request.headers);
   if (authError) return authError;
 
-  const logs = getGenerationLogs();
-  const failed = getFailedGenerations();
+  const snapshot = getAdminGenerationSnapshot();
   return NextResponse.json({
-    data: logs,
-    failedCount: failed.length,
-    totalCount: logs.length,
+    data: snapshot.logs,
+    failedCount: snapshot.failedCount,
+    totalCount: snapshot.totalCount,
   });
 }
