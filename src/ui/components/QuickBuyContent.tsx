@@ -6,9 +6,9 @@ import Link from 'next/link';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import config from '@/core/config';
+import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
 import { canPurchase, isInventoryTracked, isLowStock } from '@/domains/products/utils/inventory';
 import useProductSelection from '@/hooks/useProductSelection';
-import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import { cn } from '@/lib/cn';
 import { formatPrice } from '@/lib/format';

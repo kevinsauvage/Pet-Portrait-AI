@@ -42,7 +42,7 @@ src/
 │   └── wishlist/           # client.ts, services/, index.ts
 ├── hooks/
 ├── infra/                  # Infrastructure
-│   ├── shopify/            # storefront, admin, tokens, server (token + url helpers), images, product-options
+│   ├── shopify/            # storefront, admin, tokens, server (token + url helpers)
 │   ├── upload/             # Uploadthing router & client
 │   ├── email/
 │   ├── cache/
@@ -81,7 +81,7 @@ Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config
 
 ## Infra
 
-- **infra/shopify** — Storefront + Admin SDK, token/URL helpers, images, product-options. Used by domains (address, user, auth, cart, wishlist, products, etc.) and app. Product mappers/repositories live in the products domain.
+- **infra/shopify** — Storefront + Admin SDK, token/URL helpers. Used by domains (address, user, auth, cart, wishlist, products, etc.) and app. Product mappers/repositories live in the products domain.
 - **infra/upload** — Uploadthing (used by create flow).
 - **infra/email** — Email sending (e.g. order confirmation).
 - **infra/http** — Shared API client for client-side calls (wishlist, cart context, create wizard).

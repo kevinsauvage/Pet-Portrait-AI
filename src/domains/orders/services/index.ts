@@ -4,6 +4,7 @@ export {
   createGelatoFulfillmentOrder,
   getPrintableLineItems,
 } from './gelato-fulfillment.service';
+export { sendOrderConfirmation } from './order-email.service';
 export { OrderTrackingService } from './order-tracking.service';
 export {
   fulfillGelatoFromShopifyOrder,

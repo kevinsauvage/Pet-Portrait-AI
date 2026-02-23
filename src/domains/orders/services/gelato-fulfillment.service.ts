@@ -1,11 +1,15 @@
 import {
   createGelatoOrder,
-  GELATO_PRODUCT_UIDS,
   type GelatoOrderPayload,
   type GelatoOrderResult,
 } from '@/infra/fulfillment/gelato';
 
 // TODO: Replace GELATO_PRODUCT_UIDS with per-variant Gelato product UIDs (metafields or line-item properties).
+const GELATO_PRODUCT_UIDS = {
+  canvas: process.env.GELATO_CANVAS_PRODUCT_UID ?? 'poster_glossy_a3',
+  poster: process.env.GELATO_POSTER_PRODUCT_UID ?? 'poster_glossy_a3',
+} as const;
+
 type ShopifyLineItemProperty = {
   name: string;
   value: string;

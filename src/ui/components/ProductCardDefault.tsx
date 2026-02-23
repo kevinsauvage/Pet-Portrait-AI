@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
+import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
 import { isLowStock } from '@/domains/products/utils/inventory';
-import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
 import { Badge } from './ui/badge';
@@ -85,7 +85,9 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
           <div className="flex flex-1 flex-col gap-3 px-4 pb-5 pt-4">
             <div className="space-y-1">
               <h3 className="text-heading-4 line-clamp-2 leading-snug">{title}</h3>
-              <p className="text-body-sm text-muted-foreground">Custom pet portrait on premium paper</p>
+              <p className="text-body-sm text-muted-foreground">
+                Custom pet portrait on premium paper
+              </p>
             </div>
             <div>
               <Price compareAtPrice={compareAtPrice} priceRange={priceRange} price={price} />

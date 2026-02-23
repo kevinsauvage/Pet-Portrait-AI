@@ -1,5 +1,5 @@
+import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
 import { isLowStock } from '@/domains/products/utils/inventory';
-import { mapShopifyImagesToImageFields } from '@/infra/shopify/images';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
 import { cn } from '@/lib/cn';
 
