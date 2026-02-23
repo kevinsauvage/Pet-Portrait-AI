@@ -4,8 +4,8 @@ import Link from 'next/link';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import AuthShell from '@/ui/components/AuthShell';
-import RegisterForm from '@/ui/components/RegisterForm';
+import AuthShell from '@/ui/components/auth/AuthShell';
+import RegisterForm from '@/ui/components/auth/RegisterForm';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.register.title,

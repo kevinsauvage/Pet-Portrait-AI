@@ -5,12 +5,12 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { getHomePageData } from '@/domains/home/services/home.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
-import HomeSection from '@/ui/components/HomeSection';
-import PageBanner from '@/ui/components/PageBanner';
-import ProductSection from '@/ui/components/ProductSection';
-import { Button } from '@/ui/components/ui/button';
+import CollectionGrid from '@/ui/components/catalog/CollectionGrid';
+import ProductSection from '@/ui/components/product/ProductSection';
+import HomeSection from '@/ui/components/shared/HomeSection';
+import PageBanner from '@/ui/components/shared/PageBanner';
 import { HOME_FEATURES, HOME_HERO_PERKS } from '@/ui/content/marketing';
+import { Button } from '@/ui/primitives/button';
 
 export const revalidate = config.constants.revalidate.catalog;
 

@@ -3,12 +3,12 @@ import Link from 'next/link';
 
 import seo from '@/core/config/seo';
 import { CartService } from '@/domains/cart/services/cart.service';
-import CartEmptyState from '@/ui/components/CartEmptyState';
-import CartHeader from '@/ui/components/CartHeader';
-import CartItemsList from '@/ui/components/CartItemsList';
-import CartPromoCode from '@/ui/components/CartPromoCode';
-import CartSummary from '@/ui/components/CartSummary';
-import PageBanner from '@/ui/components/PageBanner';
+import CartEmptyState from '@/ui/components/cart/CartEmptyState';
+import CartHeader from '@/ui/components/cart/CartHeader';
+import CartItemsList from '@/ui/components/cart/CartItemsList';
+import CartPromoCode from '@/ui/components/cart/CartPromoCode';
+import CartSummary from '@/ui/components/cart/CartSummary';
+import PageBanner from '@/ui/components/shared/PageBanner';
 
 import { ChevronLeft } from 'lucide-react';
 

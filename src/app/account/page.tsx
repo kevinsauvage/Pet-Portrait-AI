@@ -7,12 +7,12 @@ import { AddressService } from '@/domains/address/services/address.service';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import AccountCardCTA from '@/ui/components/AccountCardCTA';
-import AccountStats from '@/ui/components/AccountStats';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import RecentOrdersPreview from '@/ui/components/RecentOrdersPreview';
-import { Card, CardContent } from '@/ui/components/ui/card';
-import UserFullName from '@/ui/components/UserFullName';
+import AccountCardCTA from '@/ui/components/account/AccountCardCTA';
+import AccountStats from '@/ui/components/account/AccountStats';
+import UserFullName from '@/ui/components/account/UserFullName';
+import RecentOrdersPreview from '@/ui/components/orders/RecentOrdersPreview';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 export const dynamic = 'force-dynamic'; // Account data is user-specific
 

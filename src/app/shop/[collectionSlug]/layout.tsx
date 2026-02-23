@@ -1,7 +1,7 @@
 import { getCollectionLayoutData } from '@/domains/collections/services/collections.service';
-import Breadcrumbs from '@/ui/components/Breadcrumbs';
-import CollectionNav from '@/ui/components/CollectionNav';
-import PageBanner from '@/ui/components/PageBanner';
+import CollectionNav from '@/ui/components/catalog/CollectionNav';
+import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
+import PageBanner from '@/ui/components/shared/PageBanner';
 
 const Layout = async ({
   children,

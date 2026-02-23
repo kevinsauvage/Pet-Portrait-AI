@@ -5,10 +5,10 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { getAllCollections } from '@/domains/collections/services/collections.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import CollectionGrid from '@/ui/components/CollectionGrid/CollectionGrid';
-import PageBanner from '@/ui/components/PageBanner';
-import { Button } from '@/ui/components/ui/button';
+import CollectionGrid from '@/ui/components/catalog/CollectionGrid';
+import PageBanner from '@/ui/components/shared/PageBanner';
 import { SHOP_PERKS } from '@/ui/content/marketing';
+import { Button } from '@/ui/primitives/button';
 
 import { ImageIcon, Palette, ShoppingBag } from 'lucide-react';
 

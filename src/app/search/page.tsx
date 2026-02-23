@@ -6,16 +6,16 @@ import seo from '@/core/config/seo';
 import { SEARCH_SORT_OPTIONS } from '@/domains/search/constants/sort-options';
 import { type SearchParameters, searchProducts } from '@/domains/search/services/search.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import Breadcrumbs from '@/ui/components/Breadcrumbs';
-import EmptyState from '@/ui/components/EmptyState';
-import Filters from '@/ui/components/Filters';
-import ListingHeader from '@/ui/components/ListingHeader';
-import PageBanner from '@/ui/components/PageBanner';
-import PageInfoPagination from '@/ui/components/PageInfoPagination';
-import ProductsList from '@/ui/components/ProductsList';
-import Search from '@/ui/components/Search';
-import Sort from '@/ui/components/Sort';
-import { Button } from '@/ui/components/ui/button';
+import Filters from '@/ui/components/catalog/Filters';
+import ListingHeader from '@/ui/components/catalog/ListingHeader';
+import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
+import ProductsList from '@/ui/components/catalog/ProductsList';
+import Sort from '@/ui/components/catalog/Sort';
+import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
+import Search from '@/ui/components/search/Search';
+import EmptyState from '@/ui/components/shared/EmptyState';
+import PageBanner from '@/ui/components/shared/PageBanner';
+import { Button } from '@/ui/primitives/button';
 
 export const revalidate = config.constants.revalidate.search;
 

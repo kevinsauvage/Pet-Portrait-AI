@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import GalleryGrid from '@/ui/components/GalleryGrid';
-import PageBanner from '@/ui/components/PageBanner';
-import { Button } from '@/ui/components/ui/button';
+import GalleryGrid from '@/ui/components/media/GalleryGrid';
+import PageBanner from '@/ui/components/shared/PageBanner';
 import { GALLERY_ITEMS } from '@/ui/content/marketing';
+import { Button } from '@/ui/primitives/button';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.gallery.title,

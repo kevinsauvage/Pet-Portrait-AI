@@ -2,12 +2,15 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import config from '@/core/config';
-import { getProductDetails, getProductSeo } from '@/domains/products/services/product-details.service';
+import {
+  getProductDetails,
+  getProductSeo,
+} from '@/domains/products/services/product-details.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import Breadcrumbs from '@/ui/components/Breadcrumbs';
-import HomeSection from '@/ui/components/HomeSection';
-import ProductDescription from '@/ui/components/ProductDescription';
-import ProductRecommendations from '@/ui/components/ProductRecommendations';
+import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
+import ProductDescription from '@/ui/components/product/ProductDescription';
+import ProductRecommendations from '@/ui/components/product/ProductRecommendations';
+import HomeSection from '@/ui/components/shared/HomeSection';
 
 export const revalidate = config.constants.revalidate.product;
 

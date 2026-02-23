@@ -9,12 +9,12 @@ import { CartService } from '@/domains/cart/services/cart.service';
 import { getSiteMenus } from '@/domains/navigation/services/menu.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import CookieBanner from '@/ui/components/CookieBanner';
-import Footer from '@/ui/components/Footer';
-import GtmScript from '@/ui/components/GtmScript';
-import Header from '@/ui/components/Header';
-import { ThemeProvider } from '@/ui/components/theme-provider';
-import { Toaster } from '@/ui/components/ui/sonner';
+import CookieBanner from '@/ui/components/consent/CookieBanner';
+import GtmScript from '@/ui/components/consent/GtmScript';
+import Footer from '@/ui/components/navigation/Footer';
+import Header from '@/ui/components/navigation/Header';
+import { Toaster } from '@/ui/primitives/sonner';
+import { ThemeProvider } from '@/ui/providers/theme-provider';
 
 import '../globals.css';
 

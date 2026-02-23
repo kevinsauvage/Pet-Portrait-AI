@@ -1,4 +1,4 @@
-import { Skeleton } from '@/ui/components/ui/skeleton';
+import { Skeleton } from '@/ui/primitives/skeleton';
 
 const Loading = () => {
   return (

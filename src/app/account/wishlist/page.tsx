@@ -4,12 +4,12 @@ import Link from 'next/link';
 import NoFavoriteIllustration from '@/assets/NoFavoriteIllustration.png';
 import seo from '@/core/config/seo';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import BackButton from '@/ui/components/BackButton';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import EmptyState from '@/ui/components/EmptyState';
-import ProductsList from '@/ui/components/ProductsList';
-import { Button } from '@/ui/components/ui/button';
-import { Card, CardContent } from '@/ui/components/ui/card';
+import ProductsList from '@/ui/components/catalog/ProductsList';
+import BackButton from '@/ui/components/shared/BackButton';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import EmptyState from '@/ui/components/shared/EmptyState';
+import { Button } from '@/ui/primitives/button';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 export const dynamic = 'force-dynamic'; // Wishlist is user-specific
 

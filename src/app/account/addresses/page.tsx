@@ -8,13 +8,13 @@ import seo from '@/core/config/seo';
 import { AddressService } from '@/domains/address/services/address.service';
 import { isDefaultAddress, mapAddressEdgesToList } from '@/domains/address/utils/address-utils';
 import { getUser } from '@/domains/user/get-user';
-import Address from '@/ui/components/Address';
-import BackButton from '@/ui/components/BackButton';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import EmptyState from '@/ui/components/EmptyState';
-import PageInfoPagination from '@/ui/components/PageInfoPagination';
-import { Button } from '@/ui/components/ui/button';
-import { Card, CardContent } from '@/ui/components/ui/card';
+import Address from '@/ui/components/account/Address';
+import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
+import BackButton from '@/ui/components/shared/BackButton';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import EmptyState from '@/ui/components/shared/EmptyState';
+import { Button } from '@/ui/primitives/button';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 import { Plus } from 'lucide-react';
 

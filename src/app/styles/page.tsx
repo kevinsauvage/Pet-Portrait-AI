@@ -4,9 +4,9 @@ import Link from 'next/link';
 import seo from '@/core/config/seo';
 import { AI_ART_STYLES } from '@/domains/ai/ai-portrait/types';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import PageBanner from '@/ui/components/PageBanner';
-import StylePreview from '@/ui/components/StylePreview';
-import { Button } from '@/ui/components/ui/button';
+import StylePreview from '@/ui/components/create/StylePreview';
+import PageBanner from '@/ui/components/shared/PageBanner';
+import { Button } from '@/ui/primitives/button';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.styles.title,

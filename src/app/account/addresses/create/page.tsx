@@ -5,10 +5,10 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { createAddressAction } from '@/domains/address/actions';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import AddressFormUI from '@/ui/components/AddressForm';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import { Button } from '@/ui/components/ui/button';
-import { Card, CardContent } from '@/ui/components/ui/card';
+import AddressFormUI from '@/ui/components/account/AddressForm';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import { Button } from '@/ui/primitives/button';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 import { ArrowLeft } from 'lucide-react';
 

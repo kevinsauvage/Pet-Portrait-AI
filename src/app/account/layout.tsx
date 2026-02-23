@@ -1,9 +1,9 @@
-import AccountNavigation from '@/ui/components/AccountNavigation';
-import AccountNavigationSheet from '@/ui/components/AccountNavigationSheet';
-import Breadcrumbs from '@/ui/components/Breadcrumbs';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import PageBanner from '@/ui/components/PageBanner';
-import { Card, CardContent } from '@/ui/components/ui/card';
+import AccountNavigation from '@/ui/components/account/AccountNavigation';
+import AccountNavigationSheet from '@/ui/components/account/AccountNavigationSheet';
+import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import PageBanner from '@/ui/components/shared/PageBanner';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

@@ -5,11 +5,11 @@ import { AddressService } from '@/domains/address/services/address.service';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import AccountStats from '@/ui/components/AccountStats';
-import BackButton from '@/ui/components/BackButton';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import { Card, CardContent } from '@/ui/components/ui/card';
-import UpdateUserForm from '@/ui/components/UpdateUserForm';
+import AccountStats from '@/ui/components/account/AccountStats';
+import UpdateUserForm from '@/ui/components/account/UpdateUserForm';
+import BackButton from '@/ui/components/shared/BackButton';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 export const dynamic = 'force-dynamic';
 

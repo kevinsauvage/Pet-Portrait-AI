@@ -1,6 +1,6 @@
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import { Card, CardContent } from '@/ui/components/ui/card';
-import { Skeleton } from '@/ui/components/ui/skeleton';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import { Card, CardContent } from '@/ui/primitives/card';
+import { Skeleton } from '@/ui/primitives/skeleton';
 
 const Loading = () => {
   return (

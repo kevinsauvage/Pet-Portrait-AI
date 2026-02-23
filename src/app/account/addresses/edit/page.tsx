@@ -11,10 +11,10 @@ import {
   mapAddressNodeToFormData,
 } from '@/domains/address/utils/address-utils';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import AddressForm from '@/ui/components/AddressForm';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import { Button } from '@/ui/components/ui/button';
-import { Card, CardContent } from '@/ui/components/ui/card';
+import AddressForm from '@/ui/components/account/AddressForm';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import { Button } from '@/ui/primitives/button';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 import { ArrowLeft } from 'lucide-react';
 

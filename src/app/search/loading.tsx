@@ -1,9 +1,9 @@
 import seo from '@/core/config/seo';
-import Breadcrumbs from '@/ui/components/Breadcrumbs';
-import ListDisplay from '@/ui/components/ListDisplay';
-import ListingHeader from '@/ui/components/ListingHeader';
-import PageBanner from '@/ui/components/PageBanner';
-import { Skeleton } from '@/ui/components/ui/skeleton';
+import ListingHeader from '@/ui/components/catalog/ListingHeader';
+import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
+import ListDisplay from '@/ui/components/shared/ListDisplay';
+import PageBanner from '@/ui/components/shared/PageBanner';
+import { Skeleton } from '@/ui/primitives/skeleton';
 
 const Loading = () => {
   return (

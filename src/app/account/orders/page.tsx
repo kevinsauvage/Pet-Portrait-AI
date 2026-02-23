@@ -5,13 +5,13 @@ import { redirect } from 'next/navigation';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
-import BackButton from '@/ui/components/BackButton';
-import CardHeaderPattern from '@/ui/components/CardHeaderPattern';
-import EmptyState from '@/ui/components/EmptyState';
-import Orders from '@/ui/components/Orders';
-import PageInfoPagination from '@/ui/components/PageInfoPagination';
-import { Button } from '@/ui/components/ui/button';
-import { Card, CardContent } from '@/ui/components/ui/card';
+import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
+import Orders from '@/ui/components/orders/Orders';
+import BackButton from '@/ui/components/shared/BackButton';
+import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
+import EmptyState from '@/ui/components/shared/EmptyState';
+import { Button } from '@/ui/primitives/button';
+import { Card, CardContent } from '@/ui/primitives/card';
 
 export const dynamic = 'force-dynamic'; // Orders are user-specific
 

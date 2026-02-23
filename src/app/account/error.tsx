@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
 import config from '@/core/config';
-import EmptyState from '@/ui/components/EmptyState';
-import { Button } from '@/ui/components/ui/button';
+import EmptyState from '@/ui/components/shared/EmptyState';
+import { Button } from '@/ui/primitives/button';
 
 const AccountError = ({
   error,

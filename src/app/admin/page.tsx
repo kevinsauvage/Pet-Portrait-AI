@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import AdminDashboard from '@/ui/components/AdminDashboard';
+import AdminDashboard from '@/ui/components/admin/AdminDashboard';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: 'Admin | AI Pet Portrait',

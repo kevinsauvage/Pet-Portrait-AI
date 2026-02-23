@@ -8,13 +8,13 @@ import {
   getCollectionSeo,
 } from '@/domains/collections/services/collections.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
-import EmptyState from '@/ui/components/EmptyState';
-import Filters from '@/ui/components/Filters';
-import ListingHeader from '@/ui/components/ListingHeader';
-import PageInfoPagination from '@/ui/components/PageInfoPagination';
-import ProductEdgeList from '@/ui/components/ProductsEdgeList';
-import Sort from '@/ui/components/Sort';
-import { Button } from '@/ui/components/ui/button';
+import Filters from '@/ui/components/catalog/Filters';
+import ListingHeader from '@/ui/components/catalog/ListingHeader';
+import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
+import ProductEdgeList from '@/ui/components/catalog/ProductsEdgeList';
+import Sort from '@/ui/components/catalog/Sort';
+import EmptyState from '@/ui/components/shared/EmptyState';
+import { Button } from '@/ui/primitives/button';
 
 export const revalidate = config.constants.revalidate.catalog;
 
