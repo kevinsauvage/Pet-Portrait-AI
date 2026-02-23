@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
-import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
 import config from '@/core/config';
+import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
@@ -18,7 +18,7 @@ const Error = ({ error, reset }: { error: Error & { digest?: string }; reset: ()
       <EmptyState
         variant="error"
         altText="Error illustration"
-        image={NotFoundIllustration}
+        image={notFoundIllustration}
         subtitle="We encountered an error. Please try again or contact support if the problem continues."
         title="Something went wrong"
         tips={[

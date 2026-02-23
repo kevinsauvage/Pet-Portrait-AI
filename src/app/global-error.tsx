@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
-import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
+import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
@@ -25,7 +25,7 @@ const GlobalError = ({
           <EmptyState
             variant="error"
             altText="Error illustration"
-            image={NotFoundIllustration}
+            image={notFoundIllustration}
             subtitle="A critical error occurred. Please refresh the page or contact support if the problem continues."
             title="Critical error"
             tips={[

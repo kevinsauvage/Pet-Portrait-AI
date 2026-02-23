@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
-import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
 import config from '@/core/config';
+import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
@@ -24,7 +24,7 @@ const ProductError = ({
       <EmptyState
         variant="error"
         altText="Product error illustration"
-        image={NotFoundIllustration}
+        image={notFoundIllustration}
         subtitle="We couldn't load this product. Please try again or browse our other products."
         title="Unable to load product"
         tips={['Try refreshing the page', 'Browse similar products', 'Check back later']}

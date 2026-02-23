@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
-import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
 import config from '@/core/config';
+import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
@@ -24,7 +24,7 @@ const AccountError = ({
       <EmptyState
         variant="error"
         altText="Account error illustration"
-        image={NotFoundIllustration}
+        image={notFoundIllustration}
         subtitle="We couldn't load your account information. Please try again or contact support if the problem continues."
         title="Unable to load account"
         tips={[

@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import NoAddressIllustration from '@/assets/NoAddressIllustration.png';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { AddressService } from '@/domains/address/services/address.service';
 import { isDefaultAddress, mapAddressEdgesToList } from '@/domains/address/utils/address-utils';
 import { getUser } from '@/domains/user/get-user';
+import { noAddressIllustration } from '@/lib/illustrations';
 import Address from '@/ui/components/account/Address';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
 import BackButton from '@/ui/components/shared/BackButton';
@@ -54,7 +54,7 @@ const Addresses = async ({
         <CardContent>
           <EmptyState
             variant="addresses"
-            image={NoAddressIllustration}
+            image={noAddressIllustration}
             title="No addresses saved"
             subtitle="Add shipping addresses to speed up checkout. You can save multiple addresses and set a default for faster ordering."
             altText="No Address Yet"

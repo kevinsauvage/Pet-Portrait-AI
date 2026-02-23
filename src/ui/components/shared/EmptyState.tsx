@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
+import { type IllustrationImage, notFoundIllustration } from '@/lib/illustrations';
 
 type EmptyStateProps = {
   /** Primary CTA button (required) */
@@ -11,11 +11,7 @@ type EmptyStateProps = {
   /** Optional secondary link/action */
   secondaryAction?: React.ReactNode;
   /** Image to display */
-  image?: {
-    src: string;
-    width: number;
-    height: number;
-  };
+  image?: IllustrationImage;
   /** Clear title */
   title: string;
   /** 1-2 sentence guidance (text-body-sm/text-body) */
@@ -31,7 +27,7 @@ type EmptyStateProps = {
 const EmptyState = ({
   primaryAction,
   secondaryAction,
-  image = NotFoundIllustration,
+  image = notFoundIllustration,
   title,
   subtitle,
   altText,

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import NoFavoriteIllustration from '@/assets/NoFavoriteIllustration.png';
 import seo from '@/core/config/seo';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { noFavoriteIllustration } from '@/lib/illustrations';
 import ProductsList from '@/ui/components/catalog/ProductsList';
 import BackButton from '@/ui/components/shared/BackButton';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
@@ -27,7 +27,7 @@ const Wishlist = async () => {
         <CardContent>
           <EmptyState
             variant="wishlist"
-            image={NoFavoriteIllustration}
+            image={noFavoriteIllustration}
             title="Your wishlist is empty"
             subtitle="Save your favorite items for later. Click the heart icon on any product to add it to your wishlist."
             altText="Empty wishlist"

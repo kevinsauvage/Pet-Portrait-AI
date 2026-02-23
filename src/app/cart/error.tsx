@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
-import NotFoundIllustration from '@/assets/NotFoundIllustration.png';
+import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
@@ -17,7 +17,7 @@ const CartError = ({ error, reset }: { error: Error & { digest?: string }; reset
       <EmptyState
         variant="error"
         altText="Cart error illustration"
-        image={NotFoundIllustration}
+        image={notFoundIllustration}
         subtitle="We couldn't load your cart. Please try again or contact support if the problem continues."
         title="Unable to load cart"
         tips={[
