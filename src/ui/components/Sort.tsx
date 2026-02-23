@@ -19,7 +19,7 @@ const Sort = ({
   query: {
     sort_key?: string;
   };
-  sortingOptions: { label: string; name: string }[];
+  sortingOptions: ReadonlyArray<{ label: string; name: string }>;
 }) => {
   const router = useRouter();
 

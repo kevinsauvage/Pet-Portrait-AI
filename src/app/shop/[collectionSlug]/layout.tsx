@@ -1,34 +1,10 @@
 import { storefrontSdk } from '@/infra/shopify/client';
+import { getMenuItemsForCollection } from '@/infra/shopify/helpers';
 import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Breadcrumbs from '@/ui/components/Breadcrumbs';
 import PageBanner from '@/ui/components/PageBanner';
 
 import CollectionNav from '../../../ui/components/CollectionNav';
-
-const findRecursiveMenuItem = (
-  items: GetMenuByHandleQuery['menu'] | null | undefined,
-  collectionSlug: string,
-) => {
-  if (!items?.items) return false;
-
-  for (const item of items.items) {
-    if (
-      typeof item?.url === 'string' &&
-      item.url.toLowerCase().includes(collectionSlug.toLowerCase())
-    ) {
-      return true;
-    } else if (item?.items?.length) {
-      const foundItem = findRecursiveMenuItem(
-        { items: item.items } as GetMenuByHandleQuery['menu'],
-        collectionSlug,
-      );
-      if (foundItem) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
 
 const Layout = async ({
   children,
@@ -49,22 +25,7 @@ const Layout = async ({
   ]);
 
   const { title, description } = response.collection || {};
-
-  const findNavItems = () => {
-    if (!responseMenu?.menu?.items) return [];
-
-    const foundItem = responseMenu.menu.items.find((item) => {
-      if (typeof item?.url === 'string') {
-        return findRecursiveMenuItem(
-          { items: item.items || [] } as GetMenuByHandleQuery['menu'],
-          collectionSlug,
-        );
-      }
-      return false;
-    });
-
-    return foundItem?.items || [];
-  };
+  const navItems = getMenuItemsForCollection(responseMenu?.menu, collectionSlug);
 
   return (
     <div>
@@ -73,7 +34,7 @@ const Layout = async ({
           <Breadcrumbs />
           <CollectionNav
             collectionSlug={collectionSlug}
-            items={{ items: findNavItems() } as GetMenuByHandleQuery['menu']}
+            items={{ items: navItems } as GetMenuByHandleQuery['menu']}
           />
         </div>
       </PageBanner>

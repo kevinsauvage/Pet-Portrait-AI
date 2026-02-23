@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import config from '@/core/config';
 
 import { getCurrentUrlWithoutParameters } from './server/url-helpers';
-import type { PageInfo, ProductFilter } from './storefront';
+import type { GetMenuByHandleQuery, PageInfo, ProductFilter } from './storefront';
 
 interface PaginationVariables {
   after?: string;
@@ -138,4 +138,34 @@ export const getPreviousPath = async (
   newSearchParameters.delete('after');
 
   return `${currentUrl}?${newSearchParameters.toString()}`;
+};
+
+const menuItemContainsSlug = (
+  item: GetMenuByHandleQuery['menu']['items'][number] | null | undefined,
+  collectionSlug: string,
+): boolean => {
+  if (!item) return false;
+
+  if (typeof item.url === 'string' && item.url.toLowerCase().includes(collectionSlug.toLowerCase())) {
+    return true;
+  }
+
+  if (!item.items?.length) return false;
+
+  return item.items.some((child) =>
+    menuItemContainsSlug(
+      { ...child, items: child.items ?? [] } as GetMenuByHandleQuery['menu']['items'][number],
+      collectionSlug,
+    ),
+  );
+};
+
+export const getMenuItemsForCollection = (
+  menu: GetMenuByHandleQuery['menu'] | null | undefined,
+  collectionSlug: string,
+): GetMenuByHandleQuery['menu']['items'] => {
+  if (!menu?.items?.length) return [];
+
+  const foundItem = menu.items.find((item) => menuItemContainsSlug(item, collectionSlug));
+  return foundItem?.items ?? [];
 };

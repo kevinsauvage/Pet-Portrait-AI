@@ -7,19 +7,14 @@ import {
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
-import { GELATO_PRODUCT_UIDS } from '@/domains/ai/ai-portrait/products';
+import {
+  createGelatoFulfillmentOrder,
+  type GelatoFulfillmentRequest,
+} from '@/domains/orders/services/gelato-fulfillment.service';
 
 export const dynamic = 'force-dynamic';
 
-const GELATO_API_URL = 'https://order.gelatoapis.com/v4/orders';
-const {GELATO_API_KEY} = process.env;
-
-function getProperty(
-  properties: Array<{ name: string; value: string }> | undefined,
-  name: string,
-): string | undefined {
-  return properties?.find((p) => p.name === name)?.value;
-}
+const { GELATO_API_KEY } = process.env;
 
 export async function POST(request: NextRequest) {
   if (!isApiAuthConfigured('FULFILLMENT_API_SECRET') && process.env.NODE_ENV === 'production') {
@@ -45,23 +40,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { orderId, lineItems, shippingAddress } = body as {
-      orderId: string;
-      lineItems: Array<{
-        id: number;
-        properties?: Array<{ name: string; value: string }>;
-      }>;
-      shippingAddress?: {
-        first_name: string;
-        last_name: string;
-        address1: string;
-        address2?: string;
-        city: string;
-        province: string;
-        country: string;
-        zip: string;
-      };
-    };
+    const { orderId, lineItems, shippingAddress } = body as GelatoFulfillmentRequest;
 
     if (!orderId || !lineItems?.length || !shippingAddress) {
       return createErrorResponse('Missing required fields', {
@@ -69,69 +48,20 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const orderReferenceId = `shopify-${orderId}`;
-    const customerReferenceId = `shopify-order-${orderId}`;
-
-    const gelatoItems = lineItems.map((item, index) => {
-      const artworkUrl = getProperty(item.properties, 'final_artwork_url');
-      if (!artworkUrl) {
-        throw new Error(`Line item ${item.id} missing artwork URL`);
-      }
-
-      const productType = getProperty(item.properties, 'product_type');
-      const productUid =
-        productType === 'canvas'
-          ? GELATO_PRODUCT_UIDS.canvas
-          : GELATO_PRODUCT_UIDS.poster;
-
-      return {
-        itemReferenceId: `item-${item.id}-${index}`,
-        productUid,
-        quantity: 1,
-        files: [
-          {
-            url: artworkUrl,
-            type: 'default',
-          },
-        ],
-      };
+    const result = await createGelatoFulfillmentOrder({
+      orderId,
+      lineItems,
+      shippingAddress,
     });
 
-    const gelatoOrder = {
-      orderReferenceId,
-      customerReferenceId,
-      shippingAddress: {
-        firstName: shippingAddress.first_name,
-        lastName: shippingAddress.last_name,
-        addressLine1: shippingAddress.address1,
-        addressLine2: shippingAddress.address2 ?? '',
-        city: shippingAddress.city,
-        state: shippingAddress.province,
-        postCode: shippingAddress.zip,
-        country: shippingAddress.country,
-      },
-      items: gelatoItems,
-    };
-
-    const response = await fetch(GELATO_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': GELATO_API_KEY,
-      },
-      body: JSON.stringify(gelatoOrder),
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error('Gelato API error:', response.status, errText);
-      return createErrorResponse(`Gelato order failed: ${errText}`, {
+    if (!result.ok) {
+      console.error('Gelato API error:', result.status, result.errorText);
+      return createErrorResponse(`Gelato order failed: ${result.errorText}`, {
         status: HTTP_STATUS.BAD_GATEWAY,
       });
     }
 
-    const result = await response.json();
-    return createSuccessResponse(result);
+    return createSuccessResponse(result.data);
   } catch (error) {
     return handleApiError(
       'POST /api/fulfillment/gelato',

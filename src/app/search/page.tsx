@@ -9,6 +9,7 @@ import {
   buildShopifySearchQuery,
   parseFiltersQuery,
 } from '@/infra/shopify/helpers';
+import { SEARCH_SORT_OPTIONS } from '@/infra/shopify/sort-options';
 import type { ProductFieldsFragment, SearchProductsQuery } from '@/infra/shopify/storefront';
 import { SearchSortKeys } from '@/infra/shopify/storefront';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
@@ -66,17 +67,6 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
     ...edge.node,
   })) as Array<ProductFieldsFragment>;
 
-  const sortingOptions = [
-    {
-      label: 'Relevance',
-      name: SearchSortKeys.Relevance,
-    },
-    {
-      label: 'Price, low to high',
-      name: SearchSortKeys.Price,
-    },
-  ];
-
   return (
     <div>
       <PageBanner title={seo.search.title} description={seo.search.description}>
@@ -90,7 +80,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
           <ListingHeader>
             <Sort
               query={{ sort_key: searchParameters?.sort_key || SearchSortKeys.Relevance }}
-              sortingOptions={sortingOptions}
+              sortingOptions={SEARCH_SORT_OPTIONS}
             />
             <Filters filters={filters} query={searchParameters} />
           </ListingHeader>

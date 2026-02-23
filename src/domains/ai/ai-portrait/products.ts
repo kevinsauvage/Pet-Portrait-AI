@@ -27,13 +27,3 @@ export const AI_PORTRAIT_PRODUCTS = {
 } as const;
 
 export type AIProductType = 'digital' | 'canvas' | 'poster';
-
-/**
- * Gelato product UIDs for POD fulfillment.
- * Find UIDs at https://dashboard.gelato.com/catalogue/categories
- * Override via env: GELATO_CANVAS_PRODUCT_UID, GELATO_POSTER_PRODUCT_UID
- */
-export const GELATO_PRODUCT_UIDS = {
-  canvas: process.env.GELATO_CANVAS_PRODUCT_UID ?? 'poster_glossy_a3',
-  poster: process.env.GELATO_POSTER_PRODUCT_UID ?? 'poster_glossy_a3',
-} as const;

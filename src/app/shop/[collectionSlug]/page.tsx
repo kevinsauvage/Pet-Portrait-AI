@@ -3,7 +3,9 @@ import Link from 'next/link';
 
 import { storefrontSdk } from '@/infra/shopify/client';
 import { adjustPaginationVariables, parseFiltersQuery } from '@/infra/shopify/helpers';
+import { COLLECTION_SORT_OPTIONS } from '@/infra/shopify/sort-options';
 import { ProductCollectionSortKeys } from '@/infra/shopify/storefront';
+import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import EmptyState from '@/ui/components/EmptyState';
 import Filters from '@/ui/components/Filters';
 import ListingHeader from '@/ui/components/ListingHeader';
@@ -15,8 +17,6 @@ import { Button } from '@/ui/components/ui/button';
 export const revalidate = 3600; // Revalidate every hour
 
 type parametersType = { collectionSlug: string };
-
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 
 export async function generateMetadata({
   params,
@@ -125,23 +125,6 @@ const CollectionSlugPage = async ({
     );
   }
 
-  const sortingOptions = [
-    {
-      label: 'Best Selling',
-      name: ProductCollectionSortKeys.BestSelling,
-    },
-    {
-      label: 'Relevance',
-      name: ProductCollectionSortKeys.Relevance,
-    },
-    {
-      label: 'Price, low to high',
-      name: ProductCollectionSortKeys.Price,
-    },
-
-    { label: 'New Arrivals', name: ProductCollectionSortKeys.Created },
-  ];
-
   return (
     <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 space-y-6">
       <ListingHeader>
@@ -151,7 +134,7 @@ const CollectionSlugPage = async ({
               ? searchParameters
               : { sort_key: ProductCollectionSortKeys.BestSelling }
           }
-          sortingOptions={sortingOptions}
+          sortingOptions={COLLECTION_SORT_OPTIONS}
         />
         <Filters filters={safeFilters} query={safeSearchParameters} />
       </ListingHeader>
