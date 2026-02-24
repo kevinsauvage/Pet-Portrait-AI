@@ -17,7 +17,9 @@
     "lint:css:fix": "stylelint --fix **/*.{scss,css}",
     "codegen": "ts-node --project ./src/infra/shopify/tsconfig.codegen.json bin/run-codegen.ts",
     "codegen:watch": "ts-node --project ./src/infra/shopify/tsconfig.codegen.json --transpile-only --esm bin/run-codegen.ts --watch",
-    "seed:shopify": "ts-node -r tsconfig-paths/register --project ./src/infra/shopify/tsconfig.codegen.json bin/seed-shopify.ts"
+    "seed:shopify": "ts-node -r tsconfig-paths/register --project ./src/infra/shopify/tsconfig.codegen.json bin/seed-shopify.ts",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^6.1.1",
@@ -100,7 +102,9 @@
     "eslint-plugin-sort-keys": "^2.3.5",
     "eslint-plugin-unicorn": "^63.0.0",
     "globals": "^17.0.0",
+    "husky": "^9.1.7",
     "jsdom": "28.1.0",
+    "lint-staged": "^16.2.7",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "stylelint": "^17.3.0",
