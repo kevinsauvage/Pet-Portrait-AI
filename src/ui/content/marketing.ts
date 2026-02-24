@@ -74,6 +74,20 @@ export const SHOP_HOW_IT_WORKS = [
   },
 ] as const;
 
+export const TRANSFORMATION_SAMPLE = {
+  before: {
+    src: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200',
+    alt: 'Original pet photo of a golden retriever',
+    label: 'Original photo',
+  },
+  after: {
+    src: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200',
+    alt: 'Stylized pet portrait of a poodle',
+    label: 'AI portrait',
+  },
+  caption: 'Drag the slider to reveal the transformation.',
+} as const;
+
 export const GALLERY_ITEMS = [
   {
     id: '1',

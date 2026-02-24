@@ -8,12 +8,18 @@ import { getHomePageData } from '@/domains/home/services/home.service';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/catalog/CollectionGrid';
 import StylePreview from '@/ui/components/create/StylePreview';
+import BeforeAfterPreview from '@/ui/components/media/BeforeAfterPreview';
 import GalleryGrid from '@/ui/components/media/GalleryGrid';
 import ProductSection from '@/ui/components/product/ProductSection';
 import HomeSection from '@/ui/components/shared/HomeSection';
 import HowItWorks from '@/ui/components/shared/HowItWorks';
 import PageBanner from '@/ui/components/shared/PageBanner';
-import { CREATE_HOW_IT_WORKS, GALLERY_ITEMS, HOME_HERO_PERKS } from '@/ui/content/marketing';
+import {
+  CREATE_HOW_IT_WORKS,
+  GALLERY_ITEMS,
+  HOME_HERO_PERKS,
+  TRANSFORMATION_SAMPLE,
+} from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
 
 export const revalidate = config.constants.revalidate.catalog;
@@ -41,18 +47,26 @@ const Home = async () => {
         secondaryCtaLabel="Browse Gallery"
         secondaryCtaHref="/gallery"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-left">
-          {HOME_HERO_PERKS.map((perk) => (
-            <div
-              key={perk.label}
-              className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/70 px-4 py-3 shadow-sm"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <perk.icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
-              </span>
-              <span className="text-body-sm font-medium text-foreground">{perk.label}</span>
-            </div>
-          ))}
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] text-left">
+          <BeforeAfterPreview
+            before={TRANSFORMATION_SAMPLE.before}
+            after={TRANSFORMATION_SAMPLE.after}
+            caption={TRANSFORMATION_SAMPLE.caption}
+            priority
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4">
+            {HOME_HERO_PERKS.map((perk) => (
+              <div
+                key={perk.label}
+                className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/70 px-4 py-3 shadow-sm"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <perk.icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
+                </span>
+                <span className="text-body-sm font-medium text-foreground">{perk.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </PageBanner>
 

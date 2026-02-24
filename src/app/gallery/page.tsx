@@ -3,9 +3,10 @@ import Link from 'next/link';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import BeforeAfterPreview from '@/ui/components/media/BeforeAfterPreview';
 import StyleGallery from '@/ui/components/media/StyleGallery';
 import PageBanner from '@/ui/components/shared/PageBanner';
-import { GALLERY_ITEMS } from '@/ui/content/marketing';
+import { GALLERY_ITEMS, TRANSFORMATION_SAMPLE } from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
 
 export const metadata: Metadata = generateMetadataUtil({
@@ -26,6 +27,31 @@ const GalleryPage = () => {
         secondaryCtaLabel="Browse Styles"
         secondaryCtaHref="/create"
       />
+
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center">
+            <div className="space-y-4">
+              <p className="text-caption-sm uppercase tracking-[0.3em] text-muted-foreground">
+                Before and after
+              </p>
+              <h2 className="text-heading-3 tracking-tight">See the transformation</h2>
+              <p className="text-body-sm text-muted-foreground max-w-lg">
+                Compare the original photo with the AI-styled portrait. Drag the slider to reveal
+                the final artwork.
+              </p>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/create">Create your portrait</Link>
+              </Button>
+            </div>
+            <BeforeAfterPreview
+              before={TRANSFORMATION_SAMPLE.before}
+              after={TRANSFORMATION_SAMPLE.after}
+              caption={TRANSFORMATION_SAMPLE.caption}
+            />
+          </div>
+        </div>
+      </section>
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">

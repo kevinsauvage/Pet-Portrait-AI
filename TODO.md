@@ -1,11 +1,9 @@
 # TODO — Competitor-Inspired UX
 
-1. Add hero with before/after transformation preview. Why: instant proof of value. How: place a slider or side-by-side sample in hero and gallery.
-2. Add “How it works” block near CTA on `/create` and `/shop`. Why: keep users oriented mid-funnel. How: 3–4 steps with icons and expected time.
-3. Add pricing plans + free preview CTA. Why: anchors value and lowers risk. How: 2–3 plan cards + “no card to preview” banner.
-4. Add photo tips checklist + quality score. Why: better inputs reduce failed generations. How: pre-upload checklist with auto quality checks.
-5. Add breed/theme discovery section. Why: improves SEO and exploration. How: chips linking to filtered gallery/search.
-6. Add social proof strip (ratings, real reviews, UGC). Why: trust lifts conversion. How: import Shopify reviews or CMS and surface on home + product pages.
+2. Add pricing plans + free preview CTA. Why: anchors value and lowers risk. How: 2–3 plan cards + “no card to preview” banner.
+3. Add photo tips checklist + quality score. Why: better inputs reduce failed generations. How: pre-upload checklist with auto quality checks.
+4. Add breed/theme discovery section. Why: improves SEO and exploration. How: chips linking to filtered gallery/search.
+5. Add social proof strip (ratings, real reviews, UGC). Why: trust lifts conversion. How: import Shopify reviews or CMS and surface on home + product pages.
 
 # TODO — Differentiators (Project Analysis)
 
