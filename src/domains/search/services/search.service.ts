@@ -1,6 +1,11 @@
 import config from '@/core/config';
 import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables, buildShopifySearchQuery, parseFiltersQuery } from '@/infra/shopify/helpers';
+import {
+  adjustPaginationVariables,
+  buildShopifySearchQuery,
+  parseFiltersQuery,
+  resolveSortKeyFromString,
+} from '@/infra/shopify/helpers';
 import type { ProductFieldsFragment, SearchProductsQuery } from '@/infra/shopify/storefront';
 import { SearchSortKeys } from '@/infra/shopify/storefront';
 
@@ -20,23 +25,12 @@ type SearchResults = {
   sortKey: SearchSortKeys;
 };
 
-const resolveSortKey = (sortKey?: string): SearchSortKeys => {
-  const match = Object.values(SearchSortKeys).find(
-    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
-  );
-  if (match) return match;
-
-  const matchKey = Object.keys(SearchSortKeys).find(
-    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
-  ) as keyof typeof SearchSortKeys | undefined;
-
-  if (matchKey) return SearchSortKeys[matchKey];
-
-  return SearchSortKeys.Relevance;
-};
-
 export async function searchProducts(searchParameters: SearchParameters): Promise<SearchResults> {
-  const sortKey = resolveSortKey(searchParameters?.sort_key);
+  const sortKey = resolveSortKeyFromString(
+    searchParameters?.sort_key,
+    SearchSortKeys,
+    'Relevance',
+  );
 
   const response: SearchProductsQuery = await storefrontSdk().searchProducts({
     ...adjustPaginationVariables({

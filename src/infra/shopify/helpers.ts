@@ -3,6 +3,29 @@ import { cookies } from 'next/headers';
 import config from '@/core/config';
 
 import { getCurrentUrlWithoutParameters } from './server/url-helpers';
+
+/**
+ * Resolves a string sort key to a typed enum value.
+ * Matches by value or key (case-insensitive). Falls back to defaultKey.
+ */
+export function resolveSortKeyFromString<T extends Record<string, string>>(
+  sortKey: string | undefined,
+  enumObj: T,
+  defaultKey: keyof T,
+): T[keyof T] {
+  const match = Object.values(enumObj).find(
+    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
+  );
+  if (match) return match as T[keyof T];
+
+  const matchKey = Object.keys(enumObj).find(
+    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
+  ) as keyof T | undefined;
+
+  if (matchKey) return enumObj[matchKey];
+
+  return enumObj[defaultKey];
+}
 import type { GetMenuByHandleQuery, PageInfo, ProductFilter } from './storefront';
 
 interface PaginationVariables {
@@ -91,53 +114,47 @@ export const buildShopifySearchQuery = (query: string) => {
   return `${trimmed}*`;
 };
 
+type PaginationSearchParams = {
+  after?: string;
+  before?: string;
+  sort_key?: string;
+};
+
+async function buildPaginationPath(
+  searchParameters: PaginationSearchParams,
+  options: { cursorKey: 'after' | 'before'; cursorValue: string },
+): Promise<string> {
+  const currentUrl = await getCurrentUrlWithoutParameters();
+  const params = new URLSearchParams();
+
+  params.set(options.cursorKey, options.cursorValue);
+  if (searchParameters.sort_key) params.set('sort_key', searchParameters.sort_key);
+
+  return `${currentUrl}?${params.toString()}`;
+}
+
 export const getNextPath = async (
   pageInfo: PageInfo,
-  searchParameters: {
-    after?: string;
-    before?: string;
-    sort_key?: string;
-  },
-) => {
-  if (!pageInfo.hasNextPage) {
-    return '';
-  }
+  searchParameters: PaginationSearchParams,
+): Promise<string> => {
+  if (!pageInfo.hasNextPage || !pageInfo.endCursor) return '';
 
-  const currentUrl = await getCurrentUrlWithoutParameters();
-  const newSearchParameters = new URLSearchParams();
-  if (searchParameters.after) newSearchParameters.set('after', searchParameters.after);
-  if (searchParameters.before) newSearchParameters.set('before', searchParameters.before);
-  if (searchParameters.sort_key) newSearchParameters.set('sort_key', searchParameters.sort_key);
-  if (pageInfo.endCursor) {
-    newSearchParameters.set('after', pageInfo.endCursor);
-  }
-  newSearchParameters.delete('before');
-
-  return `${currentUrl}?${newSearchParameters.toString()}`;
+  return buildPaginationPath(searchParameters, {
+    cursorKey: 'after',
+    cursorValue: pageInfo.endCursor,
+  });
 };
 
 export const getPreviousPath = async (
   pageInfo: PageInfo,
-  searchParameters: {
-    after?: string;
-    before?: string;
-    sort_key?: string;
-  },
-) => {
-  if (!pageInfo.hasPreviousPage) {
-    return '';
-  }
-  const currentUrl = await getCurrentUrlWithoutParameters();
-  const newSearchParameters = new URLSearchParams();
-  if (searchParameters.after) newSearchParameters.set('after', searchParameters.after);
-  if (searchParameters.before) newSearchParameters.set('before', searchParameters.before);
-  if (searchParameters.sort_key) newSearchParameters.set('sort_key', searchParameters.sort_key);
-  if (pageInfo.startCursor) {
-    newSearchParameters.set('before', pageInfo.startCursor);
-  }
-  newSearchParameters.delete('after');
+  searchParameters: PaginationSearchParams,
+): Promise<string> => {
+  if (!pageInfo.hasPreviousPage || !pageInfo.startCursor) return '';
 
-  return `${currentUrl}?${newSearchParameters.toString()}`;
+  return buildPaginationPath(searchParameters, {
+    cursorKey: 'before',
+    cursorValue: pageInfo.startCursor,
+  });
 };
 
 type Menu = NonNullable<GetMenuByHandleQuery['menu']>;

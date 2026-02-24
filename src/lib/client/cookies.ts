@@ -11,8 +11,8 @@ export const getCookieFront = (name: string) => {
   if (typeof document === 'undefined') return '';
   const cookies = document.cookie.split(';');
 
-  for (const cooky of cookies) {
-    const cookie = cooky.trim();
+  for (const rawCookie of cookies) {
+    const cookie = rawCookie.trim();
     if (cookie.startsWith(`${name}=`)) {
       return cookie.slice(Math.max(0, name.length + 1));
     }

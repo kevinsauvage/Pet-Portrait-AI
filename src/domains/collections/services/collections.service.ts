@@ -4,6 +4,7 @@ import {
   adjustPaginationVariables,
   getMenuItemsForCollection,
   parseFiltersQuery,
+  resolveSortKeyFromString,
 } from '@/infra/shopify/helpers';
 import {
   type CollectionQuery,
@@ -39,21 +40,6 @@ const DEFAULT_PAGE_INFO: CollectionProducts['pageInfo'] = {
   hasNextPage: false,
   hasPreviousPage: false,
   startCursor: null,
-};
-
-const resolveSortKey = (sortKey?: string): ProductCollectionSortKeys => {
-  const match = Object.values(ProductCollectionSortKeys).find(
-    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
-  );
-  if (match) return match;
-
-  const matchKey = Object.keys(ProductCollectionSortKeys).find(
-    (item) => item.toLowerCase() === sortKey?.toLowerCase(),
-  ) as keyof typeof ProductCollectionSortKeys | undefined;
-
-  if (matchKey) return ProductCollectionSortKeys[matchKey];
-
-  return ProductCollectionSortKeys.BestSelling;
 };
 
 export async function getAllCollections(): Promise<CollectionEdge[]> {
@@ -100,7 +86,11 @@ export async function getCollectionPageData(
   handle: string,
   searchParameters: CollectionSearchParams = {},
 ): Promise<CollectionPageData> {
-  const sortKey = resolveSortKey(searchParameters?.sort_key);
+  const sortKey = resolveSortKeyFromString(
+    searchParameters?.sort_key,
+    ProductCollectionSortKeys,
+    'BestSelling',
+  );
 
   const response = await storefrontSdk().collection({
     filters: parseFiltersQuery(searchParameters?.filters),

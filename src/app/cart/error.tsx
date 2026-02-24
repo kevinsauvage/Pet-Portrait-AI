@@ -1,44 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
-import Link from 'next/link';
+import config from '@/core/config';
+import { ErrorPage } from '@/ui/components/shared/ErrorPage';
 
-import { logger } from '@/core/utils/logger';
-import { notFoundIllustration } from '@/lib/illustrations';
-import EmptyState from '@/ui/components/shared/EmptyState';
-import { Button } from '@/ui/primitives/button';
-
-const CartError = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => {
-  useEffect(() => {
-    logger.error('cart', error);
-  }, [error]);
-
-  return (
-    <div className="container mx-auto px-4 md:px-6 py-10 md:py-14 min-h-[calc(100vh-76px)] flex items-center justify-center">
-      <EmptyState
-        variant="error"
-        altText="Cart error illustration"
-        image={notFoundIllustration}
-        subtitle="We couldn't load your cart. Please try again or contact support if the problem continues."
-        title="Unable to load cart"
-        tips={[
-          'Try refreshing the page',
-          'Your cart items are saved',
-          'Contact support if the problem continues',
-        ]}
-        primaryAction={
-          <Button onClick={reset} variant="default">
-            Try again
-          </Button>
-        }
-        secondaryAction={
-          <Link href="/" className="link">
-            Continue shopping
-          </Link>
-        }
-      />
-    </div>
-  );
-};
+const CartError = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => (
+  <ErrorPage
+    error={error}
+    reset={reset}
+    logContext="cart"
+    title="Unable to load cart"
+    subtitle="We couldn't load your cart. Please try again or contact support if the problem continues."
+    tips={['Try refreshing the page', 'Your cart items are saved', 'Contact support if the problem continues']}
+    secondaryAction={{ label: 'Continue shopping', href: config.routes.home }}
+  />
+);
 
 export default CartError;
