@@ -57,7 +57,7 @@ const HowItWorks = ({
             return (
               <div
                 key={`${step.title}-${index}`}
-                className="group flex flex-col items-start text-left space-y-4 rounded-2xl border border-border/70 bg-card/80 p-6 md:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                className="group flex flex-col items-start text-left space-y-4 rounded-2xl border border-border/70 bg-card/90 p-6 md:p-7 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-primary/15"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
                   <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />

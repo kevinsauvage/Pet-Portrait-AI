@@ -20,7 +20,7 @@ const NavLinks = ({ links, className, linkClassName }: NavLinksProps) => {
               href={link.href}
               className={
                 linkClassName ??
-                'px-3 py-2 text-body-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent'
+                'px-3 py-2 text-body-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg hover:bg-accent/80'
               }
             >
               {link.label}

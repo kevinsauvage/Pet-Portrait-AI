@@ -58,7 +58,7 @@ const Home = async () => {
             {HOME_HERO_PERKS.map((perk) => (
               <div
                 key={perk.label}
-                className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/70 px-4 py-3 shadow-sm"
+                className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:border-primary/10"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                   <perk.icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
@@ -159,7 +159,7 @@ const Home = async () => {
 
       <section className="py-16 md:py-24 bg-linear-to-b from-secondary/10 via-background to-secondary/30">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-10 md:p-14 text-center shadow-sm">
+          <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card/90 p-10 md:p-14 text-center shadow-lg backdrop-blur-sm">
             <div
               className="absolute -right-20 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl"
               aria-hidden="true"

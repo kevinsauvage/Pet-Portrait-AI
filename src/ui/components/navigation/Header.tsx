@@ -16,7 +16,7 @@ const Header = async ({
   const navLinks = getNavLinks(headerMenu);
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b">
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/80 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="w-full flex items-center justify-between h-16 md:h-[72px]">
           <div className="flex items-center gap-8">

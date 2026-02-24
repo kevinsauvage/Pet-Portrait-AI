@@ -16,7 +16,6 @@ const Loading = () => {
         eyebrow="Checkout"
         title="Your Cart"
         description="Review your order, apply discounts, and complete your purchase."
-        className="w-full pb-6"
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
           <Link

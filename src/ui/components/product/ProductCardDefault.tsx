@@ -33,7 +33,7 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
 
   return (
     <Component className="group relative">
-      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <ProductCardActions product={product} productId={id} />
 
         <Link

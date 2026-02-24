@@ -28,10 +28,17 @@ const PageBanner = ({
 }: PageBannerProps) => (
   <section
     aria-labelledby="page-banner-title"
-    className={cn('relative isolate overflow-hidden bg-white dark:bg-black', className)}
+    className={cn(
+      'relative isolate overflow-hidden bg-linear-to-b from-background via-background to-muted/30 dark:from-background dark:via-background dark:to-muted/20',
+      className,
+    )}
   >
     <div className="container mx-auto flex flex-col items-center justify-center text-center px-4 md:px-6 py-16 md:py-24 lg:py-32 relative">
-      <div className="max-w-4xl space-y-6 md:space-y-7">
+      <div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(194,65,12,0.04)_0%,transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(217,119,6,0.06)_0%,transparent_50%)] pointer-events-none"
+        aria-hidden
+      />
+      <div className="relative max-w-4xl space-y-6 md:space-y-7">
         {eyebrow && (
           <p className="text-caption-sm uppercase tracking-[0.2em] text-muted-foreground">
             {eyebrow}
@@ -54,7 +61,7 @@ const PageBanner = ({
               <Button
                 size="lg"
                 asChild
-                className="text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow"
+                className="text-base px-8 py-6 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 <Link href={ctaHref} aria-label={ctaLabel}>
                   {ctaLabel}
@@ -62,7 +69,12 @@ const PageBanner = ({
               </Button>
             )}
             {secondaryCtaLabel && secondaryCtaHref && (
-              <Button variant="outline" size="lg" asChild className="text-base px-8 py-6">
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="text-base px-8 py-6 border-2 hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+              >
                 <Link href={secondaryCtaHref} aria-label={secondaryCtaLabel}>
                   {secondaryCtaLabel}
                 </Link>

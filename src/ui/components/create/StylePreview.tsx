@@ -11,7 +11,7 @@ type StylePreviewProps = {
 
 const StylePreview = ({ style, index }: StylePreviewProps) => {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300">
+    <div className="group relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm hover:shadow-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300">
       <div className="relative aspect-4/3 overflow-hidden">
         <Image
           src={style.previewImage}

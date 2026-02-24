@@ -31,12 +31,12 @@ const FOOTER_LINKS = {
 
 const Footer = ({ menuItems }: FooterProps) => {
   return (
-    <footer className="border-t bg-card">
-      <div className="container mx-auto px-4 py-12 md:py-16">
+    <footer className="border-t border-border/80 bg-card/50 backdrop-blur-sm">
+      <div className="container mx-auto px-4 py-14 md:py-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           <div className="col-span-2 md:col-span-1">
-            <h3 className="text-heading-4 mb-3">{siteMetadata.companyName}</h3>
-            <p className="text-body-sm text-secondary max-w-xs leading-relaxed">
+            <h3 className="text-heading-4 mb-4 font-semibold tracking-tight">{siteMetadata.companyName}</h3>
+            <p className="text-body-sm text-muted-foreground max-w-xs leading-relaxed">
               {siteMetadata.about.short.slice(0, 140)}...
             </p>
           </div>
@@ -48,7 +48,7 @@ const Footer = ({ menuItems }: FooterProps) => {
                 <li key={link.href + link.label}>
                   <Link
                     href={link.href}
-                    className="text-body-sm text-secondary hover:text-foreground transition-colors"
+                    className="text-body-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -64,7 +64,7 @@ const Footer = ({ menuItems }: FooterProps) => {
                 <li key={link.href + link.label}>
                   <Link
                     href={link.href}
-                    className="text-body-sm text-secondary hover:text-foreground transition-colors"
+                    className="text-body-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -80,7 +80,7 @@ const Footer = ({ menuItems }: FooterProps) => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-body-sm text-secondary hover:text-foreground transition-colors"
+                    className="text-body-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -96,7 +96,7 @@ const Footer = ({ menuItems }: FooterProps) => {
                         <li key={element.id}>
                           <Link
                             href={new URL(element.url).pathname}
-                            className="text-body-sm text-secondary hover:text-foreground transition-colors"
+                            className="text-body-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                           >
                             {element.title}
                           </Link>
@@ -110,7 +110,7 @@ const Footer = ({ menuItems }: FooterProps) => {
         </div>
       </div>
 
-      <div className="border-t">
+      <div className="border-t border-border/80">
         <div className="container mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-caption-sm text-secondary">
             &copy; {new Date().getFullYear()} {siteMetadata.companyName}. All rights reserved.

@@ -33,7 +33,7 @@ const GalleryGrid = ({ items, ariaLabel = 'Gallery', className }: GalleryGridPro
       {items.map((item, index) => (
         <li
           key={item.id}
-          className="relative group break-inside-avoid overflow-hidden rounded-2xl bg-card border border-border shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300"
+          className="relative group break-inside-avoid overflow-hidden rounded-2xl bg-card border border-border shadow-sm hover:shadow-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300"
         >
           <div className="relative aspect-square overflow-hidden">
             <Image

@@ -20,7 +20,6 @@ const StylesPage = () => {
       <PageBanner
         title="Portrait Styles"
         description="Each style transforms your pet into unique artwork. Pick the one that matches your vision."
-        className="py-10 md:py-14"
       />
 
       <div className="container mx-auto px-4 py-12 md:py-16">

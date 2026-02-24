@@ -9,35 +9,35 @@
   --popover: #ffffff;
   --sidebar: #faf9f7;
 
-  --foreground: #1a1a1a;
-  --card-foreground: #1a1a1a;
-  --popover-foreground: #1a1a1a;
-  --sidebar-foreground: #1a1a1a;
+  --foreground: #1c1917;
+  --card-foreground: #1c1917;
+  --popover-foreground: #1c1917;
+  --sidebar-foreground: #1c1917;
 
-  --primary: #b45309;
-  --sidebar-primary: #b45309;
+  --primary: #c2410c;
+  --sidebar-primary: #c2410c;
   --primary-foreground: #ffffff;
   --sidebar-primary-foreground: #ffffff;
 
   --secondary: #f5f0eb;
   --accent: #f5f0eb;
   --sidebar-accent: #f5f0eb;
-  --secondary-foreground: #1a1a1a;
-  --accent-foreground: #1a1a1a;
-  --sidebar-accent-foreground: #1a1a1a;
+  --secondary-foreground: #1c1917;
+  --accent-foreground: #1c1917;
+  --sidebar-accent-foreground: #1c1917;
 
   --muted: #f5f0eb;
   --muted-foreground: #6b6259;
-  --muted-text: #8a7f72;
+  --muted-text: #78716c;
 
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  --border: #e8e2da;
-  --sidebar-border: #e8e2da;
-  --ring: #b45309;
-  --sidebar-ring: #b45309;
-  --input: #e8e2da;
+  --border: #e7e5e4;
+  --sidebar-border: #e7e5e4;
+  --ring: #c2410c;
+  --sidebar-ring: #c2410c;
+  --input: #e7e5e4;
 
   --chart-1: oklch(0.874 0.166 60);
   --chart-2: oklch(0.824 0.169 45);
@@ -45,7 +45,9 @@
   --chart-4: oklch(0.715 0.167 75);
   --chart-5: oklch(0.673 0.122 50);
 
-  --radius: 0.5rem;
+  --radius: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
 }
 
 .dark {
@@ -191,6 +193,9 @@
     letter-spacing: var(--letter-spacing-normal);
     line-height: 1.5rem;
   }
+  [id] {
+    scroll-margin-top: 6rem;
+  }
 }
 
 button {
@@ -284,7 +289,7 @@ h6 {
   font-size: 3rem;
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-tighter);
-  line-height: 3.5rem;
+  line-height: 1.1;
 }
 
 .text-heading-1 {
@@ -400,11 +405,12 @@ h6 {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  @apply hover:underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm;
+  transition: color 0.2s ease, text-underline-offset 0.2s ease;
+  @apply hover:underline-offset-2 hover:text-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm;
 }
 
 .dark .link {
-  color: #f59e0b;
+  color: var(--primary);
 }
 
 .container-sm {

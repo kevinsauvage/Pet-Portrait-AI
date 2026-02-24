@@ -41,7 +41,7 @@ const BeforeAfterPreview = ({
 
   return (
     <div className={cn('w-full', className)}>
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-muted shadow-sm">
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-muted/50 shadow-md">
         <div className={cn('relative w-full', aspectClassName)}>
           <Image
             src={after.src}

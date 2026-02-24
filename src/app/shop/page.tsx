@@ -39,7 +39,7 @@ const CollectionsPage = async () => {
           {SHOP_PERKS.map((item) => (
             <div
               key={item.label}
-              className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/70 px-4 py-3 shadow-sm"
+              className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:border-primary/10"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <item.icon className="h-5 w-5 text-primary" strokeWidth={1.5} />

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { NextWebVitalsMetric } from 'next/app';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import { CartProvider } from '@/contexts/CartContext/CartContext';
 import { UserProvider } from '@/contexts/UserContext/UserContext';
@@ -21,7 +21,7 @@ import '../globals.css';
 
 import * as Sentry from '@sentry/nextjs';
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
@@ -68,7 +68,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <html
       lang="en"
-      className={`${inter.variable} font-sans scroll-smooth antialiased`}
+      className={`${plusJakartaSans.variable} font-sans scroll-smooth antialiased`}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
@@ -77,8 +77,9 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
       </head>
       <body className="relative bg-background min-h-screen">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-radial-[circle_at_center] from-primary/12 via-primary/0 to-transparent blur-3xl" />
+        <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute -top-40 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_top,rgba(194,65,12,0.08)_0%,transparent_70%)] blur-3xl" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent" />
         </div>
         <GtmScript />
         <CookieBanner />

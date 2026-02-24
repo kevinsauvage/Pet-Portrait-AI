@@ -20,8 +20,12 @@ const CreatePage = () => {
       <PageBanner
         title="Create Your Pet Portrait"
         description="Upload a photo, pick a style, and watch AI transform your pet into stunning artwork."
-        className="py-10 md:py-14"
       />
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <Suspense fallback={<div className="min-h-[400px] animate-pulse rounded-2xl bg-muted" />}>
+          <CreateWizard />
+        </Suspense>
+      </div>
       <HowItWorks
         id="create-how-it-works"
         title="Create your portrait in minutes"
@@ -29,11 +33,6 @@ const CreatePage = () => {
         steps={CREATE_HOW_IT_WORKS}
         className="bg-muted/30"
       />
-      <div className="container mx-auto px-4 py-8 md:py-12">
-        <Suspense fallback={<div className="min-h-[400px] animate-pulse rounded-2xl bg-muted" />}>
-          <CreateWizard />
-        </Suspense>
-      </div>
     </div>
   );
 };
