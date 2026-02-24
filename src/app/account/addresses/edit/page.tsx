@@ -4,13 +4,13 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { updateAddressAction } from '@/domains/address/actions';
 import { AddressService } from '@/domains/address/services/address.service';
 import {
   findAddressById,
   mapAddressNodeToFormData,
 } from '@/domains/address/utils/address-utils';
-import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import AddressForm from '@/ui/components/account/AddressForm';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import { Button } from '@/ui/primitives/button';

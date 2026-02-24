@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-import { safeLogError } from '@/core/utils/api-responses';
+import { logger } from '@/core/utils/logger';
 
 export const delCookieAction = async (name: string) => {
   const cookieStore = await cookies();
@@ -11,7 +11,7 @@ export const delCookieAction = async (name: string) => {
 
 export const getCookieAction = async (name: string) => {
   if (!name) {
-    safeLogError('getCookieAction', new Error('Cookie name is required'));
+    logger.error('getCookieAction', new Error('Cookie name is required'));
     return;
   }
   const cookieStore = await cookies();
@@ -20,7 +20,7 @@ export const getCookieAction = async (name: string) => {
 
 export const setCookieAction = async (name: string, value: string, options = {}) => {
   if (!name || !value) {
-    safeLogError('setCookieAction', new Error('Cookie name and value are required'));
+    logger.error('setCookieAction', new Error('Cookie name and value are required'));
     return;
   }
 

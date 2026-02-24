@@ -4,6 +4,7 @@ import { createContext, useCallback, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import config from '@/core/config';
+import { logger } from '@/core/utils/logger';
 import { addToWishlist, removeFromWishlist } from '@/domains/wishlist/client';
 import type { GetCustomerQuery, ProductFieldsFragment } from '@/infra/shopify/storefront';
 
@@ -49,7 +50,7 @@ export const UserProvider = ({
           toast.error(result?.message || 'Something went wrong');
         }
       } catch (error) {
-        console.error('Wishlist operation error:', error);
+        logger.error('wishlist', error);
         toast.error(error instanceof Error ? error.message : 'Something went wrong');
       }
     },

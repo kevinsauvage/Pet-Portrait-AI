@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
+import { logger } from '@/core/utils/logger';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import SpinnerLoader from '@/ui/components/shared/SpinnerLoader';
 import { Button } from '@/ui/primitives/button';
@@ -27,7 +28,7 @@ const ProductCardActions = ({ product, productId }: ProductCardActionsProps) => 
     try {
       await handleSetWishlist(!!isWishlisted, product);
     } catch (error) {
-      console.error('Error updating wishlist:', error);
+      logger.error('wishlist', error);
     } finally {
       setLoading(false);
     }

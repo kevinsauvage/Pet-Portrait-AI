@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
+import { logger } from '@/core/utils/logger';
 import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
@@ -15,7 +16,7 @@ const GlobalError = ({
   reset: () => void;
 }) => {
   useEffect(() => {
-    console.error('Global application error:', error);
+    logger.error('Global application error', error);
   }, [error]);
 
   return (

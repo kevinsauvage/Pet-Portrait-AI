@@ -1,6 +1,7 @@
 import { type NextRequest } from 'next/server';
 
 import { createErrorResponse, createSuccessResponse, HTTP_STATUS } from '@/core/utils/api-responses';
+import { logger } from '@/core/utils/logger';
 import {
   fulfillGelatoFromShopifyOrder,
   type ShopifyOrderWebhookPayload,
@@ -26,20 +27,19 @@ export async function POST(request: NextRequest) {
     const fulfillment = await fulfillGelatoFromShopifyOrder(order);
 
     if (fulfillment.skippedReason === 'missing_shipping_address') {
-      console.error('Gelato fulfillment skipped: missing shipping address.');
+      logger.warn('webhook.orders', new Error('Gelato fulfillment skipped: missing shipping address'));
     }
 
     if (fulfillment.gelatoError) {
-      console.error(
-        'Gelato fulfillment failed:',
-        fulfillment.gelatoError.status ?? 'unknown',
-        fulfillment.gelatoError.message,
+      logger.error(
+        'webhook.orders.gelato',
+        new Error(`${fulfillment.gelatoError.status ?? 'unknown'}: ${fulfillment.gelatoError.message}`),
       );
     }
 
     return createSuccessResponse({ received: true, podOrders: fulfillment.podOrders });
   } catch (error) {
-    console.error('Shopify orders webhook error:', error);
+    logger.error('webhook.orders', error);
     return createErrorResponse('Webhook processing failed', {
       status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
     });

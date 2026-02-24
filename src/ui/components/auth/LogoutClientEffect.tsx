@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 
 import config from '@/core/config';
+import { logger } from '@/core/utils/logger';
 
 import { toast } from 'sonner';
 
@@ -27,7 +28,7 @@ const LogoutClientEffect = () => {
           window.location.href = config.routes.login;
         }, 2000);
       } catch (error) {
-        console.error('Logout error:', error);
+        logger.error('logout', error);
         window.location.href = config.routes.login;
       }
     };

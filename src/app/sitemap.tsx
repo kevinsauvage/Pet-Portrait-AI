@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import config, { sitemap as sitemapConfig } from '@/core/config';
+import { logger } from '@/core/utils/logger';
 import { getBaseUrl } from '@/core/utils/metadata';
 import { fetchShopifySitemapEntries } from '@/infra/shopify/sitemap';
 
@@ -38,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...products.map((p) => toEntry(p, '/shop/products', 'weekly', 0.7)),
     ];
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    logger.error('sitemap', error);
     return baseSitemap;
   }
 }

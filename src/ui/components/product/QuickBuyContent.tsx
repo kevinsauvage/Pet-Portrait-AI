@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import config from '@/core/config';
+import { logger } from '@/core/utils/logger';
 import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
 import { canPurchase, isInventoryTracked, isLowStock } from '@/domains/products/utils/inventory';
 import useProductSelection from '@/hooks/useProductSelection';
@@ -310,7 +311,7 @@ const QuickBuyContent = ({ product, onClose }: QuickBuyContentProps) => {
             variant={isWishlisted ? 'default' : 'outline'}
             size="lg"
             className="h-12 w-12"
-            onClick={() => handleWishlist().catch(console.error)}
+            onClick={() => handleWishlist().catch((e) => logger.error('wishlist', e))}
             aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           >
             <Heart className={cn('h-5 w-5', isWishlisted && 'fill-current')} />

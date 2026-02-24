@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
+import { logger } from '@/core/utils/logger';
 import { deleteAddressAction, setDefaultAddressAction } from '@/domains/address/actions';
 import type { MailingAddress } from '@/infra/shopify/storefront';
 import { Badge } from '@/ui/primitives/badge';
@@ -140,7 +141,7 @@ const Address = ({
                     className="cursor-pointer"
                     onClick={() => {
                       handleSetAsDefault().catch((error) => {
-                        console.error('Error setting address as default:', error);
+                        logger.error('address.set-default', error);
                       });
                     }}
                   >
@@ -153,7 +154,7 @@ const Address = ({
                   className="cursor-pointer text-destructive focus:text-destructive"
                   onClick={() => {
                     handleDelete().catch((error) => {
-                      console.error('Error deleting address:', error);
+                      logger.error('address.delete', error);
                     });
                   }}
                 >

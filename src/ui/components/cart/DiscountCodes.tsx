@@ -1,6 +1,7 @@
 'use client';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import { logger } from '@/core/utils/logger';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';
 
@@ -39,7 +40,7 @@ const DiscountCodes = () => {
                     <Button
                       onClick={() => {
                         handleRemoveCode(code.code).catch((error) => {
-                          console.error('Error removing discount code:', error);
+                          logger.error('cart.discount-code', error);
                         });
                       }}
                       className="cursor-pointer"
@@ -69,7 +70,7 @@ const DiscountCodes = () => {
                     <Button
                       onClick={() => {
                         handleRemoveCode(code.code).catch((error) => {
-                          console.error('Error removing discount code:', error);
+                          logger.error('cart.discount-code', error);
                         });
                       }}
                       className="cursor-pointer"

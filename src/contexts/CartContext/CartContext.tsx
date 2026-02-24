@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 
+import { logger } from '@/core/utils/logger';
 import { createCartAction } from '@/domains/cart/actions';
 import cartMock from '@/domains/cart/mocks/cart';
 import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
@@ -67,7 +68,7 @@ export const CartProvider = ({
       createCartAction()
         .then(setCart)
         .catch((error) => {
-          console.error('Failed to create cart:', error);
+          logger.error('cart.create', error);
           toast.error('Failed to initialize cart');
         });
     }
@@ -83,7 +84,7 @@ export const CartProvider = ({
   const removeFromCart = useCallback(
     async (lineItemId: string) => {
       if (!lineItemId) {
-        console.error('Missing line item ID');
+        logger.error('cart.remove', new Error('Missing line item ID'));
         return;
       }
 
@@ -100,7 +101,7 @@ export const CartProvider = ({
   const handleQuantityChange = useCallback(
     async (id: string, quantity: number) => {
       if (!id || !quantity) {
-        console.error('Missing required parameters: id or quantity');
+        logger.error('cart.quantity', new Error('Missing required parameters: id or quantity'));
         return;
       }
 
@@ -120,7 +121,7 @@ export const CartProvider = ({
   const handleAddToCart = useCallback(
     async (variantId: string, quantity = 1, attributes?: CartLineAttribute[]) => {
       if (!variantId) {
-        console.error('Missing variant ID');
+        logger.error('cart.add', new Error('Missing variant ID'));
         return;
       }
 
@@ -146,7 +147,7 @@ export const CartProvider = ({
   const updateDiscountCodes = useCallback(
     async (discountCodes: string[]) => {
       if (!Array.isArray(discountCodes)) {
-        console.error('Invalid discount codes format');
+        logger.error('cart.discount-codes', new Error('Invalid discount codes format'));
         return;
       }
 

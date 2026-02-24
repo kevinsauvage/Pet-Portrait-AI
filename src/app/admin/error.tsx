@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 
+import { logger } from '@/core/utils/logger';
 import { Button } from '@/ui/primitives/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/ui/primitives/card';
 
@@ -13,7 +14,7 @@ interface AdminErrorProps {
 
 const AdminError = ({ error, reset }: AdminErrorProps) => {
   useEffect(() => {
-    console.error('Admin error:', error);
+    logger.error('admin', error);
   }, [error]);
 
   return (

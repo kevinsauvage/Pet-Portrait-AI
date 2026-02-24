@@ -7,10 +7,9 @@ import {
   handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
+import { logger } from '@/core/utils/logger';
 import { formatZodErrorMessage } from '@/core/utils/zod';
-import {
-  createGelatoFulfillmentOrder,
-} from '@/domains/orders/services/gelato-fulfillment.service';
+import { createGelatoFulfillmentOrder } from '@/domains/orders/services/gelato-fulfillment.service';
 import { gelatoFulfillmentRequestSchema } from '@/domains/orders/validation';
 
 export const dynamic = 'force-dynamic';
@@ -52,7 +51,7 @@ export async function POST(request: NextRequest) {
     const result = await createGelatoFulfillmentOrder(parsedBody.data);
 
     if (!result.ok) {
-      console.error('Gelato API error:', result.status, result.errorText);
+      logger.error('api.fulfillment.gelato', new Error(`${result.status}: ${result.errorText}`));
       return createErrorResponse(`Gelato order failed: ${result.errorText}`, {
         status: HTTP_STATUS.BAD_GATEWAY,
       });
@@ -60,10 +59,6 @@ export async function POST(request: NextRequest) {
 
     return createSuccessResponse(result.data);
   } catch (error) {
-    return handleApiError(
-      'POST /api/fulfillment/gelato',
-      error,
-      'Gelato fulfillment failed',
-    );
+    return handleApiError('POST /api/fulfillment/gelato', error, 'Gelato fulfillment failed');
   }
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
+import { logger } from '@/core/utils/logger';
 import { canPurchase, isInventoryTracked } from '@/domains/products/utils/inventory';
 import useProductSelection from '@/hooks/useProductSelection';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
@@ -256,7 +257,7 @@ const ProductDescriptionClient = ({
           size="lg"
           className="gap-2"
           onClick={() => {
-            handleWishlist().catch((error) => console.error(error));
+            handleWishlist().catch((error) => logger.error('wishlist', error));
           }}
         >
           <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-primary-foreground' : ''}`} />

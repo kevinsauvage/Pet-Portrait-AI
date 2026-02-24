@@ -1,4 +1,4 @@
-import { safeLogError } from '@/core/utils/api-responses';
+import { logger } from '@/core/utils/logger';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { clearShopifyToken, getShopifyToken } from '@/infra/shopify/server';
 
@@ -26,7 +26,7 @@ export const getUser = async () => {
     ) {
       await clearShopifyToken();
     }
-    safeLogError('getUser', error);
+    logger.error('getUser', error);
     return null;
   }
 };

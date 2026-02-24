@@ -1,6 +1,6 @@
 import config from '@/core/config';
-import { safeLogError } from '@/core/utils/api-responses';
 import { handleCustomerUserErrors, handleUserErrors } from '@/core/utils/form-actions';
+import { logger } from '@/core/utils/logger';
 import { withRetry } from '@/core/utils/retry';
 import { getUser } from '@/domains/user/get-user';
 import { api } from '@/infra/http/api-client';
@@ -141,7 +141,7 @@ export class AuthService {
           customerAccessToken: token,
         });
       } catch (error) {
-        safeLogError('AuthService.logout - token deletion', error);
+        logger.error('AuthService.logout - token deletion', error);
       }
     }
 
@@ -175,7 +175,7 @@ export class AuthService {
               ? `AuthService.updateCartBuyerIdentity - failed after ${maxAttempts} attempts`
               : `AuthService.updateCartBuyerIdentity - attempt ${attempt}/${maxAttempts} failed`;
           if (attempt === maxAttempts || process.env.NODE_ENV === 'development') {
-            console.warn(context, error);
+            logger.warn(context, error);
           }
         },
       },

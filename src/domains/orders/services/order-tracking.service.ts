@@ -1,4 +1,4 @@
-import { safeLogError } from '@/core/utils/api-responses';
+import { logger } from '@/core/utils/logger';
 
 export const OrderTrackingService = {
   async getOrderStatus(orderId: string): Promise<string | null> {
@@ -6,7 +6,7 @@ export const OrderTrackingService = {
       void orderId;
       return null;
     } catch (error) {
-      safeLogError('OrderTrackingService.getOrderStatus', error);
+      logger.error('OrderTrackingService.getOrderStatus', error);
       return null;
     }
   },

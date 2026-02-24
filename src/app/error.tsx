@@ -4,13 +4,14 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 import config from '@/core/config';
+import { logger } from '@/core/utils/logger';
 import { notFoundIllustration } from '@/lib/illustrations';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
 const Error = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => {
   useEffect(() => {
-    console.error('Application error:', error);
+    logger.error('Application error', error);
   }, [error]);
 
   return (

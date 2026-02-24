@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import { logger } from '@/core/utils/logger';
 import type { GetProductByHandleQuery, ProductFieldsFragment } from '@/infra/shopify/storefront';
 type OptionValues = ProductFieldsFragment['options'][number]['optionValues'][number];
 
@@ -92,7 +93,7 @@ const useProductSelection = ({
     if (selectedVariant && typeof selectedVariant === 'object' && 'id' in selectedVariant) {
       const variantId = String((selectedVariant as { id: string }).id);
       handleAddToCartContext(variantId, quantity).catch((error) => {
-        console.error('Error adding to cart:', error);
+        logger.error('cart.add', error);
       });
     }
   }, [handleAddToCartContext, quantity, selectedVariant]);

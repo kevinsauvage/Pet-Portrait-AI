@@ -1,8 +1,8 @@
 'use server';
 
 import config from '@/core/config';
-import { safeLogError } from '@/core/utils/api-responses';
 import { getSecureCookieOptions } from '@/core/utils/cookie-security';
+import { logger } from '@/core/utils/logger';
 import { getCookieAction, setCookieAction } from '@/lib/cookies/actions';
 
 import { adminSdk } from './client';
@@ -15,7 +15,7 @@ export async function setDelegateTokenAction(): Promise<void> {
   if (tokenCookie?.value) return;
 
   if (!delegateAccessScope) {
-    safeLogError(
+    logger.error(
       'setDelegateTokenAction',
       new Error('SHOPIFY_SCOPE environment variable is not set'),
     );
@@ -33,7 +33,7 @@ export async function setDelegateTokenAction(): Promise<void> {
     const { delegateAccessToken, userErrors } = responseToken?.delegateAccessTokenCreate || {};
 
     if (userErrors && userErrors.length > 0) {
-      safeLogError('setDelegateTokenAction - user errors', userErrors);
+      logger.error('setDelegateTokenAction - user errors', userErrors);
     }
 
     if (delegateAccessToken) {
@@ -44,7 +44,7 @@ export async function setDelegateTokenAction(): Promise<void> {
       );
     }
   } catch (error) {
-    safeLogError('setDelegateTokenAction', error);
+    logger.error('setDelegateTokenAction', error);
     throw error;
   }
 }

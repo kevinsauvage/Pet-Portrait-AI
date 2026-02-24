@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import { logger } from '@/core/utils/logger';
 import { removeFromWishlist } from '@/domains/wishlist/client';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 import { Button } from '@/ui/primitives/button';
@@ -42,7 +43,7 @@ const WishlistActions = ({ product, onRemove }: WishlistActionsProps) => {
       }
     } catch (error) {
       toast.error('Something went wrong');
-      console.error('Error removing from wishlist:', error);
+      logger.error('wishlist.remove', error);
     } finally {
       setIsRemoving(false);
     }
@@ -60,7 +61,7 @@ const WishlistActions = ({ product, onRemove }: WishlistActionsProps) => {
       await handleAddToCart(variant.id, 1);
     } catch (error) {
       toast.error('Failed to add to cart');
-      console.error('Error adding to cart:', error);
+      logger.error('wishlist.add-to-cart', error);
     } finally {
       setIsAddingToCart(false);
     }

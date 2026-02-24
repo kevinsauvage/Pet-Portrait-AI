@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 
 import config from '@/core/config';
-import { safeLogError } from '@/core/utils/api-responses';
 import { getSecureCookieOptions } from '@/core/utils/cookie-security';
+import { logger } from '@/core/utils/logger';
 
 import { storefrontSdk } from '../client';
 import type { CustomerAccessToken } from '../storefront';
@@ -49,7 +49,7 @@ const renewTokenIfNeeded = async (token: string): Promise<CustomerAccessToken | 
     const { customerAccessToken, userErrors } = response?.customerAccessTokenRenew || {};
 
     if (userErrors && userErrors.length > 0) {
-      safeLogError('renewTokenIfNeeded - user errors', userErrors);
+      logger.error('renewTokenIfNeeded - user errors', userErrors);
       return null;
     }
 
@@ -60,7 +60,7 @@ const renewTokenIfNeeded = async (token: string): Promise<CustomerAccessToken | 
 
     return null;
   } catch (error) {
-    safeLogError('renewTokenIfNeeded', error);
+    logger.error('renewTokenIfNeeded', error);
     return null;
   }
 };

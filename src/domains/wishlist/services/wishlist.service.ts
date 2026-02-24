@@ -1,7 +1,7 @@
 import { revalidatePath } from 'next/cache';
 
 import config from '@/core/config';
-import { safeLogError } from '@/core/utils/api-responses';
+import { logger } from '@/core/utils/logger';
 import { adminSdk, storefrontSdk } from '@/infra/shopify/client';
 import { getShopifyToken } from '@/infra/shopify/server';
 import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
@@ -40,7 +40,7 @@ export class WishlistService {
           return parsed.filter((id): id is string => typeof id === 'string');
         }
       } catch (error) {
-        safeLogError('WishlistService.getWishlistIds - parse error', error);
+        logger.error('WishlistService.getWishlistIds - parse error', error);
         return [];
       }
     }
@@ -76,7 +76,7 @@ export class WishlistService {
         .map((id) => productMap.get(id))
         .filter((p): p is ProductFieldsFragment => p !== undefined);
     } catch (error) {
-      safeLogError('WishlistService.resolveProductsByIds', error);
+      logger.error('WishlistService.resolveProductsByIds', error);
       return [];
     }
   }
@@ -115,7 +115,7 @@ export class WishlistService {
     const errors = responseMetafield?.metafieldsSet?.userErrors;
 
     if (errors && errors.length > 0) {
-      safeLogError('WishlistService.updateWishlist - MetafieldsSet errors', errors);
+      logger.error('WishlistService.updateWishlist - MetafieldsSet errors', errors);
       return {
         success: false,
         message: 'Something went wrong updating the wishlist',
@@ -135,7 +135,7 @@ export class WishlistService {
           data: parsed,
         };
       } catch (error) {
-        safeLogError('WishlistService.updateWishlist - parse response error', error);
+        logger.error('WishlistService.updateWishlist - parse response error', error);
         return {
           success: false,
           message: "Couldn't parse wishlist response",

@@ -4,6 +4,7 @@ import type { RefObject } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
+import { logger } from '@/core/utils/logger';
 import useOnClickOutside from '@/hooks/useClickOutside';
 import type { PredictiveSearchQuery } from '@/infra/shopify/storefront';
 import debounce from '@/lib/debounce';
@@ -34,7 +35,7 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
       const data = await response.json();
       setResults(data?.predictiveSearch || null);
     } catch (error) {
-      console.error('Search error:', error);
+      logger.error('search', error);
       setResults(null);
     }
   }, []);

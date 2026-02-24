@@ -1,8 +1,8 @@
 import { revalidatePath } from 'next/cache';
 
 import config from '@/core/config';
-import { safeLogError } from '@/core/utils/api-responses';
 import { handleCustomerUserErrors } from '@/core/utils/form-actions';
+import { logger } from '@/core/utils/logger';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 import { getShopifyToken } from '@/infra/shopify/server';
@@ -115,8 +115,7 @@ export class AddressService {
       customerAccessToken,
     });
 
-    const { customerUserErrors, deletedCustomerAddressId } =
-      response?.customerAddressDelete || {};
+    const { customerUserErrors, deletedCustomerAddressId } = response?.customerAddressDelete || {};
 
     if (deletedCustomerAddressId) {
       revalidatePath(config.routes.addresses);
@@ -142,7 +141,7 @@ export class AddressService {
         customerAccessToken,
       });
     } catch (error) {
-      safeLogError('AddressService.setDefaultAddress', error);
+      logger.error('AddressService.setDefaultAddress', error);
       return { error: 'Failed to set default address' };
     }
 

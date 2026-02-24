@@ -12,6 +12,7 @@ import {
 import { isApiAuthConfigured } from '@/core/utils/api-auth';
 import { issueApiSessionCookie } from '@/core/utils/api-session';
 import { getStandardCookieOptions } from '@/core/utils/cookie-security';
+import { logger } from '@/core/utils/logger';
 import { getClientContext } from '@/core/utils/request-identity';
 import { setDelegateTokenAction } from '@/infra/shopify/actions';
 
@@ -58,10 +59,7 @@ async function proxy(request: NextRequest) {
   try {
     await setDelegateTokenAction();
   } catch (error) {
-    console.error(
-      '[Middleware] delegate token failed:',
-      error instanceof Error ? error.message : String(error),
-    );
+    logger.error('middleware.delegate-token', error);
   }
 
   const cookieShopify = cookies.get(appConfig.cookies.shopifyToken);

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
+import { logger } from '@/core/utils/logger';
 import SpinnerLoader from '@/ui/components/shared/SpinnerLoader';
 import {
   AlertDialog,
@@ -16,12 +17,7 @@ import {
   AlertDialogTrigger,
 } from '@/ui/primitives/alert-dialog';
 import { Button } from '@/ui/primitives/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/ui/primitives/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/ui/primitives/tooltip';
 
 import { Trash2 } from 'lucide-react';
 
@@ -31,7 +27,10 @@ const CartRemove = ({ id, productTitle }: { id: string; productTitle?: string })
   const { removeFromCart } = useCartContext();
 
   const handleRemove = async () => {
-    if (!id) return console.error('Missing line item to delete');
+    if (!id) {
+      logger.error('cart.remove', new Error('Missing line item to delete'));
+      return;
+    }
     setLoading(true);
     try {
       await removeFromCart(id);

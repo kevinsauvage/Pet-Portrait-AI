@@ -1,3 +1,4 @@
+import { logger } from '@/core/utils/logger';
 import { getStorefrontAccessToken } from '@/infra/shopify/tokens/storefront-token';
 
 import { GraphQLClient } from 'graphql-request';
@@ -105,7 +106,7 @@ const fetchAll = async <K extends string>(
     } catch (error) {
       errors += 1;
       if (items.length > 0 || errors >= MAX_ERRORS) break;
-      console.warn(`Error fetching ${key}:`, error instanceof Error ? error.message : error);
+      logger.warn(`sitemap.fetchAll.${key}`, error);
       // eslint-disable-next-line no-promise-executor-return
       await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** (errors - 1))); // eslint-disable-line no-await-in-loop
     }

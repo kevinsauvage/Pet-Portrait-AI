@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { logger } from '@/core/utils/logger';
 import type { CartUserError, CustomerUserError, UserError } from '@/infra/shopify/storefront';
-
-import * as Sentry from '@sentry/nextjs';
 
 export type ApiErrorResponse = {
   error: string;
@@ -39,29 +38,6 @@ const NO_CACHE_HEADERS = {
   Pragma: 'no-cache',
   Expires: '0',
 } as const;
-
-function sanitizeErrorMessage(message: string): string {
-  return message
-    .replace(/[a-zA-Z0-9]{32,}/g, '[REDACTED]')
-    .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL_REDACTED]')
-    .replace(/password[=:]\s*[^\s]+/gi, 'password=[REDACTED]')
-    .replace(/(api[_-]?key|access[_-]?token|secret)[=:]\s*[^\s]+/gi, '$1=[REDACTED]');
-}
-
-export function safeLogError(context: string, error: unknown): void {
-  const errorMessage =
-    error instanceof Error
-      ? sanitizeErrorMessage(error.message)
-      : typeof error === 'string'
-        ? sanitizeErrorMessage(error)
-        : 'Unknown error';
-
-  console.error(`[${context}]`, errorMessage);
-
-  if (error instanceof Error && process.env.NEXT_PUBLIC_SENTRY_DSN) {
-    Sentry.captureException(error, { tags: { context } });
-  }
-}
 
 export function createErrorResponse(
   error: string,
@@ -140,7 +116,7 @@ export function getErrorStatus(
 }
 
 export function handleApiError(context: string, error: unknown, defaultMessage: string) {
-  safeLogError(context, error);
+  logger.error(context, error);
   const status = getErrorStatus(error);
   return createErrorResponse(defaultMessage, {
     message: error instanceof Error ? error.message : 'An unexpected error occurred',
