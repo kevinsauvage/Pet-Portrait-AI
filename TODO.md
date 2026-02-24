@@ -16,18 +16,6 @@
 - **Where:** `docs/api/` or inline in `src/app/api/`.
 - **How:** Add OpenAPI/Swagger spec or use Next.js route metadata. Document auth, rate limits, and error formats.
 
-### 9. Remove or fix `Xxx` placeholder enum
-
-- **What:** Clean up generated/placeholder enum values.
-- **Where:** `src/infra/shopify/storefront/index.ts`, `src/infra/shopify/admin/index.ts`.
-- **How:** Regenerate GraphQL types or remove `Xxx = 'XXX'` from enums if it’s a codegen placeholder.
-
-### 8. Request size limits for API routes
-
-- **What:** Prevent large payloads from exhausting memory.
-- **Where:** `src/app/api/`, upload routes.
-- **How:** Configure `bodyParser` size limits in Next.js API routes. Add explicit limits for AI and upload endpoints.
-
 ---
 
 ## Low Priority
