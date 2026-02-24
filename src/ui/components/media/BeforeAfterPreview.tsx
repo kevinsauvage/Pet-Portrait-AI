@@ -42,7 +42,7 @@ const BeforeAfterPreview = ({
   return (
     <div className={cn('w-full', className)}>
       <div className="relative overflow-hidden rounded-3xl border border-border bg-muted/50 shadow-md">
-        <div className={cn('relative w-full', aspectClassName)}>
+        <div className={cn('relative w-full overflow-hidden', aspectClassName)}>
           <Image
             src={after.src}
             alt={after.alt}
@@ -51,18 +51,22 @@ const BeforeAfterPreview = ({
             priority={priority}
             className="object-cover"
           />
-          <div
-            className="absolute inset-y-0 left-0 overflow-hidden"
-            style={{ width: `${value}%` }}
-          >
-            <Image
-              src={before.src}
-              alt={before.alt}
-              fill
-              sizes={sizes}
-              priority={priority}
-              className="object-cover"
-            />
+          <div className="absolute inset-0">
+            <div
+              className="relative h-full w-full overflow-hidden"
+              style={{
+                clipPath: `inset(0 ${100 - value}% 0 0)`,
+              }}
+            >
+              <Image
+                src={before.src}
+                alt={before.alt}
+                fill
+                sizes={sizes}
+                priority={priority}
+                className="object-cover"
+              />
+            </div>
           </div>
           <div
             className="pointer-events-none absolute inset-y-0"
