@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import useUserContext from '@/contexts/UserContext/useUserContext';
 import { logger } from '@/core/utils/logger';
+import { sanitizeHtml } from '@/core/utils/sanitize';
 import { canPurchase, isInventoryTracked } from '@/domains/products/utils/inventory';
 import useProductSelection from '@/hooks/useProductSelection';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
@@ -151,7 +152,7 @@ const ProductDescriptionClient = ({
             {descriptionHtml ? (
               <div
                 className="product-description prose prose-sm max-w-none dark:prose-invert"
-                dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(descriptionHtml) }}
               />
             ) : (
               <p className="text-body text-secondary">

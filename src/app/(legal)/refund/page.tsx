@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
+import { sanitizeHtml } from '@/core/utils/sanitize';
 import { getRefundPolicy } from '@/domains/legal/services/policies.service';
 import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import PageBanner from '@/ui/components/shared/PageBanner';
@@ -25,7 +26,7 @@ const RefundPage = async () => {
         <Breadcrumbs lastElement={title} />
       </PageBanner>
       <MainContent>
-        {refundPolicy?.body && <div dangerouslySetInnerHTML={{ __html: refundPolicy.body }} />}
+        {refundPolicy?.body && <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(refundPolicy.body) }} />}
       </MainContent>
     </div>
   );

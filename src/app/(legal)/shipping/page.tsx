@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
+import { sanitizeHtml } from '@/core/utils/sanitize';
 import { getShippingPolicy } from '@/domains/legal/services/policies.service';
 import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import PageBanner from '@/ui/components/shared/PageBanner';
@@ -23,7 +24,7 @@ const ShippingPage = async () => {
         <Breadcrumbs lastElement={title} />
       </PageBanner>
       <MainContent>
-        {shippingPolicy?.body && <div dangerouslySetInnerHTML={{ __html: shippingPolicy.body }} />}
+        {shippingPolicy?.body && <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(shippingPolicy.body) }} />}
       </MainContent>
     </div>
   );
