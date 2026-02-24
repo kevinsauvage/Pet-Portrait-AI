@@ -44,8 +44,8 @@ const storefrontClient = createStorefrontClient('default');
 const defaultWrapper: SdkFunctionWrapper = async (
   action,
   operationName,
-  operationType,
-  variables: Record<string, unknown>,
+  _operationType,
+  _variables: Record<string, unknown>,
 ) => {
   const extraHeader = await buildExtraHeaders({});
   try {

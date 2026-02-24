@@ -25,7 +25,6 @@ export async function withRetry<T>(
   const { maxAttempts, baseDelayMs = 100, maxDelayMs = 1000, isSuccess, onAttemptFailed } = options;
 
   let lastResult: T | undefined;
-  let lastError: unknown;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
@@ -37,14 +36,13 @@ export async function withRetry<T>(
         return result;
       }
 
-      lastError = new Error(
+      const attemptError = new Error(
         typeof result === 'object' && result !== null && 'error' in result
           ? String((result as { error: unknown }).error)
           : 'Unexpected response format',
       );
-      onAttemptFailed?.(attempt, maxAttempts, lastError);
+      onAttemptFailed?.(attempt, maxAttempts, attemptError);
     } catch (error) {
-      lastError = error;
       onAttemptFailed?.(attempt, maxAttempts, error);
     }
 

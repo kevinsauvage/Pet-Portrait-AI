@@ -28,7 +28,9 @@ export async function fetchWithRetry(
       return await fetch(input, init);
     } catch (err) {
       if (attempt === maxAttempts || !isTransientError(err)) throw err;
-      await new Promise((r) => setTimeout(r, initialDelayMs * 2 ** (attempt - 1)));
+      await new Promise<void>((resolve) => {
+        setTimeout(resolve, initialDelayMs * 2 ** (attempt - 1));
+      });
     }
   }
 

@@ -75,7 +75,7 @@ export async function apiClient<T = unknown>(
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error occurred during API request');
+    throw new Error('Unknown error occurred during API request', { cause: error });
   }
 }
 

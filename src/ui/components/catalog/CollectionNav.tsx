@@ -28,7 +28,7 @@ const CollectionNav = ({
             menuItems.map((menuItem) => {
               if (typeof menuItem.url !== 'string') return null;
 
-              let href = menuItem.url;
+              let href: string;
               try {
                 const parsed = new URL(menuItem.url);
                 href = parsed.pathname + parsed.searchParams.toString();
@@ -36,9 +36,7 @@ const CollectionNav = ({
                 href = menuItem.url;
               }
 
-              const isActive = menuItem.url
-                ?.toLowerCase()
-                .includes(collectionSlug?.toLowerCase());
+              const isActive = menuItem.url?.toLowerCase().includes(collectionSlug?.toLowerCase());
 
               return (
                 <li key={menuItem.id} className="shrink-0">
