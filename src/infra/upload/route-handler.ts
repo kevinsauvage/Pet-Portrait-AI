@@ -17,7 +17,7 @@ export const uploadthingHandler = createRouteHandler({
 
 export async function ensureUploadAuth(request: NextRequest) {
   const { identifier } = getClientContext(request.headers);
-  const rateLimit = checkRateLimit(identifier, { prefix: 'upload', maxRequests: 12 });
+  const rateLimit = await checkRateLimit(identifier, { prefix: 'upload', maxRequests: 12 });
   if (!rateLimit.allowed) {
     return createErrorResponse('Too many upload requests. Please try again later.', {
       status: HTTP_STATUS.TOO_MANY_REQUESTS,

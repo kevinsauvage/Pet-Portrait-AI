@@ -1,17 +1,5 @@
 ## High Priority
 
-### 1. Add test infrastructure
-
-- **What:** Set up testing
-- **Where:** Root config + `src/**/*.test.ts`, `src/**/*.spec.ts`, `e2e/`.
-- **How:** Add Vitest + React Testing Library. Create `vitest.config.ts`, add `test` script. Start with domain services and API routes.
-
-### 3. Production-ready rate limiting
-
-- **What:** Replace in-memory rate limiter for multi-instance deployments.
-- **Where:** `src/infra/rate-limit/rate-limit.ts`, `src/infra/upload/route-handler.ts`, AI routes.
-- **How:** Use Vercel KV or Upstash Redis. Add `RATE_LIMIT_*` env vars. Implement `checkRateLimit` with Redis backend; keep in-memory fallback for dev.
-
 ### 4. Per-variant Gelato product UIDs
 
 - **What:** Remove hardcoded Gelato product UIDs; support per-variant mapping.

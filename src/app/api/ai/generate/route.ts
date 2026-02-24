@@ -20,7 +20,7 @@ export const maxDuration = 60;
 export async function POST(request: NextRequest) {
   try {
     const { identifier } = getClientContext(request.headers);
-    const rateLimit = checkRateLimit(identifier, { prefix: 'ai' });
+    const rateLimit = await checkRateLimit(identifier, { prefix: 'ai' });
     if (!rateLimit.allowed) {
       return createErrorResponse('Too many requests. Please try again later.', {
         status: HTTP_STATUS.TOO_MANY_REQUESTS,
