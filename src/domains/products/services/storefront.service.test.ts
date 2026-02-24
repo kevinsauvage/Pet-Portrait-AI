@@ -22,7 +22,7 @@ describe('ShopifyStorefrontService', () => {
   it('getProducts returns products', async () => {
     const result = await ShopifyStorefrontService.getProducts(8);
     expect(result).toHaveLength(1);
-    expect(result[0].title).toBe('Product 1');
+    expect(result?.[0]?.title).toBe('Product 1');
   });
 
   it('getProductByHandle returns product', async () => {

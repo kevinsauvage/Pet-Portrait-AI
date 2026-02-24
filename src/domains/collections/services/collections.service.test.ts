@@ -41,7 +41,7 @@ describe('collections.service', () => {
   it('getAllCollections returns collection edges', async () => {
     const result = await getAllCollections();
     expect(result).toHaveLength(1);
-    expect(result[0].node.id).toBe('col-1');
+    expect(result?.[0]?.node.id).toBe('col-1');
   });
 
   it('getCollectionSeo returns collection seo data', async () => {

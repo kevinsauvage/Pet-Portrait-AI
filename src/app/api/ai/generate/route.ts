@@ -1,13 +1,18 @@
 import { type NextRequest } from 'next/server';
 
 import { requireApiProtection } from '@/core/utils/api-protection';
-import { createErrorResponse, createSuccessResponse, handleApiError, HTTP_STATUS } from '@/core/utils/api-responses';
+import {
+  createErrorResponse,
+  createSuccessResponse,
+  handleApiError,
+  HTTP_STATUS,
+} from '@/core/utils/api-responses';
 import { getClientContext } from '@/core/utils/request-identity';
 import { enforceRequestSizeLimit } from '@/core/utils/request-size';
 import { formatZodErrorMessage } from '@/core/utils/zod';
-import { generatePetPortraitVariations } from '@/domains/ai/actions';
 import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
+import { generatePetPortraitVariations } from '@/domains/ai/services';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
 export const dynamic = 'force-dynamic';

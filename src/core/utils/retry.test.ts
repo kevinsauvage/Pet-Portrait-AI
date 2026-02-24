@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
-
 import { withRetry } from './retry';
+
+import { describe, expect, it, vi } from 'vitest';
 
 describe('withRetry', () => {
   it('returns result on first successful attempt', async () => {
-    const fn = vi.fn<[], Promise<string>>().mockResolvedValue('ok');
+    const fn = vi.fn().mockResolvedValue('ok');
 
     const result = await withRetry(fn, { maxAttempts: 3 });
 
@@ -14,10 +14,7 @@ describe('withRetry', () => {
 
   it('retries when fn throws and eventually succeeds', async () => {
     const error = new Error('temporary failure');
-    const fn = vi
-      .fn<[], Promise<string>>()
-      .mockRejectedValueOnce(error)
-      .mockResolvedValueOnce('ok');
+    const fn = vi.fn().mockRejectedValueOnce(error).mockResolvedValueOnce('ok');
 
     const onAttemptFailed = vi.fn();
 
@@ -35,10 +32,8 @@ describe('withRetry', () => {
   });
 
   it('returns last result when isSuccess is never satisfied', async () => {
-    type Result = { ok: boolean; value: number };
-
     const fn = vi
-      .fn<[], Promise<Result>>()
+      .fn()
       .mockResolvedValueOnce({ ok: false, value: 1 })
       .mockResolvedValueOnce({ ok: false, value: 2 });
 
@@ -48,7 +43,7 @@ describe('withRetry', () => {
       maxAttempts: 2,
       baseDelayMs: 1,
       maxDelayMs: 1,
-      isSuccess: (res) => res.ok,
+      isSuccess: (res: { ok: boolean; value: number }): boolean => res.ok,
       onAttemptFailed,
     });
 
@@ -57,7 +52,7 @@ describe('withRetry', () => {
   });
 
   it('returns undefined when all attempts throw', async () => {
-    const fn = vi.fn<[], Promise<string>>().mockRejectedValue(new Error('permanent failure'));
+    const fn = vi.fn().mockRejectedValue(new Error('permanent failure'));
 
     const result = await withRetry(fn, {
       maxAttempts: 2,
@@ -68,4 +63,3 @@ describe('withRetry', () => {
     expect(result).toBeUndefined();
   });
 });
-

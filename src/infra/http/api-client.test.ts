@@ -1,6 +1,6 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-
 import { apiClient } from './api-client';
+
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const originalFetch = globalThis.fetch;
 
@@ -24,7 +24,7 @@ describe('apiClient', () => {
     const result = await apiClient<typeof data>('/api/test', { method: 'GET' });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [url, options] = fetchMock.mock.calls[0];
+    const [url, options] = fetchMock.mock.calls?.[0] ?? [undefined, undefined];
     expect(url).toBe('https://example.com/api/test');
     expect((options as RequestInit).method).toBe('GET');
     expect(result).toEqual(data);
@@ -45,7 +45,7 @@ describe('apiClient', () => {
     await apiClient(absoluteUrl, { method: 'GET' });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [url] = fetchMock.mock.calls[0];
+    const [url] = fetchMock.mock.calls?.[0] ?? [undefined];
     expect(url).toBe(absoluteUrl);
   });
 
@@ -61,9 +61,7 @@ describe('apiClient', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
-    await expect(apiClient('/api/fail', { method: 'GET' })).rejects.toThrow(
-      'Bad things happened',
-    );
+    await expect(apiClient('/api/fail', { method: 'GET' })).rejects.toThrow('Bad things happened');
   });
 
   it('throws when API returns error response shape', async () => {
@@ -77,9 +75,7 @@ describe('apiClient', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
-    await expect(apiClient('/api/error', { method: 'GET' })).rejects.toThrow(
-      'Application error',
-    );
+    await expect(apiClient('/api/error', { method: 'GET' })).rejects.toThrow('Application error');
   });
 
   it('wraps non-Error throws in generic Error with cause', async () => {
@@ -101,4 +97,3 @@ describe('apiClient', () => {
     expect(err.cause).toBe(originalError);
   });
 });
-

@@ -8,8 +8,8 @@ import {
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
 import { formatZodErrorMessage } from '@/core/utils/zod';
-import { generatePetPortraitVariations } from '@/domains/ai/actions';
 import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
+import { generatePetPortraitVariations } from '@/domains/ai/services';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
