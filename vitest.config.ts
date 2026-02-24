@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      'server-only': path.resolve(__dirname, 'src/__mocks__/server-only.ts'),
       '@': path.resolve(__dirname, 'src'),
       '@/app': path.resolve(__dirname, 'src/app'),
       '@/domains': path.resolve(__dirname, 'src/domains'),
