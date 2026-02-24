@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import AdminOrders from '@/ui/components/admin/AdminOrders';
 
 export const metadata: Metadata = generateMetadataUtil({

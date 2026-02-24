@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import seo from '@/core/config/seo';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import BeforeAfterPreview from '@/ui/components/media/BeforeAfterPreview';
 import StyleGallery from '@/ui/components/media/StyleGallery';
 import PageBanner from '@/ui/components/shared/PageBanner';

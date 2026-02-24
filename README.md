@@ -64,7 +64,6 @@ src/
     cookies/              # Server cookie actions (actions.ts)
     format/               # formatPrice
     client/               # Client cookies, analytics
-    server/               # metadata (getBaseUrl, generateMetadata)
     cn.ts, debounce.ts, consents.ts, …
 
   ui/                     # Components, layouts, primitives
@@ -79,17 +78,17 @@ Imports use **direct paths** (e.g. `@/domains/user/get-user`, `@/infra/shopify/c
 
 ## Tech Stack
 
-| Category   | Technology                          |
-| ---------- | ----------------------------------- |
-| Framework  | Next.js 16, React 19, TypeScript 5  |
-| Styling   | Tailwind CSS v4, Radix UI, lucide-react |
-| APIs      | Shopify Storefront GraphQL, Shopify Admin API |
-| AI        | OpenAI API                          |
-| Validation| Zod v4                              |
-| GraphQL   | graphql-request, GraphQL Codegen    |
-| Uploads   | UploadThing                          |
-| Email     | Nodemailer                          |
-| Monitoring| Sentry                              |
+| Category   | Technology                                    |
+| ---------- | --------------------------------------------- |
+| Framework  | Next.js 16, React 19, TypeScript 5            |
+| Styling    | Tailwind CSS v4, Radix UI, lucide-react       |
+| APIs       | Shopify Storefront GraphQL, Shopify Admin API |
+| AI         | OpenAI API                                    |
+| Validation | Zod v4                                        |
+| GraphQL    | graphql-request, GraphQL Codegen              |
+| Uploads    | UploadThing                                   |
+| Email      | Nodemailer                                    |
+| Monitoring | Sentry                                        |
 
 ---
 

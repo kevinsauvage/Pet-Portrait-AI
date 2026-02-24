@@ -214,12 +214,4 @@ export class WishlistService {
     revalidatePath(config.routes.wishlist);
     revalidatePath('/', 'layout');
   }
-
-  static getErrorStatus(error: unknown): number {
-    if (error instanceof Error) {
-      if (error.message === 'User not authenticated') return 401;
-      if (error.message.includes('not found')) return 404;
-    }
-    return 500;
-  }
 }

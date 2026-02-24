@@ -1,5 +1,6 @@
 import type { ApiErrorResponse, ApiResponse } from '@/core/utils/api-responses';
-import { getBaseUrl } from '@/lib/server/metadata';
+import { extractErrorMessage } from '@/core/utils/extract-error-message';
+import { getBaseUrl } from '@/core/utils/metadata';
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 
@@ -26,18 +27,6 @@ function getAbsoluteUrl(path: string): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
   return `${baseUrl}${normalizedPath}`;
-}
-
-function extractErrorMessage(errorData: unknown, fallback: string): string {
-  if (typeof errorData === 'object' && errorData !== null) {
-    if ('error' in errorData && typeof errorData.error === 'string') {
-      return errorData.error;
-    }
-    if ('message' in errorData && typeof errorData.message === 'string') {
-      return errorData.message;
-    }
-  }
-  return fallback;
 }
 
 function isErrorResponse(data: unknown): data is ApiErrorResponse {

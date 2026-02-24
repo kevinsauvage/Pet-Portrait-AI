@@ -3,9 +3,9 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { SEARCH_SORT_OPTIONS } from '@/domains/search/constants/sort-options';
 import { type SearchParameters, searchProducts } from '@/domains/search/services/search.service';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Filters from '@/ui/components/catalog/Filters';
 import ListingHeader from '@/ui/components/catalog/ListingHeader';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';

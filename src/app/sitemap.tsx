@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next';
 
 import config, { sitemap as sitemapConfig } from '@/core/config';
+import { getBaseUrl } from '@/core/utils/metadata';
 import { fetchShopifySitemapEntries } from '@/infra/shopify/sitemap';
-import { getBaseUrl } from '@/lib/server/metadata';
 
 export const dynamic = 'force-static';
 export const revalidate = config.constants.revalidate.catalog;

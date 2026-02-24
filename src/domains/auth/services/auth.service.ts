@@ -1,6 +1,7 @@
 import config from '@/core/config';
 import { safeLogError } from '@/core/utils/api-responses';
 import { handleCustomerUserErrors, handleUserErrors } from '@/core/utils/form-actions';
+import { withRetry } from '@/core/utils/retry';
 import { getUser } from '@/domains/user/get-user';
 import { api } from '@/infra/http/api-client';
 import { storefrontSdk } from '@/infra/shopify/client';
@@ -151,91 +152,33 @@ export class AuthService {
   private static async updateCartBuyerIdentity(
     token: CustomerAccessToken['accessToken'],
     user: NonNullable<Awaited<ReturnType<typeof getUser>>>,
-    retries = 3,
   ) {
-    let lastError: unknown = null;
-
-    for (let attempt = 1; attempt <= retries; attempt++) {
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        const response = await api.patch('/api/cart/buyer-identity', {
+    await withRetry(
+      () =>
+        api.patch<{ data?: unknown }>('/api/cart/buyer-identity', {
           customerAccessToken: token,
           user: {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
           },
-        });
-
-        if (this.isSuccessResponse(response)) {
-          return;
-        }
-
-        lastError = new Error(this.extractErrorMessage(response));
-        this.handleFailedAttempt(attempt, retries, lastError, response);
-
-        if (attempt === retries) {
-          return;
-        }
-      } catch (error) {
-        lastError = error;
-        this.handleFailedAttempt(attempt, retries, error);
-
-        if (attempt === retries) {
-          return;
-        }
-      }
-
-      if (attempt < retries) {
-        await this.waitForBackoff(attempt - 1);
-      }
-    }
-  }
-
-  private static isSuccessResponse(response: unknown): response is { data: unknown } {
-    return (
-      response !== null &&
-      response !== undefined &&
-      typeof response === 'object' &&
-      'data' in response
+        }),
+      {
+        maxAttempts: 3,
+        baseDelayMs: 100,
+        maxDelayMs: 1000,
+        isSuccess: (response) =>
+          response !== null && typeof response === 'object' && 'data' in response,
+        onAttemptFailed: (attempt, maxAttempts, error) => {
+          const context =
+            attempt === maxAttempts
+              ? `AuthService.updateCartBuyerIdentity - failed after ${maxAttempts} attempts`
+              : `AuthService.updateCartBuyerIdentity - attempt ${attempt}/${maxAttempts} failed`;
+          if (attempt === maxAttempts || process.env.NODE_ENV === 'development') {
+            console.warn(context, error);
+          }
+        },
+      },
     );
-  }
-
-  private static extractErrorMessage(response: unknown): string {
-    if (
-      response &&
-      typeof response === 'object' &&
-      'error' in response &&
-      typeof (response as { error: unknown }).error === 'string'
-    ) {
-      return (response as { error: string }).error;
-    }
-    return 'Unexpected response format: missing data property';
-  }
-
-  private static async waitForBackoff(attempt: number): Promise<void> {
-    const delay = Math.min(100 * Math.pow(2, attempt - 1), 1000);
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, delay);
-    });
-  }
-
-  private static handleFailedAttempt(
-    attempt: number,
-    retries: number,
-    error: unknown,
-    response?: unknown,
-  ): void {
-    const isLastAttempt = attempt === retries;
-
-    const context = isLastAttempt
-      ? `AuthService.updateCartBuyerIdentity - failed after ${retries} attempts`
-      : `AuthService.updateCartBuyerIdentity - attempt ${attempt}/${retries} failed`;
-
-    if (isLastAttempt || process.env.NODE_ENV === 'development') {
-      console.warn(context, response ? { error, response } : error);
-    }
   }
 }

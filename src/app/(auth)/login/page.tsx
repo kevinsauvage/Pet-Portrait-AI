@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import AuthShell from '@/ui/components/auth/AuthShell';
 import LoginForm from '@/ui/components/auth/LoginForm';
 

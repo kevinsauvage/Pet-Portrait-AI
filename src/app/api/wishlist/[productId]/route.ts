@@ -3,6 +3,7 @@ import { type NextRequest } from 'next/server';
 import {
   createErrorResponse,
   createSuccessResponse,
+  handleApiError,
   HTTP_STATUS,
 } from '@/core/utils/api-responses';
 import { getUser } from '@/domains/user/get-user';
@@ -43,10 +44,10 @@ export async function DELETE(
       noCache: true,
     });
   } catch (error) {
-    const status = WishlistService.getErrorStatus(error);
-    return createErrorResponse('Failed to remove product from wishlist', {
-      message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      status,
-    });
+    return handleApiError(
+      'DELETE /api/wishlist/[productId]',
+      error,
+      'Failed to remove product from wishlist',
+    );
   }
 }

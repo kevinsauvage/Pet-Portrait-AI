@@ -3,9 +3,9 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { AI_ART_STYLES } from '@/domains/ai/ai-portrait/types';
 import { getHomePageData } from '@/domains/home/services/home.service';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/catalog/CollectionGrid';
 import StylePreview from '@/ui/components/create/StylePreview';
 import BeforeAfterPreview from '@/ui/components/media/BeforeAfterPreview';

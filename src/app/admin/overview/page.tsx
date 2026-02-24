@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAdminGenerationSnapshot } from '@/domains/ai/services/admin-dashboard.service';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import AdminOverview from '@/ui/components/admin/AdminOverview';
 
 export const metadata: Metadata = generateMetadataUtil({

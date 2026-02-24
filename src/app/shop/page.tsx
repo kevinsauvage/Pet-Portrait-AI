@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAllCollections } from '@/domains/collections/services/collections.service';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import CollectionGrid from '@/ui/components/catalog/CollectionGrid';
 import HowItWorks from '@/ui/components/shared/HowItWorks';
 import PageBanner from '@/ui/components/shared/PageBanner';

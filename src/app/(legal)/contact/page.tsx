@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import ContactForm from '@/ui/components/shared/ContactForm';
 import PageBanner from '@/ui/components/shared/PageBanner';

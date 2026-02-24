@@ -61787,9 +61787,15 @@ export type ShopifyPaymentsJpChargeStatementDescriptor = ShopifyPaymentsChargeSt
   __typename?: 'ShopifyPaymentsJpChargeStatementDescriptor';
   /** The default charge statement descriptor. */
   default?: Maybe<Scalars['String']['output']>;
-  /** The charge statement descriptor in kana. */
+  /**
+   * The charge statement descriptor in kana.
+   * @deprecated This field is deprecated and will be removed in a future release.
+   */
   kana?: Maybe<Scalars['String']['output']>;
-  /** The charge statement descriptor in kanji. */
+  /**
+   * The charge statement descriptor in kanji.
+   * @deprecated This field is deprecated and will be removed in a future release.
+   */
   kanji?: Maybe<Scalars['String']['output']>;
   /** The prefix of the statement descriptor. */
   prefix: Scalars['String']['output'];

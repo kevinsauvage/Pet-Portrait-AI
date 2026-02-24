@@ -10,7 +10,7 @@ import {
   findAddressById,
   mapAddressNodeToFormData,
 } from '@/domains/address/utils/address-utils';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import AddressForm from '@/ui/components/account/AddressForm';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import { Button } from '@/ui/primitives/button';

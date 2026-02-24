@@ -7,7 +7,7 @@ This document describes the `src/` layout after the domains + infra migration.
 - **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Domains use `actions/`, `services/`, `validation/`, `models/`, `repositories/`, `mappers/` when applicable.
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
 - **core/** — App-wide config, errors, types, and shared utils (api-responses, form-actions, cookie-security).
-- **lib/** — Pure helpers and app infra: format, html, arrays, debounce, cn, consents, cookies (server actions), client (cookies, analytics), server (metadata).
+- **lib/** — Pure helpers and app infra: format, html, debounce, cn, consents, cookies (server actions), client (cookies, analytics).
 - **ui/** — Presentational components, layouts, primitives, and shared app UI building blocks (auth shell/forms, shared sections).
 - **app/** — Next.js App Router (pages, layouts, API routes).
 
@@ -51,10 +51,8 @@ src/
 ├── lib/                    # Helpers & app infra
 │   ├── cookies/            # Server cookie actions (get/set/delete)
 │   ├── client/             # Client cookies, analytics
-│   ├── server/             # metadata (getBaseUrl, generateMetadata)
 │   ├── format/             # formatPrice
-│   ├── html/               # processHtml
-│   ├── arrays/             # numberOfDifferences
+│   ├── html/               # stripHtmlToText
 │   ├── debounce.ts
 │   ├── cn.ts
 │   └── consents.ts
@@ -94,7 +92,7 @@ Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config
 - **core/config** — App config, routes, constants, seo, userFeedback.
 - **core/errors** — AppError and domain errors.
 - **core/types** — Result, PaginatedResult, Money.
-- **core/utils** — api-responses (safeLogError, createSuccessResponse, handleApiError, …), form-actions (zodErrorsToFormActionResult, handleCustomerUserErrors, …), cookie-security (getSecureCookieOptions, getStandardCookieOptions).
+- **core/utils** — api-responses, form-actions, cookie-security, metadata (getBaseUrl, generateMetadata), retry, extract-error-message.
 
 ---
 
@@ -105,7 +103,7 @@ Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config
 - **lib/cn** — classnames helper.
 - **lib/debounce** — debounce.
 - **lib/consents** — Cookie/consent helpers.
-- **lib/client**, **lib/server** — Client-side cookies/analytics and server metadata.
+- **lib/client** — Client-side cookies/analytics.
 
 ---
 

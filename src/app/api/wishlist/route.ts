@@ -62,10 +62,6 @@ export async function POST(request: NextRequest) {
       noCache: true,
     });
   } catch (error) {
-    const status = WishlistService.getErrorStatus(error);
-    return createErrorResponse('Failed to add product to wishlist', {
-      message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      status,
-    });
+    return handleApiError('POST /api/wishlist', error, 'Failed to add product to wishlist');
   }
 }

@@ -29,24 +29,24 @@ export function createSuccessResult(success: string): FormActionResult {
   return { success };
 }
 
-/**
- * Handles customerUserErrors from Shopify responses
- */
-export function handleCustomerUserErrors(
-  customerUserErrors?: CustomerUserError[] | null,
+function handleUserErrorArray<E extends CustomerUserError | UserError>(
+  errors: E[] | undefined | null,
+  key: 'customerUserErrors' | 'userErrors',
 ): FormActionResult | null {
-  if (customerUserErrors?.length) {
-    return { customerUserErrors };
+  if (errors?.length) {
+    return { [key]: errors } as FormActionResult;
   }
   return null;
 }
 
-/**
- * Handles userErrors from Shopify responses (specifically for UserError type)
- */
+/** Handles customerUserErrors from Shopify responses */
+export function handleCustomerUserErrors(
+  customerUserErrors?: CustomerUserError[] | null,
+): FormActionResult | null {
+  return handleUserErrorArray(customerUserErrors, 'customerUserErrors');
+}
+
+/** Handles userErrors from Shopify responses */
 export function handleUserErrors(userErrors?: UserError[] | null): FormActionResult | null {
-  if (userErrors?.length) {
-    return { userErrors };
-  }
-  return null;
+  return handleUserErrorArray(userErrors, 'userErrors');
 }

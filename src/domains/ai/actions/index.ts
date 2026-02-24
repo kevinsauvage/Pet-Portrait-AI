@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import type { FormActionResult } from '@/core/types/form-actions';
 import { createErrorResult, createSuccessResult } from '@/core/utils/form-actions';
+import { withRetry } from '@/core/utils/retry';
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 
@@ -18,9 +19,6 @@ import * as Sentry from '@sentry/nextjs';
 import OpenAI from 'openai';
 import { UTApi, UTFile } from 'uploadthing/server';
 import { v4 as uuidv4 } from 'uuid';
-const MAX_RETRIES = 3;
-const RETRY_DELAY_MS = 2000;
-
 function getStylePrompt(styleId: ArtStyleId): string {
   return (
     AI_ART_STYLES.find((s) => s.id === styleId)?.promptSuffix ?? 'as a beautiful artistic portrait'
@@ -37,16 +35,14 @@ async function uploadBase64ToStorage(base64Data: string, fileName: string): Prom
   return url;
 }
 
-async function generateWithRetry(
+async function generateImageWithRetry(
   openai: OpenAI,
   prompt: string,
   imageUrl: string,
 ): Promise<string> {
-  let lastError: Error | null = null;
-
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      const imageResponse = await fetch(imageUrl); // eslint-disable-line no-await-in-loop
+  const b64 = await withRetry(
+    async () => {
+      const imageResponse = await fetch(imageUrl);
       if (!imageResponse.ok) throw new Error(`Failed to fetch image: ${imageResponse.status}`);
 
       const response = await openai.images.edit({
@@ -58,19 +54,22 @@ async function generateWithRetry(
         n: 1,
       });
 
-      const b64 = response.data?.[0]?.b64_json;
-      if (!b64) throw new Error('No image data returned from OpenAI');
-      return b64;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-      Sentry.captureException(error, { tags: { context: 'ai-portrait-generate', attempt } });
-      if (attempt < MAX_RETRIES) {
-        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS * attempt)); // eslint-disable-line no-await-in-loop
-      }
-    }
-  }
+      const data = response.data?.[0]?.b64_json;
+      if (!data) throw new Error('No image data returned from OpenAI');
+      return data;
+    },
+    {
+      maxAttempts: 3,
+      baseDelayMs: 2000,
+      maxDelayMs: 6000,
+      onAttemptFailed: (attempt, _maxAttempts, error) => {
+        Sentry.captureException(error, { tags: { context: 'ai-portrait-generate', attempt } });
+      },
+    },
+  );
 
-  throw lastError ?? new Error('AI generation failed after retries');
+  if (!b64) throw new Error('AI generation failed after retries');
+  return b64;
 }
 
 export async function generatePetPortraitVariations(
@@ -85,7 +84,7 @@ export async function generatePetPortraitVariations(
   const prompt = `Transform this pet photo into a professional portrait ${getStylePrompt(styleId)}. Keep the pet recognizable and maintain their key features. High quality, detailed, professional artwork.`;
 
   const generationPromises = Array.from({ length: 6 }, (_, i) =>
-    generateWithRetry(openai, prompt, originalPhotoUrl).then((b64) =>
+    generateImageWithRetry(openai, prompt, originalPhotoUrl).then((b64) =>
       uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`),
     ),
   );

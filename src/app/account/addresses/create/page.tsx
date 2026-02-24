@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { createAddressAction } from '@/domains/address/actions';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import AddressFormUI from '@/ui/components/account/AddressForm';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import { Button } from '@/ui/primitives/button';

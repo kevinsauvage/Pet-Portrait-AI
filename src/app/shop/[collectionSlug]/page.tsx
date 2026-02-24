@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import config from '@/core/config';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/constants/sort-options';
 import {
   getCollectionPageData,
   getCollectionSeo,
 } from '@/domains/collections/services/collections.service';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import Filters from '@/ui/components/catalog/Filters';
 import ListingHeader from '@/ui/components/catalog/ListingHeader';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';

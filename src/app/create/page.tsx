@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import seo from '@/core/config/seo';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import CreateWizard from '@/ui/components/create/CreateWizard';
 import HowItWorks from '@/ui/components/shared/HowItWorks';
 import PageBanner from '@/ui/components/shared/PageBanner';

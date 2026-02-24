@@ -278,7 +278,12 @@ export enum ArticleSortKeys {
   UpdatedAt = 'UPDATED_AT',
 }
 
-/** Represents a generic custom attribute, such as whether an order is a customer's first. */
+/**
+ * A custom key-value pair for storing additional information on [carts](https://shopify.dev/docs/api/storefront/current/objects/Cart), [cart lines](https://shopify.dev/docs/api/storefront/current/objects/CartLine), [orders](https://shopify.dev/docs/api/storefront/current/objects/Order), and [order line items](https://shopify.dev/docs/api/storefront/current/objects/OrderLineItem). Common uses include gift wrapping requests, customer notes, and tracking whether a customer is a first-time buyer.
+ *
+ * Attributes set on a cart carry over to the resulting order after checkout. Use the [`cartAttributesUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/cartAttributesUpdate) mutation to add or modify cart attributes. For a step-by-step guide, see [managing carts with the Storefront API](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/cart/manage).
+ *
+ */
 export type Attribute = {
   __typename?: 'Attribute';
   /**
@@ -293,7 +298,10 @@ export type Attribute = {
   value?: Maybe<Scalars['String']['output']>;
 };
 
-/** The input fields for an attribute. */
+/**
+ * A custom key-value pair that stores additional information on a [cart](https://shopify.dev/docs/api/storefront/current/objects/Cart) or [cart line](https://shopify.dev/docs/api/storefront/current/objects/CartLine). Attributes capture additional information like gift messages, special instructions, or custom order details. Learn more about [managing carts with the Storefront API](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/cart/manage).
+ *
+ */
 export type AttributeInput = {
   /** Key or name of the attribute. */
   key: Scalars['String']['input'];
@@ -302,7 +310,9 @@ export type AttributeInput = {
 };
 
 /**
- * Automatic discount applications capture the intentions of a discount that was automatically applied.
+ * An [automatic discount](https://help.shopify.com/manual/discounts/discount-methods/automatic-discounts) applied to a cart or checkout without requiring a discount code. Implements the [`DiscountApplication`](https://shopify.dev/docs/api/storefront/current/interfaces/DiscountApplication) interface.
+ *
+ * Includes the discount's title, value, and allocation details that specify how the discount amount distributes across entitled line items or shipping lines.
  *
  */
 export type AutomaticDiscountApplication = DiscountApplication & {
@@ -554,7 +564,9 @@ export type BrandColors = {
 };
 
 /**
- * The input fields for obtaining the buyer's identity.
+ * Identifies a B2B buyer for the [`@inContext`](https://shopify.dev/docs/storefronts/headless/bring-your-own-stack/b2b) directive. Pass this input to contextualize Storefront API queries with data like B2B-specific pricing, quantity rules, and quantity price breaks.
+ *
+ * For B2B customers with access to multiple company locations, include the [`companyLocationId`](https://shopify.dev/docs/api/storefront/latest/input-objects/BuyerInput#fields-companyLocationId) to specify which location they're purchasing for.
  *
  */
 export type BuyerInput = {
@@ -733,7 +745,10 @@ export type CartAttributesUpdatePayload = {
   warnings: Array<CartWarning>;
 };
 
-/** The discounts automatically applied to the cart line based on prerequisites that have been met. */
+/**
+ * A discount allocation [that applies automatically](https://help.shopify.com/manual/discounts/discount-methods/automatic-discounts) to a cart line when configured conditions are met. Unlike [`CartCodeDiscountAllocation`](https://shopify.dev/docs/api/storefront/current/objects/CartCodeDiscountAllocation), automatic discounts don't require customers to enter a code.
+ *
+ */
 export type CartAutomaticDiscountAllocation = CartDiscountAllocation & {
   __typename?: 'CartAutomaticDiscountAllocation';
   /** The discount that have been applied on the cart line. */
@@ -860,7 +875,10 @@ export type CartClonePayload = {
   warnings: Array<CartWarning>;
 };
 
-/** The discount that has been applied to the cart line using a discount code. */
+/**
+ * A discount allocation applied to a cart line when a customer enters a [discount code](https://help.shopify.com/manual/discounts/discount-methods/discount-codes).
+ *
+ */
 export type CartCodeDiscountAllocation = CartDiscountAllocation & {
   __typename?: 'CartCodeDiscountAllocation';
   /** The code used to apply the discount. */
@@ -1354,7 +1372,12 @@ export type CartDirectPaymentMethodInput = {
   sessionId: Scalars['String']['input'];
 };
 
-/** The discounts that have been applied to the cart line. */
+/**
+ * A common interface for querying discount allocations regardless of how the discount was applied ([automatic](https://help.shopify.com/manual/discounts/discount-methods/automatic-discounts), [code](https://help.shopify.com/manual/discounts/discount-methods/discount-codes), or custom). Each implementation represents a different discount source.
+ *
+ * Tracks how a discount distributes across [cart lines](https://shopify.dev/docs/api/storefront/current/objects/CartLine). Each allocation includes the [`CartDiscountApplication`](https://shopify.dev/docs/api/storefront/current/objects/CartDiscountApplication) details, the discounted amount, and whether the discount targets line items or shipping.
+ *
+ */
 export type CartDiscountAllocation = {
   /** The discount that have been applied on the cart line. */
   discountApplication: CartDiscountApplication;
@@ -1365,8 +1388,10 @@ export type CartDiscountAllocation = {
 };
 
 /**
- * The discount application capture the intentions of a discount source at
- *         the time of application.
+ * Captures the intent of a discount source at the time it was applied to a cart. This includes the discount value, how it's allocated across entitled items, and which line types it targets.
+ *
+ * The actual discounted amounts on specific cart lines are represented by [`CartDiscountAllocation`](https://shopify.dev/docs/api/storefront/current/interfaces/CartDiscountAllocation) objects, which reference this application.
+ *
  */
 export type CartDiscountApplication = {
   __typename?: 'CartDiscountApplication';
@@ -1380,7 +1405,12 @@ export type CartDiscountApplication = {
   value: PricingValue;
 };
 
-/** The discount codes applied to the cart. */
+/**
+ * A discount code applied to a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart). Discount codes are case-insensitive and can be added using the [`cartDiscountCodesUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/cartDiscountCodesUpdate) mutation.
+ *
+ * The [`applicable`](https://shopify.dev/docs/api/storefront/current/objects/CartDiscountCode#field-CartDiscountCode.fields.applicable) field indicates whether the code applies to the cart's current contents, which might change as items are added or removed.
+ *
+ */
 export type CartDiscountCode = {
   __typename?: 'CartDiscountCode';
   /** Whether the discount code is applicable to the cart's current contents. */
@@ -2205,8 +2235,9 @@ export type CategoryFilter = {
 };
 
 /**
- * A collection represents a grouping of products that a shop owner can create to
- * organize them or make their shops easier to browse.
+ * A group of products [organized by a merchant](https://help.shopify.com/manual/products/collections) to make their store easier to browse. Collections can help customers discover related products by category, season, promotion, or other criteria.
+ *
+ * Query a collection's products with [filtering options](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products) like availability, price range, vendor, and tags. Each collection includes [`SEO`](https://shopify.dev/docs/api/storefront/current/objects/SEO) information, an optional [`Image`](https://shopify.dev/docs/api/storefront/current/objects/Image), and supports custom data through [`metafields`](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
  *
  */
 export type Collection = HasMetafields &
@@ -2247,8 +2278,9 @@ export type Collection = HasMetafields &
   };
 
 /**
- * A collection represents a grouping of products that a shop owner can create to
- * organize them or make their shops easier to browse.
+ * A group of products [organized by a merchant](https://help.shopify.com/manual/products/collections) to make their store easier to browse. Collections can help customers discover related products by category, season, promotion, or other criteria.
+ *
+ * Query a collection's products with [filtering options](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products) like availability, price range, vendor, and tags. Each collection includes [`SEO`](https://shopify.dev/docs/api/storefront/current/objects/SEO) information, an optional [`Image`](https://shopify.dev/docs/api/storefront/current/objects/Image), and supports custom data through [`metafields`](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
  *
  */
 export type CollectionDescriptionArgs = {
@@ -2256,8 +2288,9 @@ export type CollectionDescriptionArgs = {
 };
 
 /**
- * A collection represents a grouping of products that a shop owner can create to
- * organize them or make their shops easier to browse.
+ * A group of products [organized by a merchant](https://help.shopify.com/manual/products/collections) to make their store easier to browse. Collections can help customers discover related products by category, season, promotion, or other criteria.
+ *
+ * Query a collection's products with [filtering options](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products) like availability, price range, vendor, and tags. Each collection includes [`SEO`](https://shopify.dev/docs/api/storefront/current/objects/SEO) information, an optional [`Image`](https://shopify.dev/docs/api/storefront/current/objects/Image), and supports custom data through [`metafields`](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
  *
  */
 export type CollectionMetafieldArgs = {
@@ -2266,8 +2299,9 @@ export type CollectionMetafieldArgs = {
 };
 
 /**
- * A collection represents a grouping of products that a shop owner can create to
- * organize them or make their shops easier to browse.
+ * A group of products [organized by a merchant](https://help.shopify.com/manual/products/collections) to make their store easier to browse. Collections can help customers discover related products by category, season, promotion, or other criteria.
+ *
+ * Query a collection's products with [filtering options](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products) like availability, price range, vendor, and tags. Each collection includes [`SEO`](https://shopify.dev/docs/api/storefront/current/objects/SEO) information, an optional [`Image`](https://shopify.dev/docs/api/storefront/current/objects/Image), and supports custom data through [`metafields`](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
  *
  */
 export type CollectionMetafieldsArgs = {
@@ -2275,8 +2309,9 @@ export type CollectionMetafieldsArgs = {
 };
 
 /**
- * A collection represents a grouping of products that a shop owner can create to
- * organize them or make their shops easier to browse.
+ * A group of products [organized by a merchant](https://help.shopify.com/manual/products/collections) to make their store easier to browse. Collections can help customers discover related products by category, season, promotion, or other criteria.
+ *
+ * Query a collection's products with [filtering options](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products) like availability, price range, vendor, and tags. Each collection includes [`SEO`](https://shopify.dev/docs/api/storefront/current/objects/SEO) information, an optional [`Image`](https://shopify.dev/docs/api/storefront/current/objects/Image), and supports custom data through [`metafields`](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
  *
  */
 export type CollectionProductsArgs = {
@@ -3892,7 +3927,9 @@ export type DeliveryAddressInput = {
 };
 
 /**
- * Defines the types of available validation strategies for delivery addresses.
+ * Controls how delivery addresses are validated during cart operations. The default validation checks only the country code, while strict validation verifies all address fields against Shopify's checkout rules and rejects invalid addresses.
+ *
+ * Used by [`DeliveryAddressInput`](https://shopify.dev/docs/api/storefront/current/input-objects/DeliveryAddressInput) when setting buyer identity preferences, and by [`CartSelectableAddressInput`](https://shopify.dev/docs/api/storefront/current/input-objects/CartSelectableAddressInput) and [`CartSelectableAddressUpdateInput`](https://shopify.dev/docs/api/storefront/current/input-objects/CartSelectableAddressUpdateInput) when managing cart delivery addresses.
  *
  */
 export enum DeliveryAddressValidationStrategy {
@@ -4108,7 +4145,12 @@ export type ExternalVideo = Media &
     previewImage?: Maybe<Image>;
   };
 
-/** A filter that is supported on the parent field. */
+/**
+ * A filter option available on collection and search results pages. Each filter includes a type, display label, and selectable values that customers can use to narrow down products.
+ *
+ * The [`FilterValue`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue) objects contain an [`input`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue#field-FilterValue.fields.input) field that you can combine to [build dynamic filtering queries](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products). Merchants [configure available filters](https://help.shopify.com/manual/online-store/search-and-discovery/filters) using the Shopify Search & Discovery app.
+ *
+ */
 export type Filter = {
   __typename?: 'Filter';
   /** A unique identifier. */
@@ -4156,7 +4198,12 @@ export enum FilterType {
   PriceRange = 'PRICE_RANGE',
 }
 
-/** A selectable value within a filter. */
+/**
+ * A selectable option within a [`Filter`](https://shopify.dev/docs/api/storefront/current/objects/Filter), such as a specific color, size, or product type. Each value includes a count of matching results and a human-readable label for display.
+ *
+ * The [`input`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue#field-FilterValue.fields.input) field provides ready-to-use JSON for building dynamic filtering interfaces. You can combine the `input` values from multiple selected [`FilterValue`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue) objects to construct filter queries. Visual representations are available through the [`image`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue#field-FilterValue.fields.image) or [`swatch`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue#field-FilterValue.fields.swatch) fields when the parent filter's presentation type supports them.
+ *
+ */
 export type FilterValue = {
   __typename?: 'FilterValue';
   /** The number of results that match this filter value. */
@@ -5085,7 +5132,7 @@ export type MailingAddressInput = {
 };
 
 /**
- * Manual discount applications capture the intentions of a discount that was manually created.
+ * A discount created manually by a merchant, as opposed to [automatic discounts](https://help.shopify.com/manual/discounts/discount-methods/automatic-discounts) or [discount codes](https://help.shopify.com/manual/discounts/discount-methods/discount-codes). Implements the [`DiscountApplication`](https://shopify.dev/docs/api/storefront/current/interfaces/DiscountApplication) interface and includes a title, optional description, and the discount value as either a fixed amount or percentage.
  *
  */
 export type ManualDiscountApplication = DiscountApplication & {
@@ -5334,7 +5381,10 @@ export enum MenuItemType {
   ShopPolicy = 'SHOP_POLICY',
 }
 
-/** The merchandise to be purchased at checkout. */
+/**
+ * A [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) that a buyer intends to purchase at checkout.
+ *
+ */
 export type Merchandise = ProductVariant;
 
 /**
@@ -6632,8 +6682,7 @@ export enum PredictiveSearchLimitScope {
 }
 
 /**
- * A predictive search result represents a list of products, collections, pages, articles, and query suggestions
- * that matches the predictive search query.
+ * Returned by the [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) query to power type-ahead search experiences. Includes matching [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product), [`Collection`](https://shopify.dev/docs/api/storefront/current/objects/Collection), [`Page`](https://shopify.dev/docs/api/storefront/current/objects/Page), and [`Article`](https://shopify.dev/docs/api/storefront/current/objects/Article) objects, along with query suggestions that help customers refine their search.
  *
  */
 export type PredictiveSearchResult = {
@@ -6685,7 +6734,10 @@ export type PriceRangeFilter = {
   min?: InputMaybe<Scalars['Float']['input']>;
 };
 
-/** The value of the percentage pricing object. */
+/**
+ * A percentage discount value applied to cart items or orders. Returned as part of the [`PricingValue`](https://shopify.dev/docs/api/storefront/current/unions/PricingValue) union on [discount applications](https://shopify.dev/docs/api/storefront/current/interfaces/DiscountApplication), where it represents discounts calculated as a percentage off rather than a [fixed amount](https://shopify.dev/docs/api/storefront/current/objects/MoneyV2).
+ *
+ */
 export type PricingPercentageValue = {
   __typename?: 'PricingPercentageValue';
   /** The percentage value of the object. */
@@ -7737,14 +7789,21 @@ export type QueryRoot = {
    *
    */
   cartCompletionAttempt?: Maybe<CartCompletionAttemptResult>;
-  /** Fetch a specific `Collection` by one of its unique attributes. */
+  /**
+   * Retrieves a single [`Collection`](https://shopify.dev/docs/api/storefront/current/objects/Collection) by its ID or handle. Use the [`products`](https://shopify.dev/docs/api/storefront/current/objects/Collection#field-Collection.fields.products) field to access items in the collection.
+   *
+   */
   collection?: Maybe<Collection>;
   /**
-   * Find a collection by its handle.
+   * Retrieves a [`Collection`](https://shopify.dev/docs/api/storefront/current/objects/Collection) by its URL-friendly handle. Handles are automatically generated from collection titles but merchants can customize them.
+   *
    * @deprecated Use `collection` instead.
    */
   collectionByHandle?: Maybe<Collection>;
-  /** List of the shop’s collections. */
+  /**
+   * Returns a paginated list of the shop's [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection). Each `Collection` object includes a nested connection to its [products](https://shopify.dev/docs/api/storefront/current/objects/Collection#field-Collection.fields.products).
+   *
+   */
   collections: CollectionConnection;
   /**
    * The customer associated with the given access token. Tokens are obtained by using the
@@ -8083,8 +8142,7 @@ export type Seo = {
 };
 
 /**
- * Script discount applications capture the intentions of a discount that
- * was created by a Shopify Script.
+ * A discount application created by a Shopify Script. Implements the [`DiscountApplication`](https://shopify.dev/docs/api/storefront/current/interfaces/DiscountApplication) interface and captures the discount's value, allocation method, and targeting rules at the time the script applied it.
  *
  */
 export type ScriptDiscountApplication = DiscountApplication & {
@@ -9362,7 +9420,10 @@ export type SubmitThrottled = {
   pollAfter: Scalars['DateTime']['output'];
 };
 
-/** Color and image for visual representation. */
+/**
+ * A visual representation for filter values, containing a color, an image, or both. The [`FilterValue`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue) object's [`swatch`](https://shopify.dev/docs/api/storefront/current/objects/FilterValue#field-FilterValue.fields.swatch) field returns this when the filter's presentation is set to `SWATCH`.
+ *
+ */
 export type Swatch = {
   __typename?: 'Swatch';
   /** The swatch color. */

@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
+import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAdminGenerationSnapshot } from '@/domains/ai/services/admin-dashboard.service';
-import { generateMetadata as generateMetadataUtil } from '@/lib/server/metadata';
 import AdminNav from '@/ui/components/admin/AdminNav';
 import { Separator } from '@/ui/primitives/separator';
 

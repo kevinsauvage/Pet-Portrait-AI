@@ -120,7 +120,7 @@ export function mapShopifyUserErrors(
 
 const ERROR_STATUS_MAP: Array<[RegExp, number]> = [
   [/\b(not found|Not Found)\b/i, HTTP_STATUS.NOT_FOUND],
-  [/\b(unauthorized|Unauthorized)\b/i, HTTP_STATUS.UNAUTHORIZED],
+  [/\b(unauthorized|Unauthorized|not authenticated)\b/i, HTTP_STATUS.UNAUTHORIZED],
   [/\b(forbidden|Forbidden)\b/i, HTTP_STATUS.FORBIDDEN],
   [/\b(validation|invalid)\b/i, HTTP_STATUS.BAD_REQUEST],
 ];
