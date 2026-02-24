@@ -11,8 +11,8 @@ type RateLimitResult = { allowed: boolean; retryAfter?: number };
 const DEFAULT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60_000);
 const DEFAULT_MAX_REQUESTS = Number(process.env.RATE_LIMIT_MAX_REQUESTS ?? 5);
 
-const RATE_LIMIT_REDIS_URL = process.env.RATE_LIMIT_REDIS_URL;
-const RATE_LIMIT_REDIS_TOKEN = process.env.RATE_LIMIT_REDIS_TOKEN;
+const {RATE_LIMIT_REDIS_URL} = process.env;
+const {RATE_LIMIT_REDIS_TOKEN} = process.env;
 
 const redisClient =
   RATE_LIMIT_REDIS_URL && RATE_LIMIT_REDIS_TOKEN

@@ -1,6 +1,6 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-
 import { fetchWithRetry } from './fetch-with-retry';
+
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const originalFetch = globalThis.fetch;
 
