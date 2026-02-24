@@ -6,12 +6,6 @@
 - **Where:** Root config + `src/**/*.test.ts`, `src/**/*.spec.ts`, `e2e/`.
 - **How:** Add Vitest + React Testing Library. Create `vitest.config.ts`, add `test` script. Start with domain services and API routes.
 
-### 2. Validate required environment variables at startup
-
-- **What:** Fail fast with clear errors when critical env vars are missing.
-- **Where:** `src/core/config/validation.ts`.
-- **How:** Extend `validateConfig()` to check `SHOPIFY_CLIENT_ID`, `SHOPIFY_CLIENT_SECRET`, `SHOPIFY_ADMIN_URL`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`. Add optional validation for AI/UploadThing when those features are used.
-
 ### 3. Production-ready rate limiting
 
 - **What:** Replace in-memory rate limiter for multi-instance deployments.
@@ -33,12 +27,6 @@
 - **What:** Document API routes, request/response schemas, and examples.
 - **Where:** `docs/api/` or inline in `src/app/api/`.
 - **How:** Add OpenAPI/Swagger spec or use Next.js route metadata. Document auth, rate limits, and error formats.
-
-### 7. CSRF protection for forms
-
-- **What:** Protect form submissions from cross-site request forgery.
-- **Where:** Form actions, `src/app/`, server actions.
-- **How:** Use Next.js built-in CSRF handling or add CSRF tokens for non-GET requests. Validate origin/referer headers.
 
 ### 9. Remove or fix `Xxx` placeholder enum
 
@@ -72,7 +60,7 @@
 
 - **What:** Track Core Web Vitals and performance metrics.
 - **Where:** `src/app/layout.tsx`, `next.config.ts`.
-- **How:** Use `@vercel/analytics` or Sentry performance. Report LCP, FID, CLS. Add performance budgets if needed.
+- **How:** Use Sentry performance. Report LCP, FID, CLS. Add performance budgets if needed.
 
 ### 13. Cache strategy for expensive operations
 
