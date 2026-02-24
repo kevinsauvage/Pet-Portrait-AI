@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { NextWebVitalsMetric } from 'next/app';
 import { Inter } from 'next/font/google';
 
 import { CartProvider } from '@/contexts/CartContext/CartContext';
@@ -18,6 +19,8 @@ import { ThemeProvider } from '@/ui/providers/theme-provider';
 
 import '../globals.css';
 
+import * as Sentry from '@sentry/nextjs';
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -26,7 +29,7 @@ const inter = Inter({
   weight: ['400', '500', '600', '700'],
 });
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: {
     default: seo.home.title,
     template: `%s | ${siteMetadata.companyName}`,
@@ -44,6 +47,15 @@ export const metadata: Metadata = {
     site: siteMetadata.twitterHandle,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const trace = Sentry.getTraceData();
+
+  return {
+    ...baseMetadata,
+    other: (trace as Metadata['other']) ?? baseMetadata.other,
+  };
+}
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const [menus, initialCart, user, userWishlist] = await Promise.all([
@@ -91,5 +103,28 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
     </html>
   );
 };
+
+const WEB_VITAL_BUDGETS: Partial<Record<NextWebVitalsMetric['name'], number>> = {
+  LCP: 2500,
+  FID: 100,
+  CLS: 0.1,
+};
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  const budget = WEB_VITAL_BUDGETS[metric.name];
+  const isOverBudget = typeof budget === 'number' && metric.value > budget;
+
+  if (!isOverBudget) return;
+
+  Sentry.captureMessage(`Web Vital ${metric.name} over budget`, {
+    level: 'warning',
+    extra: {
+      name: metric.name,
+      value: metric.value,
+      budget,
+      id: metric.id,
+    },
+  });
+}
 
 export default RootLayout;

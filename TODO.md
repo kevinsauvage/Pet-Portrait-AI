@@ -32,17 +32,11 @@
 - **Where:** Root `.husky/`, `package.json`.
 - **How:** Add Husky + lint-staged. Run `lint`, `type-check`, and optionally `test` on staged files.
 
-### 12. Web Vitals and performance monitoring
-
-- **What:** Track Core Web Vitals and performance metrics.
-- **Where:** `src/app/layout.tsx`, `next.config.ts`.
-- **How:** Use Sentry performance. Report LCP, FID, CLS. Add performance budgets if needed.
-
 ### 13. Cache strategy for expensive operations
 
 - **What:** Reduce load from repeated expensive queries.
 - **Where:** `src/infra/cache/`, Shopify/GraphQL calls, sitemap.
-- **How:** Use existing cache infra. Add Redis or Vercel KV for production. Set TTLs for product listings, sitemap, etc.
+- **How:** Use existing cache infra. Add Redis for production. Set TTLs for product listings, sitemap, etc.
 
 ### 14. Input sanitization for user content
 
