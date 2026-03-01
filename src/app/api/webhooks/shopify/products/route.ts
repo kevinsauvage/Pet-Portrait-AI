@@ -24,7 +24,7 @@ const { SHOPIFY_WEBHOOK_SECRET } = process.env;
  * Receives Shopify products/create webhooks.
  * Looks up the matching Gelato product and writes gelato.product_id / gelato.variant_id
  * as metafields on the Shopify product and first variant.
- * No-ops when GELATO_API_KEY or GELATO_STORE_ID are not configured.
+ * Returns 404 when no Gelato product is found for the incoming Shopify product.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
     const gelatoIds = await getGelatoIdsForShopifyProduct(product);
 
     if (!gelatoIds) {
-      return createSuccessResponse({ received: true, productGid, metafieldsSet: false });
+      logger.warn(LOG, new Error(`No Gelato product found for Shopify product ${productGid}`));
+      return createErrorResponse('Gelato product not found', { status: HTTP_STATUS.NOT_FOUND });
     }
 
     const result = await setGelatoMetafieldsOnProduct({
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!result.success) {
-      logger.warn(LOG, { productGid, userErrors: result.userErrors });
+      logger.warn(LOG, new Error(`Failed to set Gelato metafields for ${productGid}`));
       return createErrorResponse('Failed to set Gelato metafields', {
         status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
       });
