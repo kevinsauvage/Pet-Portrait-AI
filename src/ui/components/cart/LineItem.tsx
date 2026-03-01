@@ -20,7 +20,7 @@ const LineItem: React.FC<{
 }> = ({ node }) => {
   if (!('merchandise' in node)) return null;
 
-  const artworkUrl = getAttribute(node, 'final_artwork_url');
+  const artworkUrl = getAttribute(node, 'Custom Artwork URL');
   const displayImage = artworkUrl ?? node.merchandise.image?.medium;
 
   const unitPrice =

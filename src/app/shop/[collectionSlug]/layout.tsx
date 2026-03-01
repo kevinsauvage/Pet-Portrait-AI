@@ -8,9 +8,9 @@ const Layout = async ({
   params,
 }: {
   children: React.ReactNode;
-  params: { collectionSlug: string };
+  params: Promise<{ collectionSlug: string }>;
 }) => {
-  const { collectionSlug } = params;
+  const { collectionSlug } = await params;
 
   const { collection, navMenu } = await getCollectionLayoutData(collectionSlug);
   const { title, description } = collection || {};

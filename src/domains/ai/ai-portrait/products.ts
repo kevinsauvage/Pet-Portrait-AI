@@ -1,29 +1,35 @@
-/**
- * AI Pet Portrait product variant IDs from Shopify.
- * Create these products in Shopify Admin and set the variant IDs here or via env.
- */
-export const AI_PORTRAIT_PRODUCTS = {
+export const PRODUCT_TYPES = [
+  'digital',
+  'canvas',
+  'poster',
+  'tshirt',
+  'hoodie',
+  'sticker',
+] as const;
+
+export type ProductType = (typeof PRODUCT_TYPES)[number];
+
+export const AI_PORTRAIT_PRODUCTS: Record<ProductType, { variantId: string }> = {
   digital: {
     variantId: process.env.NEXT_PUBLIC_AI_DIGITAL_VARIANT_ID ?? '',
-    title: 'Digital AI Pet Portrait',
-    price: '$29.99',
-    description: 'High-resolution digital download delivered via email.',
-    productType: 'digital' as const,
   },
   canvas: {
     variantId: process.env.NEXT_PUBLIC_AI_CANVAS_VARIANT_ID ?? '',
-    title: 'Canvas Print',
-    price: '$49–$109',
-    description: 'Premium canvas print, multiple sizes. Shipped via Gelato.',
-    productType: 'canvas' as const,
   },
   poster: {
     variantId: process.env.NEXT_PUBLIC_AI_POSTER_VARIANT_ID ?? '',
-    title: 'Poster / Art Print',
-    price: '$29–$79',
-    description: 'High-quality art print. Shipped via Gelato.',
-    productType: 'poster' as const,
   },
-} as const;
+  tshirt: {
+    variantId: process.env.NEXT_PUBLIC_AI_T_SHIRT_VARIANT_ID ?? '',
+  },
+  hoodie: {
+    variantId: process.env.NEXT_PUBLIC_AI_HOODIE_VARIANT_ID ?? '',
+  },
+  sticker: {
+    variantId: process.env.NEXT_PUBLIC_AI_STICKER_VARIANT_ID ?? '',
+  },
+};
 
-export type AIProductType = 'digital' | 'canvas' | 'poster';
+export function isPhysicalProduct(type: ProductType): boolean {
+  return type !== 'digital';
+}

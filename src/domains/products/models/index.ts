@@ -30,13 +30,3 @@ export const PortraitStyleSchema = z.object({
 
 export type PortraitStyle = z.infer<typeof PortraitStyleSchema>;
 
-export const PortraitProductSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  variantId: z.string(),
-  price: z.number(),
-  format: z.enum(['digital', 'canvas', 'poster']),
-});
-
-export type PortraitProduct = z.infer<typeof PortraitProductSchema>;

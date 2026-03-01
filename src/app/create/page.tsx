@@ -4,9 +4,7 @@ import type { Metadata } from 'next';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import CreateWizard from '@/ui/components/create/CreateWizard';
-import HowItWorks from '@/ui/components/shared/HowItWorks';
 import PageBanner from '@/ui/components/shared/PageBanner';
-import { CREATE_HOW_IT_WORKS } from '@/ui/content/marketing';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.title,
@@ -26,13 +24,6 @@ const CreatePage = () => {
           <CreateWizard />
         </Suspense>
       </div>
-      <HowItWorks
-        id="create-how-it-works"
-        title="Create your portrait in minutes"
-        description="Four quick steps to go from upload to checkout."
-        steps={CREATE_HOW_IT_WORKS}
-        className="bg-muted/30"
-      />
     </div>
   );
 };

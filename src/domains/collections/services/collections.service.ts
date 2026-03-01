@@ -72,6 +72,8 @@ export async function getCollectionLayoutData(collectionSlug: string): Promise<{
       identifiers: [],
     }),
   ]);
+  console.log('🚀 ~ getCollectionLayoutData ~ responseMenu:', responseMenu);
+  console.log('🚀 ~ getCollectionLayoutData ~ responseCollection:', responseCollection);
 
   const navItems = getMenuItemsForCollection(responseMenu?.menu, collectionSlug);
   const navMenu = { items: navItems } as GetMenuByHandleQuery['menu'];
@@ -86,6 +88,7 @@ export async function getCollectionPageData(
   handle: string,
   searchParameters: CollectionSearchParams = {},
 ): Promise<CollectionPageData> {
+  console.log('🚀 ~ getCollectionPageData ~ handle:', handle);
   const sortKey = resolveSortKeyFromString(
     searchParameters?.sort_key,
     ProductCollectionSortKeys,

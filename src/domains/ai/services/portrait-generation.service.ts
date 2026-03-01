@@ -12,7 +12,7 @@ import { UTApi, UTFile } from 'uploadthing/server';
 import { v4 as uuidv4 } from 'uuid';
 
 const OPENAI_EDIT_URL = 'https://api.openai.com/v1/images/edits';
-const VARIATIONS_COUNT = 6;
+const VARIATIONS_COUNT = 2;
 
 function getStylePrompt(styleId: ArtStyleId): string {
   return (
@@ -94,9 +94,7 @@ export async function generatePetPortraitVariations(
   try {
     const urls: string[] = [];
     for (let i = 0; i < VARIATIONS_COUNT; i++) {
-      // eslint-disable-next-line no-await-in-loop -- sequential to cap total retries
       const b64 = await editImageWithOpenAI(apiKey, prompt, originalPhotoUrl);
-      // eslint-disable-next-line no-await-in-loop -- sequential upload after each generation
       urls.push(await uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`));
     }
     logGenerationSuccess(generationId, styleId);

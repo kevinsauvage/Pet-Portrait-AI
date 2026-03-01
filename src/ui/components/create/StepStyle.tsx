@@ -22,10 +22,7 @@ export default function StepStyle({
   preselectedStyleId,
 }: StepStyleProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
       <div className="space-y-8">
         <Button variant="ghost" size="sm" onClick={onBack} className="gap-2">
           <ArrowLeft className="h-4 w-4" />
@@ -64,24 +61,23 @@ export default function StepStyle({
                 >
                   <button
                     onClick={() => onSelect(style.id)}
-                    className={`w-full flex items-center gap-4 p-4 rounded-xl border bg-card hover:border-primary hover:shadow-md transition-all text-left group ${
+                    className={`relative w-full flex items-center gap-4 rounded-xl border bg-card hover:border-primary hover:shadow-md transition-all text-left group ${
                       preselectedStyleId === style.id ? 'ring-2 ring-primary border-primary' : ''
                     }`}
                   >
-                    <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0">
-                      <Image
-                        src={style.previewImage}
-                        alt={style.label}
-                        fill
-                        className="object-cover"
-                        sizes="48px"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
+                    <Image
+                      src={style.previewImage}
+                      alt={style.label}
+                      className="object-cover rounded-lg max-h-[100px] max-w-[100px]"
+                      sizes="48px"
+                      width={100}
+                      height={100}
+                    />
+                    <div className="flex-1 min-w-0 p-4">
                       <p className="font-medium text-body-sm group-hover:text-primary transition-colors">
                         {style.label}
                       </p>
-                      <p className="text-caption-sm text-muted-foreground truncate">
+                      <p className="text-caption-sm text-muted-foreground line-clamp-3">
                         {style.description}
                       </p>
                     </div>

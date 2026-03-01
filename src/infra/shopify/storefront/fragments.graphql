@@ -100,6 +100,9 @@ fragment ProductVariantFields on ProductVariant {
   product {
     ...ProductDetails
   }
+  metafields(identifiers: $identifiers) {
+    ...MetafieldFields
+  }
 }
 
 fragment ProductDetails on Product {

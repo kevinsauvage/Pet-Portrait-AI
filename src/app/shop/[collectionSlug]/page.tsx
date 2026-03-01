@@ -70,6 +70,10 @@ const CollectionSlugPage = async ({
     collectionSlug,
     searchParameters,
   );
+  console.log(
+    '🚀 ~ CollectionSlugPage ~ edges:',
+    edges.map((edge) => edge.node.metafields),
+  );
   const safeSearchParameters = {
     after: searchParameters?.after,
     before: searchParameters?.before,

@@ -92,7 +92,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
       },
       {
-        hostname: 'utfs.io',
+        hostname: 'utfs.io', // UploadThing
         protocol: 'https',
       },
       {

@@ -1,152 +1,97 @@
 import {
-  fulfillGelatoFromShopifyOrder,
+  inspectShopifyOrder,
   type ShopifyOrderWebhookPayload,
 } from './shopify-orders-webhook.service';
 
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-vi.mock('./gelato-fulfillment.service', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('./gelato-fulfillment.service')>();
-  return {
-    ...mod,
-    createGelatoFulfillmentOrder: vi.fn(),
-  };
-});
-
-const { createGelatoFulfillmentOrder } = await import('./gelato-fulfillment.service');
-
-describe('fulfillGelatoFromShopifyOrder', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('returns no_printable_items when line items have no printable artwork', async () => {
+describe('inspectShopifyOrder', () => {
+  it('counts physical POD items with Custom Artwork URL', () => {
     const order: ShopifyOrderWebhookPayload = {
       id: 1,
       line_items: [
         {
           id: 1,
           properties: [
-            { name: 'final_artwork_url', value: 'https://art.com/1.png' },
+            { name: 'Custom Artwork URL', value: 'https://art.com/1.png' },
+            { name: 'product_type', value: 'canvas' },
+          ],
+        },
+        {
+          id: 2,
+          properties: [
+            { name: 'Custom Artwork URL', value: 'https://art.com/2.png' },
+            { name: 'product_type', value: 'poster' },
+          ],
+        },
+      ],
+    };
+    const result = inspectShopifyOrder(order);
+    expect(result.orderId).toBe('1');
+    expect(result.physicalPodItems).toBe(2);
+    expect(result.skippedDigitalItems).toBe(0);
+    expect(result.missingArtworkItems).toBe(0);
+  });
+
+  it('skips digital items', () => {
+    const order: ShopifyOrderWebhookPayload = {
+      id: 2,
+      line_items: [
+        {
+          id: 1,
+          properties: [
+            { name: 'Custom Artwork URL', value: 'https://art.com/1.png' },
             { name: 'product_type', value: 'digital' },
           ],
         },
       ],
-      shipping_address: {
-        first_name: 'Jane',
-        last_name: 'Doe',
-        address1: '123 Main St',
-        city: 'NY',
-        province: 'NY',
-        country: 'US',
-        zip: '10001',
-      },
     };
-    const result = await fulfillGelatoFromShopifyOrder(order);
-    expect(result).toEqual({ podOrders: 0, skippedReason: 'no_printable_items' });
-    expect(createGelatoFulfillmentOrder).not.toHaveBeenCalled();
+    const result = inspectShopifyOrder(order);
+    expect(result.physicalPodItems).toBe(0);
+    expect(result.skippedDigitalItems).toBe(1);
+    expect(result.missingArtworkItems).toBe(0);
   });
 
-  it('returns missing_shipping_address when shipping address is absent', async () => {
+  it('counts items missing Custom Artwork URL', () => {
     const order: ShopifyOrderWebhookPayload = {
-      id: 1,
+      id: 3,
+      line_items: [
+        { id: 1, properties: [{ name: 'product_type', value: 'canvas' }] },
+        { id: 2, properties: [] },
+      ],
+    };
+    const result = inspectShopifyOrder(order);
+    expect(result.physicalPodItems).toBe(0);
+    expect(result.missingArtworkItems).toBe(2);
+  });
+
+  it('treats items without product_type as physical', () => {
+    const order: ShopifyOrderWebhookPayload = {
+      id: 4,
       line_items: [
         {
           id: 1,
-          properties: [{ name: 'final_artwork_url', value: 'https://art.com/1.png' }],
+          properties: [{ name: 'Custom Artwork URL', value: 'https://art.com/1.png' }],
         },
       ],
     };
-    const result = await fulfillGelatoFromShopifyOrder(order);
-    expect(result).toEqual({ podOrders: 0, skippedReason: 'missing_shipping_address' });
-    expect(createGelatoFulfillmentOrder).not.toHaveBeenCalled();
+    const result = inspectShopifyOrder(order);
+    expect(result.physicalPodItems).toBe(1);
+    expect(result.skippedDigitalItems).toBe(0);
   });
 
-  it('returns success when Gelato order succeeds', async () => {
-    const createMock = createGelatoFulfillmentOrder as ReturnType<typeof vi.fn>;
-    createMock.mockResolvedValue({ ok: true });
-
-    const order: ShopifyOrderWebhookPayload = {
-      id: 1,
-      line_items: [
-        {
-          id: 1,
-          properties: [{ name: 'final_artwork_url', value: 'https://art.com/1.png' }],
-        },
-      ],
-      shipping_address: {
-        first_name: 'Jane',
-        last_name: 'Doe',
-        address1: '123 Main St',
-        city: 'NY',
-        province: 'NY',
-        country: 'US',
-        zip: '10001',
-      },
-    };
-    const result = await fulfillGelatoFromShopifyOrder(order);
-    expect(result).toEqual({ podOrders: 1 });
-    expect(createMock).toHaveBeenCalledWith({
-      orderId: '1',
-      lineItems: expect.any(Array),
-      shippingAddress: order.shipping_address,
-    });
+  it('handles empty line items', () => {
+    const order: ShopifyOrderWebhookPayload = { id: 5, line_items: [] };
+    const result = inspectShopifyOrder(order);
+    expect(result.orderId).toBe('5');
+    expect(result.physicalPodItems).toBe(0);
+    expect(result.skippedDigitalItems).toBe(0);
+    expect(result.missingArtworkItems).toBe(0);
   });
 
-  it('returns gelatoError when Gelato API returns not ok', async () => {
-    const createMock = createGelatoFulfillmentOrder as ReturnType<typeof vi.fn>;
-    createMock.mockResolvedValue({ ok: false, status: 500, errorText: 'Server error' });
-
-    const order: ShopifyOrderWebhookPayload = {
-      id: 1,
-      line_items: [
-        {
-          id: 1,
-          properties: [{ name: 'final_artwork_url', value: 'https://art.com/1.png' }],
-        },
-      ],
-      shipping_address: {
-        first_name: 'Jane',
-        last_name: 'Doe',
-        address1: '123 Main St',
-        city: 'NY',
-        province: 'NY',
-        country: 'US',
-        zip: '10001',
-      },
-    };
-    const result = await fulfillGelatoFromShopifyOrder(order);
-    expect(result.podOrders).toBe(1);
-    expect(result.gelatoError).toEqual({
-      status: 500,
-      message: 'Server error',
-    });
-  });
-
-  it('returns gelatoError when Gelato throws', async () => {
-    const createMock = createGelatoFulfillmentOrder as ReturnType<typeof vi.fn>;
-    createMock.mockRejectedValue(new Error('Network failure'));
-
-    const order: ShopifyOrderWebhookPayload = {
-      id: 1,
-      line_items: [
-        {
-          id: 1,
-          properties: [{ name: 'final_artwork_url', value: 'https://art.com/1.png' }],
-        },
-      ],
-      shipping_address: {
-        first_name: 'Jane',
-        last_name: 'Doe',
-        address1: '123 Main St',
-        city: 'NY',
-        province: 'NY',
-        country: 'US',
-        zip: '10001',
-      },
-    };
-    const result = await fulfillGelatoFromShopifyOrder(order);
-    expect(result.podOrders).toBe(1);
-    expect(result.gelatoError?.message).toBe('Network failure');
+  it('handles missing line_items', () => {
+    const order: ShopifyOrderWebhookPayload = { id: 6 };
+    const result = inspectShopifyOrder(order);
+    expect(result.physicalPodItems).toBe(0);
   });
 });

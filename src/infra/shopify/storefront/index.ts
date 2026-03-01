@@ -30,8 +30,9 @@ export type Scalars = {
 };
 
 /**
- * A version of the API, as defined by [Shopify API versioning](https://shopify.dev/api/usage/versioning).
- * Versions are commonly referred to by their handle (for example, `2021-10`).
+ * A version of the Shopify API. Each version has a unique handle in date-based format (YYYY-MM) or `unstable` for the development version.
+ *
+ * Shopify guarantees supported versions are stable. Unsupported versions include unstable and release candidate versions. Use the [`publicApiVersions`](https://shopify.dev/docs/api/storefront/current/queries/publicApiVersions) query to retrieve all available versions. Learn more about [Shopify API versioning](https://shopify.dev/docs/api/usage/versioning).
  *
  */
 export type ApiVersion = {
@@ -3501,7 +3502,14 @@ export enum CurrencyCode {
   Zmw = 'ZMW',
 }
 
-/** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
+/**
+ * A customer account with the shop. Includes data such as contact information, [addresses](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) and marketing preferences for logged-in customers, so they don't have to provide these details at every checkout.
+ *
+ * Access the customer through the [`customer`](https://shopify.dev/docs/api/storefront/current/queries/customer) query using a customer access token obtained from the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation.
+ *
+ * The object implements the [`HasMetafields`](https://shopify.dev/docs/api/storefront/current/interfaces/HasMetafields) interface, enabling retrieval of [custom data](https://shopify.dev/docs/apps/build/custom-data) associated with the customer.
+ *
+ */
 export type Customer = HasMetafields & {
   __typename?: 'Customer';
   /** Indicates whether the customer has consented to be sent marketing material via email. */
@@ -3546,7 +3554,14 @@ export type Customer = HasMetafields & {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-/** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
+/**
+ * A customer account with the shop. Includes data such as contact information, [addresses](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) and marketing preferences for logged-in customers, so they don't have to provide these details at every checkout.
+ *
+ * Access the customer through the [`customer`](https://shopify.dev/docs/api/storefront/current/queries/customer) query using a customer access token obtained from the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation.
+ *
+ * The object implements the [`HasMetafields`](https://shopify.dev/docs/api/storefront/current/interfaces/HasMetafields) interface, enabling retrieval of [custom data](https://shopify.dev/docs/apps/build/custom-data) associated with the customer.
+ *
+ */
 export type CustomerAddressesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -3555,18 +3570,39 @@ export type CustomerAddressesArgs = {
   reverse?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
+/**
+ * A customer account with the shop. Includes data such as contact information, [addresses](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) and marketing preferences for logged-in customers, so they don't have to provide these details at every checkout.
+ *
+ * Access the customer through the [`customer`](https://shopify.dev/docs/api/storefront/current/queries/customer) query using a customer access token obtained from the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation.
+ *
+ * The object implements the [`HasMetafields`](https://shopify.dev/docs/api/storefront/current/interfaces/HasMetafields) interface, enabling retrieval of [custom data](https://shopify.dev/docs/apps/build/custom-data) associated with the customer.
+ *
+ */
 export type CustomerMetafieldArgs = {
   key: Scalars['String']['input'];
   namespace?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
+/**
+ * A customer account with the shop. Includes data such as contact information, [addresses](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) and marketing preferences for logged-in customers, so they don't have to provide these details at every checkout.
+ *
+ * Access the customer through the [`customer`](https://shopify.dev/docs/api/storefront/current/queries/customer) query using a customer access token obtained from the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation.
+ *
+ * The object implements the [`HasMetafields`](https://shopify.dev/docs/api/storefront/current/interfaces/HasMetafields) interface, enabling retrieval of [custom data](https://shopify.dev/docs/apps/build/custom-data) associated with the customer.
+ *
+ */
 export type CustomerMetafieldsArgs = {
   identifiers: Array<HasMetafieldsIdentifier>;
 };
 
-/** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
+/**
+ * A customer account with the shop. Includes data such as contact information, [addresses](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) and marketing preferences for logged-in customers, so they don't have to provide these details at every checkout.
+ *
+ * Access the customer through the [`customer`](https://shopify.dev/docs/api/storefront/current/queries/customer) query using a customer access token obtained from the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation.
+ *
+ * The object implements the [`HasMetafields`](https://shopify.dev/docs/api/storefront/current/interfaces/HasMetafields) interface, enabling retrieval of [custom data](https://shopify.dev/docs/apps/build/custom-data) associated with the customer.
+ *
+ */
 export type CustomerOrdersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -3577,7 +3613,12 @@ export type CustomerOrdersArgs = {
   sortKey?: InputMaybe<OrderSortKeys>;
 };
 
-/** A CustomerAccessToken represents the unique token required to make modifications to the customer object. */
+/**
+ * A unique authentication token that identifies a logged-in customer and authorizes modifications to the [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) object. The token is required for customer-specific operations like updating profile information or managing addresses.
+ *
+ * Tokens have an expiration date and must be renewed using [`customerAccessTokenRenew`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenRenew) before they expire. Create tokens with [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) using legacy customer account authentication (email and password), or with [`customerAccessTokenCreateWithMultipass`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreateWithMultipass) for single sign-on flows.
+ *
+ */
 export type CustomerAccessToken = {
   __typename?: 'CustomerAccessToken';
   /** The customer’s access token. */
@@ -3586,7 +3627,10 @@ export type CustomerAccessToken = {
   expiresAt: Scalars['DateTime']['output'];
 };
 
-/** The input fields required to create a customer access token. */
+/**
+ * The input fields for authenticating a customer with email and password. Used by the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation to generate a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken), which is required to read or modify customer data.
+ *
+ */
 export type CustomerAccessTokenCreateInput = {
   /** The email associated to the customer. */
   email: Scalars['String']['input'];
@@ -3714,7 +3758,15 @@ export type CustomerAddressUpdatePayload = {
   userErrors: Array<UserError>;
 };
 
-/** The input fields to create a new customer. */
+/**
+ * The input fields for creating a new [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) account. Used by the [`customerCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerCreate) mutation.
+ *
+ * For legacy customer accounts only and requires an email address and password. Optionally accepts the customer's name, phone number, and email marketing consent.
+ *
+ * > Caution:
+ * > The password is used for customer authentication. Ensure it's transmitted securely and never logged or stored in plain text.
+ *
+ */
 export type CustomerCreateInput = {
   /** Indicates whether the customer has consented to be sent marketing material via email. */
   acceptsMarketing?: InputMaybe<Scalars['Boolean']['input']>;
@@ -3763,7 +3815,10 @@ export type CustomerDefaultAddressUpdatePayload = {
   userErrors: Array<UserError>;
 };
 
-/** Possible error codes that can be returned by `CustomerUserError`. */
+/**
+ * Error codes returned by the [`CustomerUserError`](https://shopify.dev/docs/api/storefront/current/objects/CustomerUserError) object. These codes identify specific validation and processing failures for customer-related mutations, including account creation, updates, password resets, and address management.
+ *
+ */
 export enum CustomerErrorCode {
   /** Customer already enabled. */
   AlreadyEnabled = 'ALREADY_ENABLED',
@@ -3849,7 +3904,13 @@ export type CustomerResetPayload = {
   userErrors: Array<UserError>;
 };
 
-/** The input fields to update the Customer information. */
+/**
+ * The input fields for updating a [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer). Used by the [`customerUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/customerUpdate) mutation.
+ *
+ * > Caution:
+ * > Updating the password invalidates all existing access tokens, including the one used to perform the mutation. The response returns a new access token. Ensure your app handles the new token returned in the response to avoid logging the customer out.
+ *
+ */
 export type CustomerUpdateInput = {
   /** Indicates whether the customer has consented to be sent marketing material via email. */
   acceptsMarketing?: InputMaybe<Scalars['Boolean']['input']>;
@@ -4227,7 +4288,12 @@ export type FilterValue = {
   swatch?: Maybe<Swatch>;
 };
 
-/** Represents a single fulfillment in an order. */
+/**
+ * A shipment of one or more items in an order. Accessed through the [`Order`](https://shopify.dev/docs/api/storefront/current/objects/Order) object's [`successfulFulfillments`](https://shopify.dev/docs/api/storefront/current/objects/Order#field-Order.fields.successfulFulfillments) field.
+ *
+ * Each fulfillment includes the line items that shipped, the tracking company name, and tracking details like numbers and URLs. An order can have multiple fulfillments when items ship separately or from different locations.
+ *
+ */
 export type Fulfillment = {
   __typename?: 'Fulfillment';
   /** List of the fulfillment's line items. */
@@ -4242,7 +4308,12 @@ export type Fulfillment = {
   trackingInfo: Array<FulfillmentTrackingInfo>;
 };
 
-/** Represents a single fulfillment in an order. */
+/**
+ * A shipment of one or more items in an order. Accessed through the [`Order`](https://shopify.dev/docs/api/storefront/current/objects/Order) object's [`successfulFulfillments`](https://shopify.dev/docs/api/storefront/current/objects/Order#field-Order.fields.successfulFulfillments) field.
+ *
+ * Each fulfillment includes the line items that shipped, the tracking company name, and tracking details like numbers and URLs. An order can have multiple fulfillments when items ship separately or from different locations.
+ *
+ */
 export type FulfillmentFulfillmentLineItemsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -4251,12 +4322,20 @@ export type FulfillmentFulfillmentLineItemsArgs = {
   reverse?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** Represents a single fulfillment in an order. */
+/**
+ * A shipment of one or more items in an order. Accessed through the [`Order`](https://shopify.dev/docs/api/storefront/current/objects/Order) object's [`successfulFulfillments`](https://shopify.dev/docs/api/storefront/current/objects/Order#field-Order.fields.successfulFulfillments) field.
+ *
+ * Each fulfillment includes the line items that shipped, the tracking company name, and tracking details like numbers and URLs. An order can have multiple fulfillments when items ship separately or from different locations.
+ *
+ */
 export type FulfillmentTrackingInfoArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
 };
 
-/** Represents a single line item in a fulfillment. There is at most one fulfillment line item for each order line item. */
+/**
+ * Records how many units of an [`OrderLineItem`](https://shopify.dev/docs/api/storefront/current/objects/OrderLineItem) were included in a [`Fulfillment`](https://shopify.dev/docs/api/storefront/current/objects/Fulfillment). Each order line item has at most one fulfillment line item per fulfillment.
+ *
+ */
 export type FulfillmentLineItem = {
   __typename?: 'FulfillmentLineItem';
   /** The associated order's line item. */
@@ -4858,7 +4937,12 @@ export enum LanguageCode {
   Zu = 'ZU',
 }
 
-/** Information about the localized experiences configured for the shop. */
+/**
+ * Information about the shop's configured localized experiences, including available countries and languages. The [`country`](https://shopify.dev/docs/api/storefront/current/objects/Localization#field-Localization.fields.country) and [`language`](https://shopify.dev/docs/api/storefront/current/objects/Localization#field-Localization.fields.language) fields reflect the active localization context, which you can change using the `@inContext` directive on queries.
+ *
+ * Use [`availableCountries`](https://shopify.dev/docs/api/storefront/current/objects/Localization#field-Localization.fields.availableCountries) to list all countries with enabled localized experiences, and [`availableLanguages`](https://shopify.dev/docs/api/storefront/current/objects/Localization#field-Localization.fields.availableLanguages) to get languages available for the currently active country. Each [`Country`](https://shopify.dev/docs/api/storefront/current/objects/Country) includes its own currency, unit system, and available languages.
+ *
+ */
 export type Localization = {
   __typename?: 'Localization';
   /** The list of countries with enabled localized experiences. */
@@ -4876,7 +4960,12 @@ export type Localization = {
   market: Market;
 };
 
-/** Represents a location where product inventory is held. */
+/**
+ * A physical store location where product inventory is held and that supports in-store pickup. Provides the location's name, address, and geographic coordinates for proximity-based sorting. Use with [`StoreAvailability`](https://shopify.dev/docs/api/storefront/current/objects/StoreAvailability) to show customers where a [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) is available for pickup.
+ *
+ * Learn more about [supporting local pickup on storefronts](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/local-pickup).
+ *
+ */
 export type Location = HasMetafields &
   Node & {
     __typename?: 'Location';
@@ -4892,13 +4981,23 @@ export type Location = HasMetafields &
     name: Scalars['String']['output'];
   };
 
-/** Represents a location where product inventory is held. */
+/**
+ * A physical store location where product inventory is held and that supports in-store pickup. Provides the location's name, address, and geographic coordinates for proximity-based sorting. Use with [`StoreAvailability`](https://shopify.dev/docs/api/storefront/current/objects/StoreAvailability) to show customers where a [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) is available for pickup.
+ *
+ * Learn more about [supporting local pickup on storefronts](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/local-pickup).
+ *
+ */
 export type LocationMetafieldArgs = {
   key: Scalars['String']['input'];
   namespace?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Represents a location where product inventory is held. */
+/**
+ * A physical store location where product inventory is held and that supports in-store pickup. Provides the location's name, address, and geographic coordinates for proximity-based sorting. Use with [`StoreAvailability`](https://shopify.dev/docs/api/storefront/current/objects/StoreAvailability) to show customers where a [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) is available for pickup.
+ *
+ * Learn more about [supporting local pickup on storefronts](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/local-pickup).
+ *
+ */
 export type LocationMetafieldsArgs = {
   identifiers: Array<HasMetafieldsIdentifier>;
 };
@@ -5735,7 +5834,7 @@ export type MoneyInput = {
 };
 
 /**
- * A monetary value with currency.
+ * A precise monetary value with its associated currency. Combines a decimal amount with a three-letter [`CurrencyCode`](https://shopify.dev/docs/api/storefront/current/enums/CurrencyCode) to express prices, costs, and other financial values. For example, 12.99 USD.
  *
  */
 export type MoneyV2 = {
@@ -5876,70 +5975,137 @@ export type Mutation = {
   /** Submit the cart for checkout completion. */
   cartSubmitForCompletion?: Maybe<CartSubmitForCompletionPayload>;
   /**
-   * Creates a customer access token.
-   * The customer access token is required to modify the customer object in any way.
+   * For legacy customer accounts only.
+   *
+   * Creates a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) using the customer's email and password. The access token is required to read or modify the [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) object, such as updating account information or managing addresses.
+   *
+   * The token has an expiration time. Use [`customerAccessTokenRenew`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenRenew) to extend the token before it expires, or create a new token if it's already expired.
+   *
+   * > Caution:
+   * > This mutation handles customer credentials. Always transmit requests over HTTPS and never log or expose the password.
    *
    */
   customerAccessTokenCreate?: Maybe<CustomerAccessTokenCreatePayload>;
   /**
-   * Creates a customer access token using a
-   * [multipass token](https://shopify.dev/api/multipass) instead of email and
-   * password. A customer record is created if the customer doesn't exist. If a customer
-   * record already exists but the record is disabled, then the customer record is enabled.
+   * Creates a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) using a [multipass token](https://shopify.dev/docs/api/multipass) instead of email and password. This enables single sign-on for customers who authenticate through an external system.
+   *
+   * If the customer doesn't exist in Shopify, then a new customer record is created automatically. If the customer exists but the record is disabled, then the customer record is re-enabled.
+   *
+   * > Caution:
+   * > Multipass tokens are only valid for 15 minutes and can only be used once. Generate tokens on-the-fly when needed rather than in advance.
    *
    */
   customerAccessTokenCreateWithMultipass?: Maybe<CustomerAccessTokenCreateWithMultipassPayload>;
-  /** Permanently destroys a customer access token. */
+  /**
+   * Permanently destroys a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken). Use this mutation when a customer explicitly signs out or when you need to revoke the token. Use [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) to generate a new token with the customer's credentials.
+   *
+   * > Caution:
+   * > This action is irreversible. The customer needs to sign in again to obtain a new access token.
+   *
+   */
   customerAccessTokenDelete?: Maybe<CustomerAccessTokenDeletePayload>;
   /**
-   * Renews a customer access token.
+   * Extends the validity of a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) before it expires. The renewed token maintains authenticated access to customer operations.
    *
-   * Access token renewal must happen *before* a token expires.
-   * If a token has already expired, a new one should be created instead via `customerAccessTokenCreate`.
+   * Renewal must happen before the token's [`expiresAt`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken#field-CustomerAccessToken.fields.expiresAt) time. If a token has already expired, then use [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) to generate a new token with the customer's credentials.
+   *
+   * > Caution:
+   * > Store access tokens securely. Never store tokens in plain text or insecure locations, and avoid exposing them in URLs or logs.
    *
    */
   customerAccessTokenRenew?: Maybe<CustomerAccessTokenRenewPayload>;
-  /** Activates a customer. */
+  /**
+   * Activates a customer account using an activation token received from the [`customerCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerCreate) mutation. The customer sets their password during activation and receives a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) for authenticated access.
+   *
+   * For a simpler approach that doesn't require parsing the activation URL, use [`customerActivateByUrl`](https://shopify.dev/docs/api/storefront/current/mutations/customerActivateByUrl) instead.
+   *
+   * > Caution:
+   * > This mutation handles customer credentials. Always use HTTPS and never log or expose the password or access token.
+   *
+   */
   customerActivate?: Maybe<CustomerActivatePayload>;
-  /** Activates a customer with the activation url received from `customerCreate`. */
+  /**
+   * Activates a customer account using the full activation URL from the [`customerCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerCreate) mutation. This approach simplifies activation by accepting the complete URL directly, eliminating the need to parse it for the customer ID and activation token. Returns a [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) for authenticating subsequent requests.
+   *
+   * > Caution:
+   * > Store the returned access token securely. It grants access to the customer's account data.
+   *
+   */
   customerActivateByUrl?: Maybe<CustomerActivateByUrlPayload>;
-  /** Creates a new address for a customer. */
+  /**
+   * Creates a new [`MailingAddress`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) for a [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer). Use the customer's [access token](https://shopify.dev/docs/api/storefront/current/mutations/customerAddressCreate#arguments-customerAccessToken) to identify them. Successful creation returns the new address.
+   *
+   * Each customer can have multiple addresses.
+   *
+   */
   customerAddressCreate?: Maybe<CustomerAddressCreatePayload>;
-  /** Permanently deletes the address of an existing customer. */
+  /**
+   * Permanently deletes a specific [`MailingAddress`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) for a [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer). Requires a valid [customer access token](https://shopify.dev/docs/api/storefront/current/mutations/customerAddressDelete#arguments-customerAccessToken) to authenticate the request.
+   *
+   * > Caution:
+   * > This action is irreversible. You can't recover the deleted address.
+   *
+   */
   customerAddressDelete?: Maybe<CustomerAddressDeletePayload>;
-  /** Updates the address of an existing customer. */
+  /**
+   * Updates an existing [`MailingAddress`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress) for a [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer). Requires a [customer access token](https://shopify.dev/docs/api/storefront/current/mutations/customerAddressUpdate#arguments-customerAccessToken) to identify the customer, an ID to specify which address to modify, and an [`address`](https://shopify.dev/docs/api/storefront/current/input-objects/MailingAddressInput) with the updated fields.
+   *
+   * Successful update returns the updated [`MailingAddress`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress).
+   *
+   */
   customerAddressUpdate?: Maybe<CustomerAddressUpdatePayload>;
-  /** Creates a new customer. */
+  /**
+   * Creates a new [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) account with the provided contact information and login credentials. The customer can then sign in for things such as accessing their account, viewing order history, and managing saved addresses.
+   *
+   * > Caution:
+   * > This mutation creates customer credentials. Ensure passwords are collected securely and never logged or exposed in client-side code.
+   *
+   */
   customerCreate?: Maybe<CustomerCreatePayload>;
-  /** Updates the default address of an existing customer. */
+  /**
+   * Updates the default address of an existing [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer). Requires a [customer access token](https://shopify.dev/docs/api/storefront/current/mutations/customerDefaultAddressUpdate#arguments-customerAccessToken) to identify the customer and an address ID to specify which address to set as the new default.
+   *
+   */
   customerDefaultAddressUpdate?: Maybe<CustomerDefaultAddressUpdatePayload>;
   /**
-   * Sends a reset password email to the customer. The reset password
-   * email contains a reset password URL and token that you can pass to
-   * the [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or
-   * [`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the
-   * customer password.
+   * Sends a reset password email to the customer. The email contains a reset password URL and token that you can pass to the [`customerResetByUrl`](https://shopify.dev/docs/api/storefront/current/mutations/customerResetByUrl) or [`customerReset`](https://shopify.dev/docs/api/storefront/current/mutations/customerReset) mutation to reset the customer's password.
    *
-   * This mutation is throttled by IP. With private access,
-   * you can provide a [`Shopify-Storefront-Buyer-IP`](https://shopify.dev/api/usage/authentication#optional-ip-header) instead of the request IP.
-   * The header is case-sensitive and must be sent as `Shopify-Storefront-Buyer-IP`.
+   * This mutation is throttled by IP. With private access, you can provide a [`Shopify-Storefront-Buyer-IP` header](https://shopify.dev/docs/api/usage/authentication#optional-ip-header) instead of the request IP. The header is case-sensitive.
    *
-   * Make sure that the value provided to `Shopify-Storefront-Buyer-IP` is trusted. Unthrottled access to this
-   * mutation presents a security risk.
+   * > Caution:
+   * > Ensure the value provided to `Shopify-Storefront-Buyer-IP` is trusted. Unthrottled access to this mutation presents a security risk.
    *
    */
   customerRecover?: Maybe<CustomerRecoverPayload>;
   /**
-   * "Resets a customer’s password with the token received from a reset password email. You can send a reset password email with the [`customerRecover`](https://shopify.dev/api/storefront/latest/mutations/customerRecover) mutation."
+   * Resets a customer's password using the reset token from a password recovery email. On success, returns the updated [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) and a new [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) for immediate authentication.
+   *
+   * Use the [`customerRecover`](https://shopify.dev/docs/api/storefront/current/mutations/customerRecover) mutation to send the password recovery email that provides the reset token. Alternatively, use [`customerResetByUrl`](https://shopify.dev/docs/api/storefront/current/mutations/customerResetByUrl) if you have the full reset URL instead of the customer ID and token.
+   *
+   * > Caution:
+   * > This mutation handles sensitive customer credentials. Validate password requirements on the client before submission.
    *
    */
   customerReset?: Maybe<CustomerResetPayload>;
   /**
-   * "Resets a customer’s password with the reset password URL received from a reset password email. You can send a reset password email with the [`customerRecover`](https://shopify.dev/api/storefront/latest/mutations/customerRecover) mutation."
+   * Resets a customer's password using the reset URL from a password recovery email. The reset URL is generated by the [`customerRecover`](https://shopify.dev/docs/api/storefront/current/mutations/customerRecover) mutation.
+   *
+   * On success, returns the updated [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) and a new [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) for immediate authentication.
+   *
+   * > Caution:
+   * > This mutation handles customer credentials. Ensure the new password is transmitted securely and never logged or exposed in client-side code.
    *
    */
   customerResetByUrl?: Maybe<CustomerResetByUrlPayload>;
-  /** Updates an existing customer. */
+  /**
+   * Updates a [customer's](https://shopify.dev/docs/api/storefront/current/objects/Customer) personal information such as name, password, and marketing preferences. Requires a valid [`CustomerAccessToken`](https://shopify.dev/docs/api/storefront/current/objects/CustomerAccessToken) to authenticate the customer making the update.
+   *
+   * If the customer's password is updated, then all previous access tokens become invalid. The mutation returns a new access token in the payload to maintain the customer's session.
+   *
+   * > Caution:
+   * > Password changes invalidate all existing access tokens. Ensure your app handles the new token returned in the response to avoid logging the customer out.
+   *
+   */
   customerUpdate?: Maybe<CustomerUpdatePayload>;
   /**
    * Creates a [Shop Pay payment request session](https://shopify.dev/docs/api/storefront/current/objects/ShopPayPaymentRequestSession) for processing payments. The session includes a checkout URL where customers complete their purchase and a token for subsequent operations like submitting the payment.
@@ -6199,10 +6365,7 @@ export type MutationShopPayPaymentRequestSessionSubmitArgs = {
 };
 
 /**
- * An object with an ID field to support global identification, in accordance with the
- * [Relay specification](https://relay.dev/graphql/objectidentification.htm#sec-Node-Interface).
- * This interface is used by the [node](/docs/api/storefront/latest/queries/node)
- * and [nodes](/docs/api/storefront/latest/queries/nodes) queries.
+ * Enables global object identification following the [Relay specification](https://relay.dev/graphql/objectidentification.htm#sec-Node-Interface). Any type implementing this interface has a globally-unique `id` field and can be fetched directly using the [`node`](https://shopify.dev/docs/api/storefront/current/queries/node) or [`nodes`](https://shopify.dev/docs/api/storefront/current/queries/nodes) queries.
  *
  */
 export type Node = {
@@ -6724,7 +6887,9 @@ export enum PreferenceDeliveryMethodType {
 }
 
 /**
- * The input fields for a filter used to view a subset of products in a collection matching a specific price range.
+ * A price range for filtering products in a collection. Used by the [`ProductFilter`](https://shopify.dev/docs/api/storefront/current/input-objects/ProductFilter) input's [`price`](https://shopify.dev/docs/api/storefront/current/input-objects/ProductFilter#fields-price) field.
+ *
+ * > Note: Omitting the [maximum](https://shopify.dev/docs/api/storefront/currents/input-objects/PriceRangeFilter#fields-max) returns all products above the [minimum](https://shopify.dev/docs/api/storefront/current/input-objects/PriceRangeFilter#fields-min).
  *
  */
 export type PriceRangeFilter = {
@@ -6748,16 +6913,13 @@ export type PricingPercentageValue = {
 export type PricingValue = MoneyV2 | PricingPercentageValue;
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type Product = HasMetafields &
@@ -6970,16 +7132,13 @@ export type Product = HasMetafields &
   };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductAdjacentVariantsArgs = {
@@ -6989,16 +7148,13 @@ export type ProductAdjacentVariantsArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductCollectionsArgs = {
@@ -7010,16 +7166,13 @@ export type ProductCollectionsArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductDescriptionArgs = {
@@ -7027,16 +7180,13 @@ export type ProductDescriptionArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductImagesArgs = {
@@ -7049,16 +7199,13 @@ export type ProductImagesArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductMediaArgs = {
@@ -7071,16 +7218,13 @@ export type ProductMediaArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductMetafieldArgs = {
@@ -7089,16 +7233,13 @@ export type ProductMetafieldArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductMetafieldsArgs = {
@@ -7106,16 +7247,13 @@ export type ProductMetafieldsArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductOptionsArgs = {
@@ -7123,16 +7261,13 @@ export type ProductOptionsArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductSelectedOrFirstAvailableVariantArgs = {
@@ -7142,16 +7277,13 @@ export type ProductSelectedOrFirstAvailableVariantArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductSellingPlanGroupsArgs = {
@@ -7163,16 +7295,13 @@ export type ProductSellingPlanGroupsArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductVariantBySelectedOptionsArgs = {
@@ -7182,16 +7311,13 @@ export type ProductVariantBySelectedOptionsArgs = {
 };
 
 /**
- * The `Product` object lets you manage products in a merchant’s store.
+ * Represents an item listed in a shop's catalog.
  *
- * Products are the goods and services that merchants offer to customers.
- * They can include various details such as title, description, price, images, and options such as size or color.
- * You can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)
- * to create or update different versions of the same product.
- * You can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).
- * Products can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).
+ * Products support multiple [product variants](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant), representing different versions of the same product, and can include various [media](https://shopify.dev/docs/api/storefront/current/interfaces/Media) types. Use the [`selectedOrFirstAvailableVariant`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.selectedOrFirstAvailableVariant) or [`variantBySelectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/Product#field-Product.fields.variantBySelectedOptions) fields to help customers find the right variant based on their selections.
  *
- * Learn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
+ * Products can be organized into [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), associated with [selling plans](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanGroup) for subscriptions, and extended with custom data through [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield).
+ *
+ * Learn more about working with [products and collections](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections).
  *
  */
 export type ProductVariantsArgs = {
@@ -7203,7 +7329,12 @@ export type ProductVariantsArgs = {
   sortKey?: InputMaybe<ProductVariantSortKeys>;
 };
 
-/** The set of valid sort keys for the ProductCollection query. */
+/**
+ * Sort options for products within a [`Collection`](https://shopify.dev/docs/api/storefront/current/objects/Collection). Used by the [`products`](https://shopify.dev/docs/api/storefront/current/objects/Collection#field-Collection.fields.products) connection to order results by best-selling, price, title, creation date, or the collection's default and manual ordering.
+ *
+ * > Note: The [`RELEVANCE`](https://shopify.dev/docs/api/storefront/current/enums/ProductCollectionSortKeys#enums-RELEVANCE) key applies only when you specify a search query.
+ *
+ */
 export enum ProductCollectionSortKeys {
   /** Sort by the `best-selling` value. */
   BestSelling = 'BEST_SELLING',
@@ -7315,9 +7446,11 @@ export enum ProductMediaSortKeys {
 }
 
 /**
- * Product property names like "Size", "Color", and "Material" that the customers can select.
- * Variants are selected based on permutations of these options.
- * 255 characters limit each.
+ * A customizable product attribute that customers select when purchasing, such as "Size", "Color", or "Material". Each option has a name and a set of [`ProductOptionValue`](https://shopify.dev/docs/api/storefront/current/objects/ProductOptionValue) objects representing the available choices.
+ *
+ * Different combinations of option values create distinct [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) objects. Option values can include visual swatches that display colors or images to help customers make selections. Option names have a 255-character limit.
+ *
+ * Learn more about [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
  *
  */
 export type ProductOption = Node & {
@@ -7336,7 +7469,11 @@ export type ProductOption = Node & {
 };
 
 /**
- * The product option value names. For example, "Red", "Blue", and "Green" for a "Color" option.
+ * A specific value for a [`ProductOption`](https://shopify.dev/docs/api/storefront/current/objects/ProductOption), such as "Red" or "Blue" for a "Color" option. Option values combine across different options to create [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) objects.
+ *
+ * Each value can include a visual swatch that displays a color or image. The [`firstSelectableVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductOptionValue#field-ProductOptionValue.fields.firstSelectableVariant) field returns the variant that combines this option value with the lowest-position values for all other options. This is useful for building product selection interfaces.
+ *
+ * Learn more about [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
  *
  */
 export type ProductOptionValue = Node & {
@@ -7358,7 +7495,7 @@ export type ProductOptionValue = Node & {
 };
 
 /**
- * The product option value swatch.
+ * A visual representation for a [`ProductOptionValue`](https://shopify.dev/docs/api/storefront/current/objects/ProductOptionValue), such as a color or image. Swatches help customers visualize options like "Red" or "Blue" without relying solely on text labels.
  *
  */
 export type ProductOptionValueSwatch = {
@@ -7393,7 +7530,12 @@ export enum ProductRecommendationIntent {
   Related = 'RELATED',
 }
 
-/** The set of valid sort keys for the Product query. */
+/**
+ * Sorting options for the [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) query. Supports sorting products by criteria such as best-selling and price, and by product attributes such as type, and vendor.
+ *
+ * > Note: Use the [`RELEVANCE`](https://shopify.dev/docs/api/storefront/current/enums/ProductSortKeys#enums-RELEVANCE) key only when a search query is specified.
+ *
+ */
 export enum ProductSortKeys {
   /** Sort by the `best_selling` value. */
   BestSelling = 'BEST_SELLING',
@@ -7420,7 +7562,11 @@ export enum ProductSortKeys {
 }
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariant = HasMetafields &
@@ -7505,7 +7651,11 @@ export type ProductVariant = HasMetafields &
   };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantComponentsArgs = {
@@ -7516,7 +7666,11 @@ export type ProductVariantComponentsArgs = {
 };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantGroupedByArgs = {
@@ -7527,7 +7681,11 @@ export type ProductVariantGroupedByArgs = {
 };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantMetafieldArgs = {
@@ -7536,7 +7694,11 @@ export type ProductVariantMetafieldArgs = {
 };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantMetafieldsArgs = {
@@ -7544,7 +7706,11 @@ export type ProductVariantMetafieldsArgs = {
 };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantQuantityPriceBreaksArgs = {
@@ -7555,7 +7721,11 @@ export type ProductVariantQuantityPriceBreaksArgs = {
 };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantSellingPlanAllocationsArgs = {
@@ -7567,7 +7737,11 @@ export type ProductVariantSellingPlanAllocationsArgs = {
 };
 
 /**
- * A product variant represents a different version of a product, such as differing sizes or differing colors.
+ * A specific version of a [product](https://shopify.dev/docs/api/storefront/current/objects/Product) available for sale, differentiated by options like size or color. For example, a small blue t-shirt and a large blue t-shirt are separate variants of the same product. For more information, see the docs on [Shopify's product model](https://shopify.dev/docs/apps/build/product-merchandising/products-and-collections).
+ *
+ * For products with quantity rules, variants enforce minimum, maximum, and increment constraints on purchases.
+ *
+ * Variants also support subscriptions and pre-orders through [selling plan allocations](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) objects, bundle configurations through [product variant components](https://shopify.dev/docs/api/storefront/current/objects/ProductVariantComponent) objects, and [shop pay installments pricing](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) for flexible payment options.
  *
  */
 export type ProductVariantStoreAvailabilityArgs = {
@@ -7580,7 +7754,9 @@ export type ProductVariantStoreAvailabilityArgs = {
 };
 
 /**
- * Represents a component of a bundle variant.
+ * An individual product variant included in a [fixed bundle](https://shopify.dev/docs/apps/build/product-merchandising/bundles). Fixed bundles group multiple products together and sell them as a single unit, with the bundle's inventory determined by its components.
+ *
+ * Access components through the `ProductVariant` object's [`components`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant#field-ProductVariant.fields.components) field.
  *
  */
 export type ProductVariantComponent = {
@@ -7746,7 +7922,14 @@ export type QuantityRule = {
   minimum: Scalars['Int']['output'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRoot = {
   __typename?: 'QueryRoot';
   /**
@@ -7806,18 +7989,25 @@ export type QueryRoot = {
    */
   collections: CollectionConnection;
   /**
-   * The customer associated with the given access token. Tokens are obtained by using the
-   * [`customerAccessTokenCreate` mutation](https://shopify.dev/docs/api/storefront/latest/mutations/customerAccessTokenCreate).
+   * Retrieves the [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) associated with the provided access token. Use the [`customerAccessTokenCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAccessTokenCreate) mutation to obtain an access token using legacy customer account authentication (email and password).
+   *
+   * The returned customer includes data such as contact information, [addresses](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress), [orders](https://shopify.dev/docs/api/storefront/current/objects/Order), and [custom data](https://shopify.dev/docs/apps/build/custom-data) associated with the customer.
    *
    */
   customer?: Maybe<Customer>;
-  /** Returns the localized experiences configured for the shop. */
+  /**
+   * Returns the shop's localization settings. Use this query to build [country and language selectors](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets) for your storefront.
+   *
+   * The [`country`](https://shopify.dev/docs/api/storefront/latest/queries/localization#returns-Localization.fields.country) and [`language`](https://shopify.dev/docs/api/storefront/latest/queries/localization#returns-Localization.fields.language) fields reflect the active localized experience. To change the context, use the [`@inContext`](https://shopify.dev/docs/api/storefront#directives) directive with your desired country or language code.
+   *
+   */
   localization: Localization;
   /**
-   * List of the shop's locations that support in-store pickup.
+   * Returns shop locations that support in-store pickup. Use the `near` argument with [`GeoCoordinateInput`](https://shopify.dev/docs/api/storefront/current/input-objects/GeoCoordinateInput) to sort results by proximity to the customer's location.
    *
-   * When sorting by distance, you must specify a location via the `near` argument.
+   * When sorting by distance, set `sortKey` to [`DISTANCE`](https://shopify.dev/docs/api/storefront/current/queries/locations#arguments-sortKey.enums.DISTANCE) and provide coordinates using the [`near`](https://shopify.dev/docs/api/storefront/current/queries/locations#arguments-near) argument.
    *
+   * Learn more about [supporting local pickup on storefronts](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/local-pickup).
    *
    */
   locations: LocationConnection;
@@ -7843,9 +8033,19 @@ export type QueryRoot = {
    *
    */
   metaobjects: MetaobjectConnection;
-  /** Returns a specific node by ID. */
+  /**
+   * Retrieves any object that implements the [`Node`](https://shopify.dev/docs/api/storefront/current/interfaces/Node) interface by its globally-unique ID. Use inline fragments to access type-specific fields on the returned object.
+   *
+   * This query follows the [Relay specification](https://relay.dev/graphql/objectidentification.htm#sec-Node-Interface) and is commonly used for refetching objects when you have their ID but need updated data.
+   *
+   */
   node?: Maybe<Node>;
-  /** Returns the list of nodes with the given IDs. */
+  /**
+   * Retrieves multiple objects by their global IDs in a single request. Any object that implements the [`Node`](https://shopify.dev/docs/api/storefront/current/interfaces/Node) interface can be fetched, including [products](https://shopify.dev/docs/api/storefront/current/objects/Product), [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), and [pages](https://shopify.dev/docs/api/storefront/current/objects/Page).
+   *
+   * Use inline fragments to access type-specific fields on the returned objects. The input accepts up to 250 IDs.
+   *
+   */
   nodes: Array<Maybe<Node>>;
   /**
    * Retrieves a [`Page`](https://shopify.dev/docs/api/storefront/current/objects/Page) by its [`handle`](https://shopify.dev/docs/api/storefront/current/queries/page#arguments-handle) or [`id`](https://shopify.dev/docs/api/storefront/current/queries/page#arguments-id). Pages are static content pages that merchants display outside their product catalog, such as "About Us," "Contact," or policy pages.
@@ -7867,37 +8067,66 @@ export type QueryRoot = {
   pages: PageConnection;
   /** Settings related to payments. */
   paymentSettings: PaymentSettings;
-  /** List of the predictive search results. */
+  /**
+   * Returns suggested results as customers type in a search field, enabling type-ahead search experiences. The query matches [products](https://shopify.dev/docs/api/storefront/current/objects/Product), [collections](https://shopify.dev/docs/api/storefront/current/objects/Collection), [pages](https://shopify.dev/docs/api/storefront/current/objects/Page), and [articles](https://shopify.dev/docs/api/storefront/current/objects/Article) based on partial search terms, and also provides [search query suggestions](https://shopify.dev/docs/api/storefront/current/objects/SearchQuerySuggestion) to help customers refine their search.
+   *
+   * You can filter results by resource type and limit the quantity. The [`limitScope`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch#arguments-limitScope) argument controls whether limits apply across all result types or per type. Use [`unavailableProducts`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch#arguments-unavailableProducts) to control how out-of-stock products appear in results.
+   *
+   */
   predictiveSearch?: Maybe<PredictiveSearchResult>;
-  /** Fetch a specific `Product` by one of its unique attributes. */
+  /**
+   * Retrieves a single [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product) by its ID or handle. Use this query to build product detail pages, access variant and pricing information, or fetch product media and [metafields](https://shopify.dev/docs/api/storefront/current/objects/Metafield). See some [examples of querying products](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/getting-started).
+   *
+   */
   product?: Maybe<Product>;
   /**
-   * Find a product by its handle.
+   * Retrieves a [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product) by its handle. The handle is a URL-friendly identifier that's automatically generated from the product's title. If no product exists with the specified handle, returns `null`.
+   *
    * @deprecated Use `product` instead.
    */
   productByHandle?: Maybe<Product>;
   /**
-   * Find recommended products related to a given `product_id`.
-   * To learn more about how recommendations are generated, see
-   * [*Showing product recommendations on product pages*](https://help.shopify.com/themes/development/recommended-products).
+   * Returns recommended products for a given product, identified by either ID or handle. Use the [`intent`](https://shopify.dev/docs/api/storefront/current/enums/ProductRecommendationIntent) argument to control the recommendation strategy.
+   *
+   * Shopify [auto-generates related recommendations](https://shopify.dev/docs/storefronts/themes/product-merchandising/recommendations) based on sales data, product descriptions, and collection relationships. Complementary recommendations require [manual configuration](https://help.shopify.com/manual/online-store/storefront-search/search-and-discovery-recommendations) through the Shopify Search & Discovery app. Returns up to ten [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product) objects.
    *
    */
   productRecommendations?: Maybe<Array<Product>>;
   /**
-   * Tags added to products.
-   * Additional access scope required: unauthenticated_read_product_tags.
+   * Returns a paginated list of all tags that have been added to [products](https://shopify.dev/docs/api/storefront/current/objects/Product) in the shop. Useful for building tag-based product filtering or navigation in a storefront.
    *
    */
   productTags: StringConnection;
-  /** List of product types for the shop's products that are published to your app. */
+  /**
+   * Returns a list of product types from the shop's [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product) objects that are published to your app. Use this query to build [filtering interfaces](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products) or navigation menus based on product categorization.
+   *
+   */
   productTypes: StringConnection;
-  /** Returns a list of the shop's products. For storefront search, use the [`search`](https://shopify.dev/docs/api/storefront/latest/queries/search) query. */
+  /**
+   * Returns a paginated list of the shop's [products](https://shopify.dev/docs/api/storefront/current/objects/Product).
+   *
+   * For full-text storefront search, use the [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) query instead.
+   *
+   */
   products: ProductConnection;
-  /** The list of public Storefront API versions, including supported, release candidate and unstable versions. */
+  /**
+   * Returns all public Storefront [API versions](https://shopify.dev/docs/api/storefront/current/objects/ApiVersion), including supported, release candidate, and unstable versions.
+   *
+   */
   publicApiVersions: Array<ApiVersion>;
-  /** List of the search results. */
+  /**
+   * Returns paginated search results for [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product), [`Page`](https://shopify.dev/docs/api/storefront/current/objects/Page), and [`Article`](https://shopify.dev/docs/api/storefront/current/objects/Article) resources based on a query string. Results are sorted by relevance by default.
+   *
+   * The response includes the total result count and available product filters for building [faceted search interfaces](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/filter-products). Use the [`prefix`](https://shopify.dev/docs/api/storefront/current/enums/SearchPrefixQueryType) argument to enable partial word matching on the last search term, allowing queries like "winter snow" to match "snowboard" or "snowshoe".
+   *
+   */
   search: SearchResultItemConnection;
-  /** The shop associated with the storefront access token. */
+  /**
+   * Returns the [`Shop`](https://shopify.dev/docs/api/storefront/current/objects/Shop) associated with the storefront access token. The `Shop` object provides general store information such as the shop name, description, and primary domain.
+   *
+   * Use this query to access data like store policies, [`PaymentSettings`](https://shopify.dev/docs/api/storefront/current/objects/PaymentSettings), [`Brand`](https://shopify.dev/docs/api/storefront/current/objects/Brand) configuration, and shipping destinations. It also exposes [`ShopPayInstallmentsPricing`](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing) and [`SocialLoginProvider`](https://shopify.dev/docs/api/storefront/current/objects/SocialLoginProvider) options for customer accounts.
+   *
+   */
   shop: Shop;
   /**
    * Returns sitemap data for a specific resource type, enabling headless storefronts to generate XML sitemaps for search engine optimization. The query provides a page count and paginated access to resources like [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product), [`Collection`](https://shopify.dev/docs/api/storefront/current/objects/Collection), [`Page`](https://shopify.dev/docs/api/storefront/current/objects/Page), and [`Blog`](https://shopify.dev/docs/api/storefront/current/objects/Blog) objects.
@@ -7913,12 +8142,26 @@ export type QueryRoot = {
   urlRedirects: UrlRedirectConnection;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootArticleArgs = {
   id: Scalars['ID']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootArticlesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -7929,18 +8172,39 @@ export type QueryRootArticlesArgs = {
   sortKey?: InputMaybe<ArticleSortKeys>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootBlogArgs = {
   handle?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootBlogByHandleArgs = {
   handle: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootBlogsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -7951,28 +8215,63 @@ export type QueryRootBlogsArgs = {
   sortKey?: InputMaybe<BlogSortKeys>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootCartArgs = {
   id: Scalars['ID']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootCartCompletionAttemptArgs = {
   attemptId: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootCollectionArgs = {
   handle?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootCollectionByHandleArgs = {
   handle: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootCollectionsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -7983,12 +8282,26 @@ export type QueryRootCollectionsArgs = {
   sortKey?: InputMaybe<CollectionSortKeys>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootCustomerArgs = {
   customerAccessToken: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootLocationsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -7999,18 +8312,39 @@ export type QueryRootLocationsArgs = {
   sortKey?: InputMaybe<LocationSortKeys>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootMenuArgs = {
   handle: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootMetaobjectArgs = {
   handle?: InputMaybe<MetaobjectHandleInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootMetaobjectsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -8021,28 +8355,63 @@ export type QueryRootMetaobjectsArgs = {
   type: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootNodeArgs = {
   id: Scalars['ID']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootNodesArgs = {
   ids: Array<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootPageArgs = {
   handle?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootPageByHandleArgs = {
   handle: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootPagesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -8053,7 +8422,14 @@ export type QueryRootPagesArgs = {
   sortKey?: InputMaybe<PageSortKeys>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootPredictiveSearchArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   limitScope?: InputMaybe<PredictiveSearchLimitScope>;
@@ -8063,35 +8439,77 @@ export type QueryRootPredictiveSearchArgs = {
   unavailableProducts?: InputMaybe<SearchUnavailableProductsType>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootProductArgs = {
   handle?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootProductByHandleArgs = {
   handle: Scalars['String']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootProductRecommendationsArgs = {
   intent?: InputMaybe<ProductRecommendationIntent>;
   productHandle?: InputMaybe<Scalars['String']['input']>;
   productId?: InputMaybe<Scalars['ID']['input']>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootProductTagsArgs = {
   first: Scalars['Int']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootProductTypesArgs = {
   first: Scalars['Int']['input'];
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootProductsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -8102,7 +8520,14 @@ export type QueryRootProductsArgs = {
   sortKey?: InputMaybe<ProductSortKeys>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootSearchArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -8117,12 +8542,26 @@ export type QueryRootSearchArgs = {
   unavailableProducts?: InputMaybe<SearchUnavailableProductsType>;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootSitemapArgs = {
   type: SitemapType;
 };
 
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+/**
+ * The entry point for all Storefront API queries. Provides access to shop resources including products, collections, carts, and customer data, as well as content like articles and pages. This query acts as the public, top-level type from which all queries must start.
+ *
+ * Use individual queries like [`product`](https://shopify.dev/docs/api/storefront/current/queries/product) or [`collection`](https://shopify.dev/docs/api/storefront/current/queries/collection) to fetch specific resources by ID or handle. Use plural queries like [`products`](https://shopify.dev/docs/api/storefront/current/queries/products) or [`collections`](https://shopify.dev/docs/api/storefront/current/queries/collections) to retrieve paginated lists with optional filtering and sorting. The [`search`](https://shopify.dev/docs/api/storefront/current/queries/search) and [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries enable storefront search functionality.
+ *
+ * Explore queries interactively with the [GraphiQL explorer and sample query kit](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/api-exploration).
+ *
+ */
 export type QueryRootUrlRedirectsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -8132,7 +8571,10 @@ export type QueryRootUrlRedirectsArgs = {
   reverse?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** SEO information. */
+/**
+ * Search engine optimization metadata for a resource. The title and description appear in search engine results and browser tabs.
+ *
+ */
 export type Seo = {
   __typename?: 'SEO';
   /** The meta description. */
@@ -8167,7 +8609,12 @@ export enum SearchPrefixQueryType {
   None = 'NONE',
 }
 
-/** A search query suggestion. */
+/**
+ * A suggested search term returned by the [`predictiveSearch`](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) query. Query suggestions help customers refine their searches by showing relevant terms as they type.
+ *
+ * The [`text`](https://shopify.dev/docs/api/storefront/current/objects/SearchQuerySuggestion#field-SearchQuerySuggestion.fields.text) field provides the plain suggestion, while [`styledText`](https://shopify.dev/docs/api/storefront/current/objects/SearchQuerySuggestion#field-SearchQuerySuggestion.fields.styledText) includes HTML tags to highlight matching portions. Implements [`Trackable`](https://shopify.dev/docs/api/storefront/current/interfaces/Trackable) for analytics reporting on search traffic origins.
+ *
+ */
 export type SearchQuerySuggestion = Trackable & {
   __typename?: 'SearchQuerySuggestion';
   /** The text of the search query suggestion with highlighted HTML tags. */
@@ -8265,8 +8712,7 @@ export enum SearchableField {
 }
 
 /**
- * Properties used by customers to select a product variant.
- * Products can have multiple options, like different sizes or colors.
+ * A name/value pair representing a product option selection on a variant. The [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) object's [`selectedOptions`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant#field-ProductVariant.fields.selectedOptions) field returns this to indicate which options define that variant, such as "Size: Large" or "Color: Red".
  *
  */
 export type SelectedOption = {
@@ -8594,7 +9040,12 @@ export type SellingPlanRecurringDeliveryPolicy = {
   intervalCount: Scalars['Int']['output'];
 };
 
-/** Shop represents a collection of the general settings and information about the shop. */
+/**
+ * The central hub for store-wide settings and information accessible through the Storefront API. Provides the shop's name, description, and branding configuration including logos and colors through the [`Brand`](https://shopify.dev/docs/api/storefront/current/objects/Brand) object.
+ *
+ * Access store policies such as privacy, refund, shipping, and terms of service via [`ShopPolicy`](https://shopify.dev/docs/api/storefront/current/objects/ShopPolicy), and the subscription policy via [`ShopPolicyWithDefault`](https://shopify.dev/docs/api/storefront/current/objects/ShopPolicyWithDefault). [`PaymentSettings`](https://shopify.dev/docs/api/storefront/current/objects/PaymentSettings) expose accepted card brands, supported digital wallets, and enabled presentment currencies. The object also includes the primary [`Domain`](https://shopify.dev/docs/api/storefront/current/objects/Domain), countries the shop ships to, [`ShopPayInstallmentsPricing`](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing), and [`SocialLoginProvider`](https://shopify.dev/docs/api/storefront/current/objects/SocialLoginProvider) options for customer accounts.
+ *
+ */
 export type Shop = HasMetafields &
   Node & {
     __typename?: 'Shop';
@@ -8638,13 +9089,23 @@ export type Shop = HasMetafields &
     termsOfService?: Maybe<ShopPolicy>;
   };
 
-/** Shop represents a collection of the general settings and information about the shop. */
+/**
+ * The central hub for store-wide settings and information accessible through the Storefront API. Provides the shop's name, description, and branding configuration including logos and colors through the [`Brand`](https://shopify.dev/docs/api/storefront/current/objects/Brand) object.
+ *
+ * Access store policies such as privacy, refund, shipping, and terms of service via [`ShopPolicy`](https://shopify.dev/docs/api/storefront/current/objects/ShopPolicy), and the subscription policy via [`ShopPolicyWithDefault`](https://shopify.dev/docs/api/storefront/current/objects/ShopPolicyWithDefault). [`PaymentSettings`](https://shopify.dev/docs/api/storefront/current/objects/PaymentSettings) expose accepted card brands, supported digital wallets, and enabled presentment currencies. The object also includes the primary [`Domain`](https://shopify.dev/docs/api/storefront/current/objects/Domain), countries the shop ships to, [`ShopPayInstallmentsPricing`](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing), and [`SocialLoginProvider`](https://shopify.dev/docs/api/storefront/current/objects/SocialLoginProvider) options for customer accounts.
+ *
+ */
 export type ShopMetafieldArgs = {
   key: Scalars['String']['input'];
   namespace?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Shop represents a collection of the general settings and information about the shop. */
+/**
+ * The central hub for store-wide settings and information accessible through the Storefront API. Provides the shop's name, description, and branding configuration including logos and colors through the [`Brand`](https://shopify.dev/docs/api/storefront/current/objects/Brand) object.
+ *
+ * Access store policies such as privacy, refund, shipping, and terms of service via [`ShopPolicy`](https://shopify.dev/docs/api/storefront/current/objects/ShopPolicy), and the subscription policy via [`ShopPolicyWithDefault`](https://shopify.dev/docs/api/storefront/current/objects/ShopPolicyWithDefault). [`PaymentSettings`](https://shopify.dev/docs/api/storefront/current/objects/PaymentSettings) expose accepted card brands, supported digital wallets, and enabled presentment currencies. The object also includes the primary [`Domain`](https://shopify.dev/docs/api/storefront/current/objects/Domain), countries the shop ships to, [`ShopPayInstallmentsPricing`](https://shopify.dev/docs/api/storefront/current/objects/ShopPayInstallmentsPricing), and [`SocialLoginProvider`](https://shopify.dev/docs/api/storefront/current/objects/SocialLoginProvider) options for customer accounts.
+ *
+ */
 export type ShopMetafieldsArgs = {
   identifiers: Array<HasMetafieldsIdentifier>;
 };
@@ -9205,8 +9666,11 @@ export type SocialLoginProvider = {
 };
 
 /**
- * The availability of a product variant at a particular location.
- * Local pick-up must be enabled in the  store's shipping settings, otherwise this will return an empty result.
+ * Inventory information for a product variant at a physical store location that offers local pickup. Includes stock availability, quantity on hand, and estimated pickup readiness time.
+ *
+ * Local pickup must be [enabled in the store's shipping settings](https://help.shopify.com/manual/shipping/setting-up-and-managing-your-shipping/local-methods/local-pickup) for this data to be returned. Results can be sorted by proximity to a customer's location using the `near` argument on the [`ProductVariant.storeAvailability`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant#field-ProductVariant.fields.storeAvailability) connection.
+ *
+ * Learn more about [supporting local pickup on storefronts](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/local-pickup).
  *
  */
 export type StoreAvailability = {
@@ -9479,7 +9943,9 @@ export type Translation = {
 };
 
 /**
- * The measurement used to calculate a unit price for a product variant (e.g. $9.99 / 100ml).
+ * The measurement data used to calculate unit prices for a [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant). Unit pricing helps customers compare costs across different package sizes by showing a standardized price, such as "$9.99 / 100ml".
+ *
+ * The object includes the quantity being sold (value and unit) and the reference measurement used for price comparison. Use this alongside the variant's [`unitPrice`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant#field-ProductVariant.fields.unitPrice) field to display complete unit pricing information.
  *
  */
 export type UnitPriceMeasurement = {
@@ -9695,7 +10161,10 @@ export type VisitorConsent = {
   saleOfData?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** Units of measurement for weight. */
+/**
+ * Units of measurement for weight, supporting both metric and imperial systems. Used by [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) to specify the unit for the variant's weight value.
+ *
+ */
 export enum WeightUnit {
   /** Metric system unit of mass. */
   Grams = 'GRAMS',
@@ -12466,6 +12935,44 @@ export type CollectionQuery = {
                     nodes: Array<{ __typename?: 'Collection'; handle: string }>;
                   };
                 };
+                metafields: Array<{
+                  __typename?: 'Metafield';
+                  id: string;
+                  key: string;
+                  namespace: string;
+                  value: string;
+                  type: string;
+                  createdAt: string;
+                  updatedAt: string;
+                  parentResource:
+                    | {
+                        __typename?: 'Article';
+                        id: string;
+                        metafields: Array<{
+                          __typename?: 'Metafield';
+                          id: string;
+                          key: string;
+                          value: string;
+                          type: string;
+                          createdAt: string;
+                          updatedAt: string;
+                        } | null>;
+                      }
+                    | { __typename?: 'Blog'; id: string }
+                    | { __typename?: 'Cart'; id: string }
+                    | { __typename?: 'Collection'; id: string }
+                    | { __typename?: 'Company'; id: string }
+                    | { __typename?: 'CompanyLocation'; id: string }
+                    | { __typename?: 'Customer'; id: string }
+                    | { __typename?: 'Location'; id: string }
+                    | { __typename?: 'Market'; id: string }
+                    | { __typename?: 'Order'; id: string }
+                    | { __typename?: 'Page'; id: string }
+                    | { __typename?: 'Product'; id: string }
+                    | { __typename?: 'ProductVariant'; id: string }
+                    | { __typename?: 'SellingPlan'; id: string }
+                    | { __typename?: 'Shop'; id: string };
+                } | null>;
               };
             }>;
           };
@@ -12766,6 +13273,44 @@ export type CollectionsQuery = {
                         nodes: Array<{ __typename?: 'Collection'; handle: string }>;
                       };
                     };
+                    metafields: Array<{
+                      __typename?: 'Metafield';
+                      id: string;
+                      key: string;
+                      namespace: string;
+                      value: string;
+                      type: string;
+                      createdAt: string;
+                      updatedAt: string;
+                      parentResource:
+                        | {
+                            __typename?: 'Article';
+                            id: string;
+                            metafields: Array<{
+                              __typename?: 'Metafield';
+                              id: string;
+                              key: string;
+                              value: string;
+                              type: string;
+                              createdAt: string;
+                              updatedAt: string;
+                            } | null>;
+                          }
+                        | { __typename?: 'Blog'; id: string }
+                        | { __typename?: 'Cart'; id: string }
+                        | { __typename?: 'Collection'; id: string }
+                        | { __typename?: 'Company'; id: string }
+                        | { __typename?: 'CompanyLocation'; id: string }
+                        | { __typename?: 'Customer'; id: string }
+                        | { __typename?: 'Location'; id: string }
+                        | { __typename?: 'Market'; id: string }
+                        | { __typename?: 'Order'; id: string }
+                        | { __typename?: 'Page'; id: string }
+                        | { __typename?: 'Product'; id: string }
+                        | { __typename?: 'ProductVariant'; id: string }
+                        | { __typename?: 'SellingPlan'; id: string }
+                        | { __typename?: 'Shop'; id: string };
+                    } | null>;
                   };
                 }>;
               };
@@ -14011,6 +14556,44 @@ export type ProductVariantFieldsFragment = {
       nodes: Array<{ __typename?: 'Collection'; handle: string }>;
     };
   };
+  metafields: Array<{
+    __typename?: 'Metafield';
+    id: string;
+    key: string;
+    namespace: string;
+    value: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+    parentResource:
+      | {
+          __typename?: 'Article';
+          id: string;
+          metafields: Array<{
+            __typename?: 'Metafield';
+            id: string;
+            key: string;
+            value: string;
+            type: string;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
+        }
+      | { __typename?: 'Blog'; id: string }
+      | { __typename?: 'Cart'; id: string }
+      | { __typename?: 'Collection'; id: string }
+      | { __typename?: 'Company'; id: string }
+      | { __typename?: 'CompanyLocation'; id: string }
+      | { __typename?: 'Customer'; id: string }
+      | { __typename?: 'Location'; id: string }
+      | { __typename?: 'Market'; id: string }
+      | { __typename?: 'Order'; id: string }
+      | { __typename?: 'Page'; id: string }
+      | { __typename?: 'Product'; id: string }
+      | { __typename?: 'ProductVariant'; id: string }
+      | { __typename?: 'SellingPlan'; id: string }
+      | { __typename?: 'Shop'; id: string };
+  } | null>;
 };
 
 export type ProductDetailsFragment = {
@@ -14497,6 +15080,44 @@ export type ProductVariantConnectionFragment = {
           nodes: Array<{ __typename?: 'Collection'; handle: string }>;
         };
       };
+      metafields: Array<{
+        __typename?: 'Metafield';
+        id: string;
+        key: string;
+        namespace: string;
+        value: string;
+        type: string;
+        createdAt: string;
+        updatedAt: string;
+        parentResource:
+          | {
+              __typename?: 'Article';
+              id: string;
+              metafields: Array<{
+                __typename?: 'Metafield';
+                id: string;
+                key: string;
+                value: string;
+                type: string;
+                createdAt: string;
+                updatedAt: string;
+              } | null>;
+            }
+          | { __typename?: 'Blog'; id: string }
+          | { __typename?: 'Cart'; id: string }
+          | { __typename?: 'Collection'; id: string }
+          | { __typename?: 'Company'; id: string }
+          | { __typename?: 'CompanyLocation'; id: string }
+          | { __typename?: 'Customer'; id: string }
+          | { __typename?: 'Location'; id: string }
+          | { __typename?: 'Market'; id: string }
+          | { __typename?: 'Order'; id: string }
+          | { __typename?: 'Page'; id: string }
+          | { __typename?: 'Product'; id: string }
+          | { __typename?: 'ProductVariant'; id: string }
+          | { __typename?: 'SellingPlan'; id: string }
+          | { __typename?: 'Shop'; id: string };
+      } | null>;
     };
   }>;
 };
@@ -14608,6 +15229,44 @@ export type ProductFieldsFragment = {
             nodes: Array<{ __typename?: 'Collection'; handle: string }>;
           };
         };
+        metafields: Array<{
+          __typename?: 'Metafield';
+          id: string;
+          key: string;
+          namespace: string;
+          value: string;
+          type: string;
+          createdAt: string;
+          updatedAt: string;
+          parentResource:
+            | {
+                __typename?: 'Article';
+                id: string;
+                metafields: Array<{
+                  __typename?: 'Metafield';
+                  id: string;
+                  key: string;
+                  value: string;
+                  type: string;
+                  createdAt: string;
+                  updatedAt: string;
+                } | null>;
+              }
+            | { __typename?: 'Blog'; id: string }
+            | { __typename?: 'Cart'; id: string }
+            | { __typename?: 'Collection'; id: string }
+            | { __typename?: 'Company'; id: string }
+            | { __typename?: 'CompanyLocation'; id: string }
+            | { __typename?: 'Customer'; id: string }
+            | { __typename?: 'Location'; id: string }
+            | { __typename?: 'Market'; id: string }
+            | { __typename?: 'Order'; id: string }
+            | { __typename?: 'Page'; id: string }
+            | { __typename?: 'Product'; id: string }
+            | { __typename?: 'ProductVariant'; id: string }
+            | { __typename?: 'SellingPlan'; id: string }
+            | { __typename?: 'Shop'; id: string };
+        } | null>;
       };
     }>;
   };
@@ -15156,6 +15815,44 @@ export type GetProductByHandleQuery = {
               nodes: Array<{ __typename?: 'Collection'; handle: string }>;
             };
           };
+          metafields: Array<{
+            __typename?: 'Metafield';
+            id: string;
+            key: string;
+            namespace: string;
+            value: string;
+            type: string;
+            createdAt: string;
+            updatedAt: string;
+            parentResource:
+              | {
+                  __typename?: 'Article';
+                  id: string;
+                  metafields: Array<{
+                    __typename?: 'Metafield';
+                    id: string;
+                    key: string;
+                    value: string;
+                    type: string;
+                    createdAt: string;
+                    updatedAt: string;
+                  } | null>;
+                }
+              | { __typename?: 'Blog'; id: string }
+              | { __typename?: 'Cart'; id: string }
+              | { __typename?: 'Collection'; id: string }
+              | { __typename?: 'Company'; id: string }
+              | { __typename?: 'CompanyLocation'; id: string }
+              | { __typename?: 'Customer'; id: string }
+              | { __typename?: 'Location'; id: string }
+              | { __typename?: 'Market'; id: string }
+              | { __typename?: 'Order'; id: string }
+              | { __typename?: 'Page'; id: string }
+              | { __typename?: 'Product'; id: string }
+              | { __typename?: 'ProductVariant'; id: string }
+              | { __typename?: 'SellingPlan'; id: string }
+              | { __typename?: 'Shop'; id: string };
+          } | null>;
         };
       }>;
     };
@@ -15332,6 +16029,44 @@ export type ProductRecommendationsQuery = {
               nodes: Array<{ __typename?: 'Collection'; handle: string }>;
             };
           };
+          metafields: Array<{
+            __typename?: 'Metafield';
+            id: string;
+            key: string;
+            namespace: string;
+            value: string;
+            type: string;
+            createdAt: string;
+            updatedAt: string;
+            parentResource:
+              | {
+                  __typename?: 'Article';
+                  id: string;
+                  metafields: Array<{
+                    __typename?: 'Metafield';
+                    id: string;
+                    key: string;
+                    value: string;
+                    type: string;
+                    createdAt: string;
+                    updatedAt: string;
+                  } | null>;
+                }
+              | { __typename?: 'Blog'; id: string }
+              | { __typename?: 'Cart'; id: string }
+              | { __typename?: 'Collection'; id: string }
+              | { __typename?: 'Company'; id: string }
+              | { __typename?: 'CompanyLocation'; id: string }
+              | { __typename?: 'Customer'; id: string }
+              | { __typename?: 'Location'; id: string }
+              | { __typename?: 'Market'; id: string }
+              | { __typename?: 'Order'; id: string }
+              | { __typename?: 'Page'; id: string }
+              | { __typename?: 'Product'; id: string }
+              | { __typename?: 'ProductVariant'; id: string }
+              | { __typename?: 'SellingPlan'; id: string }
+              | { __typename?: 'Shop'; id: string };
+          } | null>;
         };
       }>;
     };
@@ -15513,6 +16248,44 @@ export type GetProductsQuery = {
                   nodes: Array<{ __typename?: 'Collection'; handle: string }>;
                 };
               };
+              metafields: Array<{
+                __typename?: 'Metafield';
+                id: string;
+                key: string;
+                namespace: string;
+                value: string;
+                type: string;
+                createdAt: string;
+                updatedAt: string;
+                parentResource:
+                  | {
+                      __typename?: 'Article';
+                      id: string;
+                      metafields: Array<{
+                        __typename?: 'Metafield';
+                        id: string;
+                        key: string;
+                        value: string;
+                        type: string;
+                        createdAt: string;
+                        updatedAt: string;
+                      } | null>;
+                    }
+                  | { __typename?: 'Blog'; id: string }
+                  | { __typename?: 'Cart'; id: string }
+                  | { __typename?: 'Collection'; id: string }
+                  | { __typename?: 'Company'; id: string }
+                  | { __typename?: 'CompanyLocation'; id: string }
+                  | { __typename?: 'Customer'; id: string }
+                  | { __typename?: 'Location'; id: string }
+                  | { __typename?: 'Market'; id: string }
+                  | { __typename?: 'Order'; id: string }
+                  | { __typename?: 'Page'; id: string }
+                  | { __typename?: 'Product'; id: string }
+                  | { __typename?: 'ProductVariant'; id: string }
+                  | { __typename?: 'SellingPlan'; id: string }
+                  | { __typename?: 'Shop'; id: string };
+              } | null>;
             };
           }>;
         };
@@ -15620,6 +16393,44 @@ export type GetProductWithVariantQuery = {
           nodes: Array<{ __typename?: 'Collection'; handle: string }>;
         };
       };
+      metafields: Array<{
+        __typename?: 'Metafield';
+        id: string;
+        key: string;
+        namespace: string;
+        value: string;
+        type: string;
+        createdAt: string;
+        updatedAt: string;
+        parentResource:
+          | {
+              __typename?: 'Article';
+              id: string;
+              metafields: Array<{
+                __typename?: 'Metafield';
+                id: string;
+                key: string;
+                value: string;
+                type: string;
+                createdAt: string;
+                updatedAt: string;
+              } | null>;
+            }
+          | { __typename?: 'Blog'; id: string }
+          | { __typename?: 'Cart'; id: string }
+          | { __typename?: 'Collection'; id: string }
+          | { __typename?: 'Company'; id: string }
+          | { __typename?: 'CompanyLocation'; id: string }
+          | { __typename?: 'Customer'; id: string }
+          | { __typename?: 'Location'; id: string }
+          | { __typename?: 'Market'; id: string }
+          | { __typename?: 'Order'; id: string }
+          | { __typename?: 'Page'; id: string }
+          | { __typename?: 'Product'; id: string }
+          | { __typename?: 'ProductVariant'; id: string }
+          | { __typename?: 'SellingPlan'; id: string }
+          | { __typename?: 'Shop'; id: string };
+      } | null>;
     } | null;
     featuredImage?: {
       __typename?: 'Image';
@@ -15716,6 +16527,44 @@ export type GetProductWithVariantQuery = {
               nodes: Array<{ __typename?: 'Collection'; handle: string }>;
             };
           };
+          metafields: Array<{
+            __typename?: 'Metafield';
+            id: string;
+            key: string;
+            namespace: string;
+            value: string;
+            type: string;
+            createdAt: string;
+            updatedAt: string;
+            parentResource:
+              | {
+                  __typename?: 'Article';
+                  id: string;
+                  metafields: Array<{
+                    __typename?: 'Metafield';
+                    id: string;
+                    key: string;
+                    value: string;
+                    type: string;
+                    createdAt: string;
+                    updatedAt: string;
+                  } | null>;
+                }
+              | { __typename?: 'Blog'; id: string }
+              | { __typename?: 'Cart'; id: string }
+              | { __typename?: 'Collection'; id: string }
+              | { __typename?: 'Company'; id: string }
+              | { __typename?: 'CompanyLocation'; id: string }
+              | { __typename?: 'Customer'; id: string }
+              | { __typename?: 'Location'; id: string }
+              | { __typename?: 'Market'; id: string }
+              | { __typename?: 'Order'; id: string }
+              | { __typename?: 'Page'; id: string }
+              | { __typename?: 'Product'; id: string }
+              | { __typename?: 'ProductVariant'; id: string }
+              | { __typename?: 'SellingPlan'; id: string }
+              | { __typename?: 'Shop'; id: string };
+          } | null>;
         };
       }>;
     };
@@ -15906,6 +16755,44 @@ export type GetProductsByIdsQuery = {
                   nodes: Array<{ __typename?: 'Collection'; handle: string }>;
                 };
               };
+              metafields: Array<{
+                __typename?: 'Metafield';
+                id: string;
+                key: string;
+                namespace: string;
+                value: string;
+                type: string;
+                createdAt: string;
+                updatedAt: string;
+                parentResource:
+                  | {
+                      __typename?: 'Article';
+                      id: string;
+                      metafields: Array<{
+                        __typename?: 'Metafield';
+                        id: string;
+                        key: string;
+                        value: string;
+                        type: string;
+                        createdAt: string;
+                        updatedAt: string;
+                      } | null>;
+                    }
+                  | { __typename?: 'Blog'; id: string }
+                  | { __typename?: 'Cart'; id: string }
+                  | { __typename?: 'Collection'; id: string }
+                  | { __typename?: 'Company'; id: string }
+                  | { __typename?: 'CompanyLocation'; id: string }
+                  | { __typename?: 'Customer'; id: string }
+                  | { __typename?: 'Location'; id: string }
+                  | { __typename?: 'Market'; id: string }
+                  | { __typename?: 'Order'; id: string }
+                  | { __typename?: 'Page'; id: string }
+                  | { __typename?: 'Product'; id: string }
+                  | { __typename?: 'ProductVariant'; id: string }
+                  | { __typename?: 'SellingPlan'; id: string }
+                  | { __typename?: 'Shop'; id: string };
+              } | null>;
             };
           }>;
         };
@@ -16141,6 +17028,44 @@ export type PredictiveSearchQuery = {
                 nodes: Array<{ __typename?: 'Collection'; handle: string }>;
               };
             };
+            metafields: Array<{
+              __typename?: 'Metafield';
+              id: string;
+              key: string;
+              namespace: string;
+              value: string;
+              type: string;
+              createdAt: string;
+              updatedAt: string;
+              parentResource:
+                | {
+                    __typename?: 'Article';
+                    id: string;
+                    metafields: Array<{
+                      __typename?: 'Metafield';
+                      id: string;
+                      key: string;
+                      value: string;
+                      type: string;
+                      createdAt: string;
+                      updatedAt: string;
+                    } | null>;
+                  }
+                | { __typename?: 'Blog'; id: string }
+                | { __typename?: 'Cart'; id: string }
+                | { __typename?: 'Collection'; id: string }
+                | { __typename?: 'Company'; id: string }
+                | { __typename?: 'CompanyLocation'; id: string }
+                | { __typename?: 'Customer'; id: string }
+                | { __typename?: 'Location'; id: string }
+                | { __typename?: 'Market'; id: string }
+                | { __typename?: 'Order'; id: string }
+                | { __typename?: 'Page'; id: string }
+                | { __typename?: 'Product'; id: string }
+                | { __typename?: 'ProductVariant'; id: string }
+                | { __typename?: 'SellingPlan'; id: string }
+                | { __typename?: 'Shop'; id: string };
+            } | null>;
           };
         }>;
       };
@@ -16327,6 +17252,44 @@ export type SearchProductsQuery = {
                       nodes: Array<{ __typename?: 'Collection'; handle: string }>;
                     };
                   };
+                  metafields: Array<{
+                    __typename?: 'Metafield';
+                    id: string;
+                    key: string;
+                    namespace: string;
+                    value: string;
+                    type: string;
+                    createdAt: string;
+                    updatedAt: string;
+                    parentResource:
+                      | {
+                          __typename?: 'Article';
+                          id: string;
+                          metafields: Array<{
+                            __typename?: 'Metafield';
+                            id: string;
+                            key: string;
+                            value: string;
+                            type: string;
+                            createdAt: string;
+                            updatedAt: string;
+                          } | null>;
+                        }
+                      | { __typename?: 'Blog'; id: string }
+                      | { __typename?: 'Cart'; id: string }
+                      | { __typename?: 'Collection'; id: string }
+                      | { __typename?: 'Company'; id: string }
+                      | { __typename?: 'CompanyLocation'; id: string }
+                      | { __typename?: 'Customer'; id: string }
+                      | { __typename?: 'Location'; id: string }
+                      | { __typename?: 'Market'; id: string }
+                      | { __typename?: 'Order'; id: string }
+                      | { __typename?: 'Page'; id: string }
+                      | { __typename?: 'Product'; id: string }
+                      | { __typename?: 'ProductVariant'; id: string }
+                      | { __typename?: 'SellingPlan'; id: string }
+                      | { __typename?: 'Shop'; id: string };
+                  } | null>;
                 };
               }>;
             };
@@ -16981,46 +17944,6 @@ export const ProductDetailsFragmentDoc = gql`
     }
   }
 `;
-export const ProductVariantFieldsFragmentDoc = gql`
-  fragment ProductVariantFields on ProductVariant {
-    id
-    availableForSale
-    quantityAvailable
-    title
-    sku
-    weight
-    weightUnit
-    compareAtPrice {
-      ...MoneyFields
-    }
-    selectedOptions {
-      name
-      value
-    }
-    image {
-      ...ImageFields
-    }
-    price {
-      ...MoneyFields
-    }
-    product {
-      ...ProductDetails
-    }
-  }
-  ${MoneyFieldsFragmentDoc}
-  ${ImageFieldsFragmentDoc}
-  ${ProductDetailsFragmentDoc}
-`;
-export const ProductVariantConnectionFragmentDoc = gql`
-  fragment ProductVariantConnection on ProductVariantConnection {
-    edges {
-      node {
-        ...ProductVariantFields
-      }
-    }
-  }
-  ${ProductVariantFieldsFragmentDoc}
-`;
 export const MetafieldFieldsFragmentDoc = gql`
   fragment MetafieldFields on Metafield {
     id
@@ -17086,6 +18009,50 @@ export const MetafieldFieldsFragmentDoc = gql`
       }
     }
   }
+`;
+export const ProductVariantFieldsFragmentDoc = gql`
+  fragment ProductVariantFields on ProductVariant {
+    id
+    availableForSale
+    quantityAvailable
+    title
+    sku
+    weight
+    weightUnit
+    compareAtPrice {
+      ...MoneyFields
+    }
+    selectedOptions {
+      name
+      value
+    }
+    image {
+      ...ImageFields
+    }
+    price {
+      ...MoneyFields
+    }
+    product {
+      ...ProductDetails
+    }
+    metafields(identifiers: $identifiers) {
+      ...MetafieldFields
+    }
+  }
+  ${MoneyFieldsFragmentDoc}
+  ${ImageFieldsFragmentDoc}
+  ${ProductDetailsFragmentDoc}
+  ${MetafieldFieldsFragmentDoc}
+`;
+export const ProductVariantConnectionFragmentDoc = gql`
+  fragment ProductVariantConnection on ProductVariantConnection {
+    edges {
+      node {
+        ...ProductVariantFields
+      }
+    }
+  }
+  ${ProductVariantFieldsFragmentDoc}
 `;
 export const ProductFieldsFragmentDoc = gql`
   fragment ProductFields on Product {

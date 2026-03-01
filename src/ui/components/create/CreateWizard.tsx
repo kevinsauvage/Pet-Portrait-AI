@@ -1,11 +1,11 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useSearchParams } from 'next/navigation';
 
 import { useCart } from '@/contexts/CartContext/useCart';
-import { AI_ART_STYLES, type ArtStyleId, isValidStyleId } from '@/domains/ai/ai-portrait/types';
+import type { ProductType } from '@/domains/ai/ai-portrait/products';
+import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
 import { validateImageDimensions } from '@/domains/ai/ai-portrait/validation';
 import { api } from '@/infra/http/api-client';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
@@ -16,17 +16,10 @@ import StepGenerating from './StepGenerating';
 import StepSelect from './StepSelect';
 import StepStyle from './StepStyle';
 import StepUpload from './StepUpload';
+import { useWizardState, type WizardStep } from './useWizardState';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-
-type WizardStep = 'upload' | 'style' | 'generating' | 'select' | 'add-to-cart';
-
-interface ArtworkState {
-  urls: string[];
-  generationId: string;
-  styleId: ArtStyleId;
-}
 
 const STEPS: { id: WizardStep; label: string }[] = [
   { id: 'upload', label: 'Upload' },
@@ -37,23 +30,28 @@ const STEPS: { id: WizardStep; label: string }[] = [
 ];
 
 export default function CreateWizard() {
-  const searchParams = useSearchParams();
-  const styleFromUrl = searchParams.get('style');
-  const preselectedStyleId = isValidStyleId(styleFromUrl) ? (styleFromUrl as ArtStyleId) : null;
-
-  const [step, setStep] = useState<WizardStep>('upload');
-  const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
-  const [selectedStyleId, setSelectedStyleId] = useState<ArtStyleId | null>(null);
-  const [artwork, setArtwork] = useState<ArtworkState | null>(null);
-  const [selectedArtworkUrl, setSelectedArtworkUrl] = useState<string | null>(null);
+  const {
+    step,
+    originalPhotoUrl,
+    artwork,
+    selectedArtworkUrl,
+    styleId,
+    preselectedStyleId,
+    setOriginalPhotoUrl,
+    setArtwork,
+    setSelectedArtworkUrl,
+    goToStep,
+    reset,
+  } = useWizardState();
 
   const { handleAddToCart } = useCart();
+
   const { startUpload, isUploading } = useUploadThing('userUpload', {
     onClientUploadComplete: (res) => {
       const url = getUploadUrl(res?.[0]);
       if (url) {
         setOriginalPhotoUrl(url);
-        setStep('style');
+        goToStep('style');
       }
     },
     onUploadError: (err) => {
@@ -85,55 +83,58 @@ export default function CreateWizard() {
     disabled: isUploading,
   });
 
-  const handleStyleSelect = (styleId: ArtStyleId) => {
-    setSelectedStyleId(styleId);
-    setStep('generating');
+  // Use a ref to track the active generation so stale responses are ignored
+  const generationRef = useRef<string | null>(null);
 
-    api
-      .post<{ data: { urls: string[]; generationId: string; styleId: ArtStyleId } }>(
-        '/api/ai/generate',
-        { originalPhotoUrl, styleId },
-      )
-      .then((res) => {
-        const { data } = res;
-        if (!data?.urls) throw new Error('Invalid response');
-        setArtwork(data);
-        setStep('select');
-      })
-      .catch((err) => {
-        toast.error(err?.message ?? 'Generation failed');
-        setStep('style');
-      });
-  };
+  const handleStyleSelect = useCallback(
+    (selectedStyleId: ArtStyleId) => {
+      if (!originalPhotoUrl) return;
 
-  const handleProceedToCart = () => {
-    if (!selectedArtworkUrl || !artwork) return;
-    setStep('add-to-cart');
-  };
+      const generationToken = crypto.randomUUID();
+      generationRef.current = generationToken;
 
-  const handleAddToCartWithArtwork = async (
-    variantId: string,
-    productType: 'digital' | 'canvas' | 'poster',
-  ) => {
-    if (!selectedArtworkUrl || !artwork || !originalPhotoUrl) return;
+      goToStep('generating');
 
-    const styleName = AI_ART_STYLES.find((s) => s.id === artwork.styleId)?.name ?? artwork.styleId;
+      api
+        .post<{ data: { urls: string[]; generationId: string; styleId: ArtStyleId } }>(
+          '/api/ai/generate',
+          { originalPhotoUrl, styleId: selectedStyleId },
+        )
+        .then((res) => {
+          if (generationRef.current !== generationToken) return;
+          const { data } = res;
+          if (!data?.urls) throw new Error('Invalid response');
+          setArtwork(data);
+        })
+        .catch((err) => {
+          if (generationRef.current !== generationToken) return;
+          toast.error(err?.message ?? 'Generation failed');
+          goToStep('style');
+        })
+        .finally(() => {
+          // no-op; navigation handled in success/error branches
+        });
+    },
+    [originalPhotoUrl, goToStep, setArtwork],
+  );
 
-    const attributes = [
-      { key: 'original_photo_url', value: originalPhotoUrl },
-      { key: 'final_artwork_url', value: selectedArtworkUrl },
-      { key: 'chosen_style', value: styleName },
-      { key: 'generation_id', value: artwork.generationId },
-      { key: 'product_type', value: productType },
-    ];
+  const handleAddToCartWithArtwork = useCallback(
+    async (variantId: string, productType: ProductType) => {
+      if (!selectedArtworkUrl || !artwork || !originalPhotoUrl) return;
 
-    try {
-      await handleAddToCart(variantId, 1, attributes);
-      toast.success('Added to cart!');
-    } catch {
-      toast.error('Failed to add to cart');
-    }
-  };
+      const styleName =
+        AI_ART_STYLES.find((s) => s.id === artwork.styleId)?.name ?? artwork.styleId;
+
+      await handleAddToCart(variantId, 1, [
+        { key: 'Custom Artwork URL', value: selectedArtworkUrl },
+        { key: 'original_photo_url', value: originalPhotoUrl },
+        { key: 'chosen_style', value: styleName },
+        { key: 'generation_id', value: artwork.generationId },
+        { key: 'product_type', value: productType },
+      ]);
+    },
+    [selectedArtworkUrl, artwork, originalPhotoUrl, handleAddToCart],
+  );
 
   const currentStepIndex = STEPS.findIndex((s) => s.id === step);
 
@@ -178,6 +179,8 @@ export default function CreateWizard() {
               getInputProps={getInputProps}
               isDragActive={isDragActive}
               isUploading={isUploading}
+              existingPhotoUrl={originalPhotoUrl}
+              onContinue={originalPhotoUrl ? () => goToStep('style') : undefined}
             />
           </motion.div>
         )}
@@ -193,7 +196,7 @@ export default function CreateWizard() {
             <StepStyle
               originalPhotoUrl={originalPhotoUrl}
               onSelect={handleStyleSelect}
-              onBack={() => setStep('upload')}
+              onBack={() => goToStep('upload')}
               preselectedStyleId={preselectedStyleId}
             />
           </motion.div>
@@ -207,7 +210,7 @@ export default function CreateWizard() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <StepGenerating styleId={selectedStyleId} />
+            <StepGenerating styleId={styleId} />
           </motion.div>
         )}
 
@@ -223,8 +226,8 @@ export default function CreateWizard() {
               urls={artwork.urls}
               selectedUrl={selectedArtworkUrl}
               onSelect={setSelectedArtworkUrl}
-              onProceed={handleProceedToCart}
-              onBack={() => setStep('style')}
+              onProceed={() => goToStep('add-to-cart')}
+              onBack={() => goToStep('style')}
               disabled={!selectedArtworkUrl}
             />
           </motion.div>
@@ -240,9 +243,8 @@ export default function CreateWizard() {
           >
             <StepAddToCart
               selectedArtworkUrl={selectedArtworkUrl}
-              artwork={artwork}
-              originalPhotoUrl={originalPhotoUrl ?? ''}
               onAddToCart={handleAddToCartWithArtwork}
+              onStartOver={reset}
             />
           </motion.div>
         )}
