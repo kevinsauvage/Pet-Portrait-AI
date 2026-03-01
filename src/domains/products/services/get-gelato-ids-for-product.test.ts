@@ -7,6 +7,25 @@ vi.mock('@/infra/gelato/client', () => ({
   findGelatoProductByShopifyId: vi.fn(),
 }));
 
+// Keep retry delays from actually sleeping in tests
+vi.mock('@/core/utils/retry', async (importOriginal) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const original = await importOriginal<typeof import('@/core/utils/retry')>();
+  return {
+    withRetry: async <T>(
+      fn: () => Promise<T>,
+      options: Parameters<typeof original.withRetry>[1],
+    ): Promise<T | undefined> => {
+      for (let attempt = 1; attempt <= options.maxAttempts; attempt++) {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await fn();
+        if (!options.isSuccess || options.isSuccess(result)) return result;
+      }
+      return undefined;
+    },
+  };
+});
+
 import { findGelatoProductByShopifyId } from '@/infra/gelato/client';
 
 const mockPayload = (
@@ -56,10 +75,28 @@ describe('getGelatoIdsForShopifyProduct', () => {
     expect(findGelatoProductByShopifyId).not.toHaveBeenCalled();
   });
 
-  it('returns null when no Gelato product found', async () => {
+  it('returns null when Gelato product is not found after all retries', async () => {
     vi.mocked(findGelatoProductByShopifyId).mockResolvedValue(null);
     const result = await getGelatoIdsForShopifyProduct(mockPayload());
     expect(result).toBeNull();
+    expect(findGelatoProductByShopifyId).toHaveBeenCalledTimes(5);
+  });
+
+  it('retries until Gelato product becomes available', async () => {
+    const product = mockGelatoProduct();
+    vi.mocked(findGelatoProductByShopifyId)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(product);
+    const result = await getGelatoIdsForShopifyProduct(mockPayload());
+    expect(result).toEqual({ gelatoProductId: 'gelato-prod-uuid', gelatoVariantId: null });
+    expect(findGelatoProductByShopifyId).toHaveBeenCalledTimes(3);
+  });
+
+  it('returns ids immediately when product is found on first attempt', async () => {
+    vi.mocked(findGelatoProductByShopifyId).mockResolvedValue(mockGelatoProduct());
+    await getGelatoIdsForShopifyProduct(mockPayload());
+    expect(findGelatoProductByShopifyId).toHaveBeenCalledTimes(1);
   });
 
   it('returns gelatoProductId and first connected variant id', async () => {
