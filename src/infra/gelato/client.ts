@@ -110,7 +110,7 @@ export async function findGelatoProductByShopifyId(
     const res = await gelatoFetch<GelatoProductListResponse>(
       `${ECOMMERCE_BASE}/stores/${storeId}/products?limit=50&page=${page}`,
     );
-    const match = res.data.find((p) => p.externalId === shopifyProductRestId);
+    const match = (res.data ?? []).find((p) => p.externalId === shopifyProductRestId);
     if (match) return match;
 
     const totalPages = res.pagination?.totalPages ?? 1;
