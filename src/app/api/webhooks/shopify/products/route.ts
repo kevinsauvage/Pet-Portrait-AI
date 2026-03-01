@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     const product = JSON.parse(body) as ShopifyProductWebhookPayload;
+    console.log('🚀 ~ POST ~ product:', JSON.parse(JSON.stringify(product)));
     const productGid = toProductGid(product.id, product.admin_graphql_api_id);
     const firstVariant = product.variants?.[0];
     const variantGid = firstVariant
