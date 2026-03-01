@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import config from '@/core/config';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import {
   getProductDetails,
@@ -12,7 +11,7 @@ import ProductDescription from '@/ui/components/product/ProductDescription';
 import ProductRecommendations from '@/ui/components/product/ProductRecommendations';
 import HomeSection from '@/ui/components/shared/HomeSection';
 
-export const revalidate = config.constants.revalidate.product;
+export const revalidate = 3600;
 
 type parametersType = {
   genre: string;

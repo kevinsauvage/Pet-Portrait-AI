@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAllCollections } from '@/domains/collections/services/collections.service';
@@ -12,7 +11,7 @@ import { Button } from '@/ui/primitives/button';
 
 import { ImageIcon, Palette, ShoppingBag } from 'lucide-react';
 
-export const revalidate = config.constants.revalidate.catalog;
+export const revalidate = 3600;
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.shop.title,

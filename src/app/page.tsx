@@ -22,7 +22,7 @@ import {
 } from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
 
-export const revalidate = config.constants.revalidate.catalog;
+export const revalidate = 3600;
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.home.title,

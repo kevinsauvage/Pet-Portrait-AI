@@ -17,7 +17,7 @@ import EmptyState from '@/ui/components/shared/EmptyState';
 import PageBanner from '@/ui/components/shared/PageBanner';
 import { Button } from '@/ui/primitives/button';
 
-export const revalidate = config.constants.revalidate.search;
+export const revalidate = 300;
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.search.title,

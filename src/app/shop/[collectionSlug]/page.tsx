@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import config from '@/core/config';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/constants/sort-options';
 import {
@@ -16,7 +15,7 @@ import Sort from '@/ui/components/catalog/Sort';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 
-export const revalidate = config.constants.revalidate.catalog;
+export const revalidate = 3600;
 
 type parametersType = { collectionSlug: string };
 
