@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { useCart } from '@/contexts/CartContext/useCart';
-import config from '@/core/config';
 import type {
   AiPortraitProduct,
   AiPortraitProductVariant,
@@ -33,7 +31,6 @@ export default function AddToCartIsland({
   styleId,
   generationId,
 }: AddToCartIslandProps) {
-  const router = useRouter();
   const { handleAddToCart } = useCart();
 
   const firstAvailable = getFirstAvailableVariant(product.variants);
@@ -45,6 +42,18 @@ export default function AddToCartIsland({
   const selectedVariant: AiPortraitProductVariant | undefined = product.variants.find(
     (v) => v.id === selectedVariantId,
   );
+
+  // Reset loading state when variant changes
+  useEffect(() => {
+    setIsLoading(false);
+  }, [selectedVariantId]);
+
+  // Briefly show a checkmark state after a successful add
+  useEffect(() => {
+    if (!isAdded) return;
+    const timeout = setTimeout(() => setIsAdded(false), 2000);
+    return () => clearTimeout(timeout);
+  }, [isAdded]);
 
   const handleAdd = async () => {
     if (!selectedVariantId || !selectedVariant?.availableForSale || isLoading) return;
@@ -67,12 +76,6 @@ export default function AddToCartIsland({
     try {
       await handleAddToCart(selectedVariantId, 1, attributes);
       setIsAdded(true);
-      toast.success('Added to cart!', {
-        action: {
-          label: 'View Cart',
-          onClick: () => router.push(config.routes.cart),
-        },
-      });
     } catch {
       toast.error('Failed to add to cart. Please try again.');
     } finally {
@@ -115,7 +118,6 @@ export default function AddToCartIsland({
           size="lg"
           onClick={handleAdd}
           disabled={isLoading || !selectedVariant?.availableForSale}
-          variant={isAdded ? 'secondary' : 'default'}
           className="gap-2"
         >
           {isLoading ? (
@@ -125,8 +127,8 @@ export default function AddToCartIsland({
             </>
           ) : isAdded ? (
             <>
-              <Check className="h-4 w-4 text-green-600" />
-              Added to Cart
+              <Check className="h-4 w-4" />
+              Added
             </>
           ) : (
             <>
@@ -135,12 +137,6 @@ export default function AddToCartIsland({
             </>
           )}
         </Button>
-
-        {isAdded && (
-          <Button size="lg" variant="outline" asChild>
-            <a href={config.routes.cart}>View Cart</a>
-          </Button>
-        )}
       </div>
     </div>
   );

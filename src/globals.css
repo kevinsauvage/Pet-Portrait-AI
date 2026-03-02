@@ -405,7 +405,9 @@ h6 {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  transition: color 0.2s ease, text-underline-offset 0.2s ease;
+  transition:
+    color 0.2s ease,
+    text-underline-offset 0.2s ease;
   @apply hover:underline-offset-2 hover:text-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm;
 }
 
