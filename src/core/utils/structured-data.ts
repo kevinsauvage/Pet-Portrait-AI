@@ -45,7 +45,6 @@ export function generateProductSchema(product: ProductFieldsFragment) {
   const images = product.images?.edges?.map((edge) => edge.node.url) || [];
   const mainImage = images[0] || siteMetadata.siteLogo;
 
-  // Get description from SEO field or strip HTML from descriptionHtml
   const description =
     product.seo?.description ||
     (product.descriptionHtml ? stripHtmlToText(product.descriptionHtml) : '') ||
@@ -67,7 +66,7 @@ export function generateProductSchema(product: ProductFieldsFragment) {
       priceCurrency: currency,
       availability,
       price,
-      priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 1 year from now
+      priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       seller: {
         '@type': 'Organization',
         name: siteMetadata.companyName,
@@ -75,22 +74,13 @@ export function generateProductSchema(product: ProductFieldsFragment) {
     },
   };
 
-  // Add SKU if available
   if (firstVariant?.sku) {
     schema.sku = firstVariant.sku;
   }
 
-  // Add product ID
   if (product.id) {
     schema.productID = product.id;
   }
-
-  // Add aggregate rating if reviews are available (can be extended later)
-  // schema.aggregateRating = {
-  //   '@type': 'AggregateRating',
-  //   ratingValue: '4.5',
-  //   reviewCount: '100',
-  // };
 
   return schema;
 }

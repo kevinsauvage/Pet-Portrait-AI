@@ -53,7 +53,6 @@ const Breadcrumbs = ({ lastElement }: { lastElement?: string }) => {
     return [{ href: '/', title: 'Home' }, ...crumbList];
   }
 
-  // Call the function to generate the breadcrumbs list
   const breadcrumbs = generateBreadcrumbs();
 
   return (

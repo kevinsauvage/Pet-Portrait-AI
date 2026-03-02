@@ -15,7 +15,6 @@ const PhotoGallery = ({ images, className }: PhotoGalleryProps) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!images || images.length <= 1) return;

@@ -17,12 +17,10 @@ type ApiClientOptions = {
  * @returns An absolute URL
  */
 function getAbsoluteUrl(path: string): string {
-  // If path is already an absolute URL, return it as is
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
 
-  // Get base URL and ensure path starts with /
   const baseUrl = getBaseUrl();
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 

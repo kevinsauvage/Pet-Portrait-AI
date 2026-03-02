@@ -43,12 +43,10 @@ export default function AddToCartIsland({
     (v) => v.id === selectedVariantId,
   );
 
-  // Reset loading state when variant changes
   useEffect(() => {
     setIsLoading(false);
   }, [selectedVariantId]);
 
-  // Briefly show a checkmark state after a successful add
   useEffect(() => {
     if (!isAdded) return;
     const timeout = setTimeout(() => setIsAdded(false), 2000);

@@ -43,7 +43,6 @@ const LineItem: React.FC<{
   const hasDiscount = finalPrice < totalPrice;
   const { currencyCode } = node.merchandise.price;
 
-  // Get product handle for link
   const productHandle =
     'product' in node.merchandise && node.merchandise.product?.handle
       ? `${config.routes.collection}/products/${node.merchandise.product.handle}`

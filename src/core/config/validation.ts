@@ -108,12 +108,13 @@ function validateProductionRecommendations(warnings: string[]): void {
   }
 }
 
+import { logger } from '../utils/logger';
+
 /**
  * Validates that required environment variables are set.
  * Called during app initialization to fail fast with clear error messages.
  */
 export function validateConfig(): void {
-  // If no environment variables are set, skip validation
   if (Object.keys(process.env).length === 0) {
     return;
   }
@@ -131,13 +132,13 @@ export function validateConfig(): void {
     validateProductionRecommendations(warnings);
   }
 
-  // Log warnings (non-blocking)
   if (warnings.length > 0) {
-     
-    console.warn(`Configuration warnings:\n${warnings.map((w) => `  ⚠ ${w}`).join('\n')}`);
+    logger.warn('Configuration warnings detected', {
+      context: 'config-validation',
+      metadata: { warnings },
+    });
   }
 
-  // Throw errors (blocking)
   if (errors.length > 0) {
     throw new Error(
       `Configuration validation failed:\n${errors.map((e) => `  ✗ ${e}`).join('\n')}`,

@@ -36,8 +36,6 @@ const ProductCardSkeleton = ({
   variant = 'card',
 }: ProductCardSkeletonProps) => {
   if (variant === 'row') {
-    // Horizontal layout for cart items
-    // Matches cart item structure: image (120x120) + title + subtitle
     return (
       <div className={cn('flex gap-4', className)}>
         <div className="shrink-0">
@@ -51,7 +49,6 @@ const ProductCardSkeleton = ({
     );
   }
 
-  // Card layout for product grid
   return (
     <li className={cn('relative overflow-hidden rounded-sm transition-all', className)}>
       {/* Action Buttons (wishlist & quick view) */}

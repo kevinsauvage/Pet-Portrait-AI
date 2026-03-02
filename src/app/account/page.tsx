@@ -28,7 +28,6 @@ const Page = async () => {
     redirect(config.routes.login);
   }
 
-  // Fetch stats in parallel
   const [ordersResponse, addressesResponse, wishlist] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 3 }),
     AddressService.getCustomerAddresses({ first: 1 }),

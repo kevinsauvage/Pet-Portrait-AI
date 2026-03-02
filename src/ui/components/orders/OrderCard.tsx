@@ -82,7 +82,6 @@ const OrderCard = ({ order }: { order: OrderFieldsFragment }) => {
 
   const [open, setOpen] = useState(false);
 
-  // Get order items from fulfillments
   const orderItems =
     successfulFulfillments
       ?.flatMap((fulfillment) =>

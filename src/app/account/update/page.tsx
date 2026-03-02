@@ -21,7 +21,6 @@ export const metadata: Metadata = {
 const Page = async () => {
   const user = await getUser();
 
-  // Fetch stats in parallel
   const [ordersResponse, addressesResponse, wishlist] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 1 }),
     AddressService.getCustomerAddresses({ first: 1 }),

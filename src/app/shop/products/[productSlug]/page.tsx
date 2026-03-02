@@ -64,10 +64,8 @@ const ProductPage = async ({ params }: PageProperties) => {
   const hasRecommendations =
     recommendations?.productRecommendations && recommendations.productRecommendations.length > 0;
 
-  // Generate structured data
   const productSchema = generateProductSchema(product);
 
-  // Generate breadcrumb schema
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
     { name: 'Shop', url: '/shop' },

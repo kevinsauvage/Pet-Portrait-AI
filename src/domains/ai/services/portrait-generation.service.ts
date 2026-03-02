@@ -1,3 +1,4 @@
+import { logger } from '@/core/utils/logger';
 import { withRetry } from '@/core/utils/retry';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 
@@ -14,12 +15,26 @@ import { v4 as uuidv4 } from 'uuid';
 const OPENAI_EDIT_URL = 'https://api.openai.com/v1/images/edits';
 const VARIATIONS_COUNT = 2;
 
+/**
+ * Gets the style prompt suffix for a given art style ID.
+ *
+ * @param styleId - The art style identifier
+ * @returns The prompt suffix for the style, or a default portrait prompt
+ */
 function getStylePrompt(styleId: ArtStyleId): string {
   return (
     AI_ART_STYLES.find((s) => s.id === styleId)?.promptSuffix ?? 'as a beautiful artistic portrait'
   );
 }
 
+/**
+ * Uploads a base64-encoded image to cloud storage.
+ *
+ * @param base64Data - Base64-encoded image data
+ * @param fileName - Name for the uploaded file
+ * @returns The public URL of the uploaded image
+ * @throws {Error} If the upload fails or no URL is returned
+ */
 async function uploadBase64ToStorage(base64Data: string, fileName: string): Promise<string> {
   const buffer = Buffer.from(base64Data, 'base64');
   const utapi = new UTApi();
@@ -30,6 +45,16 @@ async function uploadBase64ToStorage(base64Data: string, fileName: string): Prom
   return url;
 }
 
+/**
+ * Edits an image using OpenAI's image editing API with retry logic.
+ * Fetches the source image, sends it to OpenAI with a style prompt, and returns base64 data.
+ *
+ * @param apiKey - OpenAI API key
+ * @param prompt - Style prompt describing the desired transformation
+ * @param imageUrl - URL of the source image to edit
+ * @returns Base64-encoded image data of the edited image
+ * @throws {Error} If image fetch fails, API call fails, or no image data is returned
+ */
 async function editImageWithOpenAI(
   apiKey: string,
   prompt: string,
@@ -71,7 +96,11 @@ async function editImageWithOpenAI(
       baseDelayMs: 2000,
       maxDelayMs: 6000,
       onAttemptFailed: (attempt, _maxAttempts, error) => {
-        console.error('editImageWithOpenAI attempt failed:', { attempt, error });
+        logger.error('OpenAI image edit attempt failed', {
+          context: 'ai-portrait-generate',
+          error,
+          metadata: { attempt },
+        });
         Sentry.captureException(error, { tags: { context: 'ai-portrait-generate', attempt } });
       },
     },
@@ -81,6 +110,24 @@ async function editImageWithOpenAI(
   return b64;
 }
 
+/**
+ * Generates multiple portrait variations of a pet photo in a specified art style.
+ * Creates VARIATIONS_COUNT variations, uploads them to storage, and logs the results.
+ *
+ * @param originalPhotoUrl - URL of the original pet photo
+ * @param styleId - Art style to apply (e.g., 'pixar', 'watercolor')
+ * @returns Object containing the generated image URLs, generation ID, and style ID
+ * @throws {Error} If OPENAI_API_KEY is not configured, generation fails, or upload fails
+ *
+ * @example
+ * ```ts
+ * const result = await generatePetPortraitVariations(
+ *   'https://example.com/pet.jpg',
+ *   'pixar'
+ * );
+ * console.log(result.urls); // Array of generated image URLs
+ * ```
+ */
 export async function generatePetPortraitVariations(
   originalPhotoUrl: string,
   styleId: ArtStyleId,
@@ -100,7 +147,11 @@ export async function generatePetPortraitVariations(
     logGenerationSuccess(generationId, styleId);
     return { urls, generationId, styleId };
   } catch (error) {
-    console.error('generatePetPortraitVariations failed:', error);
+    logger.error('Pet portrait generation failed', {
+      context: 'ai-portrait-generate',
+      error,
+      metadata: { generationId, styleId, originalPhotoUrl },
+    });
     logGenerationFailure(
       generationId,
       styleId,

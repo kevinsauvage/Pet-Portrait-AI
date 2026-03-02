@@ -47,7 +47,6 @@ export async function getProductSeo(handle: string): Promise<ProductSeo | null> 
   const description =
     product.seo?.description || stripHtmlToText(product.descriptionHtml ?? '') || 'Product';
 
-  // Get first product image for Open Graph
   const firstImage = product.images?.edges?.[0]?.node?.url;
 
   return { title, description, image: firstImage };

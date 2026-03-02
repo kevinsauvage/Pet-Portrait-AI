@@ -10,16 +10,13 @@ export function getBaseUrl(): string {
   const envBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   if (envBaseUrl) {
-    // Remove trailing slash if present
     return envBaseUrl.replace(/\/$/, '');
   }
 
-  // Fallback to siteMetadata (useful for development)
   if (siteMetadata.siteUrl) {
     return siteMetadata.siteUrl;
   }
 
-  // Last resort: throw error to make the issue explicit
   throw new Error(
     'NEXT_PUBLIC_BASE_URL is not set and siteMetadata.siteUrl is not configured. ' +
       'Please set NEXT_PUBLIC_BASE_URL environment variable.',
@@ -47,14 +44,11 @@ export function generateMetadata({
   type = 'website',
   noindex = false,
 }: MetadataOptions): Metadata {
-  // Use getBaseUrl() to ensure consistency and proper env var handling
   const siteUrl = getBaseUrl();
-  // Use template format for title (Next.js will handle the template)
   const pageTitle = title;
   const imageUrl = image || siteMetadata.siteLogo;
   const pageUrl = url ? `${siteUrl}${url}` : siteUrl;
 
-  // Ensure description is optimized (150-160 chars is ideal for SEO)
   const optimizedDescription =
     description.length > 160 ? `${description.substring(0, 157)}...` : description;
 
