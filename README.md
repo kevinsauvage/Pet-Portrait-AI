@@ -76,18 +76,18 @@ See [GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for the ful
 
 ## Tech Stack
 
-| Category   | Technology                                    |
-| ---------- | --------------------------------------------- |
-| Framework  | Next.js 16, React 19, TypeScript 5            |
-| Styling    | Tailwind CSS v4, Radix UI, lucide-react       |
-| APIs       | Shopify Storefront GraphQL, Shopify Admin API  |
-| AI         | OpenAI API                                     |
-| Fulfillment| Gelato Shopify App (automatic)                 |
-| Validation | Zod v4                                         |
-| GraphQL    | graphql-request, GraphQL Codegen               |
-| Uploads    | UploadThing                                    |
-| Email      | Nodemailer                                     |
-| Monitoring | Sentry                                         |
+| Category    | Technology                                    |
+| ----------- | --------------------------------------------- |
+| Framework   | Next.js 16, React 19, TypeScript 5            |
+| Styling     | Tailwind CSS v4, Radix UI, lucide-react       |
+| APIs        | Shopify Storefront GraphQL, Shopify Admin API |
+| AI          | OpenAI API                                    |
+| Fulfillment | Gelato Shopify App (automatic)                |
+| Validation  | Zod v4                                        |
+| GraphQL     | graphql-request, GraphQL Codegen              |
+| Uploads     | UploadThing                                   |
+| Email       | Nodemailer                                    |
+| Monitoring  | Sentry                                        |
 
 ---
 
@@ -153,8 +153,7 @@ These are recommended for production deployments:
 - **`NEXT_PUBLIC_SENTRY_DSN`** - Sentry DSN for error monitoring
 - **`SENTRY_ORG`** - Sentry organization name
 - **`SENTRY_PROJECT`** - Sentry project name
-- **`RATE_LIMIT_REDIS_URL`** - Redis URL for distributed rate limiting
-- **`RATE_LIMIT_REDIS_TOKEN`** - Redis token for rate limiting
+- **`REDIS_URL`** - Redis URL for distributed rate limiting (from Vercel integration or other provider)
 
 ##### 🔐 Optional Security
 
@@ -193,15 +192,18 @@ console.log(status);
 #### Deployment Scenarios
 
 **Development:**
+
 - Only required variables needed
 - Admin auth optional (defaults to allowing access)
 
 **Staging:**
+
 - All required variables
 - Recommended variables (Sentry, Redis) for testing
 - Admin auth recommended
 
 **Production:**
+
 - All required variables
 - All production-required variables (admin auth)
 - All recommended variables (Sentry, Redis)

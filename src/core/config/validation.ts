@@ -101,9 +101,9 @@ function validateProductionRecommendations(warnings: string[]): void {
     );
   }
 
-  if (!process.env.RATE_LIMIT_REDIS_URL || !process.env.RATE_LIMIT_REDIS_TOKEN) {
+  if (!process.env.REDIS_URL) {
     warnings.push(
-      'RATE_LIMIT_REDIS_URL and RATE_LIMIT_REDIS_TOKEN are not set. Rate limiting will use in-memory storage, which does not work across multiple server instances.',
+      'REDIS_URL is not set. Rate limiting will use in-memory storage, which does not work across multiple server instances.',
     );
   }
 }
@@ -198,8 +198,7 @@ export function getConfigStatus(): {
       NEXT_PUBLIC_SENTRY_DSN: Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN),
       SENTRY_ORG: Boolean(process.env.SENTRY_ORG),
       SENTRY_PROJECT: Boolean(process.env.SENTRY_PROJECT),
-      RATE_LIMIT_REDIS_URL: Boolean(process.env.RATE_LIMIT_REDIS_URL),
-      RATE_LIMIT_REDIS_TOKEN: Boolean(process.env.RATE_LIMIT_REDIS_TOKEN),
+      REDIS_URL: Boolean(process.env.REDIS_URL),
     },
     optional: {
       NEXT_PUBLIC_SITE_NAME: Boolean(process.env.NEXT_PUBLIC_SITE_NAME),
