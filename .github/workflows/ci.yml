@@ -69,3 +69,20 @@ jobs:
           SHOPIFY_STORE_FRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STORE_FRONT_ACCESS_TOKEN }}
         continue-on-error: true
         # Codegen requires Storefront token to be set directly.
+
+      - name: Build production bundle
+        run: yarn build
+        env:
+          # Required env vars for build (use defaults if secrets not available)
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL || 'https://example.com' }}
+          NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL || 'https://example.myshopify.com' }}
+          SHOPIFY_STORE_FRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STORE_FRONT_ACCESS_TOKEN || 'test-token' }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID || 'test-client-id' }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET || 'test-client-secret' }}
+          SHOPIFY_ADMIN_URL: ${{ secrets.SHOPIFY_ADMIN_URL || 'https://example.myshopify.com' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'test-openai-key' }}
+          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN || 'test-upload-token' }}
+          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET || 'test-upload-secret' }}
+          # Build-time only vars (not used at runtime in build)
+          AI_API_SECRET: ${{ secrets.AI_API_SECRET || 'test-ai-secret' }}
+          NODE_ENV: production
