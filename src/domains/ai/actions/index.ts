@@ -7,6 +7,8 @@ import { createErrorResult, createSuccessResult } from '@/core/utils/form-action
 import { formatZodErrorMessage } from '@/core/utils/zod';
 
 import { parsePortraitGenerationRequest } from '../ai-portrait/request';
+import type { ArtworkGenerationResult } from '../ai-portrait/types';
+import { validateImageFromUrl } from '../ai-portrait/validate-image';
 import { generatePetPortraitVariations } from '../services/portrait-generation.service';
 
 import * as Sentry from '@sentry/nextjs';
@@ -34,5 +36,52 @@ export async function regeneratePortraitAction(
   } catch (error) {
     Sentry.captureException(error, { tags: { context: 'admin-regenerate' } });
     return createErrorResult(error instanceof Error ? error.message : 'Regeneration failed');
+  }
+}
+
+/**
+ * Server action for generating pet portrait variations
+ * This can be called directly from server components or client components
+ */
+export async function generatePortraitAction(
+  originalPhotoUrl: string,
+  styleId: string,
+): Promise<{ success: true; data: ArtworkGenerationResult } | { success: false; error: string }> {
+  const parsed = parsePortraitGenerationRequest({
+    originalPhotoUrl,
+    styleId,
+  });
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: formatZodErrorMessage(parsed.error),
+    };
+  }
+
+  try {
+    const validation = await validateImageFromUrl(parsed.data.originalPhotoUrl);
+    if (!validation.valid) {
+      return {
+        success: false,
+        error: validation.error ?? 'Invalid image',
+      };
+    }
+
+    const result = await generatePetPortraitVariations(
+      parsed.data.originalPhotoUrl,
+      parsed.data.styleId,
+    );
+
+    return {
+      success: true,
+      data: result,
+    };
+  } catch (error) {
+    Sentry.captureException(error, { tags: { context: 'ai-portrait-generate-action' } });
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Generation failed',
+    };
   }
 }

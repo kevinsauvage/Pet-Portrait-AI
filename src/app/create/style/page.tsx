@@ -7,6 +7,7 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { AI_ART_STYLES } from '@/domains/ai/ai-portrait/types';
+import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
 import { Button } from '@/ui/primitives/button';
 
@@ -59,10 +60,10 @@ export default async function StylePage({ searchParams }: StylePageProps) {
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {AI_ART_STYLES.map((style) => {
-                const href =
-                  `${config.routes.createGenerating}` +
-                  `?photo=${encodeURIComponent(photo)}` +
-                  `&styleId=${style.id}`;
+                const href = `${config.routes.createGenerating}${buildCreateFlowQueryString({
+                  photo,
+                  styleId: style.id,
+                })}`;
 
                 return (
                   <Link
