@@ -33,7 +33,6 @@ generateSchemas()
   .then(() => {
     console.info('✅ Codegen complete');
   })
-  // eslint-disable-next-line unicorn/prefer-top-level-await
   .catch((error) => {
     console.error('❌ Codegen failed', error);
   });

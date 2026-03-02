@@ -1,5 +1,73 @@
-### 1. Pre-commit hooks
+## 🔴 HIGH PRIORITY (Critical for Production)
 
-- **What:** Run lint and type-check before commits.
-- **Where:** Root `.husky/`, `package.json`.
-- **How:** Add Husky + lint-staged. Run `lint`, `type-check`, and optionally `test` on staged files.
+### 9. Database & Cache Setup
+
+**What:** Configure persistent caching solution
+**Why:** In-memory cache doesn't persist across deployments/restarts
+**How:**
+
+- Evaluate if Redis cache is needed beyond rate limiting
+- If using Shopify caching, verify cache invalidation strategy
+- Document cache TTLs and invalidation patterns
+- Add cache monitoring/metrics
+- Consider using Vercel KV or Upstash for serverless-friendly caching
+
+**Files:** `src/infra/cache/index.ts`, `src/infra/shopify/client.ts`
+
+---
+
+## 🟡 MEDIUM PRIORITY (Important for Production)
+
+### 13. Accessibility Audit & Improvements
+
+**What:** Ensure WCAG compliance and accessibility
+**Why:** Legal compliance and better user experience
+**How:**
+
+- Run automated accessibility audit (axe, Lighthouse)
+- Test with screen readers (NVDA, VoiceOver)
+- Verify keyboard navigation works everywhere
+- Ensure proper ARIA labels and roles (some already implemented)
+- Fix color contrast issues
+- Add skip links for navigation
+- Ensure form errors are properly announced
+- Test with keyboard-only navigation
+- Add accessibility testing to CI
+
+**Files:** All UI components, especially forms and navigation
+
+---
+
+### 14. Analytics & Tracking Setup
+
+**What:** Configure production analytics
+**Why:** Understand user behavior and business metrics
+**How:**
+
+- Set up Google Tag Manager properly (`NEXT_PUBLIC_GTM_ID`)
+- Configure ecommerce tracking (Shopify checkout events)
+- Set up conversion tracking
+- Add custom events for AI generation, cart additions
+- Configure privacy-compliant analytics (GDPR, CCPA)
+- Review cookie consent implementation
+- Add analytics for error rates, performance metrics
+- Document analytics setup
+
+**Files:** `src/ui/components/consent/GtmScript.tsx`, `src/ui/components/consent/CookieBanner.tsx`
+
+---
+
+### 20. Legal & Compliance
+
+**What:** Ensure legal compliance
+**Why:** Avoid legal issues
+**How:**
+
+- Review privacy policy and terms of service
+- Ensure GDPR compliance (cookie consent, data handling)
+- Add proper legal pages (privacy, terms, refunds)
+- Review and update legal text
+- Ensure proper data retention policies
+- Review third-party service compliance (Shopify, OpenAI, etc.)
+
+**Files:** Legal pages, `src/domains/legal/`

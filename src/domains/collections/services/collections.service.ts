@@ -73,8 +73,8 @@ export async function getCollectionLayoutData(collectionSlug: string): Promise<{
       identifiers: [],
     }),
   ]);
-  logger.debug('getCollectionLayoutData responseMenu', responseMenu);
-  logger.debug('getCollectionLayoutData responseCollection', responseCollection);
+  logger.debug('Collection layout data response menu', { context: 'getCollectionLayoutData', metadata: { responseMenu } });
+  logger.debug('Collection layout data response collection', { context: 'getCollectionLayoutData', metadata: { responseCollection } });
 
   const navItems = getMenuItemsForCollection(responseMenu?.menu, collectionSlug);
   const navMenu = { items: navItems } as GetMenuByHandleQuery['menu'];
@@ -89,7 +89,7 @@ export async function getCollectionPageData(
   handle: string,
   searchParameters: CollectionSearchParams = {},
 ): Promise<CollectionPageData> {
-  logger.debug('getCollectionPageData handle', handle);
+  logger.debug('Collection page data', { context: 'getCollectionPageData', metadata: { handle } });
   const sortKey = resolveSortKeyFromString(
     searchParameters?.sort_key,
     ProductCollectionSortKeys,

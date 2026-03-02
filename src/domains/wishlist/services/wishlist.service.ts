@@ -40,7 +40,7 @@ export class WishlistService {
           return parsed.filter((id): id is string => typeof id === 'string');
         }
       } catch (error) {
-        logger.error('WishlistService.getWishlistIds - parse error', error);
+        logger.error('Failed to parse wishlist IDs', { context: 'WishlistService.getWishlistIds', error });
         return [];
       }
     }
@@ -76,7 +76,7 @@ export class WishlistService {
         .map((id) => productMap.get(id))
         .filter((p): p is ProductFieldsFragment => p !== undefined);
     } catch (error) {
-      logger.error('WishlistService.resolveProductsByIds', error);
+      logger.error('Failed to resolve products by IDs', { context: 'WishlistService.resolveProductsByIds', error });
       return [];
     }
   }
@@ -115,7 +115,7 @@ export class WishlistService {
     const errors = responseMetafield?.metafieldsSet?.userErrors;
 
     if (errors && errors.length > 0) {
-      logger.error('WishlistService.updateWishlist - MetafieldsSet errors', errors);
+      logger.error('MetafieldsSet errors when updating wishlist', { context: 'WishlistService.updateWishlist', metadata: { errors } });
       return {
         success: false,
         message: 'Something went wrong updating the wishlist',
@@ -135,7 +135,7 @@ export class WishlistService {
           data: parsed,
         };
       } catch (error) {
-        logger.error('WishlistService.updateWishlist - parse response error', error);
+        logger.error('Failed to parse wishlist response', { context: 'WishlistService.updateWishlist', error });
         return {
           success: false,
           message: "Couldn't parse wishlist response",

@@ -26,7 +26,7 @@ export const getUser = async () => {
     ) {
       await clearShopifyToken();
     }
-    logger.error('getUser', error);
+    logger.error('Failed to get user', { context: 'getUser', error });
     return null;
   }
 };

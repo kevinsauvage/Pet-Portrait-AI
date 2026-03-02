@@ -15,10 +15,8 @@ export async function setDelegateTokenAction(): Promise<void> {
   if (tokenCookie?.value) return;
 
   if (!delegateAccessScope) {
-    logger.error(
-      'setDelegateTokenAction',
-      new Error('SHOPIFY_SCOPE environment variable is not set'),
-    );
+    const error = new Error('SHOPIFY_SCOPE environment variable is not set');
+    logger.error('SHOPIFY_SCOPE environment variable is not set', { context: 'setDelegateTokenAction', error });
     throw new Error('SHOPIFY_SCOPE environment variable is required for delegate token creation');
   }
 
@@ -33,7 +31,7 @@ export async function setDelegateTokenAction(): Promise<void> {
     const { delegateAccessToken, userErrors } = responseToken?.delegateAccessTokenCreate || {};
 
     if (userErrors && userErrors.length > 0) {
-      logger.error('setDelegateTokenAction - user errors', userErrors);
+      logger.error('Delegate token creation user errors', { context: 'setDelegateTokenAction', metadata: { userErrors } });
     }
 
     if (delegateAccessToken) {
@@ -44,7 +42,7 @@ export async function setDelegateTokenAction(): Promise<void> {
       );
     }
   } catch (error) {
-    logger.error('setDelegateTokenAction', error);
+    logger.error('Failed to set delegate token', { context: 'setDelegateTokenAction', error });
     throw error;
   }
 }

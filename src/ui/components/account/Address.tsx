@@ -141,7 +141,7 @@ const Address = ({
                     className="cursor-pointer"
                     onClick={() => {
                       handleSetAsDefault().catch((error) => {
-                        logger.error('address.set-default', error);
+                        logger.error('Failed to set default address', { context: 'address.set-default', error });
                       });
                     }}
                   >
@@ -154,7 +154,7 @@ const Address = ({
                   className="cursor-pointer text-destructive focus:text-destructive"
                   onClick={() => {
                     handleDelete().catch((error) => {
-                      logger.error('address.delete', error);
+                      logger.error('Failed to delete address', { context: 'address.delete', error });
                     });
                   }}
                 >

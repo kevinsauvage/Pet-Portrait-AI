@@ -1,7 +1,7 @@
 import { type NextRequest } from 'next/server';
 
-import { requireApiProtection } from '@/core/utils/api-protection';
 import { createErrorResponse, HTTP_STATUS } from '@/core/utils/api-responses';
+import { requireApiProtection } from '@/core/utils/auth';
 import { getClientContext } from '@/core/utils/request-identity';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 import { ourFileRouter } from '@/infra/upload/core';

@@ -10,8 +10,6 @@ const reactHooks = require('eslint-plugin-react-hooks');
 const typescriptEslint = require('@typescript-eslint/eslint-plugin');
 const jsxA11Y = require('eslint-plugin-jsx-a11y');
 const simpleImportSort = require('eslint-plugin-simple-import-sort');
-const unicorn = require('eslint-plugin-unicorn');
-const sonarjs = require('eslint-plugin-sonarjs');
 const js = require('@eslint/js');
 
 const { FlatCompat } = require('@eslint/eslintrc');
@@ -59,8 +57,6 @@ module.exports = defineConfig([
       '@typescript-eslint': fixupPluginRules(typescriptEslint),
       'jsx-a11y': fixupPluginRules(jsxA11Y),
       'simple-import-sort': simpleImportSort,
-      unicorn,
-      sonarjs,
     },
 
     settings: {
@@ -151,18 +147,6 @@ module.exports = defineConfig([
       'jsx-a11y/click-events-have-key-events': 'warn',
       'jsx-a11y/no-static-element-interactions': 'warn',
       'jsx-a11y/no-noninteractive-element-interactions': 'warn',
-      'sonarjs/cognitive-complexity': ['warn', 15],
-
-      'sonarjs/no-duplicate-string': [
-        'warn',
-        {
-          threshold: 3,
-        },
-      ],
-
-      'sonarjs/no-identical-functions': 'warn',
-      'sonarjs/prefer-immediate-return': 'warn',
-      'sonarjs/prefer-single-boolean-return': 'warn',
 
       'no-console': [
         'warn',
@@ -250,10 +234,6 @@ module.exports = defineConfig([
       'no-void': 'error',
       radix: 'error',
       yoda: 'error',
-      'unicorn/consistent-destructuring': 'off',
-      'unicorn/prefer-top-level-await': 'off',
-      'unicorn/prefer-module': 'off',
-      'unicorn/no-array-for-each': 'off',
       '@next/next/no-html-link-for-pages': 'off',
       '@next/next/no-img-element': 'off',
     },

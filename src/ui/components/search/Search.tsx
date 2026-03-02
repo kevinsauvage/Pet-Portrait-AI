@@ -35,7 +35,7 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
       const data = await response.json();
       setResults(data?.predictiveSearch || null);
     } catch (error) {
-      logger.error('search', error);
+      logger.error('Search failed', { context: 'search', error });
       setResults(null);
     }
   }, []);

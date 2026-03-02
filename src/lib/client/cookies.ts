@@ -50,6 +50,6 @@ export const setCookieFront = (
       document.cookie = cookie;
     }
   } catch (error) {
-    logger.error('cookies.set', error);
+    logger.error('Failed to set cookie', { context: 'cookies.set', error });
   }
 };

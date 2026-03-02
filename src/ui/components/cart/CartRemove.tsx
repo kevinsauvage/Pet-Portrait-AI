@@ -28,7 +28,7 @@ const CartRemove = ({ id, productTitle }: { id: string; productTitle?: string })
 
   const handleRemove = async () => {
     if (!id) {
-      logger.error('cart.remove', new Error('Missing line item to delete'));
+      logger.error('Missing line item to delete', { context: 'cart.remove', error: new Error('Missing line item to delete') });
       return;
     }
     setLoading(true);

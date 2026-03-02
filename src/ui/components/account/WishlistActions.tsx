@@ -43,7 +43,7 @@ const WishlistActions = ({ product, onRemove }: WishlistActionsProps) => {
       }
     } catch (error) {
       toast.error('Something went wrong');
-      logger.error('wishlist.remove', error);
+      logger.error('Failed to remove from wishlist', { context: 'wishlist.remove', error });
     } finally {
       setIsRemoving(false);
     }
@@ -61,7 +61,7 @@ const WishlistActions = ({ product, onRemove }: WishlistActionsProps) => {
       await handleAddToCart(variant.id, 1);
     } catch (error) {
       toast.error('Failed to add to cart');
-      logger.error('wishlist.add-to-cart', error);
+      logger.error('Failed to add wishlist item to cart', { context: 'wishlist.add-to-cart', error });
     } finally {
       setIsAddingToCart(false);
     }

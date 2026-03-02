@@ -141,7 +141,7 @@ export class AuthService {
           customerAccessToken: token,
         });
       } catch (error) {
-        logger.error('AuthService.logout - token deletion', error);
+        logger.error('Failed to delete token during logout', { context: 'AuthService.logout', error });
       }
     }
 
@@ -175,7 +175,7 @@ export class AuthService {
               ? `AuthService.updateCartBuyerIdentity - failed after ${maxAttempts} attempts`
               : `AuthService.updateCartBuyerIdentity - attempt ${attempt}/${maxAttempts} failed`;
           if (attempt === maxAttempts || process.env.NODE_ENV === 'development') {
-            logger.warn(context, error);
+            logger.warn('Cart buyer identity update attempt failed', { context, error });
           }
         },
       },

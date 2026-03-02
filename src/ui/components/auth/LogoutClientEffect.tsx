@@ -28,7 +28,7 @@ const LogoutClientEffect = () => {
           window.location.href = config.routes.login;
         }, 2000);
       } catch (error) {
-        logger.error('logout', error);
+        logger.error('Logout failed', { context: 'logout', error });
         window.location.href = config.routes.login;
       }
     };

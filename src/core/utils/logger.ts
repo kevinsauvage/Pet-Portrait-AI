@@ -1,5 +1,3 @@
-import { getRequestContext } from './request-context';
-
 import * as Sentry from '@sentry/nextjs';
 import { randomUUID } from 'crypto';
 
@@ -61,12 +59,7 @@ function formatLogMessage(
   context?: string,
   metadata?: Record<string, unknown>,
 ): string {
-  const requestContext = getRequestContext();
   const parts: string[] = [];
-
-  if (requestContext?.requestId) {
-    parts.push(`[req:${requestContext.requestId}]`);
-  }
 
   if (context) {
     parts.push(`[${context}]`);
@@ -90,11 +83,9 @@ function captureToSentry(
 ): void {
   if (!SENTRY_ENABLED) return;
   if (error instanceof Error) {
-    const requestContext = getRequestContext();
     Sentry.captureException(error, {
       tags: {
         ...(context && { context }),
-        ...(requestContext?.requestId && { requestId: requestContext.requestId }),
       },
       level,
       extra: metadata ? sanitizeObject(metadata) : undefined,
@@ -121,32 +112,15 @@ export type LogContext = {
 export const logger = {
   /**
    * Debug logs - only in development, disabled in production
-   * Supports both old API: debug(msg: string, ...args: unknown[])
-   * and new API: debug(message: string, options?: LogContext)
    */
-  debug: ((message: string, optionsOrArg?: LogContext | unknown, ...restArgs: unknown[]) => {
+  debug: (message: string, options?: LogContext): void => {
     if (!shouldLog('debug')) return;
 
-    // Check if it's the new API (object with context/metadata)
-    if (
-      optionsOrArg &&
-      typeof optionsOrArg === 'object' &&
-      !Array.isArray(optionsOrArg) &&
-      ('context' in optionsOrArg || 'metadata' in optionsOrArg)
-    ) {
-      const options = optionsOrArg as LogContext;
-      const { context, metadata } = options;
-      const formatted = formatLogMessage('debug', message, context, metadata);
-      // eslint-disable-next-line no-console -- logger utility
-      console.debug(formatted);
-      return;
-    }
-
-    // Old API: debug(msg: string, ...args: unknown[])
+    const { context, metadata } = options || {};
+    const formatted = formatLogMessage('debug', message, context, metadata);
     // eslint-disable-next-line no-console -- logger utility
-    console.debug(message, ...(optionsOrArg !== undefined ? [optionsOrArg, ...restArgs] : []));
-  }) as ((message: string, options?: LogContext) => void) &
-    ((message: string, ...args: unknown[]) => void),
+    console.debug(formatted);
+  },
 
   /**
    * Info logs - general information
@@ -162,85 +136,37 @@ export const logger = {
 
   /**
    * Warning logs - warnings that don't stop execution
-   * Supports both old API: warn(contextOrMsg: string, error?: unknown)
-   * and new API: warn(message: string, options?: LogContext)
    */
-  warn: ((messageOrContext: string, errorOrOptions?: unknown) => {
-    // Check if it's the new API (object with context/metadata/error)
-    if (
-      errorOrOptions &&
-      typeof errorOrOptions === 'object' &&
-      !(errorOrOptions instanceof Error) &&
-      ('context' in errorOrOptions || 'metadata' in errorOrOptions || 'error' in errorOrOptions)
-    ) {
-      const options = errorOrOptions as LogContext;
-      if (!shouldLog('warn')) return;
-
-      const { context, error, metadata } = options;
-      const msg = error !== undefined ? formatError(error) : messageOrContext;
-      const formatted = formatLogMessage('warn', msg, context, metadata);
-
-      console.warn(formatted, ...(error !== undefined ? [error] : []));
-
-      if (error !== undefined) {
-        captureToSentry(error, context, 'warning', metadata);
-      }
-      return;
-    }
-
-    // Old API: warn(contextOrMsg: string, error?: unknown)
+  warn: (message: string, options?: LogContext): void => {
     if (!shouldLog('warn')) return;
 
-    const [context, err] =
-      errorOrOptions !== undefined ? [messageOrContext, errorOrOptions] : [undefined, undefined];
-    const msg = err !== undefined ? formatError(err) : messageOrContext;
-    const prefix = context ? `[${context}]` : '';
+    const { context, error, metadata } = options || {};
+    const msg = error !== undefined ? formatError(error) : message;
+    const formatted = formatLogMessage('warn', msg, context, metadata);
 
-    console.warn(prefix ? `${prefix} ${msg}` : msg, ...(err !== undefined ? [err] : []));
-    if (err !== undefined) captureToSentry(err, context, 'warning');
-  }) as ((message: string, options?: LogContext) => void) &
-    ((contextOrMsg: string, error?: unknown) => void),
+    console.warn(formatted, ...(error !== undefined ? [error] : []));
+
+    if (error !== undefined) {
+      captureToSentry(error, context, 'warning', metadata);
+    }
+  },
 
   /**
    * Error logs - errors that should be investigated
-   * Supports both old API: error(contextOrMsg: string, error?: unknown)
-   * and new API: error(message: string, options?: LogContext)
    */
-  error: ((messageOrContext: string, errorOrOptions?: unknown) => {
-    // Check if it's the new API (object with context/metadata/error)
-    if (
-      errorOrOptions &&
-      typeof errorOrOptions === 'object' &&
-      !(errorOrOptions instanceof Error) &&
-      ('context' in errorOrOptions || 'metadata' in errorOrOptions || 'error' in errorOrOptions)
-    ) {
-      const options = errorOrOptions as LogContext;
-      if (!shouldLog('error')) return;
-
-      const { context, error, metadata } = options;
-      const msg = error !== undefined ? formatError(error) : messageOrContext;
-      const formatted = formatLogMessage('error', msg, context, metadata);
-
-      console.error(formatted, ...(error !== undefined ? [error] : []));
-
-      if (error !== undefined) {
-        captureToSentry(error, context, 'error', metadata);
-      }
-      return;
-    }
-
-    // Old API: error(contextOrMsg: string, error?: unknown)
+  error: (message: string, options?: LogContext): void => {
     if (!shouldLog('error')) return;
 
-    const [context, err] =
-      errorOrOptions !== undefined ? [messageOrContext, errorOrOptions] : [undefined, undefined];
-    const msg = err !== undefined ? formatError(err) : messageOrContext;
-    const prefix = context ? `[${context}]` : '';
+    const { context, error, metadata } = options || {};
+    const msg = error !== undefined ? formatError(error) : message;
+    const formatted = formatLogMessage('error', msg, context, metadata);
 
-    console.error(prefix ? `${prefix} ${msg}` : msg, ...(err !== undefined ? [err] : []));
-    if (err !== undefined) captureToSentry(err, context, 'error');
-  }) as ((message: string, options?: LogContext) => void) &
-    ((contextOrMsg: string, error?: unknown) => void),
+    console.error(formatted, ...(error !== undefined ? [error] : []));
+
+    if (error !== undefined) {
+      captureToSentry(error, context, 'error', metadata);
+    }
+  },
 };
 
 /**
@@ -255,7 +181,7 @@ export const logger = {
  */
 export function createPerformanceLogger(context: string, thresholdMs = 1000) {
   const startTime = Date.now();
-  const requestId = getRequestContext()?.requestId || randomUUID();
+  const requestId = randomUUID();
 
   return {
     end: (metadata?: Record<string, unknown>): number => {

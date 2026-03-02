@@ -44,7 +44,7 @@ export function ErrorPage({
   altText = 'Error illustration',
 }: ErrorPageProps) {
   useEffect(() => {
-    logger.error(logContext, error);
+    logger.error('Error occurred', { context: logContext, error });
   }, [error, logContext]);
 
   return (

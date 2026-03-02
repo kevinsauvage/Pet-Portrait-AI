@@ -14,7 +14,7 @@ interface AdminErrorProps {
 
 const AdminError = ({ error, reset }: AdminErrorProps) => {
   useEffect(() => {
-    logger.error('admin', error);
+    logger.error('Admin error occurred', { context: 'admin', error });
   }, [error]);
 
   return (

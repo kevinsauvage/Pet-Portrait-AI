@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...products.map((p) => toEntry(p, '/shop/products', 'weekly', 0.7)),
     ];
   } catch (error) {
-    logger.error('sitemap', error);
+    logger.error('Failed to generate sitemap', { context: 'sitemap', error });
     return baseSitemap;
   }
 }

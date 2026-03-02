@@ -51,7 +51,7 @@ export class CartService {
 
       return response?.cart || null;
     } catch (error) {
-      logger.error('CartService.getCart', error);
+      logger.error('Failed to get cart', { context: 'CartService.getCart', error });
       return null;
     }
   }
@@ -64,12 +64,12 @@ export class CartService {
     const { cart, userErrors, warnings } = createCartResponse.cartCreate || {};
 
     if (warnings && Array.isArray(warnings) && warnings?.length) {
-      logger.error('CartService.createCart - warnings', warnings);
+      logger.error('Cart creation warnings', { context: 'CartService.createCart', metadata: { warnings } });
     }
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {
-      logger.error('CartService.createCart - user errors', mappedUserErrors);
+      logger.error('Cart creation user errors', { context: 'CartService.createCart', metadata: { userErrors: mappedUserErrors } });
       if (!cart?.id) {
         throw new Error(
           mappedUserErrors[0]?.message || 'Failed to create cart due to validation errors',

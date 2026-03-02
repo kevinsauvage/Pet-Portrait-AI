@@ -21,7 +21,7 @@ vi.mock('@/infra/rate-limit/rate-limit', () => ({
 }));
 
 const mockRequireApiProtection = vi.fn().mockResolvedValue(null);
-vi.mock('@/core/utils/api-protection', () => ({
+vi.mock('@/core/utils/auth', () => ({
   requireApiProtection: (...args: unknown[]) => mockRequireApiProtection(...args),
 }));
 

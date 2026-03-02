@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 
 import { createErrorResponse, HTTP_STATUS } from '@/core/utils/api-responses';
-import { base64Decode } from '@/core/utils/base64';
-import { safeEqual } from '@/core/utils/secure-compare';
+
+import { timingSafeEqual } from 'crypto';
+
+/**
+ * Timing-safe string comparison using Node.js crypto.timingSafeEqual
+ */
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+}
 
 const ADMIN_BASIC_USER = process.env.ADMIN_BASIC_USER?.trim();
 const ADMIN_BASIC_PASSWORD = process.env.ADMIN_BASIC_PASSWORD?.trim();
@@ -25,7 +33,7 @@ export function isAdminAuthConfigured(): boolean {
 function parseBasicAuth(authHeader: string): { user: string; pass: string } | null {
   const token = authHeader.replace(/^Basic\s+/i, '').trim();
   try {
-    const decoded = base64Decode(token);
+    const decoded = Buffer.from(token, 'base64').toString('utf8');
     const separatorIndex = decoded.indexOf(':');
     if (separatorIndex === -1) return null;
     const user = decoded.slice(0, separatorIndex);

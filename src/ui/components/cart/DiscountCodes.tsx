@@ -40,7 +40,7 @@ const DiscountCodes = () => {
                     <Button
                       onClick={() => {
                         handleRemoveCode(code.code).catch((error) => {
-                          logger.error('cart.discount-code', error);
+                          logger.error('Failed to remove discount code', { context: 'cart.discount-code', error });
                         });
                       }}
                       className="cursor-pointer"
@@ -70,7 +70,7 @@ const DiscountCodes = () => {
                     <Button
                       onClick={() => {
                         handleRemoveCode(code.code).catch((error) => {
-                          logger.error('cart.discount-code', error);
+                          logger.error('Failed to remove discount code', { context: 'cart.discount-code', error });
                         });
                       }}
                       className="cursor-pointer"

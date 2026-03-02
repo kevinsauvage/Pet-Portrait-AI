@@ -11,7 +11,7 @@ export const delCookieAction = async (name: string) => {
 
 export const getCookieAction = async (name: string) => {
   if (!name) {
-    logger.error('getCookieAction', new Error('Cookie name is required'));
+    logger.error('Cookie name is required', { context: 'getCookieAction', error: new Error('Cookie name is required') });
     return;
   }
   const cookieStore = await cookies();
@@ -20,7 +20,7 @@ export const getCookieAction = async (name: string) => {
 
 export const setCookieAction = async (name: string, value: string, options = {}) => {
   if (!name || !value) {
-    logger.error('setCookieAction', new Error('Cookie name and value are required'));
+    logger.error('Cookie name and value are required', { context: 'setCookieAction', error: new Error('Cookie name and value are required') });
     return;
   }
 

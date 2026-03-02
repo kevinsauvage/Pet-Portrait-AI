@@ -9,28 +9,14 @@ import {
   isAdminAuthConfigured,
   isAdminAuthorized,
 } from '@/core/utils/admin-auth';
-import { isApiAuthConfigured } from '@/core/utils/api-auth';
-import { issueApiSessionCookie } from '@/core/utils/api-session';
+import { isApiAuthConfigured, issueApiSessionCookie } from '@/core/utils/auth';
 import { getStandardCookieOptions } from '@/core/utils/cookie-security';
 import { logger } from '@/core/utils/logger';
-import { runWithRequestContextAsync } from '@/core/utils/request-context';
 import { getClientContext } from '@/core/utils/request-identity';
 import { setDelegateTokenAction } from '@/infra/shopify/actions';
 
 async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const { ip } = getClientContext(request.headers, DEFAULTS.ip);
-
-  return runWithRequestContextAsync(
-    {
-      path: pathname,
-      method: request.method,
-      ip,
-    },
-    async () => {
-      return proxyHandler(request);
-    },
-  );
+  return proxyHandler(request);
 }
 
 async function proxyHandler(request: NextRequest) {

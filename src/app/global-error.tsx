@@ -16,7 +16,7 @@ const GlobalError = ({
   reset: () => void;
 }) => {
   useEffect(() => {
-    logger.error('Global application error', error);
+    logger.error('Global application error occurred', { context: 'global-error', error });
   }, [error]);
 
   return (

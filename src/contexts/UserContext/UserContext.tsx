@@ -50,7 +50,7 @@ export const UserProvider = ({
           toast.error(result?.message || 'Something went wrong');
         }
       } catch (error) {
-        logger.error('wishlist', error);
+        logger.error('Wishlist operation failed', { context: 'wishlist', error });
         toast.error(error instanceof Error ? error.message : 'Something went wrong');
       }
     },

@@ -49,7 +49,7 @@ const renewTokenIfNeeded = async (token: string): Promise<CustomerAccessToken | 
     const { customerAccessToken, userErrors } = response?.customerAccessTokenRenew || {};
 
     if (userErrors && userErrors.length > 0) {
-      logger.error('renewTokenIfNeeded - user errors', userErrors);
+      logger.error('Token renewal failed with user errors', { context: 'renewTokenIfNeeded', metadata: { userErrors } });
       return null;
     }
 
@@ -60,7 +60,7 @@ const renewTokenIfNeeded = async (token: string): Promise<CustomerAccessToken | 
 
     return null;
   } catch (error) {
-    logger.error('renewTokenIfNeeded', error);
+    logger.error('Failed to renew token', { context: 'renewTokenIfNeeded', error });
     return null;
   }
 };

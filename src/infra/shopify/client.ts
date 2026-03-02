@@ -51,7 +51,7 @@ const defaultWrapper: SdkFunctionWrapper = async (
   try {
     return await action(extraHeader);
   } catch (error) {
-    logger.error(`GraphQL request - ${operationName}`, error);
+    logger.error(`GraphQL request failed: ${operationName}`, { context: 'shopify-client', error, metadata: { operationName } });
     throw error;
   }
 };

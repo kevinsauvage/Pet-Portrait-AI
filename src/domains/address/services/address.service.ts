@@ -141,7 +141,7 @@ export class AddressService {
         customerAccessToken,
       });
     } catch (error) {
-      logger.error('AddressService.setDefaultAddress', error);
+      logger.error('Failed to set default address', { context: 'AddressService.setDefaultAddress', error });
       return { error: 'Failed to set default address' };
     }
 

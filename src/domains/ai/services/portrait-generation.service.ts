@@ -9,8 +9,8 @@ import {
 } from '../repositories/generation-log.repository';
 
 import * as Sentry from '@sentry/nextjs';
+import { randomUUID } from 'crypto';
 import { UTApi, UTFile } from 'uploadthing/server';
-import { v4 as uuidv4 } from 'uuid';
 
 const OPENAI_EDIT_URL = 'https://api.openai.com/v1/images/edits';
 const VARIATIONS_COUNT = 2;
@@ -135,7 +135,7 @@ export async function generatePetPortraitVariations(
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new Error('OPENAI_API_KEY is not configured');
 
-  const generationId = uuidv4();
+  const generationId = randomUUID();
   const prompt = `Repaint this pet portrait ${getStylePrompt(styleId)}. Preserve the pet's breed, markings, eye color, and pose exactly. Fill the entire canvas. No text, no borders, no watermarks.`;
 
   try {
