@@ -13,10 +13,27 @@ import { isApiAuthConfigured } from '@/core/utils/api-auth';
 import { issueApiSessionCookie } from '@/core/utils/api-session';
 import { getStandardCookieOptions } from '@/core/utils/cookie-security';
 import { logger } from '@/core/utils/logger';
+import { runWithRequestContextAsync } from '@/core/utils/request-context';
 import { getClientContext } from '@/core/utils/request-identity';
 import { setDelegateTokenAction } from '@/infra/shopify/actions';
 
 async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const { ip } = getClientContext(request.headers, DEFAULTS.ip);
+
+  return runWithRequestContextAsync(
+    {
+      path: pathname,
+      method: request.method,
+      ip,
+    },
+    async () => {
+      return proxyHandler(request);
+    },
+  );
+}
+
+async function proxyHandler(request: NextRequest) {
   const { nextUrl, cookies, headers, url } = request;
   const { searchParams, pathname } = nextUrl;
 
@@ -59,7 +76,10 @@ async function proxy(request: NextRequest) {
   try {
     await setDelegateTokenAction();
   } catch (error) {
-    logger.error('middleware.delegate-token', error);
+    logger.error('Failed to set delegate token', {
+      context: 'middleware.delegate-token',
+      error,
+    });
   }
 
   const cookieShopify = cookies.get(appConfig.cookies.shopifyToken);

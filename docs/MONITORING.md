@@ -50,6 +50,7 @@ SENTRY_PROJECT=your-project-name
 3. **Verify Configuration**
 
 Sentry is automatically configured via:
+
 - `sentry.client.config.ts` - Client-side error tracking
 - `sentry.server.config.ts` - Server-side error tracking
 - `sentry.edge.config.ts` - Edge runtime error tracking
@@ -58,15 +59,18 @@ Sentry is automatically configured via:
 ### Current Configuration
 
 **Sampling Rates:**
+
 - Traces: `0.1` (10% of transactions)
 - Errors: `100%` (all errors captured)
 
 **Environments:**
+
 - Development: `development`
 - Production: `production`
 - Staging: `staging` (if configured)
 
 **Source Maps:**
+
 - Automatically uploaded during build (when `SENTRY_ORG` and `SENTRY_PROJECT` are set)
 - Only in production builds
 
@@ -99,6 +103,7 @@ Sentry.init({
 ### Release Tracking
 
 Releases are automatically tracked when:
+
 - `SENTRY_ORG` and `SENTRY_PROJECT` are set
 - Source maps are uploaded during build
 - Git commit SHA is included in release
@@ -122,6 +127,7 @@ sentry-cli releases finalize $VERSION
 ### Automatic Error Capture
 
 Sentry automatically captures:
+
 - Unhandled exceptions
 - Unhandled promise rejections
 - React component errors (Error Boundaries)
@@ -164,6 +170,7 @@ Sentry.setContext('request', {
 ### Filtering Errors
 
 Configure error filtering in Sentry dashboard:
+
 - Ignore specific error types
 - Set up rules for error grouping
 - Configure alert thresholds
@@ -175,6 +182,7 @@ Configure error filtering in Sentry dashboard:
 ### Transaction Tracking
 
 Sentry automatically tracks:
+
 - Page loads
 - API route execution
 - Database queries (if configured)
@@ -198,6 +206,7 @@ transaction.finish();
 ### Performance Metrics
 
 Monitor:
+
 - **Page Load Time** - Time to First Byte (TTFB), First Contentful Paint (FCP)
 - **API Response Time** - Endpoint execution time
 - **Database Query Time** - Query performance
@@ -218,46 +227,52 @@ tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
 
 ## Logging
 
-### Structured Logging
+For complete logging documentation, see [Logging Standards](./LOGGING.md).
 
-Use the logger utility for consistent logging:
+### Quick Reference
 
 ```typescript
-import { logger } from '@/core/utils/logger';
+import { logger, createPerformanceLogger } from '@/core/utils/logger';
+import { withRequestContext } from '@/core/utils/api-wrapper';
 
-logger.info('Operation started', { context: 'operation-name' });
-logger.warn('Deprecated API used', { endpoint: '/api/old' });
-logger.error('Operation failed', { error, context: 'operation-name' });
+// In API routes
+export async function POST(request: NextRequest) {
+  return withRequestContext(request, async () => {
+    const perf = createPerformanceLogger('operation', 2000);
+
+    logger.info('Operation started', {
+      context: 'operation-name',
+      metadata: { userId: '123' },
+    });
+
+    // ... operation ...
+
+    perf.end({ success: true });
+  });
+}
 ```
+
+### Key Features
+
+- ✅ Structured logging with context and metadata
+- ✅ Automatic request ID tracking
+- ✅ Performance monitoring for slow operations
+- ✅ Sensitive data sanitization
+- ✅ Sentry integration with context
 
 ### Log Levels
 
-- **Debug**: Development-only logs (removed in production builds)
+- **Debug**: Development-only (disabled in production)
 - **Info**: General information
 - **Warn**: Warnings
 - **Error**: Errors (captured by Sentry)
 
-### Log Context
-
-Always include context:
-
-```typescript
-logger.error('Failed to generate portrait', {
-  error,
-  context: 'ai-generation',
-  metadata: {
-    photoUrl: '...',
-    styleId: 'pixar',
-    userId: '123',
-  },
-});
-```
-
 ### Production Logging
 
-- Debug logs are removed in production builds (`next.config.ts`)
-- Only `error` and `warn` console logs are kept
-- All errors are sent to Sentry
+- Debug logs are always disabled in production
+- Log level controlled via `LOG_LEVEL` environment variable
+- All errors are sent to Sentry with context
+- Request IDs included in all logs when using `withRequestContext`
 
 ---
 
@@ -313,11 +328,13 @@ Configure alerts in Sentry dashboard:
 #### Uptime Monitoring
 
 Configure external uptime monitoring:
+
 - **UptimeRobot**: Free tier available
 - **Pingdom**: Commercial solution
 - **StatusCake**: Free tier available
 
 **Endpoints to Monitor:**
+
 - `https://yourdomain.com` - Homepage
 - `https://yourdomain.com/api/health` - Health check (if implemented)
 - `https://yourdomain.com/api/cart` - Critical API endpoint
@@ -337,9 +354,12 @@ export async function GET() {
 
   const healthy = Object.values(checks).every(Boolean);
 
-  return Response.json({ healthy, checks }, {
-    status: healthy ? 200 : 503,
-  });
+  return Response.json(
+    { healthy, checks },
+    {
+      status: healthy ? 200 : 503,
+    },
+  );
 }
 ```
 
@@ -376,6 +396,7 @@ Sentry.metrics.distribution('ai.generation.duration', duration, {
 ### Vercel Analytics
 
 Enable Vercel Analytics in project settings:
+
 - Web Vitals tracking
 - Real-time analytics
 - Performance insights
