@@ -23,12 +23,33 @@ export default defineConfig({
     environment: 'jsdom',
     globals: false,
     setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.{test,spec}.{ts,tsx}', 'e2e/**/*.{test,spec}.{ts,tsx}'],
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['node_modules', 'dist', '.next', 'e2e'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
+      reporter: ['text', 'lcov', 'html', 'json'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['**/*.d.ts'],
+      exclude: [
+        '**/*.d.ts',
+        '**/*.config.{ts,tsx}',
+        '**/__mocks__/**',
+        '**/__tests__/**',
+        '**/node_modules/**',
+        '**/.next/**',
+        '**/dist/**',
+        '**/build/**',
+        '**/coverage/**',
+        '**/*.test.{ts,tsx}',
+        '**/*.spec.{ts,tsx}',
+        'src/infra/shopify/storefront/index.ts', // Generated code
+        'src/infra/shopify/admin/index.ts', // Generated code
+      ],
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+        statements: 80,
+      },
     },
   },
 });
