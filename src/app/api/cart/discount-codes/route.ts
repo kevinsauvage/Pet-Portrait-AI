@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -14,20 +15,18 @@ import { cartDiscountCodesSchema } from '@/domains/cart/validation';
 
 export const dynamic = 'force-dynamic';
 
-const ERROR_MESSAGE = 'Failed to update discount codes';
-
 export async function PATCH(request: NextRequest) {
   const cartId = await CartService.getCartId();
 
   if (!cartId) {
-    return createErrorResponse('Cart not found', { status: HTTP_STATUS.NOT_FOUND });
+    return createErrorResponse(API_ERROR_MESSAGES.CART_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
   }
 
   try {
     const body = await request.json();
     const parsedBody = cartDiscountCodesSchema.safeParse(body);
     if (!parsedBody.success) {
-      return createErrorResponse('Invalid discount codes format', {
+      return createErrorResponse(API_ERROR_MESSAGES.INVALID_DISCOUNT_CODES_FORMAT, {
         message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
@@ -42,14 +41,14 @@ export async function PATCH(request: NextRequest) {
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {
-      return createErrorResponse(ERROR_MESSAGE, {
+      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_UPDATE_DISCOUNT_CODES, {
         userErrors: mappedUserErrors,
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
     if (!cart) {
-      return createErrorResponse(ERROR_MESSAGE, {
+      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_UPDATE_DISCOUNT_CODES, {
         message: 'Cart update did not return a valid cart',
         status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
       });
@@ -61,6 +60,10 @@ export async function PATCH(request: NextRequest) {
       { message: 'Discount codes updated successfully' },
     );
   } catch (error) {
-    return handleApiError('PATCH /api/cart/discount-codes', error, ERROR_MESSAGE);
+    return handleApiError(
+      'PATCH /api/cart/discount-codes',
+      error,
+      API_ERROR_MESSAGES.FAILED_TO_UPDATE_DISCOUNT_CODES,
+    );
   }
 }

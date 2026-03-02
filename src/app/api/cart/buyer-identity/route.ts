@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -18,14 +19,14 @@ export async function PATCH(request: NextRequest) {
   const cartId = await CartService.getCartId();
 
   if (!cartId) {
-    return createErrorResponse('Cart not found', { status: HTTP_STATUS.NOT_FOUND });
+    return createErrorResponse(API_ERROR_MESSAGES.CART_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
   }
 
   try {
     const body = await request.json();
     const parsedBody = cartBuyerIdentitySchema.safeParse(body);
     if (!parsedBody.success) {
-      return createErrorResponse('Invalid request body', {
+      return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
         message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
@@ -45,14 +46,14 @@ export async function PATCH(request: NextRequest) {
 
     const mappedUserErrors = mapShopifyUserErrors(userErrors);
     if (mappedUserErrors) {
-      return createErrorResponse('Failed to update cart buyer identity', {
+      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART_BUYER_IDENTITY, {
         userErrors: mappedUserErrors,
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
     if (!cart) {
-      return createErrorResponse('Failed to update cart buyer identity', {
+      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART_BUYER_IDENTITY, {
         message: 'Cart update did not return a valid cart',
         status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
       });
@@ -64,7 +65,7 @@ export async function PATCH(request: NextRequest) {
     return handleApiError(
       'PATCH /api/cart/buyer-identity',
       error,
-      'Failed to update cart buyer identity',
+      API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART_BUYER_IDENTITY,
     );
   }
 }

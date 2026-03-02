@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -20,20 +21,22 @@ export async function DELETE(
     const user = await getUser();
 
     if (!user?.id) {
-      return createErrorResponse('User not found', { status: HTTP_STATUS.NOT_FOUND });
+      return createErrorResponse(API_ERROR_MESSAGES.USER_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
     }
 
     const { productId: rawProductId } = await params;
     if (!rawProductId) {
-      return createErrorResponse('Missing product ID', { status: HTTP_STATUS.BAD_REQUEST });
+      return createErrorResponse(API_ERROR_MESSAGES.MISSING_PRODUCT_ID, {
+        status: HTTP_STATUS.BAD_REQUEST,
+      });
     }
 
     const productId = decodeURIComponent(rawProductId);
     const result = await WishlistService.removeProduct(productId, user.id);
 
     if (!result.success) {
-      return createErrorResponse('Something went wrong removing the product from the wishlist', {
-        message: result.message || 'Something went wrong removing the product from the wishlist',
+      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT_FROM_WISHLIST, {
+        message: result.message || API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT_FROM_WISHLIST,
         status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
       });
     }
@@ -47,7 +50,7 @@ export async function DELETE(
     return handleApiError(
       'DELETE /api/wishlist/[productId]',
       error,
-      'Failed to remove product from wishlist',
+      API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT_FROM_WISHLIST,
     );
   }
 }

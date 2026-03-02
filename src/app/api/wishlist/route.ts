@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -18,7 +19,7 @@ export async function GET() {
     const wishlist = await WishlistService.getWishlist();
     return createSuccessResponse(wishlist);
   } catch (error) {
-    return handleApiError('GET /api/wishlist', error, 'Failed to fetch wishlist');
+    return handleApiError('GET /api/wishlist', error, API_ERROR_MESSAGES.FAILED_TO_FETCH_WISHLIST);
   }
 }
 
@@ -28,13 +29,13 @@ export async function POST(request: NextRequest) {
     const user = await getUser();
 
     if (!user?.id) {
-      return createErrorResponse('User not found', { status: HTTP_STATUS.NOT_FOUND });
+      return createErrorResponse(API_ERROR_MESSAGES.USER_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
     }
 
     const body = await request.json();
     const parsedBody = wishlistAddSchema.safeParse(body);
     if (!parsedBody.success) {
-      return createErrorResponse('Missing or invalid product ID', {
+      return createErrorResponse(API_ERROR_MESSAGES.MISSING_OR_INVALID_PRODUCT_ID, {
         message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
           ? HTTP_STATUS.BAD_REQUEST
           : HTTP_STATUS.INTERNAL_SERVER_ERROR;
 
-      return createErrorResponse('Failed to add product to wishlist', {
+      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT_TO_WISHLIST, {
         message: result.message,
         status,
       });
@@ -62,6 +63,6 @@ export async function POST(request: NextRequest) {
       noCache: true,
     });
   } catch (error) {
-    return handleApiError('POST /api/wishlist', error, 'Failed to add product to wishlist');
+    return handleApiError('POST /api/wishlist', error, API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT_TO_WISHLIST);
   }
 }

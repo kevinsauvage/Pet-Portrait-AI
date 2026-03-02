@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import { requireApiProtection } from '@/core/utils/api-protection';
 import {
   createErrorResponse,
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
     const { identifier } = getClientContext(request.headers);
     const rateLimit = await checkRateLimit(identifier, { prefix: 'ai' });
     if (!rateLimit.allowed) {
-      return createErrorResponse('Too many requests. Please try again later.', {
+      return createErrorResponse(API_ERROR_MESSAGES.TOO_MANY_REQUESTS, {
         status: HTTP_STATUS.TOO_MANY_REQUESTS,
         message: `Retry after ${rateLimit.retryAfter} seconds`,
       });
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const parsedBody = parsePortraitGenerationRequest(body);
     if (!parsedBody.success) {
-      return createErrorResponse('Invalid request body', {
+      return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
         message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
@@ -63,6 +64,6 @@ export async function POST(request: NextRequest) {
     const result = await generatePetPortraitVariations(originalPhotoUrl, styleId);
     return createSuccessResponse(result);
   } catch (error) {
-    return handleApiError('POST /api/ai/generate', error, 'AI portrait generation failed');
+    return handleApiError('POST /api/ai/generate', error, API_ERROR_MESSAGES.AI_PORTRAIT_GENERATION_FAILED);
   }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { logger } from '@/core/utils/logger';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/constants/sort-options';
 import {
@@ -69,8 +70,8 @@ const CollectionSlugPage = async ({
     collectionSlug,
     searchParameters,
   );
-  console.log(
-    '🚀 ~ CollectionSlugPage ~ edges:',
+  logger.debug(
+    'CollectionSlugPage edges',
     edges.map((edge) => edge.node.metafields),
   );
   const safeSearchParameters = {

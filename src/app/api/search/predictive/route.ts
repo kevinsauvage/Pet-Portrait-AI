@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -31,12 +32,16 @@ export async function GET(request: NextRequest) {
         error.message.includes('429') ||
         error.message.includes('Too Many Requests'))
     ) {
-      return createErrorResponse('Rate limit exceeded', {
+      return createErrorResponse(API_ERROR_MESSAGES.RATE_LIMIT_EXCEEDED, {
         message: 'Rate limit exceeded. Please try again in a moment.',
         status: HTTP_STATUS.TOO_MANY_REQUESTS,
       });
     }
 
-    return handleApiError('GET /api/search/predictive', error, 'Failed to fetch predictive search results');
+    return handleApiError(
+      'GET /api/search/predictive',
+      error,
+      API_ERROR_MESSAGES.FAILED_TO_FETCH_PREDICTIVE_SEARCH,
+    );
   }
 }

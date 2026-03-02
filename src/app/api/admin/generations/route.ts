@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import { requireAdminAuth } from '@/core/utils/admin-auth';
 import { handleApiError } from '@/core/utils/api-responses';
 import { getAdminGenerationSnapshot } from '@/domains/ai/services/admin-dashboard.service';
@@ -19,6 +20,6 @@ export async function GET(request: Request) {
       totalCount: snapshot.totalCount,
     });
   } catch (error) {
-    return handleApiError('GET /api/admin/generations', error, 'Failed to fetch admin generations');
+    return handleApiError('GET /api/admin/generations', error, API_ERROR_MESSAGES.FAILED_TO_FETCH_ADMIN_GENERATIONS);
   }
 }

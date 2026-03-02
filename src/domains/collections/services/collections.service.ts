@@ -1,4 +1,5 @@
 import config from '@/core/config';
+import { logger } from '@/core/utils/logger';
 import { storefrontSdk } from '@/infra/shopify/client';
 import {
   adjustPaginationVariables,
@@ -72,8 +73,8 @@ export async function getCollectionLayoutData(collectionSlug: string): Promise<{
       identifiers: [],
     }),
   ]);
-  console.log('🚀 ~ getCollectionLayoutData ~ responseMenu:', responseMenu);
-  console.log('🚀 ~ getCollectionLayoutData ~ responseCollection:', responseCollection);
+  logger.debug('getCollectionLayoutData responseMenu', responseMenu);
+  logger.debug('getCollectionLayoutData responseCollection', responseCollection);
 
   const navItems = getMenuItemsForCollection(responseMenu?.menu, collectionSlug);
   const navMenu = { items: navItems } as GetMenuByHandleQuery['menu'];
@@ -88,7 +89,7 @@ export async function getCollectionPageData(
   handle: string,
   searchParameters: CollectionSearchParams = {},
 ): Promise<CollectionPageData> {
-  console.log('🚀 ~ getCollectionPageData ~ handle:', handle);
+  logger.debug('getCollectionPageData handle', handle);
   const sortKey = resolveSortKeyFromString(
     searchParameters?.sort_key,
     ProductCollectionSortKeys,

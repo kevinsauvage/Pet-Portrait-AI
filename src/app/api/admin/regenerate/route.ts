@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import { requireAdminAuth } from '@/core/utils/admin-auth';
 import {
   createErrorResponse,
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const parsedBody = parsePortraitGenerationRequest(body);
     if (!parsedBody.success) {
-      return createErrorResponse('Invalid request body', {
+      return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
         message: formatZodErrorMessage(parsedBody.error),
         status: HTTP_STATUS.BAD_REQUEST,
       });
