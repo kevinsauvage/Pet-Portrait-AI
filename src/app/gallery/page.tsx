@@ -3,10 +3,9 @@ import Link from 'next/link';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import BeforeAfterPreview from '@/ui/components/media/BeforeAfterPreview';
 import StyleGallery from '@/ui/components/media/StyleGallery';
 import PageBanner from '@/ui/components/shared/PageBanner';
-import { GALLERY_ITEMS, TRANSFORMATION_SAMPLE } from '@/ui/content/marketing';
+import { GALLERY_ITEMS } from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
 
 export const metadata: Metadata = generateMetadataUtil({
@@ -44,11 +43,6 @@ const GalleryPage = () => {
                 <Link href="/create">Create your portrait</Link>
               </Button>
             </div>
-            <BeforeAfterPreview
-              before={TRANSFORMATION_SAMPLE.before}
-              after={TRANSFORMATION_SAMPLE.after}
-              caption={TRANSFORMATION_SAMPLE.caption}
-            />
           </div>
         </div>
       </section>
