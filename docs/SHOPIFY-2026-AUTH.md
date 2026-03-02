@@ -51,7 +51,21 @@ The shop domain is derived from `NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL` or `SHOPIFY
 
 ## Storefront API
 
-The Storefront API token is **derived** from the Admin API: the app calls `storefrontAccessTokenCreate` and caches the result. No separate Storefront token env var is required; set `SHOPIFY_CLIENT_ID`, `SHOPIFY_CLIENT_SECRET`, and `SHOPIFY_ADMIN_URL` (and install the app on the store) and the app will obtain a Storefront token automatically.
+The Storefront API requires a separate access token that must be set directly in your environment variables.
+
+### Setup
+
+1. Create a Storefront access token in Shopify:
+   - **Option 1 (Dev Dashboard)**: Go to [Shopify Dev Dashboard](https://dev.shopify.com/dashboard/) > [Your app] > Settings > API credentials > Storefront API
+   - **Option 2 (Shopify Admin)**: Go to Shopify Admin > Settings > Apps and sales channels > Develop apps > [Your app] > API credentials > Storefront API
+2. Copy the Storefront access token
+3. Add to `.env.local`:
+
+```env
+SHOPIFY_STORE_FRONT_ACCESS_TOKEN=your_storefront_token
+```
+
+The app uses this token directly for all Storefront API requests. No token derivation or caching is needed.
 
 ## Troubleshooting
 

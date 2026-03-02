@@ -112,25 +112,102 @@ yarn install
 
 ### Environment Variables
 
-Copy `.env.example`:
+#### Quick Setup
+
+Copy `.env.example` to `.env.local`:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
-**Required:** `NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`, `SHOPIFY_CLIENT_ID`, `SHOPIFY_CLIENT_SECRET`, `SHOPIFY_ADMIN_URL`, `OPENAI_API_KEY`, `UPLOADTHING_TOKEN`, `UPLOADTHING_SECRET`.
+Then fill in your values. The application will validate required variables on startup and show clear error messages if anything is missing.
 
-**Admin protection (required in production):**
+#### Environment Setup Checklist
 
-- Set `ADMIN_BASIC_USER` and `ADMIN_BASIC_PASSWORD` to protect `/admin` and `/api/admin/*` with HTTP Basic auth.
-- Or set `ADMIN_SECRET` and send `Authorization: Bearer <token>` for admin access.
+##### ✅ Required (All Environments)
 
-**Expensive endpoint protection (optional):**
+These variables are required for the application to function:
 
-- `AI_API_SECRET` protects `/api/ai/generate`.
-- `UPLOADTHING_API_SECRET` protects `/api/uploadthing`.
-- Browser flows receive a signed session cookie from the middleware when visiting `/create` (no header needed).
-- Server-to-server calls can send `Authorization: Bearer <token>` or `x-api-key`.
+- **`NEXT_PUBLIC_BASE_URL`** - Your site's base URL (e.g., `https://yourdomain.com`)
+- **`NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`** - Shopify Storefront API GraphQL endpoint
+- **`SHOPIFY_STORE_FRONT_ACCESS_TOKEN`** - Shopify Storefront API access token
+- **`SHOPIFY_CLIENT_ID`** - Shopify OAuth 2.0 client ID (from Dev Dashboard)
+- **`SHOPIFY_CLIENT_SECRET`** - Shopify OAuth 2.0 client secret (from Dev Dashboard)
+- **`SHOPIFY_ADMIN_URL`** - Shopify Admin API GraphQL endpoint
+- **`OPENAI_API_KEY`** - OpenAI API key for AI portrait generation
+- **`UPLOADTHING_TOKEN`** - UploadThing API token
+- **`UPLOADTHING_SECRET`** - UploadThing API secret
+
+##### 🔒 Required in Production
+
+These are required when `NODE_ENV=production`:
+
+- **Admin Authentication** (choose one):
+  - `ADMIN_BASIC_USER` + `ADMIN_BASIC_PASSWORD` - HTTP Basic auth for `/admin` routes
+  - OR `ADMIN_SECRET` - Bearer token for API access
+
+##### ⚠️ Recommended for Production
+
+These are recommended for production deployments:
+
+- **`NEXT_PUBLIC_SENTRY_DSN`** - Sentry DSN for error monitoring
+- **`SENTRY_ORG`** - Sentry organization name
+- **`SENTRY_PROJECT`** - Sentry project name
+- **`RATE_LIMIT_REDIS_URL`** - Redis URL for distributed rate limiting
+- **`RATE_LIMIT_REDIS_TOKEN`** - Redis token for rate limiting
+
+##### 🔐 Optional Security
+
+- **`AI_API_SECRET`** - Protects `/api/ai/generate` endpoint
+- **`UPLOADTHING_API_SECRET`** - Protects `/api/uploadthing` endpoint
+- **`CRON_SECRET`** - Secret for cron job authentication
+
+##### 📊 Optional Features
+
+- **`NEXT_PUBLIC_GTM_ID`** - Google Tag Manager container ID
+- **`NEXT_PUBLIC_SITE_NAME`** - Site name (for SEO)
+- **`NEXT_PUBLIC_SITE_EMAIL`** - Contact email
+- **`NEXT_PUBLIC_SITE_PHONE`** - Contact phone
+- **`NEXT_PUBLIC_SITE_LOGO`** - Logo URL
+- **`NEXT_PUBLIC_SITE_LOGO_SQUARE`** - Square logo URL
+- Social media links (`NEXT_PUBLIC_SITE_FACEBOOK`, `NEXT_PUBLIC_SITE_INSTAGRAM`, etc.)
+- AI product variant IDs (`NEXT_PUBLIC_AI_DIGITAL_VARIANT_ID`, etc.)
+
+#### Validation
+
+The application validates environment variables on startup:
+
+- **Errors** (blocking): Missing required variables will prevent the app from starting
+- **Warnings** (non-blocking): Missing recommended variables will show warnings but allow startup
+- **Production checks**: Additional validations run when `NODE_ENV=production`
+
+To check your configuration status programmatically:
+
+```typescript
+import { getConfigStatus } from '@/core/config/validation';
+
+const status = getConfigStatus();
+console.log(status);
+```
+
+#### Deployment Scenarios
+
+**Development:**
+- Only required variables needed
+- Admin auth optional (defaults to allowing access)
+
+**Staging:**
+- All required variables
+- Recommended variables (Sentry, Redis) for testing
+- Admin auth recommended
+
+**Production:**
+- All required variables
+- All production-required variables (admin auth)
+- All recommended variables (Sentry, Redis)
+- Optional variables as needed
+
+See `.env.example` for detailed descriptions of each variable.
 
 ### Development Commands
 
