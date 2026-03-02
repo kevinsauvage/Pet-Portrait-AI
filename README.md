@@ -233,3 +233,38 @@ yarn lint         # ESLint
 6. **React Server Components by default** — Client Components only where required.
 7. **UI has zero business logic** — Components are strictly for presentation.
 8. **No direct Gelato API calls** — The Gelato Shopify app handles fulfillment automatically.
+
+---
+
+## Documentation
+
+### Getting Started
+
+- [Deployment Guide](./DEPLOYMENT.md) - Complete deployment procedures and environment setup
+- [Environment Variables](./README.md#environment-variables) - Complete environment variable reference
+
+### API & Integration
+
+- [API Documentation](./docs/API.md) - API endpoints, authentication, and usage examples
+- [Shopify 2026+ Authentication](./docs/SHOPIFY-2026-AUTH.md) - Shopify OAuth 2.0 setup guide
+- [Gelato Shopify Integration](./docs/GELATO_SHOPIFY_INTEGRATION.md) - Print-on-demand fulfillment guide
+- [Redis Setup](./docs/REDIS_SETUP.md) - Redis configuration for rate limiting
+
+### Operations
+
+- [Monitoring Guide](./docs/MONITORING.md) - Sentry setup, error tracking, and performance monitoring
+- [Troubleshooting Guide](./docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [Runbook](./docs/RUNBOOK.md) - Operational procedures and emergency response
+- [Rollback Procedures](./docs/ROLLBACK.md) - Step-by-step rollback guide
+
+### Architecture
+
+- [Architecture Overview](./ARCHITECTURE.md) - Codebase structure and organization
+- [Architecture Decision Records](./docs/ADRs/) - Key architectural decisions and rationale
+  - [ADR-001: Domain-Driven Design](./docs/ADRs/001-domain-driven-design.md)
+  - [ADR-002: No Barrel Exports](./docs/ADRs/002-no-barrel-exports.md)
+  - [ADR-003: React Server Components Default](./docs/ADRs/003-react-server-components-default.md)
+  - [ADR-004: Shopify OAuth 2.0 Client Credentials](./docs/ADRs/004-shopify-oauth2-client-credentials.md)
+  - [ADR-005: Gelato Shopify App Integration](./docs/ADRs/005-gelato-shopify-app-integration.md)
+  - [ADR-006: Redis Rate Limiting](./docs/ADRs/006-redis-rate-limiting.md)
+  - [ADR-007: Sentry Error Monitoring](./docs/ADRs/007-sentry-error-monitoring.md)
