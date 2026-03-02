@@ -17,13 +17,14 @@ The Redis URL is automatically provided by Vercel when you link the Redis integr
 **For local development:**
 
 1. Pull environment variables from Vercel:
+
    ```bash
    vercel env pull .env.local
    ```
 
 2. Or manually add to `.env.local`:
    ```env
-   REDIS_URL=redis://default:U7EhVvI5vk8gHjdrKWlSrORwX8wTu3Mi@redis-10788.c100.us-east-1-4.ec2.cloud.redislabs.com:10788
+   REDIS_URL=redis://default:example.cloud.redislabs.com:179998
    ```
 
 **For production:**
@@ -33,6 +34,7 @@ The `REDIS_URL` environment variable is automatically set by Vercel when the Red
 ### 3. Verify Setup
 
 The rate limiting system will automatically:
+
 - Use Redis when `REDIS_URL` is set
 - Fall back to in-memory storage if Redis is unavailable
 - Handle connection errors gracefully
