@@ -34,7 +34,7 @@ const seo = {
   },
   create: {
     description:
-      'Upload a photo of your pet and let our AI create a stunning, one-of-a-kind portrait. Choose from dozens of artistic styles.',
+      'Upload a photo of your pet and watch our AI transform it into stunning artwork. Choose from Pixar, Watercolor, Anime, Royal, and more artistic styles. Get your custom pet portrait in minutes!',
     title: 'Create Your Pet Portrait',
     style: {
       title: 'Choose Your Art Style',
@@ -50,17 +50,18 @@ const seo = {
     },
     collections: {
       title: 'Choose Your Product',
-      description: 'Select how you want your portrait — digital download, canvas, poster, and more.',
+      description:
+        'Select how you want your portrait — digital download, canvas, poster, and more.',
     },
   },
   gallery: {
     description:
-      'Browse our gallery of AI-generated pet portraits. See the incredible transformations from photo to artwork.',
+      'Browse our gallery of stunning AI-generated pet portraits. See incredible transformations from photos to artwork. Get inspired for your next custom pet portrait!',
     title: 'Portrait Gallery',
   },
   home: {
     description:
-      'Turn your pet photos into stunning AI-generated artwork. Choose from canvas, poster, or digital prints. Free shipping on all orders.',
+      'Transform your pet photos into stunning AI-generated artwork. Choose from canvas prints, posters, or digital downloads. Free shipping on all orders. Create your custom pet portrait today!',
     title: 'PetPortrait AI — Custom AI Pet Portraits',
   },
   login: {
@@ -71,7 +72,7 @@ const seo = {
   pages: {
     contact: {
       description:
-        'Have a question about your pet portrait? Our team is here to help. Reach out and we\'ll get back to you within 24 hours.',
+        "Have a question about your pet portrait? Our team is here to help. Reach out and we'll get back to you within 24 hours.",
       title: 'Contact Us',
     },
     privacy: {
@@ -106,8 +107,7 @@ const seo = {
     title: 'Create Account',
   },
   reset: {
-    description:
-      'Set a new password for your PetPortrait AI account.',
+    description: 'Set a new password for your PetPortrait AI account.',
     title: 'Reset Password',
   },
   search: {
@@ -117,12 +117,12 @@ const seo = {
   },
   shop: {
     description:
-      'Browse product collections — canvas prints, posters, and digital pet portraits. Find the perfect format for your AI-generated artwork.',
-    title: 'Shop',
+      'Browse our collection of AI pet portrait products — premium canvas prints, posters, and instant digital downloads. Find the perfect format for your custom artwork.',
+    title: 'Shop Pet Portraits',
   },
   styles: {
     description:
-      'Explore our curated collection of AI portrait styles — from renaissance oil paintings to modern pop art. Find the perfect look for your pet.',
+      'Explore our curated collection of AI portrait styles — Pixar, Watercolor, Anime, Royal, Cyberpunk, Renaissance, Pop Art, and more. Find the perfect artistic style for your pet!',
     title: 'Portrait Styles',
   },
 };

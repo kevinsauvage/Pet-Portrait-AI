@@ -49,20 +49,25 @@ export function generateMetadata({
 }: MetadataOptions): Metadata {
   // Use getBaseUrl() to ensure consistency and proper env var handling
   const siteUrl = getBaseUrl();
-  const fullTitle = `${title} | ${siteMetadata.companyName}`;
+  // Use template format for title (Next.js will handle the template)
+  const pageTitle = title;
   const imageUrl = image || siteMetadata.siteLogo;
   const pageUrl = url ? `${siteUrl}${url}` : siteUrl;
 
+  // Ensure description is optimized (150-160 chars is ideal for SEO)
+  const optimizedDescription =
+    description.length > 160 ? `${description.substring(0, 157)}...` : description;
+
   return {
-    title: fullTitle,
-    description,
+    title: pageTitle,
+    description: optimizedDescription,
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
-      title: fullTitle,
-      description,
+      title: pageTitle,
+      description: optimizedDescription,
       url: pageUrl,
       siteName: siteMetadata.companyName,
       images: [
@@ -78,8 +83,8 @@ export function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: fullTitle,
-      description,
+      title: pageTitle,
+      description: optimizedDescription,
       images: [imageUrl],
       creator: siteMetadata.twitterHandle,
     },

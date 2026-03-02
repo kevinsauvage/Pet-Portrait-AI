@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import type { NextWebVitalsMetric } from 'next/app';
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import Script from 'next/script';
 
 import { CartProvider } from '@/contexts/CartContext/CartContext';
 import { UserProvider } from '@/contexts/UserContext/UserContext';
 import seo from '@/core/config/seo';
 import siteMetadata from '@/core/config/siteMetadata';
+import { generateOrganizationSchema, generateWebSiteSchema } from '@/core/utils/structured-data';
 import { CartService } from '@/domains/cart/services/cart.service';
 import { getSiteMenus } from '@/domains/navigation/services/menu.service';
 import { getUser } from '@/domains/user/get-user';
@@ -77,6 +79,22 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
       </head>
       <body className="relative bg-background min-h-screen">
+        {/* Structured Data - Organization & Website */}
+        <Script
+          id="organization-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateOrganizationSchema()),
+          }}
+        />
+        <Script
+          id="website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateWebSiteSchema()),
+          }}
+        />
+
         <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute -top-40 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_top,rgba(194,65,12,0.08)_0%,transparent_70%)] blur-3xl" />
           <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent" />

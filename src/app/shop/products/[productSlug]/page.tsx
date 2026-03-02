@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
+import { generateBreadcrumbSchema, generateProductSchema } from '@/core/utils/structured-data';
 import {
   getProductDetails,
   getProductSeo,
@@ -39,6 +41,7 @@ export async function generateMetadata({
   return generateMetadataUtil({
     title: seo.title,
     description: seo.description,
+    image: seo.image,
     url: `/shop/products/${productSlug}`,
     type: 'website',
   });
@@ -61,24 +64,61 @@ const ProductPage = async ({ params }: PageProperties) => {
   const hasRecommendations =
     recommendations?.productRecommendations && recommendations.productRecommendations.length > 0;
 
+  // Generate structured data
+  const productSchema = generateProductSchema(product);
+
+  // Generate breadcrumb schema
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: 'Shop', url: '/shop' },
+    ...(parameters.collectionSlug
+      ? [
+          {
+            name: parameters.collectionSlug.replace(/-/g, ' '),
+            url: `/shop/${parameters.collectionSlug}`,
+          },
+        ]
+      : []),
+    { name: title || 'Product', url: `/shop/products/${parameters.productSlug}` },
+  ];
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
+
   return (
-    <div className="min-h-[calc(100vh-76px)]">
-      <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
-        <Breadcrumbs lastElement={title} />
-      </div>
+    <>
+      {/* Structured Data */}
+      <Script
+        id="product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productSchema),
+        }}
+      />
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
 
-      <section className="container mx-auto px-4 md:px-6 pb-8 md:pb-12">
-        <ProductDescription product={product} isModal={false} />
-      </section>
+      <div className="min-h-[calc(100vh-76px)]">
+        <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
+          <Breadcrumbs lastElement={title} />
+        </div>
 
-      {hasRecommendations && (
-        <section className="container mx-auto px-4 md:px-6 pb-12 md:pb-16">
-          <HomeSection title="Recommended Products">
-            <ProductRecommendations recommendations={recommendations} />
-          </HomeSection>
+        <section className="container mx-auto px-4 md:px-6 pb-8 md:pb-12">
+          <ProductDescription product={product} isModal={false} />
         </section>
-      )}
-    </div>
+
+        {hasRecommendations && (
+          <section className="container mx-auto px-4 md:px-6 pb-12 md:pb-16">
+            <HomeSection title="Recommended Products">
+              <ProductRecommendations recommendations={recommendations} />
+            </HomeSection>
+          </section>
+        )}
+      </div>
+    </>
   );
 };
 

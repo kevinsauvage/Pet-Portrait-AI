@@ -1,7 +1,10 @@
 import { cache } from 'react';
 
 import { storefrontSdk } from '@/infra/shopify/client';
-import type { GetProductByHandleQuery, ProductRecommendationsQuery } from '@/infra/shopify/storefront';
+import type {
+  GetProductByHandleQuery,
+  ProductRecommendationsQuery,
+} from '@/infra/shopify/storefront';
 import { stripHtmlToText } from '@/lib/html';
 
 type ProductDetails = {
@@ -12,6 +15,7 @@ type ProductDetails = {
 type ProductSeo = {
   title: string;
   description: string;
+  image?: string;
 };
 
 const getProductByHandle = cache(async (handle: string) => {
@@ -43,5 +47,8 @@ export async function getProductSeo(handle: string): Promise<ProductSeo | null> 
   const description =
     product.seo?.description || stripHtmlToText(product.descriptionHtml ?? '') || 'Product';
 
-  return { title, description };
+  // Get first product image for Open Graph
+  const firstImage = product.images?.edges?.[0]?.node?.url;
+
+  return { title, description, image: firstImage };
 }
