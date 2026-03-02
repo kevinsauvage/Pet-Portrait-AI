@@ -7,6 +7,7 @@ export interface CreateFlowParams {
   photo?: string;
   styleId?: string;
   generationId?: string;
+  urls?: string;
 }
 
 /**
@@ -20,6 +21,7 @@ export function buildCreateFlowParams(params: CreateFlowParams): URLSearchParams
   if (params.photo) searchParams.set('photo', params.photo);
   if (params.styleId) searchParams.set('styleId', params.styleId);
   if (params.generationId) searchParams.set('generationId', params.generationId);
+  if (params.urls) searchParams.set('urls', params.urls);
 
   return searchParams;
 }

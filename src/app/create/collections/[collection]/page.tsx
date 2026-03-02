@@ -21,6 +21,7 @@ interface CollectionPageProps {
     photo?: string;
     styleId?: string;
     generationId?: string;
+    urls?: string;
   }>;
 }
 
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 
 export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
   const { collection } = await params;
-  const { artwork, photo, styleId, generationId } = await searchParams;
+  const { artwork, photo, styleId, generationId, urls } = await searchParams;
 
   const data = await getAiPortraitProductsByCollection(collection);
 
@@ -49,6 +50,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     photo,
     styleId,
     generationId,
+    urls,
   })}`;
 
   return (

@@ -25,17 +25,19 @@ interface CollectionsPageProps {
     photo?: string;
     styleId?: string;
     generationId?: string;
+    urls?: string;
   }>;
 }
 
 export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
-  const { artwork, photo, styleId, generationId } = await searchParams;
+  const { artwork, photo, styleId, generationId, urls } = await searchParams;
   const collections = await getAiPortraitCollections();
 
   const backHref = `${config.routes.createSelect}${buildCreateFlowQueryString({
     photo,
     styleId,
     generationId,
+    urls,
   })}`;
 
   return (
@@ -84,6 +86,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                   photo,
                   styleId,
                   generationId,
+                  urls,
                 },
               )}`;
 

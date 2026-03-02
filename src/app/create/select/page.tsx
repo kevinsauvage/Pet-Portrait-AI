@@ -65,6 +65,7 @@ export default async function SelectPage({ searchParams }: SelectPageProps) {
                 photo,
                 styleId,
                 generationId,
+                urls,
               })}`;
 
               return (
