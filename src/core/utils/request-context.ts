@@ -40,7 +40,7 @@ function createFullContext(context: Partial<RequestContext>): RequestContext {
  * ```ts
  * const ctx = getRequestContext();
  * if (ctx) {
- *   console.log(`Request ID: ${ctx.requestId}`);
+ *   logger.info('Request context retrieved', { context: 'request-context', metadata: { requestId: ctx.requestId } });
  * }
  * ```
  */

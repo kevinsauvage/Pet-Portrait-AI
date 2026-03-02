@@ -116,7 +116,11 @@ export function getErrorStatus(
 }
 
 export function handleApiError(context: string, error: unknown, defaultMessage: string) {
-  logger.error(context, error);
+  logger.error('API error occurred', {
+    context,
+    error,
+    metadata: { defaultMessage },
+  });
   const status = getErrorStatus(error);
   return createErrorResponse(defaultMessage, {
     message: error instanceof Error ? error.message : 'An unexpected error occurred',

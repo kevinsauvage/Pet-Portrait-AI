@@ -125,7 +125,7 @@ async function editImageWithOpenAI(
  *   'https://example.com/pet.jpg',
  *   'pixar'
  * );
- * console.log(result.urls); // Array of generated image URLs
+ * logger.info('Portrait variations generated', { context: 'ai-portrait-generate', metadata: { urls: result.urls } });
  * ```
  */
 export async function generatePetPortraitVariations(
