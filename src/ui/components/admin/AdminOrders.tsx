@@ -8,8 +8,9 @@ export default function AdminOrders() {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
-          Configure the Shopify orders/create webhook to trigger Gelato fulfillment. View order
-          status in the{' '}
+          The Gelato Shopify app handles fulfillment automatically when orders contain the{' '}
+          <code className="text-xs bg-muted px-1 py-0.5 rounded">gelato_print_url</code> line item
+          attribute. View order status in the{' '}
           <a
             href="https://dashboard.gelato.com"
             target="_blank"
@@ -18,7 +19,7 @@ export default function AdminOrders() {
           >
             Gelato dashboard
           </a>
-          . Gelato manages Shopify tracking sync automatically.
+          .
         </p>
       </CardContent>
     </Card>

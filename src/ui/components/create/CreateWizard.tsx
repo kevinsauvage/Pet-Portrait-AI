@@ -126,7 +126,7 @@ export default function CreateWizard() {
         AI_ART_STYLES.find((s) => s.id === artwork.styleId)?.name ?? artwork.styleId;
 
       await handleAddToCart(variantId, 1, [
-        { key: 'Custom Artwork URL', value: selectedArtworkUrl },
+        { key: 'gelato_print_url', value: selectedArtworkUrl },
         { key: 'original_photo_url', value: originalPhotoUrl },
         { key: 'chosen_style', value: styleName },
         { key: 'generation_id', value: artwork.generationId },

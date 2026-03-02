@@ -1,24 +1,17 @@
 # PetPortrait AI — Custom AI Pet Portrait Ecommerce
 
-A fully automated ecommerce platform that generates and sells custom AI-created pet portraits. Built with **Next.js 16**, **Shopify Storefront & Admin GraphQL APIs**, and **OpenAI** for image generation.
+A fully automated ecommerce platform that generates and sells custom AI-created pet portraits. Built with **Next.js 16**, **Shopify Storefront & Admin GraphQL APIs**, **OpenAI** for image generation, and **Gelato** for print-on-demand fulfillment.
 
-## ✨ Features
+## Features
 
 - **AI Pet Portrait Generator**
-  Upload a pet photo → choose an art style (Pixar, Watercolor, Anime, Royal, Cyberpunk, Renaissance, Pop Art, Minimalist) → receive multiple portrait variations.
+  Upload a pet photo, choose an art style (Pixar, Watercolor, Anime, Royal, Cyberpunk, Renaissance, Pop Art, Minimalist), and receive multiple portrait variations.
 
 - **Shopify Integration**
-  Storefront API for products & checkout, Admin API for dynamic product creation and order sync.
+  Storefront API for products, cart, and checkout.
 
-- **Automated Product Creation**
-  Automatically generates:
-  - product titles & descriptions
-  - tags
-  - pricing
-  - AI-created product images
-
-- **Order Tracking & Email Updates**
-  Background tasks + webhook synchronization + email notifications.
+- **Gelato Print-on-Demand**
+  The Gelato Shopify app automatically fulfills physical orders (canvas, poster, apparel) using the `gelato_print_url` line item attribute. No backend fulfillment code required.
 
 - **Modern UI**
   Tailwind CSS v4, Radix UI components, lucide-react icons, dark/light mode.
@@ -28,7 +21,7 @@ A fully automated ecommerce platform that generates and sells custom AI-created 
 
 ---
 
-## 🏛️ Architecture Overview
+## Architecture Overview
 
 ```txt
 src/
@@ -55,24 +48,29 @@ src/
     rate-limit/
 
   core/                   # Config, errors, types, shared utils
-    config/
-    errors/
-    types/
-    utils/                # api-responses, form-actions, cookie-security
-
   lib/                    # Pure helpers & app infra
-    cookies/              # Server cookie actions (actions.ts)
-    format/               # formatPrice
-    client/               # Client cookies, analytics
-    cn.ts, debounce.ts, consents.ts, …
-
   ui/                     # Components, layouts, primitives
   types/                  # FormActionResult, globals.d.ts
   hooks/
   contexts/
 ```
 
-Imports use **direct paths** (e.g. `@/domains/user/get-user`, `@/infra/shopify/client`) to keep server/client boundaries clear (no barrel exports).
+---
+
+## Data Flow
+
+```
+1. User uploads photo      → UploadThing CDN
+2. User selects art style  → Frontend only
+3. AI generates variants   → OpenAI Images API
+4. User selects final art  → Stored on CDN (public, permanent)
+5. User picks product      → Shopify Storefront API (products synced by Gelato app)
+6. Add to cart             → Shopify cart with gelato_print_url attribute
+7. Checkout & order        → Normal Shopify checkout
+8. Fulfillment             → Gelato Shopify app reads gelato_print_url, prints & ships
+```
+
+See [GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for the full Gelato integration guide.
 
 ---
 
@@ -82,13 +80,14 @@ Imports use **direct paths** (e.g. `@/domains/user/get-user`, `@/infra/shopify/c
 | ---------- | --------------------------------------------- |
 | Framework  | Next.js 16, React 19, TypeScript 5            |
 | Styling    | Tailwind CSS v4, Radix UI, lucide-react       |
-| APIs       | Shopify Storefront GraphQL, Shopify Admin API |
-| AI         | OpenAI API                                    |
-| Validation | Zod v4                                        |
-| GraphQL    | graphql-request, GraphQL Codegen              |
-| Uploads    | UploadThing                                   |
-| Email      | Nodemailer                                    |
-| Monitoring | Sentry                                        |
+| APIs       | Shopify Storefront GraphQL, Shopify Admin API  |
+| AI         | OpenAI API                                     |
+| Fulfillment| Gelato Shopify App (automatic)                 |
+| Validation | Zod v4                                         |
+| GraphQL    | graphql-request, GraphQL Codegen               |
+| Uploads    | UploadThing                                    |
+| Email      | Nodemailer                                     |
+| Monitoring | Sentry                                         |
 
 ---
 
@@ -101,6 +100,7 @@ Imports use **direct paths** (e.g. `@/domains/user/get-user`, `@/infra/shopify/c
 - Shopify store (+ custom app credentials)
 - OpenAI API key
 - UploadThing account
+- Gelato account with Shopify app installed
 
 ### Installation
 
@@ -132,13 +132,6 @@ cp .env.example .env
 - Browser flows receive a signed session cookie from the middleware when visiting `/create` (no header needed).
 - Server-to-server calls can send `Authorization: Bearer <token>` or `x-api-key`.
 
-**Internal fulfillment protection (recommended in production):**
-
-- Set `FULFILLMENT_API_SECRET` to protect `/api/fulfillment/gelato`.
-- `/api/webhooks/shopify/orders` will send it automatically via `Authorization: Bearer <token>`.
-
-For detailed AI portrait setup (Shopify products, Gelato POD, webhooks), see [README-AI-PET-PORTRAIT.md](./README-AI-PET-PORTRAIT.md).
-
 ### Development Commands
 
 ```bash
@@ -158,5 +151,6 @@ yarn lint         # ESLint
 3. **No barrel exports** — Always import from concrete file paths to preserve server/client boundaries.
 4. **Repositories return domain models** — Services orchestrate repositories and implement business rules.
 5. **Validation lives per domain** — Each domain includes its own Zod schemas.
-6. **React Server Components by default** — Client Components only where required (e.g. wishlist/client, uploads).
+6. **React Server Components by default** — Client Components only where required.
 7. **UI has zero business logic** — Components are strictly for presentation.
+8. **No direct Gelato API calls** — The Gelato Shopify app handles fulfillment automatically.

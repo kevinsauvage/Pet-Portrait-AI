@@ -100,11 +100,12 @@ export interface ArtworkGenerationResult {
 }
 
 export interface CartLineArtworkAttributes {
-  'Custom Artwork URL': string;
+  gelato_print_url: string;
+  gelato_product_uid?: string;
   original_photo_url: string;
   chosen_style: string;
   generation_id: string;
-  product_type?: 'digital' | 'canvas' | 'poster';
+  product_type?: string;
 }
 
 export const IMAGE_CONSTRAINTS = {
