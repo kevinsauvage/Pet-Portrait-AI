@@ -36,6 +36,22 @@ const seo = {
     description:
       'Upload a photo of your pet and let our AI create a stunning, one-of-a-kind portrait. Choose from dozens of artistic styles.',
     title: 'Create Your Pet Portrait',
+    style: {
+      title: 'Choose Your Art Style',
+      description: 'Pick an art style to transform your pet photo into a unique portrait.',
+    },
+    generating: {
+      title: 'Generating Your Portrait',
+      description: 'Your AI pet portrait is being created. This usually takes about a minute.',
+    },
+    select: {
+      title: 'Choose Your Favorite',
+      description: 'Select the portrait you love most to continue.',
+    },
+    collections: {
+      title: 'Choose Your Product',
+      description: 'Select how you want your portrait — digital download, canvas, poster, and more.',
+    },
   },
   gallery: {
     description:

@@ -8,7 +8,8 @@ import OptimizedImage from '@/ui/components/media/OptimizedImage';
 import { Badge } from '@/ui/primitives/badge';
 
 import Price from './Price';
-import ProductCardActions from './ProductCardActions';
+
+import { Sparkles } from 'lucide-react';
 
 const isWhatPercentOf = (x: number, y: number) => (((x - y) / y) * 100).toFixed(0);
 
@@ -19,7 +20,7 @@ type ProductCardDefaultProps = {
 };
 
 const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCardDefaultProps) => {
-  const { title, images, handle, variants, id, priceRange } = product;
+  const { title, images, handle, variants, priceRange } = product;
   const { price, compareAtPrice, availableForSale, quantityAvailable } =
     variants?.edges?.[0]?.node || {};
 
@@ -34,7 +35,15 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
   return (
     <Component className="group relative">
       <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-        <ProductCardActions product={product} productId={id} />
+        <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Link
+            href={config.routes.create}
+            className="flex items-center gap-1.5 rounded-full border border-border bg-background/95 px-3 py-1.5 text-caption-sm font-semibold text-primary shadow-md backdrop-blur-sm transition-all hover:bg-primary hover:text-primary-foreground"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Create
+          </Link>
+        </div>
 
         <Link
           className="flex h-full flex-col"

@@ -1,10 +1,9 @@
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import CreateWizard from '@/ui/components/create/CreateWizard';
-import PageBanner from '@/ui/components/shared/PageBanner';
+import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
+import UploadIsland from '@/ui/components/create/islands/UploadIsland';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.title,
@@ -12,20 +11,11 @@ export const metadata: Metadata = generateMetadataUtil({
   url: '/create',
 });
 
-const CreatePage = () => {
+export default function CreatePage() {
   return (
-    <div>
-      <PageBanner
-        title="Create Your Pet Portrait"
-        description="Upload a photo, pick a style, and watch AI transform your pet into stunning artwork."
-      />
-      <div className="container mx-auto px-4 py-8 md:py-12">
-        <Suspense fallback={<div className="min-h-[400px] animate-pulse rounded-2xl bg-muted" />}>
-          <CreateWizard />
-        </Suspense>
-      </div>
-    </div>
+    <>
+      <CreateProgressBar currentStep="upload" />
+      <UploadIsland />
+    </>
   );
-};
-
-export default CreatePage;
+}

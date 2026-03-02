@@ -1,30 +1,4 @@
-import type { SelectedOption } from '@/infra/shopify/admin';
 import type { FilterValue } from '@/infra/shopify/storefront';
-
-export const isOptionSelected = (
-  name: string,
-  optionValue: SelectedOption['value'],
-  selectedProductOption: SelectedOption[] | undefined,
-) => {
-  if (selectedProductOption?.length) {
-    return selectedProductOption?.some(
-      (option) => option.name === name && option.value === optionValue,
-    );
-  }
-  return false;
-};
-
-export const getDifference = (
-  array1: SelectedOption[] | undefined,
-  array2: SelectedOption[] | undefined,
-) => {
-  const difference = array1?.filter(
-    (object1) =>
-      !array2?.some((object2) => object1.name === object2.name && object1.value === object2.value),
-  );
-
-  return !!difference?.length;
-};
 
 const colors = new Set([
   'black',

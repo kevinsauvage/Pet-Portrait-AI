@@ -1,9 +1,7 @@
 import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
-import { isLowStock } from '@/domains/products/utils/inventory';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
 import { cn } from '@/lib/cn';
 import PhotoGallery from '@/ui/components/media/PhotoGallery';
-import { Badge } from '@/ui/primitives/badge';
 
 import ProductDescriptionClient from './ProductDescriptionClient';
 
@@ -16,36 +14,20 @@ type ProductDescriptionProps = {
 const ProductDescription = ({ product, isModal, className }: ProductDescriptionProps) => {
   if (!product) return null;
 
-  const { images } = product;
   const descriptionHtml: string =
     typeof product.descriptionHtml === 'string' ? product.descriptionHtml : '';
 
-  // Get default variant data for initial render (server-side)
-  const defaultVariant = product.variants?.edges?.[0]?.node
-    ? {
-        quantityAvailable: product.variants.edges[0].node.quantityAvailable,
-        availableForSale: product.variants.edges[0].node.availableForSale,
-        price: product.variants.edges[0].node.price,
-        compareAtPrice: product.variants.edges[0].node.compareAtPrice,
-        sku: product.variants.edges[0].node.sku,
-        title: product.variants.edges[0].node.title,
-        weight: product.variants.edges[0].node.weight,
-        weightUnit: product.variants.edges[0].node.weightUnit,
-      }
-    : {
-        quantityAvailable: null,
-        availableForSale: false,
-        price: undefined,
-        compareAtPrice: undefined,
-        sku: null,
-        title: undefined,
-        weight: null,
-        weightUnit: undefined,
-      };
+  const firstVariant = product.variants?.edges?.[0]?.node;
+  const defaultVariant = {
+    price: firstVariant?.price,
+    compareAtPrice: firstVariant?.compareAtPrice,
+    sku: firstVariant?.sku ?? null,
+    title: firstVariant?.title,
+    weight: firstVariant?.weight ?? null,
+    weightUnit: firstVariant?.weightUnit,
+  };
 
-  const productImages = mapShopifyImagesToImageFields(images?.edges);
-
-  const { quantityAvailable, availableForSale } = defaultVariant;
+  const productImages = mapShopifyImagesToImageFields(product.images?.edges);
 
   return (
     <div
@@ -54,26 +36,8 @@ const ProductDescription = ({ product, isModal, className }: ProductDescriptionP
         className,
       )}
     >
-      <div className="relative lg:col-span-7">
+      <div className="lg:col-span-7">
         <PhotoGallery images={productImages} />
-
-        {!availableForSale && (
-          <Badge
-            variant="destructive"
-            className="absolute right-4 top-4 z-10 px-3 py-1.5 text-body-sm font-medium shadow-md"
-          >
-            Sold Out
-          </Badge>
-        )}
-
-        {isLowStock(quantityAvailable) && availableForSale && (
-          <Badge
-            variant="secondary"
-            className="absolute right-4 top-4 z-10 px-3 py-1.5 text-body-sm font-medium shadow-md"
-          >
-            Low Stock: {quantityAvailable} left
-          </Badge>
-        )}
       </div>
 
       <ProductDescriptionClient
@@ -81,7 +45,6 @@ const ProductDescription = ({ product, isModal, className }: ProductDescriptionP
         isModal={isModal}
         defaultVariant={defaultVariant}
         descriptionHtml={descriptionHtml}
-        productId={product.id}
       />
     </div>
   );

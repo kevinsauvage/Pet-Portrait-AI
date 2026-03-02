@@ -22,11 +22,11 @@ This storefront does **not** call the Gelato API. The **Gelato Shopify app** han
 
 Gelato's Shopify app syncs products that contain:
 
-| Field | Location | Purpose |
-|-------|----------|---------|
-| Title, description, images | Standard Shopify fields | Product display |
-| Variant SKUs | `variant.sku` | **Required** — Gelato matches SKUs to its print specifications |
-| Template UID | `metafield(namespace: "gelato", key: "productUid")` | Links the product to a Gelato print template |
+| Field                      | Location                                            | Purpose                                                        |
+| -------------------------- | --------------------------------------------------- | -------------------------------------------------------------- |
+| Title, description, images | Standard Shopify fields                             | Product display                                                |
+| Variant SKUs               | `variant.sku`                                       | **Required** — Gelato matches SKUs to its print specifications |
+| Template UID               | `metafield(namespace: "gelato", key: "productUid")` | Links the product to a Gelato print template                   |
 
 ### Fetching Products (Storefront API)
 
@@ -59,14 +59,14 @@ query ProductByHandle($handle: String!) {
 
 When adding a Gelato product to the Shopify cart, the storefront includes these attributes:
 
-| Attribute | Required | Purpose |
-|-----------|----------|---------|
-| `gelato_print_url` | Yes | Public, permanent URL to the print-ready image. Gelato downloads this file for printing. |
-| `gelato_product_uid` | Optional | The Gelato template UID from the product metafield. |
-| `original_photo_url` | No | The original uploaded photo (for display/reference only). |
-| `chosen_style` | No | The AI art style selected by the user. |
-| `generation_id` | No | Internal generation tracking ID. |
-| `product_type` | No | Product category (digital, canvas, poster, etc.). |
+| Attribute            | Required | Purpose                                                                                  |
+| -------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `gelato_print_url`   | Yes      | Public, permanent URL to the print-ready image. Gelato downloads this file for printing. |
+| `gelato_product_uid` | Optional | The Gelato template UID from the product metafield.                                      |
+| `original_photo_url` | No       | The original uploaded photo (for display/reference only).                                |
+| `chosen_style`       | No       | The AI art style selected by the user.                                                   |
+| `generation_id`      | No       | Internal generation tracking ID.                                                         |
+| `product_type`       | No       | Product category (digital, canvas, poster, etc.).                                        |
 
 ### Storefront API Example
 
@@ -170,9 +170,9 @@ We use UploadThing CDN which satisfies all of these requirements.
 
 ## 6. Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Gelato doesn't fulfill order | Missing `gelato_print_url` attribute | Ensure the create wizard passes `gelato_print_url` in cart attributes |
-| Gelato rejects variant | Missing or wrong SKU | Check that the variant SKU in Shopify matches the Gelato template variant |
-| Print file download fails | Signed/expired URL | Use a permanent public CDN URL (UploadThing provides this) |
-| Product not appearing in Shopify | Gelato sync issue | Check the Gelato dashboard for sync status and errors |
+| Issue                            | Cause                                | Fix                                                                       |
+| -------------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| Gelato doesn't fulfill order     | Missing `gelato_print_url` attribute | Ensure the create wizard passes `gelato_print_url` in cart attributes     |
+| Gelato rejects variant           | Missing or wrong SKU                 | Check that the variant SKU in Shopify matches the Gelato template variant |
+| Print file download fails        | Signed/expired URL                   | Use a permanent public CDN URL (UploadThing provides this)                |
+| Product not appearing in Shopify | Gelato sync issue                    | Check the Gelato dashboard for sync status and errors                     |

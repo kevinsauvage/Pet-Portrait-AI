@@ -33,6 +33,10 @@ const config = {
   routes: {
     home: '/',
     create: '/create',
+    createStyle: '/create/style',
+    createGenerating: '/create/generating',
+    createSelect: '/create/select',
+    createCollections: '/create/collections',
     styles: '/styles',
     gallery: '/gallery',
     admin: '/admin',
