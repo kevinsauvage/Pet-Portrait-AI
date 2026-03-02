@@ -45,9 +45,8 @@ describe('/api/wishlist route', () => {
     const getUserMock = getUser as unknown as ReturnType<typeof vi.fn>;
     getUserMock.mockResolvedValue({ id: 'user-1' });
 
-    const addProductWithValidationMock = WishlistService.addProductWithValidation as unknown as ReturnType<
-      typeof vi.fn
-    >;
+    const addProductWithValidationMock =
+      WishlistService.addProductWithValidation as unknown as ReturnType<typeof vi.fn>;
     addProductWithValidationMock.mockResolvedValue({
       success: true,
       wishlistIds: ['prod-1'],
@@ -83,9 +82,8 @@ describe('/api/wishlist route', () => {
     const getUserMock = getUser as unknown as ReturnType<typeof vi.fn>;
     getUserMock.mockResolvedValue({ id: 'user-1' });
 
-    const addProductWithValidationMock = WishlistService.addProductWithValidation as unknown as ReturnType<
-      typeof vi.fn
-    >;
+    const addProductWithValidationMock =
+      WishlistService.addProductWithValidation as unknown as ReturnType<typeof vi.fn>;
 
     const request = {
       json: vi.fn().mockResolvedValue({}),
@@ -96,10 +94,9 @@ describe('/api/wishlist route', () => {
     expect(response.status).toBe(400);
     const body = (await (response as any).json()) as any;
 
-    expect(body.error).toBe('Missing or invalid product ID');
+    expect(body.error).toBe('A valid product ID is required.');
     expect(typeof body.message).toBe('string');
     expect(body.message).toContain('Invalid input');
     expect(addProductWithValidationMock).not.toHaveBeenCalled();
   });
 });
-
