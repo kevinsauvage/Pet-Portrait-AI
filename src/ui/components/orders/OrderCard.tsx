@@ -167,7 +167,7 @@ const OrderCard = ({ order }: { order: OrderFieldsFragment }) => {
                             <div className="flex-1 min-w-0">
                               {productHandle && collectionHandle ? (
                                 <Link
-                                  href={`/shop/${collectionHandle}/products/${productHandle}`}
+                                  href={`/shop/${collectionHandle}/${productHandle}`}
                                   className="font-medium hover:underline line-clamp-1"
                                 >
                                   {item.title}

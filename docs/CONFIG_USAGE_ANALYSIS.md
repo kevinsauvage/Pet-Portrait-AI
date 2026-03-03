@@ -33,7 +33,7 @@ These use `export const revalidate` which must be static:
 - `src/app/shop/page.tsx` - `revalidate = 3600`
 - `src/app/search/page.tsx` - `revalidate = 300`
 - `src/app/shop/[collectionSlug]/page.tsx` - `revalidate = 3600`
-- `src/app/shop/products/[productSlug]/page.tsx` - `revalidate = 3600`
+- `src/app/shop/[collectionSlug]/[productSlug]/page.tsx` - `revalidate = 3600`
 - `src/app/page.tsx` - `revalidate = 3600`
 - `src/app/sitemap.tsx` - `revalidate = 3600`
 

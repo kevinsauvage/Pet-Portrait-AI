@@ -18,6 +18,13 @@ const GET_PRODUCTS_FOR_SITEMAP = gql`
         node {
           handle
           updatedAt
+          collections(first: 1) {
+            edges {
+              node {
+                handle
+              }
+            }
+          }
         }
       }
     }
@@ -42,6 +49,9 @@ const GET_COLLECTIONS_FOR_SITEMAP = gql`
 `;
 
 type SitemapNode = { handle: string; updatedAt?: string };
+type ProductSitemapNode = SitemapNode & {
+  collections?: { edges?: Array<{ node?: { handle?: string } }> };
+};
 type PageInfo = { hasNextPage: boolean; endCursor: string | null };
 type PaginatedResponse<K extends string> = Record<
   K,
@@ -117,11 +127,11 @@ const fetchAll = async <K extends string>(
 
 export const fetchShopifySitemapEntries = async (
   options: SitemapFetchOptions,
-): Promise<{ products: SitemapNode[]; collections: SitemapNode[] }> => {
+): Promise<{ products: ProductSitemapNode[]; collections: SitemapNode[] }> => {
   const client = createSitemapClient(options.revalidate);
 
   const [productsResult, collectionsResult] = await Promise.allSettled([
-    fetchAll(client, GET_PRODUCTS_FOR_SITEMAP, 'products'),
+    fetchAll(client, GET_PRODUCTS_FOR_SITEMAP, 'products') as Promise<ProductSitemapNode[]>,
     fetchAll(client, GET_COLLECTIONS_FOR_SITEMAP, 'collections'),
   ]);
 

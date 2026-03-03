@@ -15,8 +15,7 @@ import HomeSection from '@/ui/components/shared/HomeSection';
 
 export const revalidate = 3600;
 
-type parametersType = {
-  genre: string;
+type ParametersType = {
   collectionSlug: string;
   productSlug: string;
 };
@@ -24,16 +23,16 @@ type parametersType = {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<parametersType>;
+  params: Promise<ParametersType>;
 }): Promise<Metadata> {
-  const { productSlug } = await params;
+  const { collectionSlug, productSlug } = await params;
 
   const seo = await getProductSeo(productSlug);
   if (!seo) {
     return generateMetadataUtil({
       title: 'Product Not Found',
       description: 'Product not found',
-      url: `/shop/products/${productSlug}`,
+      url: `/shop/${collectionSlug}/${productSlug}`,
       noindex: true,
     });
   }
@@ -42,19 +41,19 @@ export async function generateMetadata({
     title: seo.title,
     description: seo.description,
     image: seo.image,
-    url: `/shop/products/${productSlug}`,
+    url: `/shop/${collectionSlug}/${productSlug}`,
     type: 'website',
   });
 }
 
 type PageProperties = {
-  params: Promise<parametersType>;
+  params: Promise<ParametersType>;
 };
 
 const ProductPage = async ({ params }: PageProperties) => {
-  const parameters = await params;
+  const { collectionSlug, productSlug } = await params;
 
-  const { product, recommendations } = await getProductDetails(parameters.productSlug);
+  const { product, recommendations } = await getProductDetails(productSlug);
 
   if (!product) {
     notFound();
@@ -64,20 +63,16 @@ const ProductPage = async ({ params }: PageProperties) => {
   const hasRecommendations =
     recommendations?.productRecommendations && recommendations.productRecommendations.length > 0;
 
-  const productSchema = generateProductSchema(product);
+  const productSchema = generateProductSchema(product, `/shop/${collectionSlug}/${productSlug}`);
 
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
     { name: 'Shop', url: '/shop' },
-    ...(parameters.collectionSlug
-      ? [
-          {
-            name: parameters.collectionSlug.replace(/-/g, ' '),
-            url: `/shop/${parameters.collectionSlug}`,
-          },
-        ]
-      : []),
-    { name: title || 'Product', url: `/shop/products/${parameters.productSlug}` },
+    {
+      name: collectionSlug.replace(/-/g, ' '),
+      url: `/shop/${collectionSlug}`,
+    },
+    { name: title || 'Product', url: `/shop/${collectionSlug}/${productSlug}` },
   ];
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
 

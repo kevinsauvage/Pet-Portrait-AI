@@ -41,9 +41,12 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
   const hasDiscount = finalPrice < totalPrice;
   const { currencyCode } = node.merchandise.price;
 
+  const collectionHandle =
+    'product' in node.merchandise &&
+    node.merchandise.product?.collections?.nodes?.[0]?.handle;
   const productHandle =
     'product' in node.merchandise && node.merchandise.product?.handle
-      ? `${config.routes.collection}/products/${node.merchandise.product.handle}`
+      ? `${config.routes.collection}/${collectionHandle ?? 'all'}/${node.merchandise.product.handle}`
       : '#';
 
   return (

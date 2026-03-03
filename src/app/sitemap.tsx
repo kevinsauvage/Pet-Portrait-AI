@@ -33,10 +33,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority,
     });
 
+    const productCollectionSlug = (
+      p: { collections?: { edges?: Array<{ node?: { handle?: string } }> } },
+    ) => p.collections?.edges?.[0]?.node?.handle ?? 'all';
+
     return [
       ...baseSitemap,
       ...collections.map((c) => toEntry(c, '/shop', 'daily', 0.8)),
-      ...products.map((p) => toEntry(p, '/shop/products', 'weekly', 0.7)),
+      ...products.map((p) =>
+        toEntry(
+          { handle: p.handle, updatedAt: p.updatedAt },
+          `/shop/${productCollectionSlug(p)}`,
+          'weekly',
+          0.7,
+        ),
+      ),
     ];
   } catch (error) {
     logger.error('Failed to generate sitemap', { context: 'sitemap', error });

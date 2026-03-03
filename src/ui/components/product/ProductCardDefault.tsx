@@ -17,10 +17,26 @@ type ProductCardDefaultProps = {
   product: ProductFieldsFragment;
   priority: boolean;
   asListItem?: boolean;
+  /** When provided, links to /shop/{collectionSlug}/{productHandle}. Otherwise uses product's first collection or "all". */
+  collectionSlug?: string;
 };
 
-const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCardDefaultProps) => {
+function getProductCollectionSlug(
+  product: ProductFieldsFragment,
+  explicitSlug?: string,
+): string {
+  if (explicitSlug) return explicitSlug;
+  return product.collections?.edges?.[0]?.node?.handle ?? 'all';
+}
+
+const ProductCardDefault = ({
+  product,
+  priority,
+  asListItem = true,
+  collectionSlug,
+}: ProductCardDefaultProps) => {
   const { title, images, handle, variants, priceRange } = product;
+  const resolvedCollectionSlug = getProductCollectionSlug(product, collectionSlug);
   const { price, compareAtPrice, availableForSale, quantityAvailable } =
     variants?.edges?.[0]?.node || {};
 
@@ -49,7 +65,7 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
 
         <Link
           className="flex h-full flex-col"
-          href={`${config.routes.collection}/products/${handle}`}
+          href={`${config.routes.collection}/${resolvedCollectionSlug}/${handle}`}
           scroll
           aria-label={`View details for ${title}`}
         >

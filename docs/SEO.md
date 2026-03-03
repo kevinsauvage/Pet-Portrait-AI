@@ -25,7 +25,7 @@ Added to root layout (`src/app/layout.tsx`):
 
 ### Product Schema
 
-Added to product pages (`src/app/shop/products/[productSlug]/page.tsx`):
+Added to product pages (`src/app/shop/[collectionSlug]/[productSlug]/page.tsx`):
 
 - Product name, description, images
 - Pricing and availability

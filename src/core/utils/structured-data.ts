@@ -32,9 +32,18 @@ export function generateOrganizationSchema() {
 
 /**
  * Generate Product structured data (JSON-LD)
+ * @param product - Product data
+ * @param productPath - Optional path for the product URL (e.g. "/shop/collection-handle/product-handle")
  */
-export function generateProductSchema(product: ProductFieldsFragment) {
+export function generateProductSchema(
+  product: ProductFieldsFragment,
+  productPath?: string,
+) {
   const baseUrl = getBaseUrl();
+  const collectionSlug = (
+    product as { collections?: { edges?: Array<{ node?: { handle?: string } }> } }
+  ).collections?.edges?.[0]?.node?.handle ?? 'all';
+  const productUrl = productPath ?? `/shop/${collectionSlug}/${product.handle}`;
   const firstVariant = product.variants?.edges?.[0]?.node;
   const price = firstVariant?.price?.amount;
   const currency = firstVariant?.price?.currencyCode || 'USD';
@@ -62,7 +71,7 @@ export function generateProductSchema(product: ProductFieldsFragment) {
     },
     offers: {
       '@type': 'Offer',
-      url: `${baseUrl}/shop/products/${product.handle}`,
+      url: productUrl.startsWith('http') ? productUrl : `${baseUrl}${productUrl}`,
       priceCurrency: currency,
       availability,
       price,

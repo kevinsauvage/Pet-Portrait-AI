@@ -104,7 +104,7 @@ const CollectionSlugPage = async ({
         />
       </ListingHeader>
 
-      <ProductEdgeList products={edges} layout="grid" />
+      <ProductEdgeList products={edges} layout="grid" collectionSlug={collectionSlug} />
 
       <PageInfoPagination pageInfo={pageInfo} searchParameters={safeSearchParameters} />
     </div>

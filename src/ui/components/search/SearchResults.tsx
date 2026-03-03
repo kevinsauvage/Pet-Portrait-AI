@@ -18,10 +18,12 @@ type ProductSearchItem = {
   title?: string;
   handle?: string;
   priceRange?: { minVariantPrice: { amount: string; currencyCode: string } };
+  collections?: { edges?: Array<{ node?: { handle?: string } }> };
 };
 
 const Product = ({ product }: { product: ProductSearchItem }) => {
-  const { featuredImage, title, handle, priceRange } = product;
+  const { featuredImage, title, handle, priceRange, collections } = product;
+  const collectionSlug = collections?.edges?.[0]?.node?.handle ?? 'all';
 
   if (!featuredImage) return null;
 
@@ -47,7 +49,7 @@ const Product = ({ product }: { product: ProductSearchItem }) => {
   return (
     <Link
       key={handle}
-      href={`/shop/products/${handle}`}
+      href={`/shop/${collectionSlug}/${handle}`}
       role="option"
       className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
