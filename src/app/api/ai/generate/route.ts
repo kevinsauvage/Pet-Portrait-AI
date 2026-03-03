@@ -15,10 +15,11 @@ import { formatZodErrorMessage } from '@/core/utils/zod';
 import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
 import { generatePetPortraitVariations } from '@/domains/ai/services';
+import { getShopConfig } from '@/domains/shop/services';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
+export const maxDuration = 300; // 5 minutes max (safe upper bound)
 
 export async function POST(request: NextRequest) {
   const perf = createPerformanceLogger('ai.generate', 2000); // Log if > 2s
@@ -32,7 +33,12 @@ export async function POST(request: NextRequest) {
     if (sizeError) return sizeError;
 
     const { identifier } = getClientContext(request.headers);
-    const rateLimit = await checkRateLimit(identifier, { prefix: 'ai' });
+    const shopConfig = await getShopConfig();
+    const rateLimit = await checkRateLimit(identifier, {
+      prefix: 'ai',
+      maxRequests: shopConfig.rateLimit.ai.maxRequests,
+      windowMs: shopConfig.rateLimit.ai.windowMs,
+    });
     if (!rateLimit.allowed) {
       return createErrorResponse(API_ERROR_MESSAGES.TOO_MANY_REQUESTS, {
         status: HTTP_STATUS.TOO_MANY_REQUESTS,

@@ -1,5 +1,6 @@
 import { logger } from '@/core/utils/logger';
 import { withRetry } from '@/core/utils/retry';
+import { getShopConfig } from '@/domains/shop/services';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 
 import { AI_ART_STYLES, type ArtStyleId, type ArtworkGenerationResult } from '../ai-portrait/types';
@@ -13,7 +14,6 @@ import { randomUUID } from 'crypto';
 import { UTApi, UTFile } from 'uploadthing/server';
 
 const OPENAI_EDIT_URL = 'https://api.openai.com/v1/images/edits';
-const VARIATIONS_COUNT = 2;
 
 /**
  * Gets the style prompt suffix for a given art style ID.
@@ -60,6 +60,9 @@ async function editImageWithOpenAI(
   prompt: string,
   imageUrl: string,
 ): Promise<string> {
+  const shopConfig = await getShopConfig();
+  const retryConfig = shopConfig.ai.retry;
+
   const b64 = await withRetry(
     async () => {
       const imageResponse = await fetch(imageUrl);
@@ -68,7 +71,7 @@ async function editImageWithOpenAI(
 
       const imageBlob = await imageResponse.blob();
       const form = new FormData();
-      form.append('model', 'gpt-image-1.5');
+      form.append('model', shopConfig.ai.model);
       form.append('prompt', prompt);
       form.append('image', imageBlob, 'pet.png');
 
@@ -92,9 +95,9 @@ async function editImageWithOpenAI(
       return data;
     },
     {
-      maxAttempts: 2,
-      baseDelayMs: 2000,
-      maxDelayMs: 6000,
+      maxAttempts: retryConfig.maxAttempts,
+      baseDelayMs: retryConfig.baseDelayMs,
+      maxDelayMs: retryConfig.maxDelayMs,
       onAttemptFailed: (attempt, _maxAttempts, error) => {
         logger.error('OpenAI image edit attempt failed', {
           context: 'ai-portrait-generate',
@@ -112,7 +115,7 @@ async function editImageWithOpenAI(
 
 /**
  * Generates multiple portrait variations of a pet photo in a specified art style.
- * Creates VARIATIONS_COUNT variations, uploads them to storage, and logs the results.
+ * Creates variations based on shop config, uploads them to storage, and logs the results.
  *
  * @param originalPhotoUrl - URL of the original pet photo
  * @param styleId - Art style to apply (e.g., 'pixar', 'watercolor')
@@ -135,12 +138,15 @@ export async function generatePetPortraitVariations(
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new Error('OPENAI_API_KEY is not configured');
 
+  const shopConfig = await getShopConfig();
+  const { variationsCount } = shopConfig.ai;
+
   const generationId = randomUUID();
   const prompt = `Repaint this pet portrait ${getStylePrompt(styleId)}. Preserve the pet's breed, markings, eye color, and pose exactly. Fill the entire canvas. No text, no borders, no watermarks.`;
 
   try {
     const urls: string[] = [];
-    for (let i = 0; i < VARIATIONS_COUNT; i++) {
+    for (let i = 0; i < variationsCount; i++) {
       const b64 = await editImageWithOpenAI(apiKey, prompt, originalPhotoUrl);
       urls.push(await uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`));
     }

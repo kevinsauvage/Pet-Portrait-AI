@@ -1,0 +1,58 @@
+{
+  "ai": {
+    "variationsCount": 3,
+    "generationTimeoutSeconds": 120,
+    "apiTimeoutSeconds": 60,
+    "model": "gpt-image-1.5",
+    "retry": {
+      "maxAttempts": 2,
+      "baseDelayMs": 2000,
+      "maxDelayMs": 6000
+    },
+    "timeEstimate": {
+      "minSeconds": 30,
+      "maxSeconds": 60
+    }
+  },
+  "rateLimit": {
+    "ai": {
+      "maxRequests": 5,
+      "windowMs": 60000
+    },
+    "upload": {
+      "maxRequests": 12,
+      "windowMs": 60000
+    }
+  },
+  "image": {
+    "maxFileSize": 8388608,
+    "minDimension": 200,
+    "maxDimension": 10000,
+    "minAspectRatio": 0.5,
+    "maxAspectRatio": 2.0,
+    "acceptedTypes": [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ]
+  },
+  "features": {
+    "enableRegeneration": true,
+    "enableAdminDashboard": true,
+    "enableGallery": true
+  },
+  "pagination": {
+    "productsPerPage": 16
+  },
+  "cache": {
+    "revalidate": {
+      "catalog": 3600,
+      "search": 300,
+      "product": 3600,
+      "shopify": 600
+    }
+  },
+  "cookies": {
+    "expiryDays": 182
+  }
+}

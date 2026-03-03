@@ -22,9 +22,11 @@ import { Label } from '@/ui/primitives/label';
 
 import { Settings } from 'lucide-react';
 
-const EXPIRY_COOKIE_TIME = config.constants.cookieExpiryDays;
+interface CookieBannerProps {
+  cookieExpiryDays: number;
+}
 
-const CookieBanner = () => {
+const CookieBanner = ({ cookieExpiryDays }: CookieBannerProps) => {
   const [show, setShow] = useState<boolean | undefined>(false);
 
   const setShowBannerCookies = useCallback((payload: boolean) => {
@@ -56,12 +58,12 @@ const CookieBanner = () => {
       personalization_storage: true,
     };
     const transformedObject = transformedSettings(cookie);
-    setCookieFront('localConsent', JSON.stringify(cookie), EXPIRY_COOKIE_TIME);
+    setCookieFront('localConsent', JSON.stringify(cookie), cookieExpiryDays);
     setShowBannerCookies(false);
     withGtag((gtag) => {
       gtag('consent', 'update', transformedObject);
     });
-  }, [setShowBannerCookies]);
+  }, [setShowBannerCookies, cookieExpiryDays]);
 
   const rejectAllCookie = useCallback(() => {
     const cookie = {
@@ -74,9 +76,9 @@ const CookieBanner = () => {
     withGtag((gtag) => {
       gtag('consent', 'update', transformedObject);
     });
-    setCookieFront('localConsent', JSON.stringify(cookie), EXPIRY_COOKIE_TIME);
+    setCookieFront('localConsent', JSON.stringify(cookie), cookieExpiryDays);
     setShowBannerCookies(false);
-  }, [setShowBannerCookies]);
+  }, [setShowBannerCookies, cookieExpiryDays]);
 
   const handleSaveSettings = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -99,10 +101,10 @@ const CookieBanner = () => {
       withGtag((gtag) => {
         gtag('consent', 'update', transformedObject);
       });
-      setCookieFront('localConsent', JSON.stringify(formData), EXPIRY_COOKIE_TIME);
+      setCookieFront('localConsent', JSON.stringify(formData), cookieExpiryDays);
       setShowBannerCookies(false);
     },
-    [setShowBannerCookies],
+    [setShowBannerCookies, cookieExpiryDays],
   );
 
   if (!show) return null;

@@ -108,6 +108,12 @@ export interface CartLineArtworkAttributes {
   product_type?: string;
 }
 
+/**
+ * Client-side image constraints for zod schema validation.
+ * Note: These should match the shop config values for consistency.
+ * Server-side validation uses shop config directly (see validate-image.ts).
+ * This constant is used in client components where async shop config is not available.
+ */
 export const IMAGE_CONSTRAINTS = {
   maxFileSize: 8 * 1024 * 1024,
   minDimension: 200,

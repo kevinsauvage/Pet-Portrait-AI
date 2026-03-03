@@ -17385,6 +17385,7 @@ export type GetShopQuery = {
         } | null;
       } | null;
     } | null;
+    shopConfig?: { __typename?: 'Metafield'; value: string; type: string } | null;
   };
 };
 
@@ -19179,6 +19180,10 @@ export const GetShopDocument = gql`
             altText
           }
         }
+      }
+      shopConfig: metafield(namespace: "custom", key: "shop_config") {
+        value
+        type
       }
     }
   }

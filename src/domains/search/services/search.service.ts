@@ -1,4 +1,4 @@
-import config from '@/core/config';
+import { getShopConfig } from '@/domains/shop/services';
 import { storefrontSdk } from '@/infra/shopify/client';
 import {
   adjustPaginationVariables,
@@ -26,17 +26,14 @@ type SearchResults = {
 };
 
 export async function searchProducts(searchParameters: SearchParameters): Promise<SearchResults> {
-  const sortKey = resolveSortKeyFromString(
-    searchParameters?.sort_key,
-    SearchSortKeys,
-    'Relevance',
-  );
+  const shopConfig = await getShopConfig();
+  const sortKey = resolveSortKeyFromString(searchParameters?.sort_key, SearchSortKeys, 'Relevance');
 
   const response: SearchProductsQuery = await storefrontSdk().searchProducts({
     ...adjustPaginationVariables({
       after: searchParameters.after,
       before: searchParameters.before,
-      first: config.constants.pagination.productsPerPage,
+      first: shopConfig.pagination.productsPerPage,
     }),
     identifiers: [],
     productFilters: parseFiltersQuery(searchParameters?.filters),

@@ -33,7 +33,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
   const { artwork, photo, styleId, generationId, urls } = await searchParams;
   const collections = await getAiPortraitCollections();
 
-  const backHref = `${config.routes.createSelect}${buildCreateFlowQueryString({
+  const backHref = `${config.routes.createGenerating}${buildCreateFlowQueryString({
     photo,
     styleId,
     generationId,

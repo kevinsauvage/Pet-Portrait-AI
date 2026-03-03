@@ -12,7 +12,7 @@ import { CartService } from '@/domains/cart/services/cart.service';
 import { getSiteMenus } from '@/domains/navigation/services/menu.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
-import CookieBanner from '@/ui/components/consent/CookieBanner';
+import CookieBannerWrapper from '@/ui/components/consent/CookieBannerWrapper';
 import GtmScript from '@/ui/components/consent/GtmScript';
 import Footer from '@/ui/components/navigation/Footer';
 import Header from '@/ui/components/navigation/Header';
@@ -100,7 +100,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent" />
         </div>
         <GtmScript />
-        <CookieBanner />
+        <CookieBannerWrapper />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

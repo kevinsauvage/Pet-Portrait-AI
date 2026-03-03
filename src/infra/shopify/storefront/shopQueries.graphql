@@ -20,6 +20,10 @@ query getShop($language: LanguageCode) @inContext(language: $language) {
         }
       }
     }
+    shopConfig: metafield(namespace: "custom", key: "shop_config") {
+      value
+      type
+    }
   }
 }
 

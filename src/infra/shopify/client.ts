@@ -19,22 +19,41 @@ if (!SHOPIFY_URL) throw new Error('Missing NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL');
 const createStorefrontClient = (cacheOption: 'default' | 'no-store' = 'default') => {
   return new GraphQLClient(SHOPIFY_URL, {
     fetch: async (url: RequestInfo | URL, params?: RequestInit) => {
-      const token = await getStorefrontAccessToken();
-      const headers = new Headers(params?.headers);
-      headers.set('Content-Type', 'application/json');
-      headers.set('X-Shopify-Storefront-Access-Token', token);
+      try {
+        const token = await getStorefrontAccessToken();
+        const headers = new Headers(params?.headers);
+        headers.set('Content-Type', 'application/json');
+        headers.set('X-Shopify-Storefront-Access-Token', token);
 
-      const fetchOptions: RequestInit = { ...params, headers };
-      if (cacheOption === 'no-store') {
-        fetchOptions.cache = 'no-store';
-        fetchOptions.next = { revalidate: 0 };
-      } else {
-        fetchOptions.next = { revalidate: config.constants.revalidate.shopify };
+        const fetchOptions: RequestInit = { ...params, headers };
+        if (cacheOption === 'no-store') {
+          fetchOptions.cache = 'no-store';
+          fetchOptions.next = { revalidate: 0 };
+        } else {
+          // Use default config to avoid circular dependency
+          fetchOptions.next = { revalidate: config.constants.revalidate.shopify };
+        }
+
+        const response = await fetchWithRetry(url, fetchOptions, {
+          maxAttempts: 3,
+          initialDelayMs: 500,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Shopify fetch failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response;
+      } catch (error) {
+        logger.error('Storefront client fetch error', {
+          context: 'shopify-client',
+          error,
+          metadata: {
+            url: typeof url === 'string' ? url : url.toString(),
+          },
+        });
+        throw error;
       }
-
-      const response = await fetchWithRetry(url, fetchOptions);
-      if (!response.ok) throw new Error(`Shopify fetch failed: ${response.statusText}`);
-      return response;
     },
   });
 };
@@ -51,7 +70,11 @@ const defaultWrapper: SdkFunctionWrapper = async (
   try {
     return await action(extraHeader);
   } catch (error) {
-    logger.error(`GraphQL request failed: ${operationName}`, { context: 'shopify-client', error, metadata: { operationName } });
+    logger.error(`GraphQL request failed: ${operationName}`, {
+      context: 'shopify-client',
+      error,
+      metadata: { operationName },
+    });
     throw error;
   }
 };

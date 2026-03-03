@@ -1,19 +1,12 @@
 import { cn } from '@/lib/cn';
 
-export type CreateStep =
-  | 'upload'
-  | 'style'
-  | 'generating'
-  | 'select'
-  | 'collections'
-  | 'product';
+export type CreateStep = 'upload' | 'style' | 'generating' | 'collections' | 'product';
 
 const STEPS: { id: CreateStep; label: string }[] = [
   { id: 'upload', label: 'Upload' },
   { id: 'style', label: 'Style' },
   { id: 'generating', label: 'Generating' },
-  { id: 'select', label: 'Select' },
-  { id: 'collections', label: 'Format' },
+  { id: 'collections', label: 'Template' },
   { id: 'product', label: 'Order' },
 ];
 

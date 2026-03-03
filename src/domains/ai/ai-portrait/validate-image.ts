@@ -1,6 +1,6 @@
 'use server';
 
-import { IMAGE_CONSTRAINTS } from './types';
+import { getShopConfig } from '@/domains/shop/services';
 
 import sharp from 'sharp';
 
@@ -15,6 +15,9 @@ export async function validateImageFromUrl(
   imageUrl: string,
 ): Promise<ImageValidationResult> {
   try {
+    const shopConfig = await getShopConfig();
+    const imageConfig = shopConfig.image;
+
     const response = await fetch(imageUrl, {
       headers: { Accept: 'image/*' },
       signal: AbortSignal.timeout(10000),
@@ -25,30 +28,31 @@ export async function validateImageFromUrl(
     }
 
     const contentType = response.headers.get('content-type') ?? '';
-    if (!IMAGE_CONSTRAINTS.acceptedTypes.some((t) => contentType.includes(t))) {
+    if (!imageConfig.acceptedTypes.some((t) => contentType.includes(t))) {
       return { valid: false, error: 'Only JPEG, PNG, and WebP images are allowed' };
     }
 
     const buffer = Buffer.from(await response.arrayBuffer());
-    if (buffer.length > IMAGE_CONSTRAINTS.maxFileSize) {
-      return { valid: false, error: 'Image must be under 8MB' };
+    const maxFileSizeMB = Math.round(imageConfig.maxFileSize / (1024 * 1024));
+    if (buffer.length > imageConfig.maxFileSize) {
+      return { valid: false, error: `Image must be under ${maxFileSizeMB}MB` };
     }
 
     const metadata = await sharp(buffer).metadata();
     const width = metadata.width ?? 0;
     const height = metadata.height ?? 0;
 
-    if (width < IMAGE_CONSTRAINTS.minDimension || height < IMAGE_CONSTRAINTS.minDimension) {
-      return { valid: false, error: `Image must be at least ${IMAGE_CONSTRAINTS.minDimension}x${IMAGE_CONSTRAINTS.minDimension}px`, width, height };
+    if (width < imageConfig.minDimension || height < imageConfig.minDimension) {
+      return { valid: false, error: `Image must be at least ${imageConfig.minDimension}x${imageConfig.minDimension}px`, width, height };
     }
 
-    if (width > IMAGE_CONSTRAINTS.maxDimension || height > IMAGE_CONSTRAINTS.maxDimension) {
-      return { valid: false, error: `Image must not exceed ${IMAGE_CONSTRAINTS.maxDimension}x${IMAGE_CONSTRAINTS.maxDimension}px`, width, height };
+    if (width > imageConfig.maxDimension || height > imageConfig.maxDimension) {
+      return { valid: false, error: `Image must not exceed ${imageConfig.maxDimension}x${imageConfig.maxDimension}px`, width, height };
     }
 
     const aspectRatio = width / height;
-    if (aspectRatio < IMAGE_CONSTRAINTS.minAspectRatio || aspectRatio > IMAGE_CONSTRAINTS.maxAspectRatio) {
-      return { valid: false, error: 'Image aspect ratio should be between 1:2 and 2:1', width, height };
+    if (aspectRatio < imageConfig.minAspectRatio || aspectRatio > imageConfig.maxAspectRatio) {
+      return { valid: false, error: `Image aspect ratio should be between ${imageConfig.minAspectRatio}:1 and ${imageConfig.maxAspectRatio}:1`, width, height };
     }
 
     return { valid: true, width, height };

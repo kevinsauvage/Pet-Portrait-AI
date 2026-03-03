@@ -197,20 +197,29 @@ export async function isApiSessionValid(
  */
 export function isSameOriginRequest(request: NextRequest): boolean {
   const secFetchSite = request.headers.get('sec-fetch-site');
-  if (secFetchSite && !['same-origin', 'same-site'].includes(secFetchSite)) {
+  // If sec-fetch-site indicates cross-origin, block it
+  if (secFetchSite === 'cross-site') {
     return false;
+  }
+  // If sec-fetch-site is same-origin or same-site, allow it
+  if (secFetchSite && ['same-origin', 'same-site'].includes(secFetchSite)) {
+    return true;
   }
 
   const origin = request.headers.get('origin');
+  // No origin header usually means same-origin request
   if (!origin) return true;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL?.trim();
+  // If baseUrl is not configured, be lenient (allow the request)
   if (!baseUrl) return true;
 
   try {
     const expectedOrigin = new URL(baseUrl).origin;
-    return origin === expectedOrigin;
+    const requestOrigin = new URL(origin).origin;
+    return requestOrigin === expectedOrigin;
   } catch {
+    // If URL parsing fails, be lenient (allow the request)
     return true;
   }
 }
@@ -241,14 +250,16 @@ export async function requireApiProtection(
   if (headerAuthorized) return null;
 
   if (!isSameOriginRequest(request)) {
-    return createErrorResponse('Forbidden', {
+    return createErrorResponse('Forbidden: Request must be from same origin', {
       status: HTTP_STATUS.FORBIDDEN,
+      message: 'Cross-origin requests require Authorization header. Ensure NEXT_PUBLIC_BASE_URL matches your domain.',
     });
   }
 
   if (!(await isApiSessionValid(request, scope))) {
-    return createErrorResponse('Unauthorized', {
+    return createErrorResponse('Unauthorized: Session expired or invalid', {
       status: HTTP_STATUS.UNAUTHORIZED,
+      message: 'Please refresh the page or visit /create to obtain a new session cookie.',
     });
   }
 

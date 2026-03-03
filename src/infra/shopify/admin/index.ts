@@ -25854,6 +25854,8 @@ export enum InventoryShipmentCreateUserErrorCode {
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
+  /** The idempotency record was found but the associated scheduled changes no longer exist. */
+  IdempotencyRecordNotFound = 'IDEMPOTENCY_RECORD_NOT_FOUND',
   /** One or more items are not valid. */
   InvalidItem = 'INVALID_ITEM',
   /** The quantity is invalid. */
@@ -59611,11 +59613,11 @@ export type ShippingLine = {
   /** Whether the shipping line has been removed. */
   isRemoved: Scalars['Boolean']['output'];
   /**
-   * The pre-tax shipping price without any discounts applied.
+   * The shipping price without any discounts applied. If the parent order.taxesIncluded field is true, then this price includes taxes. Otherwise, this field is the pre-tax price.
    * @deprecated Use `originalPriceSet` instead.
    */
   originalPrice: MoneyV2;
-  /** The pre-tax shipping price without any discounts applied. */
+  /** The shipping price without any discounts applied. If the parent order.taxesIncluded field is true, then this price includes taxes. Otherwise, this field is the pre-tax price. */
   originalPriceSet: MoneyBag;
   /** The phone number at the shipping address. */
   phone?: Maybe<Scalars['String']['output']>;

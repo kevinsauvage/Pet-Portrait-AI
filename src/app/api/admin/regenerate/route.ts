@@ -13,7 +13,7 @@ import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request
 import { generatePetPortraitVariations } from '@/domains/ai/services';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
+export const maxDuration = 300; // 5 minutes max (safe upper bound)
 
 export async function POST(request: NextRequest) {
   const authError = requireAdminAuth(request.headers);

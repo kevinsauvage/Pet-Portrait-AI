@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
-    "build": "yarn codegen && next build --turbo",
+    "dev": "NODE_OPTIONS='--max-old-space-size=8192' next dev --turbo",
+    "build": "yarn codegen && NODE_OPTIONS='--max-old-space-size=8192' next build --turbo",
     "analyze": "next experimental-analyze",
     "start": "next start",
     "test": "vitest",

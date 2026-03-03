@@ -1,0 +1,283 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shop Configuration Schema",
+  "description": "Configuration schema for shop_config Shopify metafield",
+  "type": "object",
+  "properties": {
+    "ai": {
+      "type": "object",
+      "description": "AI generation settings",
+      "properties": {
+        "variationsCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 3,
+          "description": "Number of portrait variations to generate (1-10)"
+        },
+        "generationTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 600,
+          "default": 120,
+          "description": "Maximum time allowed for generation in seconds"
+        },
+        "apiTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 600,
+          "default": 60,
+          "description": "API route timeout in seconds"
+        },
+        "model": {
+          "type": "string",
+          "default": "gpt-image-1.5",
+          "description": "OpenAI model name to use for image generation"
+        },
+        "retry": {
+          "type": "object",
+          "description": "Retry configuration for API calls",
+          "properties": {
+            "maxAttempts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5,
+              "default": 2,
+              "description": "Maximum number of retry attempts"
+            },
+            "baseDelayMs": {
+              "type": "integer",
+              "minimum": 500,
+              "maximum": 10000,
+              "default": 2000,
+              "description": "Base delay in milliseconds before first retry"
+            },
+            "maxDelayMs": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 60000,
+              "default": 6000,
+              "description": "Maximum delay in milliseconds between retries"
+            }
+          },
+          "required": ["maxAttempts", "baseDelayMs", "maxDelayMs"]
+        },
+        "timeEstimate": {
+          "type": "object",
+          "description": "Time estimates shown to users",
+          "properties": {
+            "minSeconds": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 300,
+              "default": 30,
+              "description": "Minimum estimated time in seconds"
+            },
+            "maxSeconds": {
+              "type": "integer",
+              "minimum": 30,
+              "maximum": 600,
+              "default": 60,
+              "description": "Maximum estimated time in seconds"
+            }
+          },
+          "required": ["minSeconds", "maxSeconds"]
+        }
+      },
+      "required": ["variationsCount", "generationTimeoutSeconds", "apiTimeoutSeconds", "model", "retry", "timeEstimate"]
+    },
+    "rateLimit": {
+      "type": "object",
+      "description": "Rate limiting settings",
+      "properties": {
+        "ai": {
+          "type": "object",
+          "description": "Rate limits for AI generation endpoint",
+          "properties": {
+            "maxRequests": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 5,
+              "description": "Maximum requests per window"
+            },
+            "windowMs": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 3600000,
+              "default": 60000,
+              "description": "Time window in milliseconds (60000 = 1 minute)"
+            }
+          },
+          "required": ["maxRequests", "windowMs"]
+        },
+        "upload": {
+          "type": "object",
+          "description": "Rate limits for upload endpoint",
+          "properties": {
+            "maxRequests": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 12,
+              "description": "Maximum requests per window"
+            },
+            "windowMs": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 3600000,
+              "default": 60000,
+              "description": "Time window in milliseconds (60000 = 1 minute)"
+            }
+          },
+          "required": ["maxRequests", "windowMs"]
+        }
+      },
+      "required": ["ai", "upload"]
+    },
+    "image": {
+      "type": "object",
+      "description": "Image validation constraints",
+      "properties": {
+        "maxFileSize": {
+          "type": "integer",
+          "minimum": 1048576,
+          "maximum": 52428800,
+          "default": 8388608,
+          "description": "Maximum file size in bytes (8388608 = 8MB)"
+        },
+        "minDimension": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 1000,
+          "default": 200,
+          "description": "Minimum image dimension in pixels (width or height)"
+        },
+        "maxDimension": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 20000,
+          "default": 10000,
+          "description": "Maximum image dimension in pixels (width or height)"
+        },
+        "minAspectRatio": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 1.0,
+          "default": 0.5,
+          "description": "Minimum aspect ratio (width/height)"
+        },
+        "maxAspectRatio": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 10.0,
+          "default": 2.0,
+          "description": "Maximum aspect ratio (width/height)"
+        },
+        "acceptedTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["image/jpeg", "image/png", "image/webp", "image/gif"]
+          },
+          "default": ["image/jpeg", "image/png", "image/webp"],
+          "description": "Accepted MIME types for image uploads"
+        }
+      },
+      "required": ["maxFileSize", "minDimension", "maxDimension", "minAspectRatio", "maxAspectRatio", "acceptedTypes"]
+    },
+    "features": {
+      "type": "object",
+      "description": "Feature flags to enable/disable functionality",
+      "properties": {
+        "enableRegeneration": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable regeneration feature in admin dashboard"
+        },
+        "enableAdminDashboard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable admin dashboard access"
+        },
+        "enableGallery": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable gallery page"
+        }
+      },
+      "required": ["enableRegeneration", "enableAdminDashboard", "enableGallery"]
+    },
+    "pagination": {
+      "type": "object",
+      "description": "Pagination settings",
+      "properties": {
+        "productsPerPage": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 100,
+          "default": 16,
+          "description": "Number of products to show per page"
+        }
+      },
+      "required": ["productsPerPage"]
+    },
+    "cache": {
+      "type": "object",
+      "description": "Cache revalidation settings (in seconds)",
+      "properties": {
+        "revalidate": {
+          "type": "object",
+          "properties": {
+            "catalog": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 86400,
+              "default": 3600,
+              "description": "Catalog cache revalidation time in seconds (3600 = 1 hour)"
+            },
+            "search": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 3600,
+              "default": 300,
+              "description": "Search cache revalidation time in seconds (300 = 5 minutes)"
+            },
+            "product": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 86400,
+              "default": 3600,
+              "description": "Product cache revalidation time in seconds (3600 = 1 hour)"
+            },
+            "shopify": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 3600,
+              "default": 600,
+              "description": "Shopify API cache revalidation time in seconds (600 = 10 minutes)"
+            }
+          },
+          "required": ["catalog", "search", "product", "shopify"]
+        }
+      },
+      "required": ["revalidate"]
+    },
+    "cookies": {
+      "type": "object",
+      "description": "Cookie settings",
+      "properties": {
+        "expiryDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365,
+          "default": 182,
+          "description": "Cookie expiry in days (182 = ~6 months)"
+        }
+      },
+      "required": ["expiryDays"]
+    }
+  },
+  "required": ["ai", "rateLimit", "image", "features", "pagination", "cache", "cookies"],
+  "additionalProperties": false
+}

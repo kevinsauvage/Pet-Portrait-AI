@@ -1,12 +1,17 @@
+import { getShopConfig } from '@/domains/shop/services';
 import { Skeleton } from '@/ui/primitives/skeleton';
 
 import { Sparkles } from 'lucide-react';
 
-export default function GeneratingLoading() {
+export default async function GeneratingLoading() {
+  const shopConfig = await getShopConfig();
+  const { variationsCount } = shopConfig.ai;
+  const { minSeconds, maxSeconds } = shopConfig.ai.timeEstimate;
+
   return (
     <div className="space-y-10">
       <div className="flex justify-center gap-4">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: variationsCount }).map((_, i) => (
           <Skeleton key={i} className="h-7 w-7 rounded-full" />
         ))}
       </div>
@@ -16,10 +21,11 @@ export default function GeneratingLoading() {
         </div>
         <h3 className="mb-3 text-heading-3">Creating Your Portrait</h3>
         <p className="mb-10 max-w-md text-center text-body text-muted-foreground">
-          Our AI is generating 6 unique variations. This usually takes 45–90 seconds.
+          Our AI is generating {variationsCount} unique variation{variationsCount > 1 ? 's' : ''}.
+          This usually takes {minSeconds}–{maxSeconds} seconds.
         </p>
         <div className="flex gap-2">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {Array.from({ length: variationsCount }).map((_, i) => (
             <div
               key={i}
               className="h-2.5 w-2.5 animate-bounce rounded-full bg-primary"
