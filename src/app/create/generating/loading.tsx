@@ -1,5 +1,5 @@
 import { getShopConfig } from '@/domains/shop/services';
-import { Skeleton } from '@/ui/primitives/skeleton';
+import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
 
 import { Sparkles } from 'lucide-react';
 
@@ -9,31 +9,32 @@ export default async function GeneratingLoading() {
   const { minSeconds, maxSeconds } = shopConfig.ai.timeEstimate;
 
   return (
-    <div className="space-y-10">
-      <div className="flex justify-center gap-4">
-        {Array.from({ length: variationsCount }).map((_, i) => (
-          <Skeleton key={i} className="h-7 w-7 rounded-full" />
-        ))}
-      </div>
-      <div className="flex flex-col items-center justify-center py-20">
-        <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10">
-          <Sparkles className="h-10 w-10 animate-pulse text-primary" />
+    <>
+      <CreateProgressBar currentStep="generating" />
+      <div className="flex flex-col items-center justify-center py-16 md:py-24">
+        <div className="relative mb-10">
+          <div className="absolute inset-0 bg-primary/20 rounded-3xl blur-2xl animate-pulse" />
+          <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border-2 border-primary/20">
+            <Sparkles className="h-12 w-12 text-primary animate-pulse" strokeWidth={1.5} />
+          </div>
         </div>
-        <h3 className="mb-3 text-heading-3">Creating Your Portrait</h3>
-        <p className="mb-10 max-w-md text-center text-body text-muted-foreground">
-          Our AI is generating {variationsCount} unique variation{variationsCount > 1 ? 's' : ''}.
-          This usually takes {minSeconds}–{maxSeconds} seconds.
-        </p>
-        <div className="flex gap-2">
+        <div className="space-y-4 text-center max-w-lg">
+          <h2 className="text-heading-3 font-semibold">Creating Your Portrait</h2>
+          <p className="text-body-lg text-muted-foreground leading-relaxed">
+            Our AI is generating {variationsCount} unique variation{variationsCount > 1 ? 's' : ''}{' '}
+            of your pet portrait. This usually takes {minSeconds}–{maxSeconds} seconds.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 mt-10">
           {Array.from({ length: variationsCount }).map((_, i) => (
             <div
               key={i}
-              className="h-2.5 w-2.5 animate-bounce rounded-full bg-primary"
+              className="h-3 w-3 animate-bounce rounded-full bg-primary"
               style={{ animationDelay: `${i * 0.15}s` }}
             />
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }

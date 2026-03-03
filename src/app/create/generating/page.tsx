@@ -77,21 +77,23 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
       <CreateProgressBar currentStep="generating" />
 
       <div className="space-y-8">
-        <Button variant="ghost" size="sm" asChild className="gap-2">
+        <Button variant="ghost" size="sm" asChild className="gap-2 -ml-2">
           <Link href={backHref}>
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
         </Button>
 
-        <div>
-          <h3 className="mb-2 text-heading-3">Choose Your Favorite</h3>
-          <p className="mb-8 text-body text-muted-foreground">
-            Click the portrait you love most to continue. You can order it as a digital download or
-            premium print.
-          </p>
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <h2 className="text-heading-3 font-semibold">Choose Your Favorite</h2>
+            <p className="text-body text-muted-foreground max-w-2xl">
+              Select the portrait you love most to continue. You can order it as a digital download
+              or premium print.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3">
             {artworkUrls.map((url, i) => {
               const variationNumber = i + 1;
               const href = `${config.routes.createCollections}${buildCreateFlowQueryString({
@@ -106,18 +108,20 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
                 <Link
                   key={url}
                   href={href}
-                  className="group relative aspect-square w-full overflow-hidden rounded-xl border-2 border-border transition-all hover:border-primary hover:shadow-lg hover:ring-4 hover:ring-primary/20"
+                  className="group relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-border transition-all duration-300 hover:border-primary hover:shadow-xl hover:-translate-y-1"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
                   <Image
                     src={url}
                     alt={`Variation ${variationNumber}`}
                     fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 768px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 640px) 50vw, 33vw"
                   />
-                  <div className="absolute bottom-2 right-2 rounded-md bg-background/80 px-2 py-1 text-caption-sm font-medium backdrop-blur-sm">
+                  <div className="absolute bottom-3 right-3 rounded-lg bg-background/95 backdrop-blur-sm px-3 py-1.5 text-caption font-semibold shadow-lg border border-border/50 transition-all duration-300 group-hover:scale-105 z-20">
                     #{variationNumber}
                   </div>
+                  <div className="absolute inset-0 ring-4 ring-primary/0 group-hover:ring-primary/20 rounded-2xl transition-all duration-300 z-10 pointer-events-none" />
                 </Link>
               );
             })}
