@@ -1,21 +1,3 @@
-## 🔴 HIGH PRIORITY (Critical for Production)
-
-### 9. Database & Cache Setup
-
-**What:** Configure persistent caching solution
-**Why:** In-memory cache doesn't persist across deployments/restarts
-**How:**
-
-- Evaluate if Redis cache is needed beyond rate limiting
-- If using Shopify caching, verify cache invalidation strategy
-- Document cache TTLs and invalidation patterns
-- Add cache monitoring/metrics
-- Consider using Vercel KV or Upstash for serverless-friendly caching
-
-**Files:** `src/infra/cache/index.ts`, `src/infra/shopify/client.ts`
-
----
-
 ## 🟡 MEDIUM PRIORITY (Important for Production)
 
 ### 13. Accessibility Audit & Improvements
