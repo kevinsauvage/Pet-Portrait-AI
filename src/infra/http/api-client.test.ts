@@ -18,7 +18,6 @@ describe('apiClient', () => {
       json: jsonMock,
     } as unknown as Response);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
     const result = await apiClient<typeof data>('/api/test', { method: 'GET' });
@@ -38,7 +37,6 @@ describe('apiClient', () => {
       json: jsonMock,
     } as unknown as Response);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
     const absoluteUrl = 'https://api.other.com/resource';
@@ -58,7 +56,6 @@ describe('apiClient', () => {
       json: jsonMock,
     } as unknown as Response);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
     await expect(apiClient('/api/fail', { method: 'GET' })).rejects.toThrow('Bad things happened');
@@ -72,7 +69,6 @@ describe('apiClient', () => {
       json: jsonMock,
     } as unknown as Response);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
     await expect(apiClient('/api/error', { method: 'GET' })).rejects.toThrow('Application error');
@@ -81,7 +77,7 @@ describe('apiClient', () => {
   it('wraps non-Error throws in generic Error with cause', async () => {
     const originalError = 'boom';
     const fetchMock = vi.fn().mockRejectedValue(originalError);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     (globalThis as any).fetch = fetchMock;
 
     let caught: unknown;

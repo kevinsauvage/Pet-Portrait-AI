@@ -13,7 +13,6 @@ describe('fetchWithRetry', () => {
   it('returns response when fetch succeeds on first attempt', async () => {
     const response = { ok: true } as Response;
     const fetchMock = vi.fn().mockResolvedValue(response);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
     const result = await fetchWithRetry('https://example.com');
@@ -27,12 +26,8 @@ describe('fetchWithRetry', () => {
     const transientError = new Error('ECONNRESET') as NodeJS.ErrnoException;
     transientError.code = 'ECONNRESET';
 
-    const fetchMock = vi
-      .fn()
-      .mockRejectedValueOnce(transientError)
-      .mockResolvedValueOnce(response);
+    const fetchMock = vi.fn().mockRejectedValueOnce(transientError).mockResolvedValueOnce(response);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = fetchMock;
 
     const result = await fetchWithRetry('https://example.com', undefined, {
@@ -47,7 +42,7 @@ describe('fetchWithRetry', () => {
   it('does not retry on non-transient error', async () => {
     const error = new Error('Permanent failure');
     const fetchMock = vi.fn().mockRejectedValue(error);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     (globalThis as any).fetch = fetchMock;
 
     await expect(
@@ -65,7 +60,7 @@ describe('fetchWithRetry', () => {
     transientError.code = 'ECONNRESET';
 
     const fetchMock = vi.fn().mockRejectedValue(transientError);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     (globalThis as any).fetch = fetchMock;
 
     await expect(
@@ -78,4 +73,3 @@ describe('fetchWithRetry', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
-

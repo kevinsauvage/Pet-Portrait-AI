@@ -238,6 +238,20 @@ module.exports = defineConfig([
       '@next/next/no-img-element': 'off',
     },
   },
+  {
+    // Allow `any` in test files
+    files: [
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/__tests__/**/*.ts',
+      '**/__tests__/**/*.tsx',
+    ],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
   globalIgnores([
     '**/.next/',
     '**/node_modules/',
