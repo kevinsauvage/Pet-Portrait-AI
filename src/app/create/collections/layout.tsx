@@ -9,11 +9,9 @@ import { Package } from 'lucide-react';
 
 interface CollectionsLayoutProps {
   children: ReactNode;
-  params: Promise<{ collection?: string }>;
 }
 
-export default async function CollectionsLayout({ children, params }: CollectionsLayoutProps) {
-  const { collection } = await params;
+export default async function CollectionsLayout({ children }: CollectionsLayoutProps) {
   const collections = await getAiPortraitCollections();
 
   return (
@@ -31,10 +29,7 @@ export default async function CollectionsLayout({ children, params }: Collection
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <CollectionsNavigation
-                  collections={collections}
-                  currentCollectionHandle={collection}
-                />
+                <CollectionsNavigation collections={collections} />
               </CardContent>
             </Card>
           </aside>

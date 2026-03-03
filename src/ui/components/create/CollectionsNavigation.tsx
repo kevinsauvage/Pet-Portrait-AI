@@ -1,25 +1,32 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import config from '@/core/config';
 import type { AiPortraitCollection } from '@/domains/ai/ai-portrait/get-ai-portrait-collections.service';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { cn } from '@/lib/cn';
 
-import { Package } from 'lucide-react';
+import { Check, Package } from 'lucide-react';
 
 interface CollectionsNavigationProps {
   collections: AiPortraitCollection[];
-  currentCollectionHandle?: string;
 }
 
 export default function CollectionsNavigation({
   collections,
-  currentCollectionHandle,
 }: CollectionsNavigationProps) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  // Extract collection handle from pathname: /create/collections/[handle]
+  const pathSegments = pathname.split('/').filter(Boolean);
+  const collectionIndex = pathSegments.indexOf('collections');
+  const currentCollectionHandle =
+    collectionIndex !== -1 && pathSegments[collectionIndex + 1]
+      ? pathSegments[collectionIndex + 1]
+      : undefined;
 
   // Get search params from URL
   const artwork = searchParams.get('artwork') || undefined;
@@ -37,7 +44,7 @@ export default function CollectionsNavigation({
   }
 
   return (
-    <nav aria-label="Collections navigation" className="space-y-1">
+    <nav aria-label="Collections navigation" className="space-y-1 p-2">
       {collections.map((collection) => {
         const isActive = collection.handle === currentCollectionHandle;
         const href = `${config.routes.createCollections}/${collection.handle}${buildCreateFlowQueryString({
@@ -53,15 +60,41 @@ export default function CollectionsNavigation({
             key={collection.handle}
             href={href}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-body-sm font-medium transition-colors',
+              'group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-body-sm font-medium transition-all duration-200',
               'hover:bg-accent hover:text-accent-foreground',
               isActive
-                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                : 'text-muted-foreground',
+                ? 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90'
+                : 'text-muted-foreground hover:text-foreground',
             )}
           >
-            <Package className="h-4 w-4 shrink-0" strokeWidth={1.5} />
-            <span className="line-clamp-1">{collection.title}</span>
+            {/* Active indicator bar */}
+            {isActive && (
+              <div className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-primary-foreground/30" />
+            )}
+
+            {/* Icon */}
+            <div
+              className={cn(
+                'flex h-5 w-5 shrink-0 items-center justify-center rounded transition-all duration-200',
+                isActive
+                  ? 'bg-primary-foreground/20 text-primary-foreground'
+                  : 'bg-muted text-muted-foreground group-hover:bg-accent group-hover:text-accent-foreground',
+              )}
+            >
+              {isActive ? (
+                <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+              ) : (
+                <Package className="h-3.5 w-3.5" strokeWidth={1.5} />
+              )}
+            </div>
+
+            {/* Title */}
+            <span className="line-clamp-1 flex-1">{collection.title}</span>
+
+            {/* Active indicator dot */}
+            {isActive && (
+              <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-foreground/60" />
+            )}
           </Link>
         );
       })}
