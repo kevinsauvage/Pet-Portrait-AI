@@ -1,7 +1,5 @@
 import { getCollectionLayoutData } from '@/domains/collections/services/collections.service';
-import CollectionNav from '@/ui/components/catalog/CollectionNav';
 import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
-import PageBanner from '@/ui/components/shared/PageBanner';
 
 const Layout = async ({
   children,
@@ -12,17 +10,22 @@ const Layout = async ({
 }) => {
   const { collectionSlug } = await params;
 
-  const { collection, navMenu } = await getCollectionLayoutData(collectionSlug);
+  const { collection } = await getCollectionLayoutData(collectionSlug);
   const { title, description } = collection || {};
 
   return (
-    <div>
-      <PageBanner title={title || 'Collection'} description={description}>
-        <div className="space-y-6">
-          <Breadcrumbs />
-          <CollectionNav collectionSlug={collectionSlug} items={navMenu} />
+    <div className="space-y-6">
+      <Breadcrumbs />
+
+      {title && (
+        <div className="space-y-1">
+          <h1 className="text-heading-2 font-semibold tracking-tight">{title}</h1>
+          {description && (
+            <p className="text-body-sm text-muted-foreground max-w-2xl">{description}</p>
+          )}
         </div>
-      </PageBanner>
+      )}
+
       {children}
     </div>
   );

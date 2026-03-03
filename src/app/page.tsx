@@ -17,8 +17,6 @@ import PageBanner from '@/ui/components/shared/PageBanner';
 import {
   CREATE_HOW_IT_WORKS,
   GALLERY_ITEMS,
-  HOME_HERO_PERKS,
-  TRANSFORMATION_SAMPLE,
 } from '@/ui/content/marketing';
 import { Button } from '@/ui/primitives/button';
 
@@ -47,26 +45,14 @@ const Home = async () => {
         secondaryCtaLabel="Browse Gallery"
         secondaryCtaHref="/gallery"
       >
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] text-left">
+        <div className="w-full max-w-6xl mx-auto">
           <BeforeAfterPreview
-            before={TRANSFORMATION_SAMPLE.before}
-            after={TRANSFORMATION_SAMPLE.after}
-            caption={TRANSFORMATION_SAMPLE.caption}
+            showStyleSelector
+            caption="Drag the slider to reveal the transformation. Choose a style to see different artistic interpretations."
             priority
+            aspectClassName="aspect-[21/9]"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
           />
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4">
-            {HOME_HERO_PERKS.map((perk) => (
-              <div
-                key={perk.label}
-                className="flex items-center gap-3 rounded-xl border border-border/70 bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:border-primary/10"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <perk.icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
-                </span>
-                <span className="text-body-sm font-medium text-foreground">{perk.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </PageBanner>
 

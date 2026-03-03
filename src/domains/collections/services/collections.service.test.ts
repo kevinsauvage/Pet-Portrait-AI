@@ -59,7 +59,6 @@ describe('collections.service', () => {
     const result = await getCollectionPageData('test');
     expect(result).toHaveProperty('collection');
     expect(result).toHaveProperty('edges');
-    expect(result).toHaveProperty('filters');
     expect(result).toHaveProperty('pageInfo');
     expect(result).toHaveProperty('sortKey');
   });

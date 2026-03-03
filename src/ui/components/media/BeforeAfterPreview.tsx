@@ -3,8 +3,11 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 
+import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
 import { cn } from '@/lib/cn';
+import { STYLE_TRANSFORMATIONS } from '@/ui/content/marketing';
 import { Badge } from '@/ui/primitives/badge';
+import { Button } from '@/ui/primitives/button';
 import { Slider } from '@/ui/primitives/slider';
 
 type BeforeAfterImage = {
@@ -14,33 +17,73 @@ type BeforeAfterImage = {
 };
 
 type BeforeAfterPreviewProps = {
-  before: BeforeAfterImage;
-  after: BeforeAfterImage;
+  before?: BeforeAfterImage;
+  after?: BeforeAfterImage;
   className?: string;
   caption?: string;
   priority?: boolean;
   initial?: number;
   sizes?: string;
   aspectClassName?: string;
+  showStyleSelector?: boolean;
+  defaultStyleId?: ArtStyleId;
 };
 
 const clamp = (value: number) => Math.min(100, Math.max(0, value));
 
 const BeforeAfterPreview = ({
-  before,
-  after,
+  before: propBefore,
+  after: propAfter,
   className,
   caption,
   priority = false,
   initial = 55,
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw',
   aspectClassName = 'aspect-[4/3]',
+  showStyleSelector = false,
+  defaultStyleId = 'pixar',
 }: BeforeAfterPreviewProps) => {
+  const [selectedStyleId, setSelectedStyleId] = useState<ArtStyleId>(defaultStyleId);
   const [value, setValue] = useState(() => clamp(initial));
   const sliderValue = useMemo(() => [value], [value]);
 
+  // Use style-based images if showStyleSelector is true, otherwise use props
+  const before = useMemo(() => {
+    if (propBefore) return propBefore;
+    if (showStyleSelector) {
+      const styleTransformation = STYLE_TRANSFORMATIONS[selectedStyleId];
+      return styleTransformation?.before || STYLE_TRANSFORMATIONS.pixar.before;
+    }
+    return STYLE_TRANSFORMATIONS.pixar.before;
+  }, [propBefore, showStyleSelector, selectedStyleId]);
+
+  const after = useMemo(() => {
+    if (propAfter) return propAfter;
+    if (showStyleSelector) {
+      const styleTransformation = STYLE_TRANSFORMATIONS[selectedStyleId];
+      return styleTransformation?.after || STYLE_TRANSFORMATIONS.pixar.after;
+    }
+    return STYLE_TRANSFORMATIONS.pixar.after;
+  }, [propAfter, showStyleSelector, selectedStyleId]);
+
   return (
     <div className={cn('w-full', className)}>
+      {showStyleSelector && (
+        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-body-sm font-medium text-muted-foreground">Style:</span>
+          {AI_ART_STYLES.map((style) => (
+            <Button
+              key={style.id}
+              variant={selectedStyleId === style.id ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedStyleId(style.id)}
+              className="text-xs"
+            >
+              {style.label}
+            </Button>
+          ))}
+        </div>
+      )}
       <div className="relative overflow-hidden rounded-3xl border border-border bg-muted/50 shadow-md">
         <div className={cn('relative w-full overflow-hidden', aspectClassName)}>
           <Image
@@ -105,7 +148,7 @@ const BeforeAfterPreview = ({
         </div>
       </div>
       {caption ? (
-        <p className="mt-3 text-body-sm text-muted-foreground">{caption}</p>
+        <p className="mt-3 text-body-sm text-muted-foreground text-center">{caption}</p>
       ) : null}
     </div>
   );

@@ -88,6 +88,84 @@ export const TRANSFORMATION_SAMPLE = {
   caption: 'Drag the slider to reveal the transformation.',
 } as const;
 
+/**
+ * Before/After transformation samples for each AI art style
+ * The before image is always the same placeholder image
+ * TODO: Replace placeholder after images with actual style-specific transformations
+ */
+const COMMON_BEFORE_IMAGE = {
+  src: '/placeholder-before.jpg',
+  alt: 'Original pet photo',
+  label: 'Original photo',
+} as const;
+
+export const STYLE_TRANSFORMATIONS = {
+  pixar: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIAQd8u4eNAfVXGKqSvP1UlasDtO5Fz0gb9pui',
+      alt: 'Pixar 3D style pet portrait',
+      label: 'Pixar 3D',
+    },
+  },
+  watercolor: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIirPVCtBn6KIzr3G1hcqZvUaYR50iuMOQjeWS',
+      alt: 'Watercolor style pet portrait',
+      label: 'Watercolor',
+    },
+  },
+  anime: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIkRKUXdqGuTvHQEdlB5kirKnXwSsjIoR91hqD',
+      alt: 'Anime style pet portrait',
+      label: 'Anime',
+    },
+  },
+  royal: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIvQTBpLtPwQI75yEpDhslkqCTaV3cHz8GR6oS',
+      alt: 'Royal oil painting style pet portrait',
+      label: 'Royal Oil',
+    },
+  },
+  cyberpunk: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIwDWngN9mhceYwVviAoBbLrMzT548uJGZSqpx',
+      alt: 'Cyberpunk style pet portrait',
+      label: 'Cyberpunk',
+    },
+  },
+  renaissance: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIOiMedDzmIrVcubaM50D1P6GxJRkKdCe8wW4o',
+      alt: 'Renaissance style pet portrait',
+      label: 'Renaissance',
+    },
+  },
+  'pop-art': {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIOkBGLEfzmIrVcubaM50D1P6GxJRkKdCe8wW4',
+      alt: 'Pop Art style pet portrait',
+      label: 'Pop Art',
+    },
+  },
+  minimalist: {
+    before: COMMON_BEFORE_IMAGE,
+    after: {
+      src: 'https://i5xe50sg8q.ufs.sh/f/i69tL0DBn6KIcxp9VtAjYKeHqx7SwhMXvsTyF5nr1kzJZAom',
+      alt: 'Minimalist style pet portrait',
+      label: 'Minimalist',
+    },
+  },
+} as const;
+
 export const GALLERY_ITEMS = [
   {
     id: '1',

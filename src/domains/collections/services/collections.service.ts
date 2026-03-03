@@ -4,7 +4,6 @@ import { storefrontSdk } from '@/infra/shopify/client';
 import {
   adjustPaginationVariables,
   getMenuItemsForCollection,
-  parseFiltersQuery,
   resolveSortKeyFromString,
 } from '@/infra/shopify/helpers';
 import {
@@ -21,7 +20,6 @@ type CollectionEdge = CollectionsQuery['collections']['edges'][number];
 type CollectionSearchParams = {
   after?: string;
   before?: string;
-  filters?: string;
   sort_key?: string;
   reverse?: boolean;
 };
@@ -31,7 +29,6 @@ type CollectionProducts = NonNullable<CollectionQuery['collection']>['products']
 type CollectionPageData = {
   collection: CollectionQuery['collection'] | null | undefined;
   edges: CollectionProducts['edges'];
-  filters: CollectionProducts['filters'];
   pageInfo: CollectionProducts['pageInfo'];
   sortKey: ProductCollectionSortKeys;
 };
@@ -97,7 +94,6 @@ export async function getCollectionPageData(
   );
 
   const response = await storefrontSdk().collection({
-    filters: parseFiltersQuery(searchParameters?.filters),
     ...adjustPaginationVariables({
       after: searchParameters?.after || undefined,
       before: searchParameters?.before || undefined,
@@ -115,7 +111,6 @@ export async function getCollectionPageData(
   return {
     collection: response.collection,
     edges: products?.edges ?? [],
-    filters: products?.filters ?? [],
     pageInfo: products?.pageInfo ?? DEFAULT_PAGE_INFO,
     sortKey,
   };

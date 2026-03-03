@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { logger } from '@/core/utils/logger';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/constants/sort-options';
 import {
   getCollectionPageData,
   getCollectionSeo,
 } from '@/domains/collections/services/collections.service';
-import Filters from '@/ui/components/catalog/Filters';
 import ListingHeader from '@/ui/components/catalog/ListingHeader';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
 import ProductEdgeList from '@/ui/components/catalog/ProductsEdgeList';
@@ -18,12 +16,12 @@ import { Button } from '@/ui/primitives/button';
 
 export const revalidate = 3600;
 
-type parametersType = { collectionSlug: string };
+type ParametersType = { collectionSlug: string };
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<parametersType>;
+  params: Promise<ParametersType>;
 }): Promise<Metadata> {
   const { collectionSlug } = await params;
 
@@ -58,7 +56,6 @@ const CollectionSlugPage = async ({
   searchParams?: Promise<{
     after?: string;
     before?: string;
-    filters?: string;
     sort_key?: string;
     reverse?: boolean;
   }>;
@@ -66,14 +63,11 @@ const CollectionSlugPage = async ({
   const { collectionSlug } = await params;
   const searchParameters = (await searchParams) || {};
 
-  const { edges, filters, pageInfo, sortKey } = await getCollectionPageData(
+  const { edges, pageInfo, sortKey } = await getCollectionPageData(
     collectionSlug,
     searchParameters,
   );
-  logger.debug('CollectionSlugPage edges', {
-    context: 'CollectionSlugPage',
-    metadata: { edges: edges.map((edge) => edge.node.metafields) },
-  });
+
   const safeSearchParameters = {
     after: searchParameters?.after,
     before: searchParameters?.before,
@@ -82,57 +76,36 @@ const CollectionSlugPage = async ({
 
   if (!edges?.length) {
     return (
-      <div className="container mx-auto px-4 md:px-6 py-8 md:py-12">
-        <EmptyState
-          variant="default"
-          title="Collection not found"
-          subtitle="This collection doesn't exist or has been removed. Browse our other collections to find what you're looking for."
-          altText="Collection Not Found"
-          primaryAction={
-            <Link href="/shop">
-              <Button variant="default">Browse Collections</Button>
-            </Link>
-          }
-          secondaryAction={
-            <Link href="/" className="link">
-              Go home
-            </Link>
-          }
-        />
-      </div>
+      <EmptyState
+        variant="default"
+        title="No products found"
+        subtitle="This collection is empty. Browse other collections to find what you're looking for."
+        altText="No products found"
+        primaryAction={
+          <Button variant="default" asChild>
+            <Link href="/shop">Browse Collections</Link>
+          </Button>
+        }
+        secondaryAction={
+          <Link href="/" className="link">
+            Go home
+          </Link>
+        }
+      />
     );
   }
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 space-y-6">
+    <div className="space-y-6">
       <ListingHeader>
         <Sort
           query={searchParameters?.sort_key ? searchParameters : { sort_key: sortKey }}
           sortingOptions={COLLECTION_SORT_OPTIONS}
         />
-        <Filters filters={filters} query={safeSearchParameters} />
       </ListingHeader>
 
-      {edges && edges.length > 0 ? (
-        <ProductEdgeList products={edges} layout="grid" />
-      ) : (
-        <EmptyState
-          variant="default"
-          title="No products found"
-          subtitle="This collection is empty or your filters are too specific. Try adjusting your filters or browse other collections."
-          altText="No products found"
-          primaryAction={
-            <Button variant="default" asChild>
-              <Link href="/shop">Browse All Collections</Link>
-            </Button>
-          }
-          secondaryAction={
-            <Link href="/" className="link">
-              Go home
-            </Link>
-          }
-        />
-      )}
+      <ProductEdgeList products={edges} layout="grid" />
+
       <PageInfoPagination pageInfo={pageInfo} searchParameters={safeSearchParameters} />
     </div>
   );
