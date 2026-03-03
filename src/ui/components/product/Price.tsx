@@ -1,6 +1,5 @@
 import type { MoneyV2, ProductFieldsFragment } from '@/infra/shopify/storefront';
 import { formatPrice } from '@/lib/format';
-import { Badge } from '@/ui/primitives/badge';
 
 const Price = ({
   compareAtPrice,
@@ -14,16 +13,19 @@ const Price = ({
   const isDiscount = compareAtPrice && compareAtPrice?.amount !== price?.amount;
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-baseline gap-2">
       {priceRange?.minVariantPrice && (
-        <Badge variant="secondary">
-          {formatPrice(priceRange.minVariantPrice.amount, priceRange.minVariantPrice.currencyCode)}
-        </Badge>
+        <span className="text-body font-semibold text-foreground tabular-nums">
+          {formatPrice(
+            priceRange.minVariantPrice.amount,
+            priceRange.minVariantPrice.currencyCode,
+          )}
+        </span>
       )}
       {isDiscount && compareAtPrice && (
-        <p className="text-caption-sm text-muted-foreground line-through">
+        <span className="text-body-sm text-muted-foreground line-through tabular-nums">
           {formatPrice(compareAtPrice.amount, compareAtPrice.currencyCode)}
-        </p>
+        </span>
       )}
     </div>
   );

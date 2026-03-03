@@ -2,6 +2,10 @@ import { getPredictiveSearch, searchProducts } from './search.service';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/domains/shop/services', () => ({
+  getShopConfig: vi.fn().mockResolvedValue({ pagination: { productsPerPage: 12 } }),
+}));
+
 const mockPredictiveSearch = vi.fn().mockResolvedValue({ suggestions: [] });
 vi.mock('@/infra/shopify/client', () => ({
   storefrontSdk: vi.fn(() => ({
@@ -39,6 +43,12 @@ describe('search.service', () => {
     it('calls storefront when query is 2+ chars', async () => {
       await getPredictiveSearch('ab');
       expect(mockPredictiveSearch).toHaveBeenCalledWith({ query: 'ab' });
+    });
+
+    it('returns null when predictiveSearch returns null/undefined', async () => {
+      mockPredictiveSearch.mockResolvedValueOnce(null);
+      const result = await getPredictiveSearch('test');
+      expect(result).toBeNull();
     });
   });
 

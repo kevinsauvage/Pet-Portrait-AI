@@ -1,4 +1,9 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { cn } from '@/lib/cn';
 
 import type { NavLink } from './nav-links-utils';
 
@@ -9,24 +14,38 @@ type NavLinksProps = {
 };
 
 const NavLinks = ({ links, className, linkClassName }: NavLinksProps) => {
+  const pathname = usePathname();
   if (!links.length) return null;
 
   return (
     <nav className={className} aria-label="Main navigation">
-      <ul className="flex items-center gap-1 list-none p-0 m-0">
-        {links.map((link) => (
-          <li key={link.href + link.label}>
-            <Link
-              href={link.href}
-              className={
-                linkClassName ??
-                'px-3 py-2 text-body-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg hover:bg-accent/80'
-              }
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
+      <ul className="flex items-center gap-0.5 list-none p-0 m-0">
+        {links.map((link) => {
+          const isActive =
+            link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+          return (
+            <li key={link.href + link.label}>
+              <Link
+                href={link.href}
+                aria-current={isActive ? 'page' : undefined}
+                className={
+                  linkClassName ??
+                  cn(
+                    'relative px-3 py-2 text-body-sm font-medium transition-all duration-200 rounded-lg',
+                    isActive
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+                  )
+                }
+              >
+                {link.label}
+                {isActive && (
+                  <span className="absolute inset-x-3 -bottom-px h-[2px] rounded-full bg-primary" />
+                )}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

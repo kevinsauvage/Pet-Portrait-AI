@@ -16,16 +16,16 @@ const CartEmptyState = () => {
             height: 200,
           }}
           title="Your cart is empty"
-          subtitle="Add items to your cart to get started. Browse our collections to find products you’ll love."
+          subtitle="Give your pet the spotlight. Create a custom AI portrait, then pick a product to bring it to life."
           altText="Empty shopping cart"
           primaryAction={
             <Button size="lg" className="min-w-[200px]" asChild>
-              <Link href="/shop">Start Shopping</Link>
+              <Link href="/create">Create a portrait</Link>
             </Button>
           }
           secondaryAction={
             <Link href="/gallery" className="link">
-              Browse gallery
+              Or explore the gallery
             </Link>
           }
         />

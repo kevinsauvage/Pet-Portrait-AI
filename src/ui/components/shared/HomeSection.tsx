@@ -25,14 +25,14 @@ const HomeSection = ({
   const titleId = id ? `${id}-title` : undefined;
 
   return (
-    <section className={cn('py-10 md:py-14', className)} aria-labelledby={titleId}>
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-6 md:mb-8">
-        <div className="space-y-2">
+    <section className={cn(className)} aria-labelledby={titleId}>
+      <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-end md:justify-between">
+        <div className="space-y-1.5">
           <SectionTitle id={titleId} className={cn('tracking-tight', titleClassName)}>
             {title}
           </SectionTitle>
           {description && (
-            <p className="text-body-sm text-muted-foreground max-w-2xl">{description}</p>
+            <p className="max-w-2xl text-body leading-relaxed text-muted-foreground">{description}</p>
           )}
         </div>
         {action && <div className="shrink-0">{action}</div>}

@@ -74,6 +74,18 @@ describe('AddressService', () => {
       const result = await AddressService.updateAddress(baseAddress);
       expect(result).toEqual({ error: 'Address ID is required for update' });
     });
+
+    it('returns error when not authenticated', async () => {
+      vi.mocked(getShopifyToken).mockResolvedValue(undefined);
+      const result = await AddressService.updateAddress({ ...baseAddress, id: 'addr-1' });
+      expect(result).toEqual({ error: 'User not authenticated' });
+    });
+
+    it('returns success when address updated', async () => {
+      vi.mocked(getShopifyToken).mockResolvedValue('token' as never);
+      const result = await AddressService.updateAddress({ ...baseAddress, id: 'addr-1' });
+      expect(result).toEqual({ success: true, customerAddress: { id: 'addr-1' } });
+    });
   });
 
   describe('deleteAddress', () => {
@@ -82,6 +94,12 @@ describe('AddressService', () => {
       const result = await AddressService.deleteAddress('addr-1');
       expect(result).toEqual({ error: 'User not authenticated' });
     });
+
+    it('returns success when address deleted', async () => {
+      vi.mocked(getShopifyToken).mockResolvedValue('token' as never);
+      const result = await AddressService.deleteAddress('addr-1');
+      expect(result).toEqual({ success: true, deletedCustomerAddressId: 'addr-1' });
+    });
   });
 
   describe('setDefaultAddress', () => {
@@ -89,6 +107,26 @@ describe('AddressService', () => {
       vi.mocked(getShopifyToken).mockResolvedValue(undefined);
       const result = await AddressService.setDefaultAddress('addr-1');
       expect(result).toEqual({ error: 'User not authenticated' });
+    });
+
+    it('returns success when default address set', async () => {
+      vi.mocked(getShopifyToken).mockResolvedValue('token' as never);
+      const result = await AddressService.setDefaultAddress('addr-1');
+      expect(result).toEqual({ success: true, customer: {} });
+    });
+  });
+
+  describe('createAddress (error handling)', () => {
+    it('returns default error when no customerAddress and no userErrors', async () => {
+      vi.mocked(getShopifyToken).mockResolvedValue('token' as never);
+      const { storefrontSdk } = await import('@/infra/shopify/client');
+      (storefrontSdk as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+        customerAddressCreate: vi.fn().mockResolvedValue({
+          customerAddressCreate: { customerAddress: null, customerUserErrors: [] },
+        }),
+      });
+      const result = await AddressService.createAddress(baseAddress);
+      expect(result).toEqual({ error: 'Something went wrong' });
     });
   });
 });

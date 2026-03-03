@@ -15,9 +15,7 @@ function getAttribute(node: CartLineNode, key: string): string | undefined {
   return attrs?.find((a) => a.key === key)?.value ?? undefined;
 }
 
-const LineItem: React.FC<{
-  node: CartLineNode;
-}> = ({ node }) => {
+const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
   if (!('merchandise' in node)) return null;
 
   const artworkUrl = getAttribute(node, 'gelato_print_url');
@@ -49,87 +47,75 @@ const LineItem: React.FC<{
       : '#';
 
   return (
-    <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6 group">
-      {/* Product Image & Info */}
-      <div className="flex gap-4 flex-1 min-w-0">
-        <Link href={productHandle} className="shrink-0 hover:opacity-80 transition-opacity">
-          {displayImage ? (
-            <OptimizedImage
-              src={String(displayImage)}
-              alt={node.merchandise.product.title}
-              width={120}
-              height={120}
-              quality={75}
-              sizes="120px"
-              className="rounded-lg object-cover border border-border"
-            />
-          ) : (
-            <div className="w-[120px] h-[120px] rounded-lg bg-muted flex items-center justify-center">
-              <span className="text-caption-sm text-secondary">No image</span>
-            </div>
-          )}
-        </Link>
-        <div className="flex-1 min-w-0">
-          <Link href={productHandle}>
-            <h3 className="text-heading-4 mb-1 hover:text-primary transition-colors line-clamp-2">
-              {node.merchandise.product.title}
-            </h3>
-          </Link>
-          {node.merchandise.selectedOptions && node.merchandise.selectedOptions.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 mt-1.5 mb-2">
-              {node.merchandise.selectedOptions.map(
-                (option: { name: string; value: string }, index: number) => (
-                  <span key={option.name} className="text-body-sm text-secondary">
-                    {option.name}: <span className="font-medium">{option.value}</span>
-                    {index < node.merchandise.selectedOptions.length - 1 && (
-                      <span className="mx-1.5">•</span>
-                    )}
-                  </span>
-                ),
-              )}
-            </div>
-          )}
-          <div className="flex items-center gap-2 mt-2">
-            <p className="text-body-sm text-secondary">
-              Unit: {formatPrice(unitPrice, currencyCode)}
-            </p>
-            {hasDiscount && (
-              <span className="text-caption-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">
-                Discounted
-              </span>
+    <div className="group relative flex flex-col gap-4 rounded-xl border border-border/60 bg-card p-4 transition-colors hover:border-border sm:flex-row sm:items-start sm:gap-5">
+      <Link
+        href={productHandle}
+        className="shrink-0 overflow-hidden rounded-lg transition-opacity hover:opacity-80"
+      >
+        {displayImage ? (
+          <OptimizedImage
+            src={String(displayImage)}
+            alt={node.merchandise.product.title}
+            width={96}
+            height={96}
+            quality={75}
+            sizes="96px"
+            className="h-24 w-24 rounded-lg object-cover"
+          />
+        ) : (
+          <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-muted">
+            <span className="text-caption-sm text-muted-foreground">No image</span>
+          </div>
+        )}
+      </Link>
+
+      <div className="flex flex-1 min-w-0 flex-col gap-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <Link href={productHandle}>
+              <h3 className="line-clamp-2 text-body font-semibold leading-snug tracking-tight hover:text-primary transition-colors">
+                {node.merchandise.product.title}
+              </h3>
+            </Link>
+            {node.merchandise.selectedOptions && node.merchandise.selectedOptions.length > 0 && (
+              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
+                {node.merchandise.selectedOptions.map(
+                  (option: { name: string; value: string }) => (
+                    <span key={option.name} className="text-caption text-muted-foreground">
+                      {option.name}:{' '}
+                      <span className="font-medium text-foreground">{option.value}</span>
+                    </span>
+                  ),
+                )}
+              </div>
             )}
           </div>
+          <CartRemove id={node.id} productTitle={node.merchandise.product.title} />
         </div>
-      </div>
 
-      {/* Quantity, Price & Remove */}
-      <div className="flex items-center justify-between sm:justify-end gap-4 sm:flex-col sm:items-end sm:gap-3">
-        <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <QuantityUpdatedContainer
             originalQuantity={node.quantity}
             quantityAvailable={node.merchandise.quantityAvailable ?? null}
             id={node.id}
             disabled={finalPrice <= 0}
           />
-          <div className="flex flex-col items-end min-w-[100px]">
-            <div className="text-right">
-              <p className="text-heading-4 font-semibold">
-                {formatPrice(finalPrice, currencyCode)}
+          <div className="text-right">
+            <p className="text-body font-semibold tabular-nums">
+              {formatPrice(finalPrice, currencyCode)}
+            </p>
+            {hasDiscount && (
+              <p className="text-caption text-muted-foreground line-through tabular-nums">
+                {formatPrice(totalPrice, currencyCode)}
               </p>
-              {hasDiscount && (
-                <p className="text-body-sm text-muted line-through mt-0.5">
-                  {formatPrice(totalPrice, currencyCode)}
-                </p>
-              )}
-            </div>
+            )}
             {node.quantity > 1 && (
-              <p className="text-caption-sm text-muted mt-1">
+              <p className="text-caption-sm text-muted-foreground">
                 {formatPrice(unitPrice, currencyCode)} each
               </p>
             )}
           </div>
         </div>
-        <CartRemove id={node.id} productTitle={node.merchandise.product.title} />
       </div>
     </div>
   );

@@ -19,21 +19,21 @@ const ThemeToggle = () => {
       <DropdownMenuTrigger asChild className="flex items-center justify-center">
         <button
           aria-label="toggle theme"
-          className="cursor-pointer flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted transition-colors"
+          className="cursor-pointer relative flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-all duration-200 text-muted-foreground hover:text-foreground"
         >
           <Sun
-            size={20}
-            strokeWidth={1.5}
-            className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:absolute dark:scale-0"
+            size={18}
+            strokeWidth={1.75}
+            className="rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0"
           />
           <Moon
-            size={20}
-            strokeWidth={1.5}
-            className="rotate-90 scale-0 transition-all absolute dark:relative dark:rotate-0 dark:scale-100"
+            size={18}
+            strokeWidth={1.75}
+            className="absolute rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100"
           />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="min-w-[120px]">
         <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>

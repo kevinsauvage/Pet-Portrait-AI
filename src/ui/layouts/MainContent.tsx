@@ -1,3 +1,5 @@
+import { cn } from '@/lib/cn';
+
 const MainContent = ({
   children,
   className,
@@ -8,7 +10,10 @@ const MainContent = ({
 } & React.HTMLProps<HTMLDivElement> & { [key: string]: unknown }) => {
   return (
     <div
-      className={`${className} flex flex-col space-y-12 max-w-6xl mx-auto mb-12`}
+      className={cn(
+        'mx-auto mb-12 flex max-w-7xl flex-col space-y-8',
+        className,
+      )}
       {...properties}
     >
       <div className="container mx-auto">{children}</div>

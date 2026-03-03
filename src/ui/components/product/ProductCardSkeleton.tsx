@@ -50,26 +50,22 @@ const ProductCardSkeleton = ({
   }
 
   return (
-    <li className={cn('relative overflow-hidden rounded-sm transition-all', className)}>
-      {/* Action Buttons (wishlist & quick view) */}
+    <li className={cn('relative overflow-hidden rounded-2xl border border-border bg-card', className)}>
       {showActions && (
-        <div className="absolute top-2 right-2 z-20 flex flex-col gap-2">
-          <Skeleton className="h-9 w-9 rounded-full" />
-          <Skeleton className="h-9 w-9 rounded-full" />
+        <div className="absolute right-2.5 top-2.5 z-20">
+          <Skeleton className="h-8 w-20 rounded-full" />
         </div>
       )}
 
-      {/* Product Image Skeleton */}
       <div className="relative overflow-hidden">
         <Skeleton className="aspect-square w-full" />
-        {/* Badge */}
-        {showBadge && <Skeleton className="absolute left-2 top-2 h-6 w-12 rounded" />}
+        {showBadge && <Skeleton className="absolute left-2.5 top-2.5 h-5 w-12 rounded-full" />}
       </div>
 
-      {/* Text Content - Two lines: title + price */}
-      <div className="py-4 space-y-2">
+      <div className="space-y-2 px-4 pb-4 pt-3.5">
         <Skeleton className="h-5 w-3/4" />
-        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-3.5 w-1/2" />
+        <Skeleton className="h-5 w-1/3 mt-1" />
       </div>
     </li>
   );

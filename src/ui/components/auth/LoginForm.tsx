@@ -18,7 +18,7 @@ import { Label } from '@/ui/primitives/label';
 const LoginButton = () => {
   const status = useFormStatus();
   return (
-    <Button type="submit" className="w-full md:w-auto" loading={status.pending}>
+    <Button type="submit" className="h-11 w-full font-semibold" loading={status.pending}>
       Sign in
     </Button>
   );
@@ -62,8 +62,10 @@ const LoginForm = () => {
 
   return (
     <Form action={action} className="space-y-5">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email address</Label>
+      <div className="space-y-1.5">
+        <Label htmlFor="email" className="text-body-sm font-medium">
+          Email address
+        </Label>
         <Input
           id="email"
           type="email"
@@ -72,6 +74,7 @@ const LoginForm = () => {
           required={true}
           autoComplete="username"
           disabled={isPending}
+          className="h-11"
           aria-invalid={!!states.email?.at(-1)}
           aria-describedby={states.email?.at(-1) ? 'email-error' : undefined}
         />
@@ -87,7 +90,9 @@ const LoginForm = () => {
         disabled={isPending}
         error={states.password}
       />
-      <LoginButton />
+      <div className="pt-1">
+        <LoginButton />
+      </div>
     </Form>
   );
 };

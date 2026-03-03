@@ -29,18 +29,20 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
 
   const lowStock = isLowStock(quantityAvailable) && availableForSale;
   const isSoldOut = !availableForSale;
+  const hasDiscount =
+    compareAtPrice && price?.amount !== compareAtPrice?.amount;
 
   const Component = asListItem ? 'li' : 'div';
 
   return (
-    <Component className="group relative">
-      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-        <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <Component className="group">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[var(--shadow-card-hover)] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+        <div className="absolute right-2.5 top-2.5 z-20 translate-y-1 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
           <Link
             href={config.routes.create}
-            className="flex items-center gap-1.5 rounded-full border border-border bg-background/95 px-3 py-1.5 text-caption-sm font-semibold text-primary shadow-md backdrop-blur-sm transition-all hover:bg-primary hover:text-primary-foreground"
+            className="flex items-center gap-1.5 rounded-full border border-white/20 bg-background/95 px-3 py-1.5 text-caption-sm font-semibold text-primary shadow-lg backdrop-blur-sm transition-all hover:bg-primary hover:text-primary-foreground"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Sparkles className="h-3 w-3" />
             Create
           </Link>
         </div>
@@ -51,7 +53,7 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
           scroll
           aria-label={`View details for ${title}`}
         >
-          <div className="relative overflow-hidden aspect-square bg-muted/40">
+          <div className="relative aspect-square overflow-hidden bg-muted/30">
             <OptimizedImage
               src={primaryImage?.medium || primaryImage?.small || primaryImage?.src || ''}
               alt={primaryImage?.altText || title}
@@ -61,46 +63,44 @@ const ProductCardDefault = ({ product, priority, asListItem = true }: ProductCar
               priority={priority}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw"
               quality={75}
-              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.07]"
             />
+            <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />
 
-            {compareAtPrice && price?.amount !== compareAtPrice?.amount && (
-              <Badge
-                variant="destructive"
-                className="absolute left-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-destructive/95 border-2 border-white/20"
-              >
-                -{isWhatPercentOf(Number(price?.amount), Number(compareAtPrice?.amount))}%
-              </Badge>
-            )}
-
-            {isSoldOut && (
-              <Badge
-                variant="destructive"
-                className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-destructive/95 border-2 border-white/20"
-              >
-                Sold Out
-              </Badge>
-            )}
-            {lowStock && !isSoldOut && (
-              <Badge
-                variant="secondary"
-                className="absolute right-2 top-2 z-10 text-body-sm font-bold px-2.5 py-1 shadow-lg backdrop-blur-sm bg-secondary/95 border-2 border-white/20"
-              >
-                Low Stock
-              </Badge>
-            )}
+            <div className="absolute left-2.5 top-2.5 z-10 flex flex-col gap-1.5">
+              {hasDiscount && (
+                <Badge
+                  variant="destructive"
+                  className="text-caption-sm font-bold shadow-md"
+                >
+                  -{isWhatPercentOf(Number(price?.amount), Number(compareAtPrice?.amount))}%
+                </Badge>
+              )}
+              {isSoldOut && (
+                <Badge variant="destructive" className="text-caption-sm font-bold shadow-md">
+                  Sold Out
+                </Badge>
+              )}
+              {lowStock && !isSoldOut && (
+                <Badge variant="secondary" className="text-caption-sm font-bold shadow-md">
+                  Low Stock
+                </Badge>
+              )}
+            </div>
           </div>
 
-          <div className="flex flex-1 flex-col gap-3 px-4 pb-5 pt-4">
-            <div className="space-y-1">
-              <h3 className="text-heading-4 line-clamp-2 leading-snug">{title}</h3>
-              <p className="text-body-sm text-muted-foreground">
-                Custom pet portrait on premium paper
-              </p>
+          <div className="flex flex-1 flex-col gap-3 px-4 pb-4 pt-3.5">
+            <div className="flex-1 space-y-0.5">
+              <h3 className="line-clamp-2 text-body font-semibold leading-snug tracking-tight">
+                {title}
+              </h3>
+              <p className="text-caption text-muted-foreground">Custom pet portrait</p>
             </div>
-            <div>
-              <Price compareAtPrice={compareAtPrice} priceRange={priceRange} price={price} />
-            </div>
+            <Price
+              compareAtPrice={compareAtPrice}
+              priceRange={priceRange}
+              price={price}
+            />
           </div>
         </Link>
       </article>

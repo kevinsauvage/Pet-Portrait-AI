@@ -17,49 +17,52 @@ const CartSummary = () => {
   const { currencyCode } = cart.cost.subtotalAmount;
 
   return (
-    <Card className="lg:sticky lg:top-4">
-      <CardHeaderPattern className="pb-4" title="Order Summary" size={4} />
-      <CardContent className="space-y-4">
-        <div className="space-y-3">
-          <div className="flex justify-between items-center text-body-sm">
-            <span className="text-secondary">Subtotal</span>
-            <span className="text-body font-medium tabular-nums">
+    <Card className="border-border/70 lg:sticky lg:top-24">
+      <CardHeaderPattern className="pb-3" title="Order Summary" size={4} />
+      <CardContent className="space-y-4 pt-0">
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-body-sm text-muted-foreground">Subtotal</span>
+            <span className="text-body-sm font-medium tabular-nums">
               {formatPrice(subtotal, currencyCode)}
             </span>
           </div>
           {hasDiscount && (
-            <div className="flex justify-between items-center text-body-sm animate-in fade-in slide-in-from-top-2 duration-300">
-              <span className="text-secondary">Discount</span>
-              <span className="text-body font-medium text-green-600 dark:text-green-400 tabular-nums">
+            <div className="flex items-center justify-between animate-in fade-in slide-in-from-top-1 duration-200">
+              <span className="text-body-sm text-muted-foreground">Discount</span>
+              <span className="text-body-sm font-semibold tabular-nums text-success">
                 -{formatPrice(discount, currencyCode)}
               </span>
             </div>
           )}
           {tax > 0 && (
-            <div className="flex justify-between items-center text-body-sm">
-              <span className="text-secondary">Tax</span>
-              <span className="text-body font-medium tabular-nums">
+            <div className="flex items-center justify-between">
+              <span className="text-body-sm text-muted-foreground">Tax</span>
+              <span className="text-body-sm font-medium tabular-nums">
                 {formatPrice(tax, currencyCode)}
               </span>
             </div>
           )}
         </div>
-        <Separator />
-        <div className="flex justify-between items-baseline pt-2">
-          <span className="text-body-lg font-semibold">Total</span>
-          <span className="text-heading-3 text-primary tabular-nums">
+
+        <Separator className="bg-border/60" />
+
+        <div className="flex items-baseline justify-between">
+          <span className="text-body font-semibold">Total</span>
+          <span className="text-heading-4 font-bold tabular-nums text-primary">
             {formatPrice(total, currencyCode)}
           </span>
         </div>
+
         {hasDiscount && (
-          <div className="pt-2">
-            <p className="text-caption-sm text-green-600 dark:text-green-400 text-center">
-              You saved {formatPrice(discount, currencyCode)}!
+          <div className="rounded-lg bg-success/8 px-3 py-2 text-center">
+            <p className="text-caption-sm font-medium text-success">
+              You saved {formatPrice(discount, currencyCode)}
             </p>
           </div>
         )}
       </CardContent>
-      <CardFooter className="pt-6">
+      <CardFooter className="pt-2">
         <CheckoutButton checkoutUrl={String(cart.checkoutUrl)} />
       </CardFooter>
     </Card>

@@ -143,24 +143,36 @@ const Home = async () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-linear-to-b from-secondary/10 via-background to-secondary/30">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card/90 p-10 md:p-14 text-center shadow-lg backdrop-blur-sm">
-            <div
-              className="absolute -right-20 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl"
-              aria-hidden="true"
-            />
-            <div className="relative space-y-6 max-w-2xl mx-auto">
-              <h2 className="text-heading-2 tracking-tight">Ready to Create?</h2>
-              <p className="text-body-lg text-secondary">
+          <div className="relative overflow-hidden rounded-3xl bg-foreground px-10 py-14 text-center md:px-16 md:py-20">
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,color-mix(in_srgb,var(--primary)_25%,transparent),transparent)]" />
+              <div className="absolute -left-16 -top-12 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
+              <div className="absolute -bottom-12 -right-16 h-64 w-64 rounded-full bg-primary/15 blur-3xl" />
+            </div>
+            <div className="relative mx-auto max-w-2xl space-y-6">
+              <h2 className="text-heading-2 font-bold tracking-tight text-primary-foreground md:text-[2.25rem]">
+                Ready to Create Your Masterpiece?
+              </h2>
+              <p className="text-body-lg leading-relaxed text-primary-foreground/70">
                 Join thousands of pet owners who have turned their beloved companions into timeless
                 art.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-3">
-                <Button asChild size="lg" className="px-8 py-6 text-base">
+              <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-12 bg-primary-foreground px-8 text-base font-semibold text-foreground shadow-lg transition-all duration-200 hover:scale-[1.02] hover:bg-primary-foreground/90"
+                >
                   <Link href="/create">Start Your Portrait</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="px-8 py-6 text-base">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="h-12 border-primary-foreground/25 bg-transparent px-8 text-base font-medium text-primary-foreground transition-all duration-200 hover:border-primary-foreground/40 hover:bg-primary-foreground/10"
+                >
                   <Link href="/gallery">View Gallery</Link>
                 </Button>
               </div>

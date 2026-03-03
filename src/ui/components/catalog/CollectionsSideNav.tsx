@@ -41,7 +41,7 @@ export default function CollectionsSideNav({
   }
 
   return (
-    <nav aria-label="Collections navigation" className="space-y-1 p-2">
+    <nav aria-label="Collections navigation" className="space-y-0.5 p-2">
       {items.map((item) => {
         const isActive = item.handle === currentHandle;
 
@@ -51,23 +51,18 @@ export default function CollectionsSideNav({
             href={item.href}
             aria-current={isActive ? 'page' : undefined}
             className={cn(
-              'group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-body-sm font-medium transition-all duration-200',
-              'hover:bg-accent hover:text-accent-foreground',
+              'group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-body-sm font-medium transition-all duration-150',
               isActive
-                ? 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90'
-                : 'text-muted-foreground hover:text-foreground',
+                ? 'bg-primary/10 text-primary'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
-            {isActive && (
-              <div className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-primary-foreground/30" />
-            )}
-
             <div
               className={cn(
-                'flex h-5 w-5 shrink-0 items-center justify-center rounded transition-all duration-200',
+                'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all duration-150',
                 isActive
-                  ? 'bg-primary-foreground/20 text-primary-foreground'
-                  : 'bg-muted text-muted-foreground group-hover:bg-accent group-hover:text-accent-foreground',
+                  ? 'bg-primary/15 text-primary'
+                  : 'bg-muted/80 text-muted-foreground group-hover:bg-accent-foreground/10',
               )}
             >
               {isActive ? (
@@ -80,7 +75,7 @@ export default function CollectionsSideNav({
             <span className="line-clamp-1 flex-1">{item.title}</span>
 
             {isActive && (
-              <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-foreground/60" />
+              <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
             )}
           </Link>
         );

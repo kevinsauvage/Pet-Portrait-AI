@@ -1,20 +1,30 @@
 import { Skeleton } from '@/ui/primitives/skeleton';
 
 /**
- * Shown while the collection page (products + filters) is loading,
- * after the layout (title/heading) has already rendered.
- * Only fills the content area — no sidebar, no heading.
+ * Shown while the shop segment (including [collectionSlug]/layout.tsx) is loading.
+ * The ShopLayout sidebar is a parent layout and already rendered — this fills the content column only.
  */
 const Loading = () => {
   return (
     <div className="space-y-6">
+      {/* Breadcrumb */}
+      <Skeleton className="h-4 w-40" />
+
+      {/* Collection heading */}
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-52" />
+        <Skeleton className="h-4 w-80" />
+      </div>
+
+      {/* Filters / sort bar */}
       <div className="flex items-center justify-between">
         <Skeleton className="h-9 w-32 rounded-xl" />
         <Skeleton className="h-9 w-28 rounded-xl" />
       </div>
 
+      {/* Product grid */}
       <div className="grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 md:gap-5 xl:grid-cols-3">
-        {Array.from({ length: 6 }, (_, i) => `col-skeleton-${i}`).map((key) => (
+        {Array.from({ length: 6 }, (_, i) => `shop-skeleton-${i}`).map((key) => (
           <div key={key} className="overflow-hidden rounded-2xl border border-border bg-card">
             <Skeleton className="aspect-square w-full" />
             <div className="space-y-2 px-4 pb-4 pt-3.5">

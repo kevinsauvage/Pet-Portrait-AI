@@ -4,7 +4,7 @@ import Link from 'next/link';
 import config from '@/core/config';
 import type { CollectionsQuery } from '@/infra/shopify/storefront';
 
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const CollectionCard = ({
   collection,
@@ -19,9 +19,9 @@ const CollectionCard = ({
     <Link
       href={`${config.routes.collection}/${handle}`}
       aria-label={`Shop ${title} collection`}
-      className="group relative block overflow-hidden rounded-2xl border border-border bg-card shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="group relative block overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
-      <div className="relative aspect-4/3 min-h-[240px]">
+      <div className="relative aspect-[4/3] min-h-[220px]">
         {image?.src ? (
           <Image
             src={image.src}
@@ -30,23 +30,27 @@ const CollectionCard = ({
             quality={85}
             priority={priority}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
             blurDataURL={image?.blurDataURL}
           />
         ) : (
           <div className="absolute inset-0 bg-muted" />
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent opacity-90 transition-colors duration-300 group-hover:from-black/90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
       </div>
-      <div className="absolute inset-x-0 bottom-0 p-5 md:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="space-y-1">
-          <h3 className="text-heading-3 text-white drop-shadow-md font-semibold">{title}</h3>
-          <p className="text-body-sm text-white/80">Curated portraits and premium prints</p>
+
+      <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+        <div className="flex items-end justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="text-heading-3 font-semibold leading-tight text-white drop-shadow-sm">
+              {title}
+            </h3>
+            <p className="text-body-sm text-white/70">Curated portraits & premium prints</p>
+          </div>
+          <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 group-hover:bg-white/20 group-hover:scale-110">
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </div>
         </div>
-        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-white/95 group-hover:text-white group-hover:gap-2 transition-all">
-          Shop collection
-          <ChevronRight className="h-4 w-4 shrink-0" />
-        </span>
       </div>
     </Link>
   );
