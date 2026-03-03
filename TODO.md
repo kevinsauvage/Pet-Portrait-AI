@@ -1,25 +1,5 @@
 ## 🟡 MEDIUM PRIORITY (Important for Production)
 
-### 13. Accessibility Audit & Improvements
-
-**What:** Ensure WCAG compliance and accessibility
-**Why:** Legal compliance and better user experience
-**How:**
-
-- Run automated accessibility audit (axe, Lighthouse)
-- Test with screen readers (NVDA, VoiceOver)
-- Verify keyboard navigation works everywhere
-- Ensure proper ARIA labels and roles (some already implemented)
-- Fix color contrast issues
-- Add skip links for navigation
-- Ensure form errors are properly announced
-- Test with keyboard-only navigation
-- Add accessibility testing to CI
-
-**Files:** All UI components, especially forms and navigation
-
----
-
 ### 14. Analytics & Tracking Setup
 
 **What:** Configure production analytics

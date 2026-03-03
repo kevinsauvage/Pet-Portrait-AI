@@ -21,14 +21,17 @@ const Header = async ({
   const navLinks = getNavLinks(headerMenu);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/90 shadow-[0_1px_0_0_rgba(0,0,0,0.04)] backdrop-blur-xl">
+    <header
+      id="main-navigation"
+      className="sticky top-0 z-50 border-b border-border/60 bg-background/90 shadow-[0_1px_0_0_rgba(0,0,0,0.04)] backdrop-blur-xl"
+    >
       <div className="container mx-auto px-4">
         <div className="flex h-16 w-full items-center justify-between md:h-[68px]">
           <div className="flex items-center gap-6 lg:gap-8">
             <Logo />
-            <div className="hidden md:block">
+            <nav className="hidden md:block" aria-label="Main navigation">
               <NavLinks links={navLinks} />
-            </div>
+            </nav>
           </div>
           <div className="flex items-center gap-1">
             <UserButtons className="hidden md:flex" />

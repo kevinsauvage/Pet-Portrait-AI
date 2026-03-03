@@ -16,6 +16,7 @@ import CookieBannerWrapper from '@/ui/components/consent/CookieBannerWrapper';
 import GtmScript from '@/ui/components/consent/GtmScript';
 import Footer from '@/ui/components/navigation/Footer';
 import Header from '@/ui/components/navigation/Header';
+import SkipLinks from '@/ui/components/navigation/SkipLinks';
 import { Toaster } from '@/ui/primitives/sonner';
 import { ThemeProvider } from '@/ui/providers/theme-provider';
 
@@ -109,9 +110,12 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         >
           <CartProvider initialCart={initialCart}>
             <UserProvider user={user} userWishlist={userWishlist}>
+              <SkipLinks />
               <div className="relative z-10 flex min-h-screen flex-col">
                 <Header headerMenu={menus.headerMenu} />
-                <main className="flex-1">{children}</main>
+                <main id="main-content" className="flex-1" tabIndex={-1}>
+                  {children}
+                </main>
                 <Toaster richColors />
                 <Footer menuItems={menus.footerMenu?.items} />
               </div>

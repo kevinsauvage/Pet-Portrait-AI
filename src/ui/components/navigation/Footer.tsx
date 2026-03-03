@@ -36,7 +36,7 @@ const footerLinkClass =
 
 const Footer = ({ menuItems }: FooterProps) => {
   return (
-    <footer className="border-t border-border/60 bg-card/40">
+    <footer id="footer" className="border-t border-border/60 bg-card/40">
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           <div className="col-span-2 md:col-span-1 space-y-4">
