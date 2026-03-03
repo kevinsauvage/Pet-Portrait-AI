@@ -21,13 +21,26 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 interface StylePageProps {
-  searchParams: Promise<{ photo?: string }>;
+  searchParams: Promise<{ photo?: string; styleId?: string }>;
 }
 
 export default async function StylePage({ searchParams }: StylePageProps) {
-  const { photo } = await searchParams;
+  const { photo, styleId } = await searchParams;
 
   if (!photo) redirect(config.routes.create);
+
+  // If styleId is already selected, redirect directly to generating
+  if (styleId) {
+    const { isValidStyleId } = await import('@/domains/ai/ai-portrait/types');
+    if (isValidStyleId(styleId)) {
+      redirect(
+        `${config.routes.createGenerating}${buildCreateFlowQueryString({
+          photo,
+          styleId,
+        })}`,
+      );
+    }
+  }
 
   return (
     <>
@@ -35,7 +48,7 @@ export default async function StylePage({ searchParams }: StylePageProps) {
 
       <div className="space-y-8">
         <Button variant="ghost" size="sm" asChild className="gap-2">
-          <Link href={config.routes.create}>
+          <Link href={`${config.routes.create}${buildCreateFlowQueryString({ styleId })}`}>
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
@@ -60,6 +73,8 @@ export default async function StylePage({ searchParams }: StylePageProps) {
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {AI_ART_STYLES.map((style) => {
+                if (!style.id) return null;
+                
                 const href = `${config.routes.createGenerating}${buildCreateFlowQueryString({
                   photo,
                   styleId: style.id,

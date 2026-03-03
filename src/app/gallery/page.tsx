@@ -33,7 +33,7 @@ const GalleryPage = () => {
             <div className="space-y-2">
               <h2 className="text-heading-3 tracking-tight">Style Gallery</h2>
               <p className="text-body-sm text-muted-foreground max-w-2xl">
-                Filter by style, pet type, and theme to explore the full range of portraits.
+                Filter by style and pet type to explore the full range of portraits.
               </p>
             </div>
             <Button variant="ghost" size="sm" asChild>

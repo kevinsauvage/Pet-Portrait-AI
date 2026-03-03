@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
 
 import config from '@/core/config';
+import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { validateImageDimensions } from '@/domains/ai/ai-portrait/validation';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 import { useUploadThing } from '@/infra/upload/uploadthing';
@@ -13,14 +14,22 @@ import { Button } from '@/ui/primitives/button';
 import { ImageIcon, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function UploadIsland() {
+interface UploadIslandProps {
+  initialStyleId?: string;
+}
+
+export default function UploadIsland({ initialStyleId }: UploadIslandProps) {
   const router = useRouter();
 
   const { startUpload, isUploading } = useUploadThing('userUpload', {
     onClientUploadComplete: (res) => {
       const url = getUploadUrl(res?.[0]);
       if (!url) return;
-      router.push(`${config.routes.createStyle}?photo=${encodeURIComponent(url)}`);
+      const queryString = buildCreateFlowQueryString({
+        photo: url,
+        styleId: initialStyleId,
+      });
+      router.push(`${config.routes.createStyle}${queryString}`);
     },
     onUploadError: (err) => {
       toast.error(err.message ?? 'Upload failed');

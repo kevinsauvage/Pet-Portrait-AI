@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import config from '@/core/config';
 import type { ArtStyle } from '@/domains/ai/ai-portrait/types';
+import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { Button } from '@/ui/primitives/button';
 
 type StylePreviewProps = {
@@ -30,7 +32,7 @@ const StylePreview = ({ style, index }: StylePreviewProps) => {
           {style.description}
         </p>
         <Button variant="outline" size="sm" asChild className="w-full">
-          <Link href={`/create?style=${style.id}`}>
+          <Link href={`${config.routes.create}${buildCreateFlowQueryString({ styleId: style.id })}`}>
             Try This Style
           </Link>
         </Button>

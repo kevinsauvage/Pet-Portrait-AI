@@ -11,11 +11,17 @@ export const metadata: Metadata = generateMetadataUtil({
   url: '/create',
 });
 
-export default function CreatePage() {
+interface CreatePageProps {
+  searchParams: Promise<{ styleId?: string }>;
+}
+
+export default async function CreatePage({ searchParams }: CreatePageProps) {
+  const { styleId } = await searchParams;
+
   return (
     <>
       <CreateProgressBar currentStep="upload" />
-      <UploadIsland />
+      <UploadIsland initialStyleId={styleId} />
     </>
   );
 }
