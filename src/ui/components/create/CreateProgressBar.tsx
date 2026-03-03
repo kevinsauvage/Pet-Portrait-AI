@@ -21,15 +21,17 @@ export default function CreateProgressBar({ currentStep }: CreateProgressBarProp
 
   return (
     <nav aria-label="Progress" className="w-full">
-      <div className="flex items-center justify-between gap-2 sm:gap-4 max-w-4xl mx-auto">
+      <div className="flex items-center max-w-4xl mx-auto">
         {STEPS.map((step, i) => {
           const isCompleted = i < currentIndex;
           const isActive = i === currentIndex;
           const isUpcoming = i > currentIndex;
+          const isLast = i === STEPS.length - 1;
 
           return (
-            <div key={step.id} className="flex flex-1 items-center">
-              <div className="flex flex-1 flex-col items-center gap-3">
+            <div key={step.id} className={cn('flex items-center', isLast ? 'flex-none' : 'flex-1')}>
+              {/* Step content */}
+              <div className="flex flex-col items-center gap-3 shrink-0">
                 {/* Step indicator */}
                 <div className="relative flex items-center justify-center">
                   <div
@@ -95,9 +97,9 @@ export default function CreateProgressBar({ currentStep }: CreateProgressBarProp
                 </span>
               </div>
 
-              {/* Connector line */}
-              {i < STEPS.length - 1 && (
-                <div className="hidden sm:flex flex-1 items-center px-2 mx-2">
+              {/* Connector line - only between steps */}
+              {!isLast && (
+                <div className="hidden sm:flex flex-1 items-center px-2 mx-2 min-w-0">
                   <div
                     className={cn(
                       'h-0.5 w-full rounded-full transition-all duration-500',

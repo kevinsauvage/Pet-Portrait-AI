@@ -220,5 +220,6 @@ export class CartService {
 
   static revalidate(): void {
     revalidatePath(config.routes.cart);
+    revalidatePath(config.routes.createOrder);
   }
 }

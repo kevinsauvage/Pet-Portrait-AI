@@ -23,8 +23,8 @@ test.describe('Cart Flow', () => {
   });
 
   test('should display cart page', async ({ page }) => {
-    await page.goto('/cart');
-    await expect(page).toHaveURL(/\/cart/);
+    await page.goto('/create/order');
+    await expect(page).toHaveURL(/\/create\/order/);
     
     // Check if cart page loads (either empty or with items)
     const cartContent = page.locator('main, [role="main"]');
@@ -32,7 +32,7 @@ test.describe('Cart Flow', () => {
   });
 
   test('should handle empty cart state', async ({ page }) => {
-    await page.goto('/cart');
+    await page.goto('/create/order');
     
     // Check for empty cart message or continue shopping link
     const emptyState = page.getByText(/empty|no items|continue shopping/i).first();

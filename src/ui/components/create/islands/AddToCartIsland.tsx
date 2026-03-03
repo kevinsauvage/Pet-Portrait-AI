@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/contexts/CartContext/useCart';
+import config from '@/core/config';
 import type {
   AiPortraitProduct,
   AiPortraitProductVariant,
 } from '@/domains/ai/ai-portrait/products';
+import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getFirstAvailableVariant } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { getStyleName } from '@/domains/ai/ai-portrait/utils/style-utils';
 import { formatPrice } from '@/lib/format';
@@ -32,6 +35,7 @@ export default function AddToCartIsland({
   generationId,
 }: AddToCartIslandProps) {
   const { handleAddToCart } = useCart();
+  const router = useRouter();
 
   const firstAvailable = getFirstAvailableVariant(product.variants);
 
@@ -49,9 +53,19 @@ export default function AddToCartIsland({
 
   useEffect(() => {
     if (!isAdded) return;
-    const timeout = setTimeout(() => setIsAdded(false), 2000);
+    const timeout = setTimeout(() => {
+      setIsAdded(false);
+      // Navigate to order page with query params for back button
+      const queryString = buildCreateFlowQueryString({
+        artwork: artworkUrl,
+        photo: originalPhotoUrl,
+        styleId,
+        generationId,
+      });
+      router.push(`${config.routes.createOrder}${queryString}`);
+    }, 1500);
     return () => clearTimeout(timeout);
-  }, [isAdded]);
+  }, [isAdded, router, artworkUrl, originalPhotoUrl, styleId, generationId]);
 
   const handleAdd = async () => {
     if (!selectedVariantId || !selectedVariant?.availableForSale || isLoading) return;
