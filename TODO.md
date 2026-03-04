@@ -2,10 +2,6 @@
 
 ## P2 — High Priority
 
-- [ ] **WHAT:** Sanitize HTML in `CreateProductRow` and `LegalContent` before `dangerouslySetInnerHTML`.
-      **WHY:** `CreateProductRow` (`src/ui/components/create/islands/CreateProductRow.tsx`) uses `product.description` from Shopify without sanitization. `LegalContent` (`src/ui/components/legal/LegalContent.tsx`) uses policy HTML from Shopify. While both are "trusted" sources, defense in depth prevents XSS if Shopify data is ever compromised or misconfigured.
-      **HOW:** Import `sanitizeHtml` from `@/core/utils/sanitize` and wrap `product.description` and `html` in `LegalContent` before passing to `dangerouslySetInnerHTML`.
-
 - [ ] **WHAT:** Persist generation logs for admin dashboard.
       **WHY:** `src/domains/ai/repositories/generation-log.repository.ts` uses an in-memory array. Data is lost on server restart. Admin dashboard cannot show historical trends or failures across deployments.
       **HOW:** Replace in-memory store with Redis (using existing `src/infra/cache`) or a database. Add `getCached`/`setCached` patterns or a dedicated key schema for generation logs. Ensure TTL and max entries are configurable.

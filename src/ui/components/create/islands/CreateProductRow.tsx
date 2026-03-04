@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
+import { sanitizeHtml } from '@/core/utils/sanitize';
 import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/products';
 import { getLowestPrice } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { formatPrice } from '@/lib/format';
@@ -76,7 +77,7 @@ export default function CreateProductRow({
             <SheetDescription asChild>
               <div
                 className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: product.description }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
               />
             </SheetDescription>
           )}
