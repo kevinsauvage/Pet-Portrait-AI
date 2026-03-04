@@ -30,10 +30,6 @@
       **WHY:** Multiple components use Tailwind. Ensure consistent spacing, typography, and color tokens.
       **HOW:** Run a design audit. Use `tailwind.config` or CSS variables for consistency. Document design tokens in a style guide.
 
-- [ ] **WHAT:** Add `security.txt` route verification.
-      **WHY:** `src/app/.well-known/security.txt/route.ts` exists. Verify it returns correct content and is accessible at `/.well-known/security.txt`.
-      **HOW:** Add an E2E or smoke test that fetches `/.well-known/security.txt` and asserts expected fields (Contact, Expires, etc.).
-
 - [ ] **WHAT:** Consider adding `Content-Length` validation for uploads.
       **WHY:** `enforceRequestSizeLimit` only checks `request.headers.get('content-length')`. Malicious clients can omit or lie about this header.
       **HOW:** For streaming uploads, consider checking body size during read. For JSON, the 256KB limit for AI is already enforced. Document that `Content-Length` can be spoofed and that UploadThing has its own limits.
