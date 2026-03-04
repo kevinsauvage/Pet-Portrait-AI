@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 import type {
   GetProductByHandleQuery,
@@ -18,11 +19,28 @@ type ProductSeo = {
   image?: string;
 };
 
-const getProductByHandle = cache(async (handle: string) => {
+const getProductByHandleInternal = cache(async (handle: string) => {
   return storefrontSdk().getProductByHandle({
     handle,
     identifiers: [],
   });
+});
+
+const getProductByHandle = withCache(getProductByHandleInternal, {
+  prefix: 'product-details',
+  ttlMs: 3600000,
+});
+
+async function getProductRecommendationsInternal(productId: string): Promise<ProductRecommendationsQuery | null> {
+  return storefrontSdk().productRecommendations({
+    identifiers: [],
+    productId,
+  });
+}
+
+const getProductRecommendations = withCache(getProductRecommendationsInternal, {
+  prefix: 'product-recommendations',
+  ttlMs: 3600000,
 });
 
 export async function getProductDetails(handle: string): Promise<ProductDetails> {
@@ -31,10 +49,7 @@ export async function getProductDetails(handle: string): Promise<ProductDetails>
     return { product: null, recommendations: null };
   }
 
-  const recommendations = await storefrontSdk().productRecommendations({
-    identifiers: [],
-    productId: product.id,
-  });
+  const recommendations = await getProductRecommendations(product.id);
 
   return { product, recommendations };
 }

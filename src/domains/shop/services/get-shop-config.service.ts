@@ -1,4 +1,5 @@
 import { logger } from '@/core/utils/logger';
+import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 
 /**
@@ -151,13 +152,7 @@ function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
   };
 }
 
-/**
- * Fetches shop configuration from Shopify metafield `custom.shop_config`
- * Falls back to default values if metafield is not set or invalid
- *
- * @returns Shop configuration with defaults applied
- */
-export async function getShopConfig(): Promise<ShopConfig> {
+async function fetchShopConfigInternal(): Promise<ShopConfig> {
   try {
     const sdk = storefrontSdk();
     const result = await sdk.getShop();
@@ -185,4 +180,13 @@ export async function getShopConfig(): Promise<ShopConfig> {
     });
     return DEFAULT_SHOP_CONFIG;
   }
+}
+
+const cachedFetchShopConfig = withCache(fetchShopConfigInternal, {
+  prefix: 'shop-config',
+  ttlMs: 600000,
+});
+
+export async function getShopConfig(): Promise<ShopConfig> {
+  return cachedFetchShopConfig();
 }

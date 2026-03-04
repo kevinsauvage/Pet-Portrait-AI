@@ -2,6 +2,19 @@
 
 This project uses Redis for distributed rate limiting in production. The Redis instance is provided via Vercel integration.
 
+## Current Usage
+
+- ✅ **Rate Limiting**: Redis is actively used for distributed rate limiting (`src/infra/rate-limit/rate-limit.ts`)
+- ✅ **Application Cache**: Redis cache is actively used to cache Shopify API responses (`src/infra/cache/index.ts`)
+
+Both modules use the same `REDIS_URL` environment variable but maintain separate Redis client instances.
+
+**Cached Data:**
+- Shop configuration (10 minutes TTL)
+- Product data and details (1 hour TTL)
+- Product recommendations (1 hour TTL)
+- Collection data and SEO (1 hour TTL)
+
 ## Setup Steps
 
 ### 1. Install Dependencies
@@ -96,3 +109,18 @@ This project previously used `@upstash/redis`. The migration to `node-redis` pro
 - ✅ Same functionality with simpler configuration
 
 The old `RATE_LIMIT_REDIS_URL` and `RATE_LIMIT_REDIS_TOKEN` variables have been replaced with a single `REDIS_URL` variable.
+
+## Related Documentation
+
+- [Cache Documentation](./CACHE.md) - Application cache module (available but not currently used)
+- [ADR-006: Redis-Based Distributed Rate Limiting](./ADRs/006-redis-rate-limiting.md) - Rate limiting architecture decision
+- [Deployment Guide](../DEPLOYMENT.md) - Redis setup for production deployments
+
+## Future Use
+
+The cache module (`src/infra/cache/index.ts`) is available for future integration. Potential use cases:
+- Cache Shopify product/collection data to reduce API calls
+- Cache expensive computations or AI generation results
+- Cache user sessions or frequently accessed data
+
+See [Cache Documentation](./CACHE.md) for details on using the cache module.

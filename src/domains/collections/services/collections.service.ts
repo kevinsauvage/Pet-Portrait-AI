@@ -1,5 +1,6 @@
 import config from '@/core/config';
 import { logger } from '@/core/utils/logger';
+import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 import {
   adjustPaginationVariables,
@@ -40,7 +41,7 @@ const DEFAULT_PAGE_INFO: CollectionProducts['pageInfo'] = {
   startCursor: null,
 };
 
-export async function getAllCollections(): Promise<CollectionEdge[]> {
+async function getAllCollectionsInternal(): Promise<CollectionEdge[]> {
   const response = await storefrontSdk().collections({
     first: 100,
     firstProducts: 1,
@@ -51,14 +52,34 @@ export async function getAllCollections(): Promise<CollectionEdge[]> {
   return response.collections.edges;
 }
 
-export async function getCollectionSeo(
+async function getCollectionSeoInternal(
   handle: string,
 ): Promise<GetCollectionSeoByHandleQuery['collection'] | null | undefined> {
   const response = await storefrontSdk().getCollectionSeoByHandle({ handle });
   return response?.collection;
 }
 
-export async function getCollectionLayoutData(collectionSlug: string): Promise<{
+const cachedGetAllCollections = withCache(getAllCollectionsInternal, {
+  prefix: 'collections:all',
+  ttlMs: 3600000,
+});
+
+const cachedGetCollectionSeo = withCache(getCollectionSeoInternal, {
+  prefix: 'collections:seo',
+  ttlMs: 3600000,
+});
+
+export async function getAllCollections(): Promise<CollectionEdge[]> {
+  return cachedGetAllCollections();
+}
+
+export async function getCollectionSeo(
+  handle: string,
+): Promise<GetCollectionSeoByHandleQuery['collection'] | null | undefined> {
+  return cachedGetCollectionSeo(handle);
+}
+
+async function getCollectionLayoutDataInternal(collectionSlug: string): Promise<{
   collection: CollectionQuery['collection'] | null | undefined;
   navMenu: GetMenuByHandleQuery['menu'] | null;
 }> {
@@ -82,7 +103,19 @@ export async function getCollectionLayoutData(collectionSlug: string): Promise<{
   };
 }
 
-export async function getCollectionPageData(
+const cachedGetCollectionLayoutData = withCache(getCollectionLayoutDataInternal, {
+  prefix: 'collections:layout',
+  ttlMs: 3600000,
+});
+
+export async function getCollectionLayoutData(collectionSlug: string): Promise<{
+  collection: CollectionQuery['collection'] | null | undefined;
+  navMenu: GetMenuByHandleQuery['menu'] | null;
+}> {
+  return cachedGetCollectionLayoutData(collectionSlug);
+}
+
+async function getCollectionPageDataInternal(
   handle: string,
   searchParameters: CollectionSearchParams = {},
 ): Promise<CollectionPageData> {
@@ -114,4 +147,16 @@ export async function getCollectionPageData(
     pageInfo: products?.pageInfo ?? DEFAULT_PAGE_INFO,
     sortKey,
   };
+}
+
+const cachedGetCollectionPageData = withCache(getCollectionPageDataInternal, {
+  prefix: 'collections:page',
+  ttlMs: 3600000,
+});
+
+export async function getCollectionPageData(
+  handle: string,
+  searchParameters: CollectionSearchParams = {},
+): Promise<CollectionPageData> {
+  return cachedGetCollectionPageData(handle, searchParameters);
 }

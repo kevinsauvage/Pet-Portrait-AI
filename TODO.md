@@ -34,14 +34,6 @@
       **WHY:** Multiple components use Tailwind. Ensure consistent spacing, typography, and color tokens.
       **HOW:** Run a design audit. Use `tailwind.config` or CSS variables for consistency. Document design tokens in a style guide.
 
-- [ ] **WHAT:** Add `aria-live` for dynamic cart updates.
-      **WHY:** When items are added to cart, screen readers may not announce the change.
-      **HOW:** Wrap cart count or status in an `aria-live="polite"` region. Ensure toast notifications from `sonner` are announced (already handled by `sonner` in many cases).
-
-- [ ] **WHAT:** Document Redis cache usage.
-      **WHY:** `src/infra/cache/index.ts` provides Redis caching but it is not used in the application (only in tests and docs). Rate limiting uses Redis separately.
-      **HOW:** Either: (a) integrate Redis cache for product/collection data to reduce Shopify API calls, or (b) document that cache is available for future use and remove from deployment requirements if not needed.
-
 - [ ] **WHAT:** Add `security.txt` route verification.
       **WHY:** `src/app/.well-known/security.txt/route.ts` exists. Verify it returns correct content and is accessible at `/.well-known/security.txt`.
       **HOW:** Add an E2E or smoke test that fetches `/.well-known/security.txt` and asserts expected fields (Contact, Expires, etc.).

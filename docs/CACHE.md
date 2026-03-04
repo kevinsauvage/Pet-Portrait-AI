@@ -2,12 +2,22 @@
 
 This document describes the caching strategy, TTLs, invalidation patterns, and monitoring for the application.
 
+## ✅ Current Status
+
+**Important:** The Redis cache module (`src/infra/cache/index.ts`) is **now integrated and actively used in production**. It provides:
+- ✅ **Integrated**: Used in application code to cache Shopify API responses
+- ✅ **Production-ready**: Fully implemented and tested
+- ✅ **Performance**: Reduces Shopify API calls by caching frequently accessed data
+
+**Redis is required for both rate limiting and caching**. Both use the same `REDIS_URL` environment variable but maintain separate Redis client instances.
+
 ## Overview
 
-The application uses a Redis-only caching strategy optimized for serverless environments:
+The application uses a multi-layer caching strategy optimized for serverless environments:
 
-1. **Redis Cache** (persistent, distributed) - **Required** - Cache operations require `REDIS_URL` to be configured
-2. **Next.js Fetch Cache** - Used for Shopify API responses
+1. **Redis Cache** (persistent, distributed) - **Active** - Caches Shopify product/collection data and shop configuration
+2. **Next.js Fetch Cache** - Used for Shopify API responses (complements Redis cache)
+3. **React Cache** - Request-level deduplication for same-request data fetching
 
 ### Redis-Only Design
 
@@ -28,7 +38,21 @@ The application uses a Redis-only caching strategy optimized for serverless envi
 
 ### 1. Application Cache (`src/infra/cache/index.ts`)
 
-A general-purpose cache module that supports both Redis and in-memory storage.
+A general-purpose cache module that supports Redis-based caching. **Now actively used in production.**
+
+**Status:**
+- ✅ **Implemented**: Fully functional Redis cache module
+- ✅ **Tested**: Comprehensive test suite in `src/infra/cache/cache.test.ts`
+- ✅ **Integrated**: Used in application code to cache Shopify data
+- ✅ **Production**: Reduces Shopify API calls and improves response times
+
+**Current Usage:**
+- **Shop Configuration** (`getShopConfig`) - Cached for 10 minutes
+- **Product Data** (`ShopifyProductRepository`) - Cached for 1 hour
+- **Product Details** (`getProductDetails`, `getProductSeo`) - Cached for 1 hour
+- **Product Recommendations** - Cached for 1 hour
+- **Collection Data** (`getCollectionPageData`, `getCollectionSeo`) - Cached for 1 hour
+- **All Collections** (`getAllCollections`) - Cached for 1 hour
 
 **Features:**
 - Redis-only (requires `REDIS_URL` environment variable)
@@ -55,9 +79,28 @@ await invalidateCache('my-key');
 await clearCache();
 ```
 
-**Current Usage:**
-- Currently only used in tests
-- Available for future use cases (e.g., expensive computations, API responses)
+**Cache Wrapper Utility:**
+The `withCache` utility (`src/infra/cache/cache-wrapper.ts`) provides a simple way to add caching to any async function:
+
+```typescript
+import { withCache } from '@/infra/cache';
+
+const cachedFunction = withCache(
+  async (param: string) => {
+    // Expensive operation
+    return await fetchData(param);
+  },
+  {
+    prefix: 'my-cache',
+    ttlMs: 3600000, // 1 hour
+  }
+);
+```
+
+**Future Integration Opportunities:**
+- Cache expensive computations or AI generation results
+- Cache user sessions or frequently accessed data
+- Cache search results with shorter TTL
 
 ### 2. Shopify API Cache (`src/infra/shopify/client.ts`)
 
@@ -98,7 +141,11 @@ const sdkNoCache = storefrontSdk('no-store');
 
 | Use Case | TTL | Reason |
 |----------|-----|--------|
-| General purpose | Configurable | Set per use case based on data freshness requirements |
+| Shop Configuration | 10 minutes (600s) | Matches Shopify API revalidation time |
+| Product Data | 1 hour (3600s) | Product details change infrequently |
+| Product Recommendations | 1 hour (3600s) | Recommendations are relatively stable |
+| Collection Data | 1 hour (3600s) | Collection data changes infrequently |
+| Collection SEO | 1 hour (3600s) | SEO metadata changes infrequently |
 
 ### Shopify API Cache TTLs
 
@@ -213,20 +260,26 @@ REDIS_URL=redis://default:password@redis.example.com:6379
 
 ### Shared Redis Instance
 
-The application uses the same Redis instance for:
-- Rate limiting (`src/infra/rate-limit/rate-limit.ts`)
-- Application cache (`src/infra/cache/index.ts`)
+The application uses the same Redis instance (`REDIS_URL`) for:
+- ✅ **Rate limiting** (`src/infra/rate-limit/rate-limit.ts`) - **Active in production**
+- ✅ **Application cache** (`src/infra/cache/index.ts`) - **Active in production**
+
+**Note:** While both modules use the same `REDIS_URL`, they maintain separate Redis client instances and key namespaces.
 
 **Key Prefixes:**
 - Rate limiting: `[prefix]:[identifier]` (e.g., `ai:user123`)
-- Cache: `cache:[key]` (e.g., `cache:product:123`)
+- Cache: `cache:[key]` (e.g., `cache:products:all:8:undefined`, `cache:shop-config:`)
 
 ### Redis Requirement
 
-**All Environments:**
-- Redis is **required** - `REDIS_URL` must be configured
-- Cache operations throw errors if Redis is unavailable
-- Fail-fast approach ensures issues are detected immediately
+**Redis is required for both rate limiting and caching**:
+
+- ✅ **Rate limiting**: Requires `REDIS_URL` - falls back to in-memory if unavailable
+- ✅ **Application cache**: Requires `REDIS_URL` - falls back to direct API calls if unavailable (graceful degradation)
+
+**Deployment Requirements:**
+- `REDIS_URL` must be configured for rate limiting to work in multi-instance deployments (e.g., Vercel, serverless)
+- Cache module is optional - if not used, Redis is only needed for rate limiting
 
 **Why Redis-only?**
 - ✅ **Serverless**: In-memory cache doesn't persist between invocations
@@ -271,10 +324,13 @@ await setCached('summer-collection', collection, 3600000);
 
 ### 4. Error Handling
 
-The cache module handles errors gracefully:
-- Redis errors fall back to in-memory cache
-- Errors are logged but don't throw exceptions
+The cache wrapper (`withCache`) uses graceful degradation:
+- Redis errors fall back to direct function calls
+- Errors are logged but don't block requests
+- Cache misses automatically trigger function execution
 - Always check return values (may be `null`)
+
+**Note:** The cache wrapper gracefully handles Redis unavailability by falling back to direct API calls. This ensures the application continues to work even if Redis is temporarily unavailable.
 
 ## Future Improvements
 

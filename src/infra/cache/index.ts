@@ -95,7 +95,7 @@ export async function getCached<T>(key: string): Promise<T | null> {
 
     // Parse stored value (includes expiresAt for double-checking)
     const parsed = JSON.parse(value) as { value: T; expiresAt: number };
-    
+
     // Redis TTL handles expiration, but we double-check for safety
     if (Date.now() > parsed.expiresAt) {
       await client.del(cacheKey);
@@ -137,7 +137,7 @@ export async function setCached<T>(key: string, value: T, ttlMs: number): Promis
       value,
       expiresAt: Date.now() + ttlMs,
     });
-    
+
     // Redis handles TTL automatically with setEx
     await client.setEx(cacheKey, Math.ceil(ttlMs / 1000), data);
     metrics.sets++;
@@ -230,3 +230,7 @@ export function resetCacheMetrics(): void {
   metrics.invalidations = 0;
   metrics.errors = 0;
 }
+
+// Export cache wrapper utility
+export type { CacheOptions } from './cache-wrapper';
+export { withCache } from './cache-wrapper';
