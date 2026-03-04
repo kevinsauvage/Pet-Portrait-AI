@@ -85,6 +85,17 @@ function validateProductionRequirements(errors: string[]): void {
       'Admin authentication is required in production. Set either ADMIN_BASIC_USER + ADMIN_BASIC_PASSWORD, or ADMIN_SECRET.',
     );
   }
+
+  const requiredSmtpVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'] as const;
+  const missingSmtpVars = requiredSmtpVars.filter((key) => !process.env[key]);
+
+  if (missingSmtpVars.length > 0) {
+    errors.push(
+      `SMTP configuration is required in production for order emails. Missing: ${missingSmtpVars.join(
+        ', ',
+      )}. Set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM (and optionally SMTP_SECURE).`,
+    );
+  }
 }
 
 /**
@@ -188,6 +199,11 @@ export function getConfigStatus(): {
       OPENAI_API_KEY: Boolean(process.env.OPENAI_API_KEY),
       UPLOADTHING_TOKEN: Boolean(process.env.UPLOADTHING_TOKEN),
       UPLOADTHING_SECRET: Boolean(process.env.UPLOADTHING_SECRET),
+      SMTP_HOST: Boolean(process.env.SMTP_HOST),
+      SMTP_PORT: Boolean(process.env.SMTP_PORT),
+      SMTP_USER: Boolean(process.env.SMTP_USER),
+      SMTP_PASS: Boolean(process.env.SMTP_PASS),
+      SMTP_FROM: Boolean(process.env.SMTP_FROM),
       ...(isProduction && {
         ADMIN_AUTH: Boolean(
           (process.env.ADMIN_BASIC_USER && process.env.ADMIN_BASIC_PASSWORD) ||
@@ -200,6 +216,7 @@ export function getConfigStatus(): {
       SENTRY_ORG: Boolean(process.env.SENTRY_ORG),
       SENTRY_PROJECT: Boolean(process.env.SENTRY_PROJECT),
       REDIS_URL: Boolean(process.env.REDIS_URL),
+      SMTP_SECURE: Boolean(process.env.SMTP_SECURE),
     },
     optional: {
       NEXT_PUBLIC_SITE_NAME: Boolean(process.env.NEXT_PUBLIC_SITE_NAME),

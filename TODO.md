@@ -1,31 +1,5 @@
 # TODO — Production Readiness Audit
 
-## P1 — Critical (Launch Blockers)
-
-- [x] **WHAT:** Wire Next.js middleware to protect `/create` routes.
-      **WHY:** `src/proxy.ts` exports a `proxy` function that redirects unauthenticated users to `/login`, but Next.js requires `middleware.ts` at the project root with a default export. Without it, the proxy never runs and `/create` is fully accessible to anyone.
-      **HOW:** Created `middleware.ts` at project root that delegates to the proxy function. Proxy now handles all routes, protecting `/create/*` (Shopify auth) and `/admin/*` (admin auth). Matcher config runs for all routes except static assets.
-
-- [x] **WHAT:** Protect admin pages (`/admin/*`) with authentication.
-      **WHY:** Admin layout (`src/app/admin/layout.tsx`) calls `getAdminGenerationSnapshot()` and renders admin UI without any auth check. Only API routes (`/api/admin/*`) use `requireAdminAuth`. Anyone can view generation logs, orders, and admin dashboard.
-      **HOW:** Added admin auth check in proxy function for `/admin/*` routes. Also added defense-in-depth check in admin layout using `isAdminAuthorized(headers())` that redirects to login if unauthorized.
-
-- [ ] **WHAT:** Issue API session cookies when users visit `/create`.
-      **WHY:** `issueApiSessionCookie` exists in `src/core/utils/auth.ts` but is never called. When `AI_API_SECRET` or `UPLOADTHING_API_SECRET` are set in production, browser users must have a valid session cookie to call `/api/ai/generate` and `/api/uploadthing`. Without issuing the cookie, the create flow is broken for authenticated users.
-      **HOW:** Add a route handler or middleware that runs when users visit `/create` (or `/create/*`), calls `issueApiSessionCookie(response, request, 'ai')` and `issueApiSessionCookie(response, request, 'upload')`, and returns the response with the cookie set. Alternatively, integrate into the create layout or a dedicated API route that the create page calls on mount.
-
-- [ ] **WHAT:** Document SMTP environment variables in `.env.example`.
-      **WHY:** `src/infra/email/index.ts` uses `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` for order confirmation emails. These are not listed in `.env.example`. Order emails will fail or behave unexpectedly if SMTP is not configured.
-      **HOW:** Add a section to `.env.example` under "Required" or "Production" with `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, and optionally `SMTP_SECURE`. Add validation in `src/core/config/validation.ts` if order emails are required for production.
-
-- [ ] **WHAT:** Remove debug `console.log` from auth service.
-      **WHY:** `src/domains/auth/services/auth.service.ts` lines 95–96 log `customerAccessToken` and `customerUserErrors` on every login. This can leak sensitive data in production logs.
-      **HOW:** Remove the two `console.log` calls. Use `logger.debug` with redacted context if debug logging is needed in development.
-
-- [x] **WHAT:** Add `requireAdminAuth` check before fetching admin data in admin layout.
-      **WHY:** Admin layout fetches `getAdminGenerationSnapshot()` on every render. If middleware is added later, the layout still needs to guard against direct access. Defense in depth: layout should not render admin data without auth.
-      **HOW:** Added `isAdminAuthorized(await headers())` check in admin layout that redirects to login if unauthorized. This provides defense in depth alongside the proxy middleware protection.
-
 ## P2 — High Priority
 
 - [ ] **WHAT:** Enforce auth on account sub-pages (wishlist, creations, update).

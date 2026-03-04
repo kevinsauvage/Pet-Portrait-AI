@@ -1,7 +1,6 @@
-import type { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import { createErrorResponse, HTTP_STATUS } from '@/core/utils/api-responses';
-import { getSecureCookieOptions } from '@/core/utils/cookie-security';
 import { getClientContext } from '@/core/utils/request-identity';
 
 import { timingSafeEqual } from 'crypto';
@@ -52,7 +51,6 @@ export function isApiAuthorized(headers: Headers, envVar: string): boolean {
 
 type ApiSessionScope = 'ai' | 'upload';
 
-const SESSION_TTL_SECONDS = 15 * 60;
 const SESSION_VERSION = 1;
 
 const COOKIE_NAMES: Record<ApiSessionScope, string> = {
@@ -109,26 +107,11 @@ async function hmacSha256Hex(secret: string, value: string): Promise<string> {
   return toHex(signature);
 }
 
-function base64UrlEncode(value: string): string {
-  return Buffer.from(value, 'utf8')
-    .toString('base64')
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-}
-
 function base64UrlDecode(value: string): string {
   const padded = value.replace(/-/g, '+').replace(/_/g, '/');
   const padLength = (4 - (padded.length % 4)) % 4;
   const withPadding = `${padded}${'='.repeat(padLength)}`;
   return Buffer.from(withPadding, 'base64').toString('utf8');
-}
-
-async function serializeSession(payload: SessionPayload, secret: string): Promise<string> {
-  const json = JSON.stringify(payload);
-  const encoded = base64UrlEncode(json);
-  const signature = await hmacSha256Hex(secret, encoded);
-  return `${encoded}.${signature}`;
 }
 
 async function parseSession(value: string, secret: string): Promise<SessionPayload | null> {
@@ -145,30 +128,6 @@ async function parseSession(value: string, secret: string): Promise<SessionPaylo
   } catch {
     return null;
   }
-}
-
-/**
- * Issues an API session cookie for same-origin requests
- */
-export async function issueApiSessionCookie(
-  response: NextResponse,
-  request: NextRequest,
-  scope: ApiSessionScope,
-): Promise<void> {
-  const secret = getSecret(scope);
-  if (!secret) return;
-
-  const payload: SessionPayload = {
-    v: SESSION_VERSION,
-    exp: Date.now() + SESSION_TTL_SECONDS * 1000,
-    fp: await sha256Hex(getClientContext(request.headers).identifier),
-  };
-
-  response.cookies.set(
-    COOKIE_NAMES[scope],
-    await serializeSession(payload, secret),
-    getSecureCookieOptions({ maxAge: SESSION_TTL_SECONDS }),
-  );
 }
 
 /**
@@ -252,7 +211,8 @@ export async function requireApiProtection(
   if (!isSameOriginRequest(request)) {
     return createErrorResponse('Forbidden: Request must be from same origin', {
       status: HTTP_STATUS.FORBIDDEN,
-      message: 'Cross-origin requests require Authorization header. Ensure NEXT_PUBLIC_BASE_URL matches your domain.',
+      message:
+        'Cross-origin requests require Authorization header. Ensure NEXT_PUBLIC_BASE_URL matches your domain.',
     });
   }
 

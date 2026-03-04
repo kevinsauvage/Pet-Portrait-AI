@@ -94,8 +94,6 @@ export class AuthService {
     });
 
     const { customerUserErrors, customerAccessToken } = response?.customerAccessTokenCreate || {};
-    console.log('🚀 ~ AuthService ~ login ~ customerAccessToken:', customerAccessToken);
-    console.log('🚀 ~ AuthService ~ login ~ customerUserErrors:', customerUserErrors);
 
     // Map Shopify login errors to a friendly, consistent message
     const normalizedCustomerErrors = normalizeCustomerErrors(
