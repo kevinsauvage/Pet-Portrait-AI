@@ -275,12 +275,6 @@ Predictive search suggestions.
 
 ### Admin
 
-#### `GET /api/admin/generations`
-
-List AI generations (admin only).
-
-**Authentication:** Required (Admin auth)
-
 #### `POST /api/admin/regenerate`
 
 Regenerate AI portrait (admin only).

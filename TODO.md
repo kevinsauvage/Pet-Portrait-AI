@@ -2,10 +2,6 @@
 
 ## P2 — High Priority
 
-- [ ] **WHAT:** Persist generation logs for admin dashboard.
-      **WHY:** `src/domains/ai/repositories/generation-log.repository.ts` uses an in-memory array. Data is lost on server restart. Admin dashboard cannot show historical trends or failures across deployments.
-      **HOW:** Replace in-memory store with Redis (using existing `src/infra/cache`) or a database. Add `getCached`/`setCached` patterns or a dedicated key schema for generation logs. Ensure TTL and max entries are configurable.
-
 - [ ] **WHAT:** Enable E2E tests in CI.
       **WHY:** `e2e/cart-flow.spec.ts` and `e2e/api-routes.spec.ts` exist but are commented out in `.github/workflows/ci.yml`. Critical flows (cart, API auth) are not validated on every PR.
       **HOW:** Uncomment the Playwright install and E2E test steps in CI. Add `PLAYWRIGHT_TEST_BASE_URL` secret or use `http://localhost:3000` with a dev server. Consider running E2E on a schedule or before merge to main.

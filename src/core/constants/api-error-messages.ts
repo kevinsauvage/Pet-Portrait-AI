@@ -23,7 +23,6 @@ export const API_ERROR_MESSAGES = {
   FAILED_TO_UPDATE_CART_LINES: 'Unable to update cart items. Please try again.',
   FAILED_TO_REMOVE_CART_LINE: 'Unable to remove item from cart. Please try again.',
   FAILED_TO_LOGOUT: 'Unable to sign out. Please try again.',
-  FAILED_TO_FETCH_ADMIN_GENERATIONS: 'Unable to load generation data.',
   FAILED_TO_FETCH_PREDICTIVE_SEARCH: 'Unable to load search suggestions. Please try again.',
   AI_PORTRAIT_GENERATION_FAILED: 'Unable to generate portrait. Please try again or contact support if the issue persists.',
   RATE_LIMIT_EXCEEDED: 'Too many requests. Please wait a moment and try again.',

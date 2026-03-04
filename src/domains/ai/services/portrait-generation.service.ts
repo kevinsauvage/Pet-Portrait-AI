@@ -4,10 +4,6 @@ import { getShopConfig } from '@/domains/shop/services';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 
 import { AI_ART_STYLES, type ArtStyleId, type ArtworkGenerationResult } from '../ai-portrait/types';
-import {
-  logGenerationFailure,
-  logGenerationSuccess,
-} from '../repositories/generation-log.repository';
 
 import * as Sentry from '@sentry/nextjs';
 import { randomUUID } from 'crypto';
@@ -150,7 +146,6 @@ export async function generatePetPortraitVariations(
       const b64 = await editImageWithOpenAI(apiKey, prompt, originalPhotoUrl);
       urls.push(await uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`));
     }
-    logGenerationSuccess(generationId, styleId);
     return { urls, generationId, styleId };
   } catch (error) {
     logger.error('Pet portrait generation failed', {
@@ -158,12 +153,6 @@ export async function generatePetPortraitVariations(
       error,
       metadata: { generationId, styleId, originalPhotoUrl },
     });
-    logGenerationFailure(
-      generationId,
-      styleId,
-      error instanceof Error ? error.message : String(error),
-      originalPhotoUrl,
-    );
     throw error;
   }
 }

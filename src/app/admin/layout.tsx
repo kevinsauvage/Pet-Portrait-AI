@@ -2,13 +2,12 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import { getAdminGenerationSnapshot } from '@/domains/ai/services/admin-dashboard.service';
 import AdminNav from '@/ui/components/admin/AdminNav';
 import { Separator } from '@/ui/primitives/separator';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: 'Admin',
-  description: 'Internal admin dashboard for AI portrait generations and orders.',
+  description: 'Internal admin dashboard.',
   url: '/admin',
   noindex: true,
 });
@@ -16,8 +15,6 @@ export const metadata: Metadata = generateMetadataUtil({
 export const dynamic = 'force-dynamic';
 
 const AdminLayout = async ({ children }: { children: ReactNode }) => {
-  const snapshot = getAdminGenerationSnapshot();
-
   return (
     <div className="container mx-auto px-4 py-8 space-y-6">
       <header className="space-y-3">
@@ -25,18 +22,12 @@ const AdminLayout = async ({ children }: { children: ReactNode }) => {
           <div>
             <h1 className="text-2xl font-bold">AI Portrait Admin</h1>
             <p className="text-sm text-muted-foreground">
-              Internal dashboard for AI portrait generations and order handling.
+              Internal dashboard for order handling.
             </p>
           </div>
           <AdminNav
             items={[
               { href: '/admin/overview', label: 'Overview' },
-              {
-                href: '/admin/generations',
-                label: 'Generations',
-                badge: snapshot.totalCount,
-                badgeVariant: 'secondary',
-              },
               { href: '/admin/orders', label: 'POD Orders' },
             ]}
           />
