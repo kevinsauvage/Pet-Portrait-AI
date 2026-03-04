@@ -1,7 +1,11 @@
 'use server';
 
+import { headers } from 'next/headers';
+
 import type { FormActionResult } from '@/core/types/form-actions';
 import { zodErrorsToFormActionResult } from '@/core/utils/form-actions';
+import { getClientContext } from '@/core/utils/request-identity';
+import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
 import { type ContactInput,contactSchema } from '../validation';
 
@@ -23,6 +27,21 @@ export async function contactAction(
   if (!formData.success) {
     const { fieldErrors } = flattenError(formData.error);
     return { ...zodErrorsToFormActionResult(formData.error), ...(fieldErrors as ContactFieldErrors) };
+  }
+
+  // Rate limit check
+  const headersList = await headers();
+  const { ip } = getClientContext(headersList);
+  const rateLimit = await checkRateLimit(ip, {
+    prefix: 'contact',
+    maxRequests: 3,
+    windowMs: 10 * 60 * 1000, // 10 minutes
+  });
+
+  if (!rateLimit.allowed) {
+    return {
+      error: `Too many requests. Please try again after ${rateLimit.retryAfter} seconds.`,
+    };
   }
 
   const { name, email, message } = formData.data;
