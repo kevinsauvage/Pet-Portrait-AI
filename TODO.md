@@ -16,17 +16,9 @@
       **WHY:** `e2e/cart-flow.spec.ts` has a TODO for the full flow. Current tests only verify navigation and empty cart state. No test validates AI generation → add to cart → checkout.
       **HOW:** Add a test that mocks or bypasses AI generation (e.g., uses a pre-generated image URL), adds to cart, and verifies checkout redirect. Ensure test environment has required Shopify credentials or use a test store.
 
-- [ ] **WHAT:** Add error boundary for create flow steps.
-      **WHY:** Create flow has multiple steps (upload, style, generating, select, collections, order). Errors in one step can leave the user stuck without clear recovery.
-      **HOW:** Add `error.tsx` in `src/app/create/` that catches errors and offers "Start over" and "Go home" actions. Ensure the error state is user-friendly and logs to Sentry.
-
 - [ ] **WHAT:** Ensure Gelato print URLs are permanent.
       **WHY:** `gelato_print_url` is passed to Shopify cart lines. Gelato app fetches the file from this URL. UploadThing URLs may have retention policies; if files are deleted, orders will fail.
       **HOW:** Verify UploadThing file retention policy. Document that generated art files must be kept for at least X days (e.g., order fulfillment period). Consider a dedicated storage for order fulfillment with longer retention.
-
-- [ ] **WHAT:** Add `NEXT_PUBLIC_BASE_URL` validation for HTTP in production.
-      **WHY:** `src/core/config/validation.ts` warns when `NEXT_PUBLIC_BASE_URL` uses HTTP in production but does not block. Mixed content or insecure cookies can occur.
-      **HOW:** Consider making HTTP a hard error in production (not just a warning). Add a check in `validateConfig` that throws when `isProduction && url.protocol === 'http:'`.
 
 ## P4 — Low Priority
 
