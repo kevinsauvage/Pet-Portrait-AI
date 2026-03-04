@@ -16,10 +16,6 @@
       **WHY:** `e2e/cart-flow.spec.ts` has a TODO for the full flow. Current tests only verify navigation and empty cart state. No test validates AI generation → add to cart → checkout.
       **HOW:** Add a test that mocks or bypasses AI generation (e.g., uses a pre-generated image URL), adds to cart, and verifies checkout redirect. Ensure test environment has required Shopify credentials or use a test store.
 
-- [ ] **WHAT:** Add Shopify webhook handlers if needed.
-      **WHY:** `src/infra/shopify/webhooks.ts` exports `verifyShopifyWebhook` but no webhook route handlers exist. Docs state Gelato app handles fulfillment and no webhooks are needed for current flow. If order confirmation or inventory sync is required later, handlers are missing.
-      **HOW:** Create `/api/webhooks/shopify/product-update` (or similar) route that verifies HMAC and processes events. Document in `docs/` when webhooks are needed. If not needed, add a comment in `webhooks.ts` explaining the design decision.
-
 - [ ] **WHAT:** Update robots.txt to disallow cart route.
       **WHY:** `src/core/config/robots.ts` disallows `/cart` but the actual cart/order page is `/create/order`. Search engines may still index the cart page.
       **HOW:** Add `/create/order` to the `disallow` array in `ROBOTS_RULES`. Consider disallowing `/create/*` if the create flow is user-specific and not useful for SEO.
