@@ -16,14 +16,6 @@
       **WHY:** `e2e/cart-flow.spec.ts` has a TODO for the full flow. Current tests only verify navigation and empty cart state. No test validates AI generation → add to cart → checkout.
       **HOW:** Add a test that mocks or bypasses AI generation (e.g., uses a pre-generated image URL), adds to cart, and verifies checkout redirect. Ensure test environment has required Shopify credentials or use a test store.
 
-- [ ] **WHAT:** Redirect unauthenticated users from account update page.
-      **WHY:** `src/app/account/update/page.tsx` does not redirect when `user` is null. It renders `UpdateUserForm` which uses `useUserContext`; submitting without user returns "User not found". Poor UX and confusing state.
-      **HOW:** Add `if (!user) redirect(config.routes.login);` at the top of the page, consistent with other account pages.
-
-- [ ] **WHAT:** Validate image URL scheme before fetching in AI generation.
-      **WHY:** `validateImageFromUrl` in `src/domains/ai/ai-portrait/validate-image.ts` fetches any URL. Malicious URLs (e.g., `file://`, `http://internal-service`) could be used for SSRF.
-      **HOW:** Add a whitelist: only allow `https://` URLs from known domains (e.g., `utfs.io`, `*.ufs.sh`, `cdn.shopify.com`, `res.cloudinary.com`). Reject `file://`, `http://internal`, and non-whitelisted hosts before fetching.
-
 - [ ] **WHAT:** Add error boundary for create flow steps.
       **WHY:** Create flow has multiple steps (upload, style, generating, select, collections, order). Errors in one step can leave the user stuck without clear recovery.
       **HOW:** Add `error.tsx` in `src/app/create/` that catches errors and offers "Start over" and "Go home" actions. Ensure the error state is user-friendly and logs to Sentry.
