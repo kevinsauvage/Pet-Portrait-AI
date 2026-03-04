@@ -2,10 +2,6 @@
 
 ## P2 — High Priority
 
-- [ ] **WHAT:** Enforce auth on account sub-pages (wishlist, creations, update).
-      **WHY:** `src/app/account/page.tsx`, `addresses`, `orders`, `edit` redirect to login when user is missing. `wishlist`, `creations`, and `update` do not. Unauthenticated users can view these pages (empty state for wishlist/creations). Update page shows a form that returns "User not found" on submit.
-      **HOW:** Add `const user = await getUser(); if (!user) redirect(config.routes.login);` at the top of `src/app/account/wishlist/page.tsx`, `creations/page.tsx`, and `update/page.tsx` for consistency with other account pages.
-
 - [ ] **WHAT:** Sanitize HTML in `CreateProductRow` and `LegalContent` before `dangerouslySetInnerHTML`.
       **WHY:** `CreateProductRow` (`src/ui/components/create/islands/CreateProductRow.tsx`) uses `product.description` from Shopify without sanitization. `LegalContent` (`src/ui/components/legal/LegalContent.tsx`) uses policy HTML from Shopify. While both are "trusted" sources, defense in depth prevents XSS if Shopify data is ever compromised or misconfigured.
       **HOW:** Import `sanitizeHtml` from `@/core/utils/sanitize` and wrap `product.description` and `html` in `LegalContent` before passing to `dangerouslySetInnerHTML`.
@@ -17,10 +13,6 @@
 - [ ] **WHAT:** Enable E2E tests in CI.
       **WHY:** `e2e/cart-flow.spec.ts` and `e2e/api-routes.spec.ts` exist but are commented out in `.github/workflows/ci.yml`. Critical flows (cart, API auth) are not validated on every PR.
       **HOW:** Uncomment the Playwright install and E2E test steps in CI. Add `PLAYWRIGHT_TEST_BASE_URL` secret or use `http://localhost:3000` with a dev server. Consider running E2E on a schedule or before merge to main.
-
-- [ ] **WHAT:** Re-enable Next.js image optimization.
-      **WHY:** `next.config.ts` has `images.unoptimized: true`. This disables automatic WebP/AVIF, resizing, and lazy loading. Images are served at full size, increasing bandwidth and hurting LCP.
-      **HOW:** Set `images.unoptimized: false` (or remove the line). Ensure all image domains are in `remotePatterns`. If Vercel/Image Optimization is used, verify no conflicts with external domains.
 
 - [ ] **WHAT:** Add rate limiting for contact form submission.
       **WHY:** Contact form has no rate limit. Malicious actors can spam the contact endpoint.

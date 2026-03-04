@@ -1,18 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { COOKIES } from '@/core/config/constants';
-import {
-  createAdminUnauthorizedResponse,
-  isAdminAuthorized,
-} from '@/core/utils/admin-auth';
+import { createAdminUnauthorizedResponse, isAdminAuthorized } from '@/core/utils/admin-auth';
 
-/**
- * Proxy — runs on every request to protect routes
- * Protects:
- * - /create/* routes: Requires Shopify customer authentication
- * - /admin/* routes: Requires admin authentication (Basic Auth or Bearer token)
- * - All other routes: Pass through
- */
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -24,8 +14,12 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Protect create routes - requires Shopify customer token
-  if (pathname.startsWith('/create')) {
+  // Protect customer routes - requires Shopify customer token
+  const requiresCustomerToken =
+    pathname.startsWith('/create') || pathname === '/account' || pathname.startsWith('/account/');
+  console.log('🚀 ~ proxy ~ requiresCustomerToken:', requiresCustomerToken);
+
+  if (requiresCustomerToken) {
     const token = request.cookies.get(COOKIES.shopifyToken)?.value;
 
     if (!token) {

@@ -1,9 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
 
-import { isAdminAuthorized } from '@/core/utils/admin-auth';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAdminGenerationSnapshot } from '@/domains/ai/services/admin-dashboard.service';
 import AdminNav from '@/ui/components/admin/AdminNav';
@@ -19,12 +16,6 @@ export const metadata: Metadata = generateMetadataUtil({
 export const dynamic = 'force-dynamic';
 
 const AdminLayout = async ({ children }: { children: ReactNode }) => {
-  // Defense in depth: verify admin auth even though middleware protects this route
-  const headersList = await headers();
-  if (!isAdminAuthorized(headersList)) {
-    redirect('/login');
-  }
-
   const snapshot = getAdminGenerationSnapshot();
 
   return (

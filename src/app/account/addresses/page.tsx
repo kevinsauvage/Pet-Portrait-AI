@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
@@ -38,12 +37,29 @@ const Addresses = async ({
   });
 
   if (!response) {
-    redirect(config.routes.login);
+    return (
+      <Card>
+        <CardContent>
+          <EmptyState
+            variant="error"
+            image={noAddressIllustration}
+            title="Unable to load addresses"
+            subtitle="We couldn't load your address book. Please try again in a moment."
+            altText="Address load error"
+            primaryAction={
+              <Button variant="default" asChild>
+                <Link href={config.routes.account}>Back to account</Link>
+              </Button>
+            }
+          />
+        </CardContent>
+      </Card>
+    );
   }
 
-  const addresses = mapAddressEdgesToList(response?.customer?.addresses);
+  const addresses = mapAddressEdgesToList(response.customer?.addresses);
 
-  const pageInfo = response?.customer?.addresses.pageInfo;
+  const pageInfo = response.customer?.addresses.pageInfo;
   const user = await getUser();
 
   const hasAddresses = Array.isArray(addresses) && addresses.length > 0;

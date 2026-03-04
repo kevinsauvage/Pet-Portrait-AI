@@ -7,10 +7,7 @@ import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { updateAddressAction } from '@/domains/address/actions';
 import { AddressService } from '@/domains/address/services/address.service';
-import {
-  findAddressById,
-  mapAddressNodeToFormData,
-} from '@/domains/address/utils/address-utils';
+import { findAddressById, mapAddressNodeToFormData } from '@/domains/address/utils/address-utils';
 import AddressForm from '@/ui/components/account/AddressForm';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import { Button } from '@/ui/primitives/button';
@@ -32,7 +29,6 @@ type PageProperties = {
   }>;
 };
 
-
 const EditAddress = async ({ searchParams }: PageProperties) => {
   const searchParameters = await searchParams;
   const { id } = searchParameters;
@@ -43,7 +39,24 @@ const EditAddress = async ({ searchParams }: PageProperties) => {
 
   const response = await AddressService.getCustomerAddresses({ first: 100 });
   if (!response) {
-    redirect(config.routes.login);
+    return (
+      <Card>
+        <CardHeaderPattern
+          title="Addresses"
+          size={3}
+          descriptionClassName="max-w-md"
+          description="We couldn't load your addresses. Please try again from your account."
+          actions={
+            <Button variant="secondary" size="sm" asChild>
+              <Link href={config.routes.addresses} className="gap-2">
+                <ArrowLeft size={16} />
+                Back to addresses
+              </Link>
+            </Button>
+          }
+        />
+      </Card>
+    );
   }
 
   const addressNode = findAddressById(response?.customer?.addresses, id);

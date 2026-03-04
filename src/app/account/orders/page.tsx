@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
-import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
@@ -33,11 +31,7 @@ const Page = async ({
     before: searchParameters.before || undefined,
   });
 
-  if (!response) {
-    redirect(config.routes.login);
-  }
-
-  if (response?.customer?.orders === undefined) {
+  if (!response || response?.customer?.orders === undefined) {
     return (
       <EmptyState
         variant="orders"

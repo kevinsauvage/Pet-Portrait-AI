@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
@@ -24,19 +23,11 @@ export const metadata: Metadata = {
 const Page = async () => {
   const user = await getUser();
 
-  if (!user) {
-    redirect(config.routes.login);
-  }
-
   const [ordersResponse, creationsCount, savedPortraitsCount] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 3 }),
     CreationsService.getCreationsCount(),
     WishlistService.getWishlistCount(),
   ]);
-
-  if (!ordersResponse) {
-    redirect(config.routes.login);
-  }
 
   const ordersCount = Number(ordersResponse?.customer?.orders?.totalCount || 0);
   const recentOrders = ordersResponse?.customer?.orders?.edges || [];
@@ -60,7 +51,7 @@ const Page = async () => {
             ordersCount={ordersCount}
             creationsCount={creationsCount}
             savedPortraitsCount={savedPortraitsCount}
-            memberSince={user.createdAt}
+            memberSince={user?.createdAt}
           />
 
           {recentOrders.length > 0 && (
