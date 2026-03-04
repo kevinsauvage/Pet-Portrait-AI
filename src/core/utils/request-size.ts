@@ -15,6 +15,18 @@ type RequestSizeOptions = {
   message?: string;
 };
 
+/**
+ * Enforces request size limits by checking Content-Length header.
+ *
+ * **Limitations:**
+ * - Content-Length header can be spoofed or omitted by malicious clients
+ * - For JSON requests, actual body size should be verified after parsing
+ * - For streaming uploads, UploadThing enforces its own file size limits
+ *
+ * @param request - Next.js request object
+ * @param options - Size limit options
+ * @returns Error response if limit exceeded, null otherwise
+ */
 export function enforceRequestSizeLimit(
   request: NextRequest,
   { scope, status, message }: RequestSizeOptions,
@@ -27,6 +39,30 @@ export function enforceRequestSizeLimit(
 
   const maxBytes = REQUEST_SIZE_LIMITS[scope];
   if (size <= maxBytes) return null;
+
+  return createErrorResponse('Payload too large', {
+    status: status ?? 413,
+    message: message ?? `Request body exceeds limit for ${scope} requests.`,
+  });
+}
+
+/**
+ * Validates actual body size for JSON requests.
+ * This provides a more reliable check than Content-Length header alone.
+ *
+ * @param body - Parsed JSON body (as object or string)
+ * @param scope - Size limit scope
+ * @returns Error response if limit exceeded, null otherwise
+ */
+export function enforceBodySizeLimit(
+  body: unknown,
+  { scope, status, message }: RequestSizeOptions,
+) {
+  const bodyString = typeof body === 'string' ? body : JSON.stringify(body);
+  const actualSize = new TextEncoder().encode(bodyString).length;
+  const maxBytes = REQUEST_SIZE_LIMITS[scope];
+
+  if (actualSize <= maxBytes) return null;
 
   return createErrorResponse('Payload too large', {
     status: status ?? 413,

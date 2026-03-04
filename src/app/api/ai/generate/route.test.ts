@@ -31,6 +31,7 @@ vi.mock('@/core/utils/request-identity', () => ({
 
 vi.mock('@/core/utils/request-size', () => ({
   enforceRequestSizeLimit: vi.fn(() => null),
+  enforceBodySizeLimit: vi.fn(() => null),
 }));
 
 describe('/api/ai/generate route', () => {

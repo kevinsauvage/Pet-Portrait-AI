@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 
-import { enforceRequestSizeLimit, getRequestSizeLimit } from './request-size';
+import { enforceBodySizeLimit, enforceRequestSizeLimit, getRequestSizeLimit } from './request-size';
 
 import { describe, expect, it } from 'vitest';
 
@@ -79,5 +79,53 @@ describe('enforceRequestSizeLimit', () => {
     const result = enforceRequestSizeLimit(req, { scope: 'upload' });
     expect(result).not.toBeNull();
     expect(result?.status).toBe(413);
+  });
+});
+
+describe('enforceBodySizeLimit', () => {
+  it('returns null when body size is within the limit', () => {
+    const smallBody = { data: 'small' };
+    const result = enforceBodySizeLimit(smallBody, { scope: 'ai' });
+    expect(result).toBeNull();
+  });
+
+  it('returns null when body size equals the limit exactly', () => {
+    const limit = getRequestSizeLimit('ai');
+    const exactSizeBody = 'x'.repeat(limit);
+    const result = enforceBodySizeLimit(exactSizeBody, { scope: 'ai' });
+    expect(result).toBeNull();
+  });
+
+  it('returns error response when body size exceeds the limit', async () => {
+    const limit = getRequestSizeLimit('ai');
+    const overLimitBody = 'x'.repeat(limit + 1);
+    const result = enforceBodySizeLimit(overLimitBody, { scope: 'ai' });
+    expect(result).not.toBeNull();
+    expect(result?.status).toBe(413);
+    const body = await result?.json();
+    expect(body.error).toBe('Payload too large');
+  });
+
+  it('handles object bodies correctly', async () => {
+    const limit = getRequestSizeLimit('ai');
+    const largeObject = { data: 'x'.repeat(limit + 1) };
+    const result = enforceBodySizeLimit(largeObject, { scope: 'ai' });
+    expect(result).not.toBeNull();
+    expect(result?.status).toBe(413);
+  });
+
+  it('uses custom status when provided', async () => {
+    const limit = getRequestSizeLimit('ai');
+    const overLimitBody = 'x'.repeat(limit + 1);
+    const result = enforceBodySizeLimit(overLimitBody, { scope: 'ai', status: 400 });
+    expect(result?.status).toBe(400);
+  });
+
+  it('uses custom message when provided', async () => {
+    const limit = getRequestSizeLimit('ai');
+    const overLimitBody = 'x'.repeat(limit + 1);
+    const result = enforceBodySizeLimit(overLimitBody, { scope: 'ai', message: 'Too large!' });
+    const body = await result?.json();
+    expect(body.message).toBe('Too large!');
   });
 });

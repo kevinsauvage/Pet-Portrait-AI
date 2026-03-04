@@ -10,7 +10,7 @@ import {
 import { requireApiProtection } from '@/core/utils/auth';
 import { createPerformanceLogger, logger } from '@/core/utils/logger';
 import { getClientContext } from '@/core/utils/request-identity';
-import { enforceRequestSizeLimit } from '@/core/utils/request-size';
+import { enforceBodySizeLimit, enforceRequestSizeLimit } from '@/core/utils/request-size';
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
@@ -53,6 +53,13 @@ export async function POST(request: NextRequest) {
     if (authError) return authError;
 
     const body = await request.json();
+
+    const bodySizeError = enforceBodySizeLimit(body, {
+      scope: 'ai',
+      status: 413,
+      message: 'Request body must be smaller than 256KB.',
+    });
+    if (bodySizeError) return bodySizeError;
     const parsedBody = parsePortraitGenerationRequest(body);
     if (!parsedBody.success) {
       return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
