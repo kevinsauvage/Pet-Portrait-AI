@@ -2,8 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 
-import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
-
 type CollectionLayoutContentProps = {
   collectionTitle?: string;
   collectionDescription?: string;
@@ -12,7 +10,7 @@ type CollectionLayoutContentProps = {
 
 /**
  * Conditionally shows collection header only on collection pages (not product pages).
- * Product pages have their own H1 and breadcrumbs.
+ * Product pages have their own H1.
  */
 const CollectionLayoutContent = ({
   collectionTitle,
@@ -25,8 +23,6 @@ const CollectionLayoutContent = ({
 
   return (
     <div className="space-y-6">
-      {!isProductPage && <Breadcrumbs />}
-
       {!isProductPage && collectionTitle && (
         <div className="space-y-1">
           <h1 className="text-heading-2 font-semibold tracking-tight">{collectionTitle}</h1>

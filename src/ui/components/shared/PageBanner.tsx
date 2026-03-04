@@ -90,7 +90,11 @@ const PageBanner = ({
           </div>
         )}
       </div>
-      {children && <div className="mt-12 w-full max-w-5xl">{children}</div>}
+      {children && (
+        <div className="mt-12 w-full max-w-5xl flex justify-center">
+          {children}
+        </div>
+      )}
     </div>
   </section>
 );

@@ -75,6 +75,11 @@ const seo = {
         "Have a question about your pet portrait? Our team is here to help. Reach out and we'll get back to you within 24 hours.",
       title: 'Contact Us',
     },
+    faq: {
+      description:
+        'Frequently asked questions about PetPortrait AI — learn about our AI pet portraits, ordering process, shipping, refunds, and more.',
+      title: 'Frequently Asked Questions',
+    },
     privacy: {
       description:
         'Learn how PetPortrait AI protects your privacy and handles your personal data and pet photos.',
@@ -89,6 +94,11 @@ const seo = {
       description:
         'Free shipping on all canvas and poster orders. Digital downloads delivered instantly. Learn about our shipping methods and timelines.',
       title: 'Shipping Policy',
+    },
+    subscription: {
+      description:
+        'Learn about purchase options, subscription plans, and how to cancel or modify your PetPortrait AI subscription.',
+      title: 'Purchase Options & Cancellation Policy',
     },
     terms: {
       description:

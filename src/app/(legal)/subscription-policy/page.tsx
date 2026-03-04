@@ -3,27 +3,27 @@ import type { Metadata } from 'next';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import { getRefundPolicy } from '@/domains/legal/services/policies.service';
+import { getSubscriptionPolicy } from '@/domains/legal/services/policies.service';
 import LegalContent from '@/ui/components/legal/LegalContent';
 import PageBanner from '@/ui/components/shared/PageBanner';
 import MainContent from '@/ui/layouts/MainContent';
 
 export const metadata: Metadata = generateMetadataUtil({
-  title: seo.pages.refund.title,
-  description: seo.pages.refund.description,
-  url: config.routes.refund,
+  title: seo.pages.subscription.title,
+  description: seo.pages.subscription.description,
+  url: config.routes.subscription,
 });
 
-const RefundPage = async () => {
-  const refundPolicy = await getRefundPolicy();
-  const { title, description } = seo.pages.refund;
+const SubscriptionPolicyPage = async () => {
+  const policy = await getSubscriptionPolicy();
+  const { title, description } = seo.pages.subscription;
 
   return (
     <div>
       <PageBanner title={title} description={description} />
       <MainContent className="px-4 py-12 md:px-6 md:py-16">
-        {refundPolicy?.body ? (
-          <LegalContent html={refundPolicy.body} />
+        {policy?.body ? (
+          <LegalContent html={policy.body} />
         ) : (
           <p className="text-muted-foreground">Policy content is not available at this time.</p>
         )}
@@ -32,4 +32,4 @@ const RefundPage = async () => {
   );
 };
 
-export default RefundPage;
+export default SubscriptionPolicyPage;

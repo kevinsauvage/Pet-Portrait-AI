@@ -31,16 +31,16 @@ const NavLinks = ({ links, className, linkClassName }: NavLinksProps) => {
                 className={
                   linkClassName ??
                   cn(
-                    'relative px-3 py-2 text-body-sm font-medium transition-all duration-200 rounded-lg',
+                    'relative px-3.5 py-2 text-body-sm font-medium transition-colors duration-150 rounded-lg',
                     isActive
                       ? 'text-foreground'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/70',
                   )
                 }
               >
                 {link.label}
                 {isActive && (
-                  <span className="absolute inset-x-3 -bottom-px h-[2px] rounded-full bg-primary" />
+                  <span className="absolute inset-x-3 -bottom-[9px] h-[2px] rounded-full bg-primary" />
                 )}
               </Link>
             </li>

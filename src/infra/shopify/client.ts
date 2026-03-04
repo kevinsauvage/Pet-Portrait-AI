@@ -87,6 +87,8 @@ export const storefrontSdk = (cacheOption: 'default' | 'no-store' = 'default') =
 let cachedAdminClient: GraphQLClient | null = null;
 
 const getAdminClient = () => {
+  console.log('🚀 ~ getAdminClient ~ getAdminClient:');
+
   if (cachedAdminClient) return cachedAdminClient;
   if (!ADMIN_URL) {
     throw new Error('Missing SHOPIFY_ADMIN_URL');

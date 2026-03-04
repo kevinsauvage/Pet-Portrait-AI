@@ -1,6 +1,5 @@
 import seo from '@/core/config/seo';
 import ListingHeader from '@/ui/components/catalog/ListingHeader';
-import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import ListDisplay from '@/ui/components/shared/ListDisplay';
 import PageBanner from '@/ui/components/shared/PageBanner';
 import { Skeleton } from '@/ui/primitives/skeleton';
@@ -10,7 +9,6 @@ const Loading = () => {
     <div>
       <PageBanner title={seo.search.title} description={seo.search.description}>
         <div className="space-y-6">
-          <Breadcrumbs />
           <Skeleton className="h-10 w-full max-w-md mx-auto" />
         </div>
       </PageBanner>

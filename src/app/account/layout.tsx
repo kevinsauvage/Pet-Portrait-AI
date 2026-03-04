@@ -1,6 +1,5 @@
 import AccountNavigation from '@/ui/components/account/AccountNavigation';
 import AccountNavigationSheet from '@/ui/components/account/AccountNavigationSheet';
-import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import PageBanner from '@/ui/components/shared/PageBanner';
 import { Card, CardContent } from '@/ui/primitives/card';
@@ -11,9 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <PageBanner
         title="Account"
         description="Welcome to your account dashboard. Here you can view and update your personal information, manage your orders, addresses, and preferences, as well as access all your account-related settings and features."
-      >
-        <Breadcrumbs />
-      </PageBanner>
+      />
       <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="hidden md:block h-fit">
           <CardHeaderPattern

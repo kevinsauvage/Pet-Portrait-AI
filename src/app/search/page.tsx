@@ -11,7 +11,6 @@ import ListingHeader from '@/ui/components/catalog/ListingHeader';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
 import ProductsList from '@/ui/components/catalog/ProductsList';
 import Sort from '@/ui/components/catalog/Sort';
-import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import Search from '@/ui/components/search/Search';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import PageBanner from '@/ui/components/shared/PageBanner';
@@ -33,7 +32,6 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
     <div>
       <PageBanner title={seo.search.title} description={seo.search.description}>
         <div className="space-y-6">
-          <Breadcrumbs />
           <Search searchQuery={searchParameters.searchQuery} />
         </div>
       </PageBanner>

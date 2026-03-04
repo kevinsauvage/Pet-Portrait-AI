@@ -54,9 +54,10 @@
   --radius-lg: 0.875rem;
   --radius-xl: 1.25rem;
 
-  --shadow-card: 0 1px 3px 0 rgba(28,25,23,0.06), 0 1px 2px -1px rgba(28,25,23,0.04);
-  --shadow-card-hover: 0 10px 25px -5px rgba(28,25,23,0.1), 0 4px 10px -6px rgba(28,25,23,0.06);
-  --shadow-elevated: 0 20px 40px -12px rgba(28,25,23,0.12);
+  --shadow-card: 0 1px 3px 0 rgba(28, 25, 23, 0.06), 0 1px 2px -1px rgba(28, 25, 23, 0.04);
+  --shadow-card-hover:
+    0 10px 25px -5px rgba(28, 25, 23, 0.1), 0 4px 10px -6px rgba(28, 25, 23, 0.06);
+  --shadow-elevated: 0 20px 40px -12px rgba(28, 25, 23, 0.12);
 }
 
 .dark {
@@ -100,9 +101,9 @@
   --sidebar-ring: #d97706;
   --input: #3d3630;
 
-  --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.2), 0 1px 2px -1px rgba(0,0,0,0.15);
-  --shadow-card-hover: 0 10px 25px -5px rgba(0,0,0,0.3), 0 4px 10px -6px rgba(0,0,0,0.2);
-  --shadow-elevated: 0 20px 40px -12px rgba(0,0,0,0.35);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px -1px rgba(0, 0, 0, 0.15);
+  --shadow-card-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 10px -6px rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 20px 40px -12px rgba(0, 0, 0, 0.35);
 
   --chart-1: oklch(0.906 0.124 60);
   --chart-2: oklch(0.904 0.113 45);
@@ -508,19 +509,33 @@ h6 {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
-  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--foreground) 6%, transparent) 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--foreground) 6%, transparent) 50%,
+    transparent 100%
+  );
   background-size: 200% 100%;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .animate-float {
@@ -528,7 +543,11 @@ h6 {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 70%, #f59e0b) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 70%, #f59e0b) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -543,7 +562,9 @@ h6 {
 
 .card-elevated {
   box-shadow: var(--shadow-card);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .card-elevated:hover {
@@ -555,6 +576,101 @@ h6 {
   height: 1px;
   margin: 0;
   background: linear-gradient(to right, transparent, var(--border), transparent);
+}
+
+.legal-content {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  line-height: 1.75;
+
+  h1 {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+    color: var(--foreground);
+    font-size: 1.875rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: 1.2;
+  }
+
+  h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--foreground);
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: 1.4;
+  }
+
+  h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--foreground);
+    font-size: 1rem;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  li {
+    padding-left: 0.25rem;
+    margin-bottom: 0.25rem;
+    list-style: inherit;
+  }
+
+  a {
+    color: var(--primary);
+    font-weight: var(--font-weight-medium);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  strong,
+  b {
+    color: var(--foreground);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 3px solid var(--primary);
+    margin-left: 0;
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
 }
 
 .product-description {

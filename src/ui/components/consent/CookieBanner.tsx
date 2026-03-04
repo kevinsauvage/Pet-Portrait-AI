@@ -36,9 +36,20 @@ const CookieBanner = ({ cookieExpiryDays }: CookieBannerProps) => {
   const handleCookies = useCallback(() => {
     const consent = getCookieFront('localConsent');
     if (consent && typeof consent === 'string') {
-      withGtag((gtag) => {
-        gtag('consent', 'update', transformedSettings(JSON.parse(consent) as originalSettingsType));
-      });
+      // Update consent synchronously for returning visitors
+      // This ensures consent is set before any tracking scripts execute
+      const parsedConsent = JSON.parse(consent) as originalSettingsType;
+      const transformedConsent = transformedSettings(parsedConsent);
+      
+      // Update via gtag if available (should be available from GtmScript stub)
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('consent', 'update', transformedConsent);
+      } else {
+        // Fallback: use withGtag wrapper (may have slight delay)
+        withGtag((gtag) => {
+          gtag('consent', 'update', transformedConsent);
+        });
+      }
     } else {
       setShow(true);
     }

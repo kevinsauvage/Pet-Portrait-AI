@@ -7,9 +7,6 @@ import { Skeleton } from '@/ui/primitives/skeleton';
 const Loading = () => {
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
-      <Skeleton className="h-4 w-40" />
-
       {/* Collection heading */}
       <div className="space-y-2">
         <Skeleton className="h-8 w-52" />

@@ -8,7 +8,6 @@ import {
   getProductDetails,
   getProductSeo,
 } from '@/domains/products/services/product-details.service';
-import Breadcrumbs from '@/ui/components/navigation/Breadcrumbs';
 import ProductDescription from '@/ui/components/product/ProductDescription';
 import ProductRecommendations from '@/ui/components/product/ProductRecommendations';
 import HomeSection from '@/ui/components/shared/HomeSection';
@@ -95,11 +94,7 @@ const ProductPage = async ({ params }: PageProperties) => {
       />
 
       <div className="min-h-[calc(100vh-76px)]">
-        <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
-          <Breadcrumbs lastElement={title} />
-        </div>
-
-        <section className="container mx-auto px-4 md:px-6 pb-8 md:pb-12">
+        <section className="container mx-auto px-4 md:px-6 pt-6 md:pt-8 pb-8 md:pb-12">
           <ProductDescription product={product} isModal={false} />
         </section>
 
