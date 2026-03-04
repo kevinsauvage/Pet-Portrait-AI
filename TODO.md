@@ -45,7 +45,3 @@
 - [ ] **WHAT:** Add `priceValidUntil` to product schema.
       **WHY:** `src/core/utils/structured-data.ts` sets `priceValidUntil` to 1 year from now. This is a reasonable default but may not reflect actual pricing.
       **HOW:** If Shopify provides price validity, use it. Otherwise, document the default and consider making it configurable.
-
-- [ ] **WHAT:** Wire order confirmation email to order flow.
-      **WHY:** `sendOrderConfirmation` in `src/domains/orders/services/order-email.service.ts` exists but is never called. Shopify sends its own order confirmation; this service may be intended for custom or additional emails.
-      **HOW:** If custom order emails are required, add a Shopify order webhook handler that calls `sendOrderConfirmation` after verifying the webhook. Ensure SMTP is configured. If not needed, remove or document that Shopify handles order emails.
