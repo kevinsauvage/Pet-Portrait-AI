@@ -4,7 +4,10 @@ import { revalidatePath } from 'next/cache';
 
 import type { FormActionResult } from '@/core/types/form-actions';
 import { createErrorResult, createSuccessResult } from '@/core/utils/form-actions';
+import { logger } from '@/core/utils/logger';
 import { formatZodErrorMessage } from '@/core/utils/zod';
+import { CreationsService } from '@/domains/creations/services/creations.service';
+import { getUser } from '@/domains/user/get-user';
 
 import { parsePortraitGenerationRequest } from '../ai-portrait/request';
 import type { ArtworkGenerationResult } from '../ai-portrait/types';
@@ -72,6 +75,27 @@ export async function generatePortraitAction(
       parsed.data.originalPhotoUrl,
       parsed.data.styleId,
     );
+
+    // Auto-save the creation for logged-in users — fire-and-forget, non-blocking
+    getUser()
+      .then((user) => {
+        if (!user?.id) return;
+        return CreationsService.addCreation(
+          {
+            originalPhotoUrl: parsed.data.originalPhotoUrl,
+            generatedUrls: result.urls,
+            styleId: result.styleId,
+            generationId: result.generationId,
+          },
+          user.id,
+        );
+      })
+      .catch((err) => {
+        logger.error('Failed to auto-save creation', {
+          context: 'generatePortraitAction',
+          error: err,
+        });
+      });
 
     return {
       success: true,

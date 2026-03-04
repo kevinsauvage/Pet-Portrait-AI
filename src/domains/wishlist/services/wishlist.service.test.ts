@@ -7,7 +7,6 @@ vi.mock('@/infra/shopify/server', () => ({
 vi.mock('@/infra/shopify/client', () => ({
   storefrontSdk: vi.fn(() => ({
     getCustomerMetafields: vi.fn().mockResolvedValue({ customer: { metafields: [] } }),
-    getProductsByIds: vi.fn().mockResolvedValue({ nodes: [] }),
   })),
   adminSdk: vi.fn(() => ({
     MetafieldsSet: vi.fn().mockResolvedValue({
@@ -20,7 +19,18 @@ vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
 }));
 
+import type { SavedPortrait } from './wishlist.service';
 import { WISHLIST_MAX_ITEMS, WishlistService } from './wishlist.service';
+
+const makeFakePortrait = (overrides?: Partial<SavedPortrait>): SavedPortrait => ({
+  id: 'portrait-1',
+  imageUrl: 'https://example.com/portrait.jpg',
+  originalPhotoUrl: 'https://example.com/original.jpg',
+  styleId: 'watercolor',
+  generationId: 'gen-1',
+  savedAt: new Date().toISOString(),
+  ...overrides,
+});
 
 describe('WishlistService.requireAuth', () => {
   let getShopifyToken: ReturnType<typeof vi.fn>;
@@ -46,7 +56,7 @@ describe('WishlistService.requireAuth', () => {
   });
 });
 
-describe('WishlistService.getWishlistIds', () => {
+describe('WishlistService.getWishlist', () => {
   let getShopifyToken: ReturnType<typeof vi.fn>;
   let storefrontSdk: ReturnType<typeof vi.fn>;
 
@@ -63,21 +73,23 @@ describe('WishlistService.getWishlistIds', () => {
 
   it('returns empty array when not authenticated', async () => {
     getShopifyToken.mockResolvedValue(null);
-    const ids = await WishlistService.getWishlistIds();
-    expect(ids).toEqual([]);
+    const result = await WishlistService.getWishlist();
+    expect(result).toEqual([]);
   });
 
-  it('returns parsed IDs from metafields', async () => {
+  it('returns parsed portraits from metafields', async () => {
     getShopifyToken.mockResolvedValue('token');
+    const portraits = [makeFakePortrait()];
     storefrontSdk.mockReturnValue({
       getCustomerMetafields: vi.fn().mockResolvedValue({
         customer: {
-          metafields: [{ value: JSON.stringify(['prod-1', 'prod-2']) }],
+          metafields: [{ value: JSON.stringify(portraits) }],
         },
       }),
     });
-    const ids = await WishlistService.getWishlistIds();
-    expect(ids).toEqual(['prod-1', 'prod-2']);
+    const result = await WishlistService.getWishlist();
+    expect(result).toHaveLength(1);
+    expect(result[0]?.id).toBe('portrait-1');
   });
 
   it('returns empty array when metafield value is invalid JSON', async () => {
@@ -87,8 +99,8 @@ describe('WishlistService.getWishlistIds', () => {
         customer: { metafields: [{ value: 'not-json' }] },
       }),
     });
-    const ids = await WishlistService.getWishlistIds();
-    expect(ids).toEqual([]);
+    const result = await WishlistService.getWishlist();
+    expect(result).toEqual([]);
   });
 
   it('returns empty array when metafield value is not an array', async () => {
@@ -98,56 +110,96 @@ describe('WishlistService.getWishlistIds', () => {
         customer: { metafields: [{ value: JSON.stringify({ foo: 'bar' }) }] },
       }),
     });
-    const ids = await WishlistService.getWishlistIds();
-    expect(ids).toEqual([]);
+    const result = await WishlistService.getWishlist();
+    expect(result).toEqual([]);
   });
 });
 
-describe('WishlistService.removeProduct', () => {
+describe('WishlistService.removePortrait', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('returns error when product is not in wishlist', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue(['other-prod']);
-    const result = await WishlistService.removeProduct('not-in-list', 'user-1');
+  it('returns error when portrait is not in wishlist', async () => {
+    vi.spyOn(WishlistService, 'getWishlist').mockResolvedValue([makeFakePortrait({ id: 'other' })]);
+    const result = await WishlistService.removePortrait('not-in-list', 'user-1');
     expect(result.success).toBe(false);
     expect(result.message).toContain('not found');
   });
 
-  it('calls updateWishlist with filtered list when product is present', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue(['prod-1', 'prod-2']);
+  it('calls updateWishlist with filtered list when portrait is present', async () => {
+    const portrait = makeFakePortrait({ id: 'portrait-1' });
+    vi.spyOn(WishlistService, 'getWishlist').mockResolvedValue([portrait]);
     const updateSpy = vi.spyOn(WishlistService, 'updateWishlist').mockResolvedValue({
       success: true,
-      data: ['prod-2'],
+      data: [],
     });
-    await WishlistService.removeProduct('prod-1', 'user-1');
-    expect(updateSpy).toHaveBeenCalledWith(['prod-2'], 'user-1');
+    await WishlistService.removePortrait('portrait-1', 'user-1');
+    expect(updateSpy).toHaveBeenCalledWith([], 'user-1');
   });
 });
 
-describe('WishlistService.addProduct', () => {
+describe('WishlistService.addPortrait', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
-  it('returns existing ids without calling update when product is already present', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue(['prod-1']);
-    const updateSpy = vi.spyOn(WishlistService, 'updateWishlist');
-    const result = await WishlistService.addProduct('prod-1', 'user-1');
-    expect(updateSpy).not.toHaveBeenCalled();
-    expect(result.success).toBe(true);
-    expect(result.data).toContain('prod-1');
+  it('returns duplicate error when portrait imageUrl already exists', async () => {
+    const existing = makeFakePortrait({ imageUrl: 'https://example.com/portrait.jpg' });
+    vi.spyOn(WishlistService, 'getWishlist').mockResolvedValue([existing]);
+
+    const result = await WishlistService.addPortrait(
+      {
+        imageUrl: 'https://example.com/portrait.jpg',
+        originalPhotoUrl: 'https://example.com/original.jpg',
+        styleId: 'watercolor',
+        generationId: 'gen-2',
+      },
+      'user-1',
+    );
+
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('duplicate');
   });
 
-  it('calls updateWishlist with new product appended', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue(['prod-1']);
-    const updateSpy = vi.spyOn(WishlistService, 'updateWishlist').mockResolvedValue({
+  it('returns max error when wishlist is full', async () => {
+    const full = Array.from({ length: WISHLIST_MAX_ITEMS }, (_, i) =>
+      makeFakePortrait({ id: `portrait-${i}`, generationId: `gen-${i}` }),
+    );
+    vi.spyOn(WishlistService, 'getWishlist').mockResolvedValue(full);
+
+    const result = await WishlistService.addPortrait(
+      {
+        imageUrl: 'https://example.com/new.jpg',
+        originalPhotoUrl: 'https://example.com/original.jpg',
+        styleId: 'anime',
+        generationId: 'gen-new',
+      },
+      'user-1',
+    );
+
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('max');
+  });
+
+  it('adds portrait when wishlist is not full', async () => {
+    vi.spyOn(WishlistService, 'getWishlist').mockResolvedValue([]);
+    vi.spyOn(WishlistService, 'updateWishlist').mockResolvedValue({
       success: true,
-      data: ['prod-1', 'prod-2'],
+      data: [makeFakePortrait()],
     });
-    await WishlistService.addProduct('prod-2', 'user-1');
-    expect(updateSpy).toHaveBeenCalledWith(['prod-1', 'prod-2'], 'user-1');
+
+    const result = await WishlistService.addPortrait(
+      {
+        imageUrl: 'https://example.com/portrait.jpg',
+        originalPhotoUrl: 'https://example.com/original.jpg',
+        styleId: 'watercolor',
+        generationId: 'gen-1',
+      },
+      'user-1',
+    );
+
+    expect(result.success).toBe(true);
   });
 });
 
@@ -156,102 +208,31 @@ describe('WishlistService.updateWishlist', () => {
     vi.restoreAllMocks();
   });
 
-  it('returns success when update succeeds (default mock returns success)', async () => {
-    // The module-level mock returns an empty metafields array -> "Couldn't update" failure
-    // We test the actual behavior via spy overrides
+  it('returns success when update succeeds', async () => {
     vi.spyOn(WishlistService, 'updateWishlist').mockResolvedValueOnce({
       success: true,
-      data: ['prod-1'],
+      data: [makeFakePortrait()],
     });
-    const result = await WishlistService.updateWishlist(['prod-1'], 'user-1');
+    const result = await WishlistService.updateWishlist([makeFakePortrait()], 'user-1');
     expect(result.success).toBe(true);
-    expect(result.data).toEqual(['prod-1']);
   });
 
   it('returns failure result shape with message', async () => {
     vi.spyOn(WishlistService, 'updateWishlist').mockResolvedValueOnce({
       success: false,
-      message: 'Something went wrong updating the wishlist',
+      message: 'Something went wrong updating saved portraits',
     });
-    const result = await WishlistService.updateWishlist(['prod-1'], 'user-1');
+    const result = await WishlistService.updateWishlist([makeFakePortrait()], 'user-1');
     expect(result.success).toBe(false);
-    expect(result.message).toContain('wishlist');
+    expect(result.message).toContain('portrait');
   });
 
-  it('default module mock returns failure (no matching metafield value)', async () => {
-    // The module-level adminSdk mock returns empty metafields, so updateWishlist fails
-    const result = await WishlistService.updateWishlist(['prod-1'], 'user-1');
-    expect(result.success).toBe(false);
-  });
-
-  it('limits input to WISHLIST_MAX_ITEMS unique ids', () => {
-    // Test the slicing/deduplication logic directly (pure logic test)
-    const manyIds = Array.from({ length: WISHLIST_MAX_ITEMS + 5 }, (_, i) => `prod-${i}`);
-    const limited = manyIds.slice(0, WISHLIST_MAX_ITEMS);
-    const unique = Array.from(new Set(limited));
+  it('limits input to WISHLIST_MAX_ITEMS unique portraits', () => {
+    const many = Array.from({ length: WISHLIST_MAX_ITEMS + 5 }, (_, i) =>
+      makeFakePortrait({ id: `portrait-${i}` }),
+    );
+    const limited = many.slice(0, WISHLIST_MAX_ITEMS);
+    const unique = Array.from(new Map(limited.map((p) => [p.id, p])).values());
     expect(unique.length).toBeLessThanOrEqual(WISHLIST_MAX_ITEMS);
-  });
-});
-
-describe('WishlistService.addProductWithValidation', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it('returns duplicate error when product is already in wishlist', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue(['prod-1']);
-
-    const result = await WishlistService.addProductWithValidation('prod-1', 'user-1');
-
-    expect(result).toEqual({
-      success: false,
-      reason: 'duplicate',
-      message: 'Product already in wishlist',
-    });
-  });
-
-  it('returns max error when wishlist is full', async () => {
-    const fullWishlist = Array.from({ length: WISHLIST_MAX_ITEMS }, (_, index) => `prod-${index}`);
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue(fullWishlist);
-
-    const result = await WishlistService.addProductWithValidation('new-prod', 'user-1');
-
-    expect(result.success).toBe(false);
-    expect(result.reason).toBe('max');
-    expect(result.message).toContain(`${WISHLIST_MAX_ITEMS}`);
-  });
-
-  it('adds product when wishlist is not full and does not contain product', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue([]);
-
-    const addProductMock = vi.spyOn(WishlistService, 'addProduct').mockResolvedValue({
-      success: true,
-      data: ['new-prod'],
-      message: 'Product correctly added to wishlist',
-    });
-
-    const result = await WishlistService.addProductWithValidation('new-prod', 'user-1');
-
-    expect(addProductMock).toHaveBeenCalledWith('new-prod', 'user-1');
-    expect(result).toEqual({
-      success: true,
-      wishlistIds: ['new-prod'],
-      message: 'Product correctly added to wishlist',
-    });
-  });
-
-  it('returns update_failed when underlying update fails', async () => {
-    vi.spyOn(WishlistService, 'getWishlistIds').mockResolvedValue([]);
-
-    vi.spyOn(WishlistService, 'addProduct').mockResolvedValue({
-      success: false,
-      message: 'Something went wrong',
-    });
-
-    const result = await WishlistService.addProductWithValidation('new-prod', 'user-1');
-
-    expect(result.success).toBe(false);
-    expect(result.reason).toBe('update_failed');
-    expect(result.message).toBe('Something went wrong');
   });
 });

@@ -6,7 +6,7 @@ import config from '@/core/config';
 import { cn } from '@/lib/cn';
 import { Card, CardContent } from '@/ui/primitives/card';
 
-import { Calendar, Heart, MapPin, Package } from 'lucide-react';
+import { Calendar, Heart, Package, Sparkles } from 'lucide-react';
 
 type StatCardProps = {
   title: string;
@@ -48,16 +48,16 @@ const StatCard = ({ title, value, icon, href, description, className }: StatCard
 
 type AccountStatsProps = {
   ordersCount?: number;
-  addressesCount?: number;
-  wishlistCount?: number;
+  creationsCount?: number;
+  savedPortraitsCount?: number;
   memberSince?: string;
   className?: string;
 };
 
 const AccountStats = ({
   ordersCount = 0,
-  addressesCount = 0,
-  wishlistCount = 0,
+  creationsCount = 0,
+  savedPortraitsCount = 0,
   memberSince,
   className,
 }: AccountStatsProps) => {
@@ -79,18 +79,18 @@ const AccountStats = ({
         description="View order history"
       />
       <StatCard
-        title="Saved Addresses"
-        value={addressesCount}
-        icon={<MapPin size={24} className="shrink-0" />}
-        href={config.routes.addresses}
-        description="Manage addresses"
+        title="AI Portraits Created"
+        value={creationsCount}
+        icon={<Sparkles size={24} className="shrink-0" />}
+        href={config.routes.creations}
+        description="View all my creations"
       />
       <StatCard
-        title="Wishlist Items"
-        value={wishlistCount}
+        title="Saved Portraits"
+        value={savedPortraitsCount}
         icon={<Heart size={24} className="shrink-0" />}
         href={config.routes.wishlist}
-        description="View saved items"
+        description="View saved favourites"
       />
       <StatCard
         title="Member Since"

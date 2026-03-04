@@ -4,11 +4,24 @@ import config from '@/core/config';
 import { logger } from '@/core/utils/logger';
 import { adminSdk, storefrontSdk } from '@/infra/shopify/client';
 import { getShopifyToken } from '@/infra/shopify/server';
-import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
 
-export const WISHLIST_MAX_ITEMS = 100;
+export const WISHLIST_MAX_ITEMS = 50;
 
-export type WishlistIds = string[];
+export type SavedPortrait = {
+  id: string;
+  imageUrl: string;
+  originalPhotoUrl: string;
+  styleId: string;
+  generationId: string;
+  label?: string;
+  savedAt: string;
+  /** When saved from cart: variant and product info for one-click add back */
+  variantId?: string;
+  productHandle?: string;
+  gelatoProductUid?: string;
+};
+
+export type WishlistData = SavedPortrait[];
 
 export class WishlistService {
   static async requireAuth(): Promise<string> {
@@ -19,14 +32,14 @@ export class WishlistService {
     return shopifyToken;
   }
 
-  static async getWishlistIds(): Promise<WishlistIds> {
+  static async getWishlist(): Promise<WishlistData> {
     const shopifyToken = await getShopifyToken();
 
     if (!shopifyToken) return [];
 
     const wishlistResponse = await storefrontSdk('no-store').getCustomerMetafields({
       customerAccessToken: shopifyToken,
-      metafields: [{ key: 'wishlist', namespace: 'custom' }],
+      metafields: [{ key: 'portrait_wishlist', namespace: 'custom' }],
     });
 
     const metafields = wishlistResponse?.customer?.metafields;
@@ -37,10 +50,16 @@ export class WishlistService {
         const parsed = JSON.parse(wishlistValue);
 
         if (Array.isArray(parsed)) {
-          return parsed.filter((id): id is string => typeof id === 'string');
+          return parsed.filter(
+            (item): item is SavedPortrait =>
+              typeof item === 'object' && item !== null && typeof item.id === 'string',
+          );
         }
       } catch (error) {
-        logger.error('Failed to parse wishlist IDs', { context: 'WishlistService.getWishlistIds', error });
+        logger.error('Failed to parse portrait wishlist', {
+          context: 'WishlistService.getWishlist',
+          error,
+        });
         return [];
       }
     }
@@ -48,170 +67,131 @@ export class WishlistService {
     return [];
   }
 
-  private static async resolveProductsByIds(
-    productIds: string[],
-  ): Promise<ProductFieldsFragment[]> {
-    if (productIds.length === 0) return [];
-
-    try {
-      const response = await storefrontSdk('no-store').getProductsByIds({
-        ids: productIds,
-        identifiers: [],
-      });
-
-      if (!response.nodes || response.nodes.length === 0) {
-        return [];
-      }
-
-      const productMap = new Map(
-        response.nodes
-          .filter((node) => node !== null && node !== undefined)
-          .map((node) => {
-            const product = node as unknown as ProductFieldsFragment;
-            return [product.id, product] as [string, ProductFieldsFragment];
-          }),
-      );
-
-      return productIds
-        .map((id) => productMap.get(id))
-        .filter((p): p is ProductFieldsFragment => p !== undefined);
-    } catch (error) {
-      logger.error('Failed to resolve products by IDs', { context: 'WishlistService.resolveProductsByIds', error });
-      return [];
-    }
-  }
-
-  static async getWishlist(): Promise<ProductFieldsFragment[]> {
-    const productIds = await this.getWishlistIds();
-    return this.resolveProductsByIds(productIds);
-  }
-
-  private static createWishlistMetafields(productIds: WishlistIds, userId: string) {
-    const limitedIds = productIds.slice(0, WISHLIST_MAX_ITEMS);
+  private static createWishlistMetafields(portraits: WishlistData, userId: string) {
+    const limited = portraits.slice(0, WISHLIST_MAX_ITEMS);
 
     return {
       metafields: [
         {
-          key: 'wishlist',
+          key: 'portrait_wishlist',
           namespace: 'custom',
           ownerId: userId,
           type: 'json',
-          value: JSON.stringify(limitedIds),
+          value: JSON.stringify(limited),
         },
       ],
     };
   }
 
   static async updateWishlist(
-    productIds: WishlistIds,
+    portraits: WishlistData,
     userId: string,
-  ): Promise<{ success: boolean; data?: WishlistIds; message?: string }> {
-    const limitedIds = productIds.slice(0, WISHLIST_MAX_ITEMS);
-    const uniqueIds = Array.from(new Set(limitedIds));
+  ): Promise<{ success: boolean; data?: WishlistData; message?: string }> {
+    const limited = portraits.slice(0, WISHLIST_MAX_ITEMS);
+    const unique = Array.from(new Map(limited.map((p) => [p.id, p])).values());
 
-    const { metafields } = this.createWishlistMetafields(uniqueIds, userId);
+    const { metafields } = this.createWishlistMetafields(unique, userId);
 
     const responseMetafield = await adminSdk().MetafieldsSet({ metafields });
     const errors = responseMetafield?.metafieldsSet?.userErrors;
 
     if (errors && errors.length > 0) {
-      logger.error('MetafieldsSet errors when updating wishlist', { context: 'WishlistService.updateWishlist', metadata: { errors } });
+      logger.error('MetafieldsSet errors when updating portrait wishlist', {
+        context: 'WishlistService.updateWishlist',
+        metadata: { errors },
+      });
       return {
         success: false,
-        message: 'Something went wrong updating the wishlist',
+        message: 'Something went wrong updating your saved portraits',
       };
     }
 
     const value = responseMetafield?.metafieldsSet?.metafields?.filter(
-      (field) => field.key === 'wishlist',
+      (field) => field.key === 'portrait_wishlist',
     )?.[0]?.value;
 
     if (value) {
       try {
-        const parsed = JSON.parse(value) as WishlistIds;
+        const parsed = JSON.parse(value) as WishlistData;
         this.revalidate();
-        return {
-          success: true,
-          data: parsed,
-        };
+        return { success: true, data: parsed };
       } catch (error) {
-        logger.error('Failed to parse wishlist response', { context: 'WishlistService.updateWishlist', error });
-        return {
-          success: false,
-          message: "Couldn't parse wishlist response",
-        };
+        logger.error('Failed to parse portrait wishlist response', {
+          context: 'WishlistService.updateWishlist',
+          error,
+        });
+        return { success: false, message: "Couldn't parse saved portraits response" };
       }
     }
 
-    return {
-      success: false,
-      message: "Couldn't update user wishlist",
-    };
+    return { success: false, message: "Couldn't update saved portraits" };
   }
 
-  static async addProduct(productId: string, userId: string) {
-    const currentIds = await this.getWishlistIds();
+  static async addPortrait(portrait: Omit<SavedPortrait, 'id' | 'savedAt'>, userId: string) {
+    const current = await this.getWishlist();
 
-    if (currentIds.includes(productId)) {
-      return { success: true, data: currentIds, message: 'Product already in wishlist' };
-    }
+    const alreadySaved = current.some(
+      (p) => p.imageUrl === portrait.imageUrl || p.generationId === portrait.generationId,
+    );
 
-    const newIds = [...currentIds, productId];
-    return this.updateWishlist(newIds, userId);
-  }
-
-  static async removeProduct(productId: string, userId: string) {
-    const currentIds = await this.getWishlistIds();
-    const newIds = currentIds.filter((id) => id !== productId);
-
-    if (currentIds.length === newIds.length) {
+    if (alreadySaved) {
       return {
         success: false,
-        message: 'Product not found in wishlist',
+        reason: 'duplicate' as const,
+        message: 'Portrait already saved to favourites',
       };
     }
 
-    return this.updateWishlist(newIds, userId);
-  }
-
-  static async addProductWithValidation(productId: string, userId: string) {
-    const currentIds = await this.getWishlistIds();
-
-    if (currentIds.includes(productId)) {
+    if (current.length >= WISHLIST_MAX_ITEMS) {
       return {
         success: false,
-        reason: 'duplicate',
-        message: 'Product already in wishlist',
-      } as const;
+        reason: 'max' as const,
+        message: `Favourites is full. Maximum ${WISHLIST_MAX_ITEMS} portraits allowed.`,
+      };
     }
 
-    if (currentIds.length >= WISHLIST_MAX_ITEMS) {
-      return {
-        success: false,
-        reason: 'max',
-        message: `Wishlist is full. Maximum ${WISHLIST_MAX_ITEMS} items allowed.`,
-      } as const;
-    }
+    const newPortrait: SavedPortrait = {
+      ...portrait,
+      id: `${portrait.generationId}-${Date.now()}`,
+      savedAt: new Date().toISOString(),
+    };
 
-    const result = await this.addProduct(productId, userId);
+    const result = await this.updateWishlist([...current, newPortrait], userId);
 
     if (!result.success || result.data === undefined) {
       return {
         success: false,
-        reason: 'update_failed',
-        message: result.message || "Couldn't add product to user wishlist",
-      } as const;
+        reason: 'update_failed' as const,
+        message: result.message || "Couldn't save portrait to favourites",
+      };
     }
 
     return {
-      success: true,
-      wishlistIds: result.data,
-      message: 'Product correctly added to wishlist',
-    } as const;
+      success: true as const,
+      data: result.data,
+      message: 'Portrait saved to favourites',
+    };
+  }
+
+  static async removePortrait(portraitId: string, userId: string) {
+    const current = await this.getWishlist();
+    const updated = current.filter((p) => p.id !== portraitId);
+
+    if (current.length === updated.length) {
+      return { success: false, message: 'Portrait not found in favourites' };
+    }
+
+    return this.updateWishlist(updated, userId);
+  }
+
+  static async getWishlistCount(): Promise<number> {
+    const wishlist = await this.getWishlist();
+    return wishlist.length;
   }
 
   static revalidate(): void {
     revalidatePath(config.routes.wishlist);
+    revalidatePath(config.routes.creations);
     revalidatePath('/', 'layout');
   }
 }

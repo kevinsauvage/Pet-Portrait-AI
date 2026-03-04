@@ -1,5 +1,7 @@
 import { storefrontSdk } from '@/infra/shopify/client';
 
+import { getFirstAvailableVariant } from './utils/product-utils';
+import { getAiPortraitCollections } from './get-ai-portrait-collections.service';
 import type { AiPortraitProduct, AiPortraitProductVariant } from './products';
 
 function mapVariant(node: {
@@ -66,4 +68,22 @@ export async function getAiPortraitProductsByCollection(
     collectionTitle: collection.title,
     products,
   };
+}
+
+export async function getDefaultAiPortraitProduct(): Promise<{
+  product: AiPortraitProduct;
+  variant: AiPortraitProductVariant;
+} | null> {
+  const collections = await getAiPortraitCollections();
+  const firstCollection = collections[0];
+  if (!firstCollection) return null;
+
+  const data = await getAiPortraitProductsByCollection(firstCollection.handle);
+  const firstProduct = data?.products[0];
+  if (!firstProduct) return null;
+
+  const variant = getFirstAvailableVariant(firstProduct.variants) ?? firstProduct.variants[0];
+  if (!variant) return null;
+
+  return { product: firstProduct, variant };
 }

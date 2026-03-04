@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import seo from '@/core/config/seo';
-import { AddressService } from '@/domains/address/services/address.service';
+import { CreationsService } from '@/domains/creations/services/creations.service';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
@@ -21,21 +21,19 @@ export const metadata: Metadata = {
 const Page = async () => {
   const user = await getUser();
 
-  const [ordersResponse, addressesResponse, wishlist] = await Promise.all([
+  const [ordersResponse, creationsCount, savedPortraitsCount] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 1 }),
-    AddressService.getCustomerAddresses({ first: 1 }),
-    WishlistService.getWishlist(),
+    CreationsService.getCreationsCount(),
+    WishlistService.getWishlistCount(),
   ]);
 
   const ordersCount = Number(ordersResponse?.customer?.orders?.totalCount || 0);
-  const addressesCount = addressesResponse?.customer?.addresses?.edges?.length || 0;
-  const wishlistCount = wishlist?.length || 0;
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeaderPattern
-          title="Update Account"
+          title="My Details"
           size={3}
           actions={<BackButton />}
           description="Update your account information and preferences."
@@ -48,15 +46,15 @@ const Page = async () => {
       {user && (
         <Card>
           <CardHeaderPattern
-            title="Account Statistics"
+            title="Account Summary"
             size={4}
             description="Overview of your account activity"
           />
           <CardContent>
             <AccountStats
               ordersCount={ordersCount}
-              addressesCount={addressesCount}
-              wishlistCount={wishlistCount}
+              creationsCount={creationsCount}
+              savedPortraitsCount={savedPortraitsCount}
               memberSince={user.createdAt}
             />
           </CardContent>

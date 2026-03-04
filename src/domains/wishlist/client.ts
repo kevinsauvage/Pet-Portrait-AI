@@ -1,25 +1,24 @@
 'use client';
 
 import { api } from '@/infra/http/api-client';
-import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
+
+import type { SavedPortrait } from './services/wishlist.service';
+import type { WishlistAddInput } from './validation';
 
 type WishlistResponse = {
   success?: boolean;
   error?: boolean;
   message?: string;
-  data?: ProductFieldsFragment[];
+  data?: SavedPortrait[];
 };
 
-/**
- * Client-side wishlist API utilities
- * Functions for adding/removing products from wishlist via API
- */
-
-export const addToWishlist = async (productId: string): Promise<WishlistResponse> => {
-  return api.post<WishlistResponse>('/api/wishlist', { productId });
+export const savePortraitToWishlist = async (
+  input: WishlistAddInput,
+): Promise<WishlistResponse> => {
+  return api.post<WishlistResponse>('/api/wishlist', input);
 };
 
-export const removeFromWishlist = async (productId: string): Promise<WishlistResponse> => {
-  const encodedProductId = encodeURIComponent(productId);
-  return api.delete<WishlistResponse>(`/api/wishlist/${encodedProductId}`);
+export const removePortraitFromWishlist = async (portraitId: string): Promise<WishlistResponse> => {
+  const encodedId = encodeURIComponent(portraitId);
+  return api.delete<WishlistResponse>(`/api/wishlist/${encodedId}`);
 };

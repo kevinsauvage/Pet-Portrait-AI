@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
+import { useSearchParams } from 'next/navigation';
 
 import { userFeedback } from '@/core/config/userFeedback';
 import { registerAction } from '@/domains/auth/actions';
@@ -23,17 +24,19 @@ const SubmitButton = () => {
   );
 };
 
-const handleSubmit = async (_previousState: unknown, formData_: FormData) => {
-  const email = formData_.get('email') as string;
-  const firstName = formData_.get('firstName') as string;
-  const lastName = formData_.get('lastName') as string;
-  const password = formData_.get('password') as string;
-  const passwordConfirm = formData_.get('passwordConfirm') as string;
-
-  return registerAction({ email, firstName, lastName, password, passwordConfirm });
-};
-
 const RegisterForm = () => {
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') ?? undefined;
+
+  const handleSubmit = async (_previousState: unknown, formData_: FormData) => {
+    const email = formData_.get('email') as string;
+    const firstName = formData_.get('firstName') as string;
+    const lastName = formData_.get('lastName') as string;
+    const password = formData_.get('password') as string;
+    const passwordConfirm = formData_.get('passwordConfirm') as string;
+
+    return registerAction({ email, firstName, lastName, password, passwordConfirm, redirectUrl });
+  };
   const initialStates = {
     email: '',
     firstName: '',

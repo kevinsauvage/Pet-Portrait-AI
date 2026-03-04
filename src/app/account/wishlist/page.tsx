@@ -1,44 +1,49 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import config from '@/core/config';
 import seo from '@/core/config/seo';
+import { getDefaultAiPortraitProduct } from '@/domains/ai/ai-portrait/get-ai-portrait-product.service';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import { noFavoriteIllustration } from '@/lib/illustrations';
-import ProductsList from '@/ui/components/catalog/ProductsList';
+import SavedPortraitsList from '@/ui/components/account/SavedPortraitsList';
 import BackButton from '@/ui/components/shared/BackButton';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import EmptyState from '@/ui/components/shared/EmptyState';
 import { Button } from '@/ui/primitives/button';
 import { Card, CardContent } from '@/ui/primitives/card';
 
-export const dynamic = 'force-dynamic'; // Wishlist is user-specific
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   description: seo.account.wishlist.description,
   title: seo.account.wishlist.title,
 };
 
-const Wishlist = async () => {
-  const userWishlist = await WishlistService.getWishlist();
+const WishlistPage = async () => {
+  const [savedPortraits, defaultProduct] = await Promise.all([
+    WishlistService.getWishlist(),
+    getDefaultAiPortraitProduct(),
+  ]);
 
-  if (!userWishlist?.length) {
+  if (!savedPortraits.length) {
     return (
       <Card>
         <CardContent>
           <EmptyState
             variant="wishlist"
             image={noFavoriteIllustration}
-            title="Your wishlist is empty"
-            subtitle="Save your favorite items for later. Click the heart icon on any product to add it to your wishlist."
-            altText="Empty wishlist"
+            title="No saved portraits yet"
+            subtitle="When you generate portraits, tap the heart icon to save your favourites here. Then order them anytime."
+            altText="No saved portraits"
             primaryAction={
               <Button variant="default" asChild>
-                <Link href="/">Start Shopping</Link>
+                <Link href={config.routes.create}>Create a portrait</Link>
               </Button>
             }
             secondaryAction={
-              <Link href="/shop" className="link">
-                Browse collections
+              <Link href={config.routes.creations} className="link">
+                View my creations
               </Link>
             }
           />
@@ -50,16 +55,29 @@ const Wishlist = async () => {
   return (
     <Card>
       <CardHeaderPattern
-        title={`Wishlist (${userWishlist.length})`}
+        title={`Saved Portraits (${savedPortraits.length})`}
         size={3}
         actions={<BackButton />}
-        description={`You have ${userWishlist.length} ${userWishlist.length === 1 ? 'item' : 'items'} saved in your wishlist.`}
+        description={`You have ${savedPortraits.length} saved portrait${savedPortraits.length === 1 ? '' : 's'}. Click any portrait to order it as a print or digital download.`}
       />
       <CardContent>
-        <ProductsList loading={false} layout="grid" products={userWishlist} />
+        <SavedPortraitsList
+          portraits={savedPortraits}
+          defaultProduct={
+            defaultProduct
+              ? {
+                  product: {
+                    handle: defaultProduct.product.handle,
+                    gelatoProductUid: defaultProduct.product.gelatoProductUid,
+                  },
+                  variant: defaultProduct.variant,
+                }
+              : null
+          }
+        />
       </CardContent>
     </Card>
   );
 };
 
-export default Wishlist;
+export default WishlistPage;

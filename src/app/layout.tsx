@@ -11,7 +11,6 @@ import { generateOrganizationSchema, generateWebSiteSchema } from '@/core/utils/
 import { CartService } from '@/domains/cart/services/cart.service';
 import { getSiteMenus } from '@/domains/navigation/services/menu.service';
 import { getUser } from '@/domains/user/get-user';
-import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import CookieBannerWrapper from '@/ui/components/consent/CookieBannerWrapper';
 import GtmScript from '@/ui/components/consent/GtmScript';
 import Footer from '@/ui/components/navigation/Footer';
@@ -61,11 +60,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const [menus, initialCart, user, userWishlist] = await Promise.all([
+  const [menus, initialCart, user] = await Promise.all([
     getSiteMenus(),
     CartService.getExistingCart(),
     getUser(),
-    WishlistService.getWishlist(),
   ]);
 
   return (
@@ -109,7 +107,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           disableTransitionOnChange
         >
           <CartProvider initialCart={initialCart}>
-            <UserProvider user={user} userWishlist={userWishlist}>
+            <UserProvider user={user}>
               <SkipLinks />
               <div className="relative z-10 flex min-h-screen flex-col">
                 <Header headerMenu={menus.headerMenu} />

@@ -7,7 +7,7 @@ import { ArrowRight } from 'lucide-react';
 const CheckoutButton = ({ checkoutUrl }: { checkoutUrl: string }) => {
   return (
     <Button 
-      className="w-full py-6 text-body-lg font-semibold shadow-lg hover:shadow-xl transition-shadow" 
+      className="w-full py-6 text-body-lg font-semibold shadow-lg hover:shadow-xl transition-shadow text-white" 
       size="lg"
       asChild
     >

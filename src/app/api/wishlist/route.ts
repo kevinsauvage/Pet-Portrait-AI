@@ -29,11 +29,14 @@ export async function POST(request: NextRequest) {
     const user = await getUser();
 
     if (!user?.id) {
-      return createErrorResponse(API_ERROR_MESSAGES.USER_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
+      return createErrorResponse(API_ERROR_MESSAGES.USER_NOT_FOUND, {
+        status: HTTP_STATUS.NOT_FOUND,
+      });
     }
 
     const body = await request.json();
     const parsedBody = wishlistAddSchema.safeParse(body);
+
     if (!parsedBody.success) {
       return createErrorResponse(API_ERROR_MESSAGES.MISSING_OR_INVALID_PRODUCT_ID, {
         message: formatZodErrorMessage(parsedBody.error),
@@ -41,9 +44,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const { productId } = parsedBody.data;
-
-    const result = await WishlistService.addProductWithValidation(productId, user.id);
+    const result = await WishlistService.addPortrait(parsedBody.data, user.id);
 
     if (!result.success) {
       const status =
@@ -57,12 +58,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const wishlist = await WishlistService.getWishlist();
-    return createSuccessResponse(wishlist, {
+    return createSuccessResponse(result.data, {
       message: result.message,
       noCache: true,
     });
   } catch (error) {
-    return handleApiError('POST /api/wishlist', error, API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT_TO_WISHLIST);
+    return handleApiError(
+      'POST /api/wishlist',
+      error,
+      API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT_TO_WISHLIST,
+    );
   }
 }

@@ -11,7 +11,7 @@ vi.mock('@/domains/wishlist/services/wishlist.service', () => ({
   WishlistService: {
     getWishlist: vi.fn(),
     requireAuth: vi.fn(),
-    addProductWithValidation: vi.fn(),
+    addPortrait: vi.fn(),
   },
 }));
 
@@ -25,7 +25,7 @@ describe('/api/wishlist route', () => {
   });
 
   it('GET returns wishlist from service', async () => {
-    const wishlist = [{ id: 'prod-1' }] as unknown[];
+    const wishlist = [{ id: 'portrait-1' }] as unknown[];
     const getWishlistMock = WishlistService.getWishlist as unknown as ReturnType<typeof vi.fn>;
     getWishlistMock.mockResolvedValue(wishlist);
 
@@ -33,57 +33,61 @@ describe('/api/wishlist route', () => {
 
     expect(response.status).toBe(200);
 
-    const body = (await (response as any).json()) as any;
+    const body = (await (response as unknown as Response).json()) as { success: boolean; data: unknown };
     expect(body.success).toBe(true);
     expect(body.data).toEqual(wishlist);
   });
 
-  it('POST adds a product and returns updated wishlist', async () => {
+  it('POST adds a portrait and returns updated wishlist', async () => {
     const requireAuthMock = WishlistService.requireAuth as unknown as ReturnType<typeof vi.fn>;
     requireAuthMock.mockResolvedValue('token');
 
     const getUserMock = getUser as unknown as ReturnType<typeof vi.fn>;
     getUserMock.mockResolvedValue({ id: 'user-1' });
 
-    const addProductWithValidationMock =
-      WishlistService.addProductWithValidation as unknown as ReturnType<typeof vi.fn>;
-    addProductWithValidationMock.mockResolvedValue({
+    const addPortraitMock = WishlistService.addPortrait as unknown as ReturnType<typeof vi.fn>;
+    addPortraitMock.mockResolvedValue({
       success: true,
-      wishlistIds: ['prod-1'],
-      message: 'Product correctly added to wishlist',
+      data: [{ id: 'portrait-1' }],
+      message: 'Portrait saved to favourites',
     });
 
-    const wishlist = [{ id: 'prod-1' }] as unknown[];
     const getWishlistMock = WishlistService.getWishlist as unknown as ReturnType<typeof vi.fn>;
-    getWishlistMock.mockResolvedValue(wishlist);
+    getWishlistMock.mockResolvedValue([{ id: 'portrait-1' }]);
 
     const request = {
-      json: vi.fn().mockResolvedValue({ productId: 'prod-1' }),
+      json: vi.fn().mockResolvedValue({
+        imageUrl: 'https://example.com/portrait.jpg',
+        originalPhotoUrl: 'https://example.com/original.jpg',
+        styleId: 'watercolor',
+        generationId: 'gen-1',
+      }),
     } as unknown as NextRequest;
 
     const response = await POST(request);
 
     expect(requireAuthMock).toHaveBeenCalled();
-    expect(addProductWithValidationMock).toHaveBeenCalledWith('prod-1', 'user-1');
+    expect(addPortraitMock).toHaveBeenCalled();
 
     expect(response.status).toBe(200);
-    const body = (await (response as any).json()) as any;
+    const body = (await (response as unknown as Response).json()) as {
+      success: boolean;
+      message: string;
+    };
 
     expect(body.success).toBe(true);
-    expect(body.data).toEqual(wishlist);
-    expect(body.message).toBe('Product correctly added to wishlist');
-    expect((response as any).headers.get('Cache-Control')).toContain('no-store');
+    expect(body.message).toBe('Portrait saved to favourites');
+    expect((response as unknown as Response).headers.get('Cache-Control')).toContain('no-store');
   });
 
-  it('POST returns validation error when productId is missing', async () => {
+  it('POST returns validation error when required fields are missing', async () => {
     const requireAuthMock = WishlistService.requireAuth as unknown as ReturnType<typeof vi.fn>;
     requireAuthMock.mockResolvedValue('token');
 
     const getUserMock = getUser as unknown as ReturnType<typeof vi.fn>;
     getUserMock.mockResolvedValue({ id: 'user-1' });
 
-    const addProductWithValidationMock =
-      WishlistService.addProductWithValidation as unknown as ReturnType<typeof vi.fn>;
+    const addPortraitMock = WishlistService.addPortrait as unknown as ReturnType<typeof vi.fn>;
 
     const request = {
       json: vi.fn().mockResolvedValue({}),
@@ -92,11 +96,6 @@ describe('/api/wishlist route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(400);
-    const body = (await (response as any).json()) as any;
-
-    expect(body.error).toBe('A valid product ID is required.');
-    expect(typeof body.message).toBe('string');
-    expect(body.message).toContain('Invalid input');
-    expect(addProductWithValidationMock).not.toHaveBeenCalled();
+    expect(addPortraitMock).not.toHaveBeenCalled();
   });
 });

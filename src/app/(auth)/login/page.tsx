@@ -11,11 +11,21 @@ export const metadata: Metadata = generateMetadataUtil({
   title: seo.login.title,
   description: seo.login.description,
   url: config.routes.login,
-  noindex: true, // Login page shouldn't be indexed
+  noindex: true,
 });
 
-const LoginPage = () => {
+interface LoginPageProps {
+  searchParams: Promise<{ redirect?: string }>;
+}
+
+const LoginPage = async ({ searchParams }: LoginPageProps) => {
+  const { redirect: redirectUrl } = await searchParams;
   const { title, description } = seo.login || {};
+
+  const registerHref = redirectUrl
+    ? `${config.routes.register}?redirect=${encodeURIComponent(redirectUrl)}`
+    : config.routes.register;
+
   return (
     <AuthShell
       title={title}
@@ -24,7 +34,7 @@ const LoginPage = () => {
         <div className="pt-4 space-y-3 text-body-sm text-center text-secondary">
           <div>
             Don&apos;t have an account?{' '}
-            <Link href={config.routes.register} className="link">
+            <Link href={registerHref} className="link">
               Sign up
             </Link>
           </div>

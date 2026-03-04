@@ -21,7 +21,7 @@ export const metadata: Metadata = generateMetadataUtil({
   noindex: true,
 });
 
-export const maxDuration = 300; // 5 minutes max (safe upper bound)
+export const maxDuration = 300;
 
 interface GeneratingPageProps {
   searchParams: Promise<{
@@ -39,12 +39,10 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
     redirect(config.routes.create);
   }
 
-  // If URLs are already in query params, skip generation and display images
   const artworkUrls = urls ? urls.split('|').filter(Boolean) : [];
   const hasGeneratedImages = artworkUrls.length > 0 && generationId;
 
   if (!hasGeneratedImages) {
-    // Generate images
     const result = await generatePortraitAction(photo, styleId);
 
     if (!result.success) {
@@ -56,7 +54,6 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
       redirect(`${config.routes.createStyle}${buildCreateFlowQueryString({ photo })}`);
     }
 
-    // Redirect to same page with URLs in query params
     const encodedUrls = encodeURIComponent(data.urls.join('|'));
     const queryString = buildCreateFlowQueryString({
       photo,
@@ -69,7 +66,6 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
     return null;
   }
 
-  // Display generated images
   const backHref = `${config.routes.createStyle}${buildCreateFlowQueryString({ photo })}`;
 
   return (
@@ -86,10 +82,10 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
 
         <div className="space-y-6">
           <div className="space-y-3">
-            <h2 className="text-heading-3 font-semibold">Choose Your Favorite</h2>
+            <h2 className="text-heading-3 font-semibold">Choose Your Favourite</h2>
             <p className="text-body text-muted-foreground max-w-2xl">
-              Select the portrait you love most to continue. You can order it as a digital download
-              or premium print.
+              Select the portrait you love most to continue. Your creation is automatically saved
+              to your account — you can save any variation to your favourites from the cart.
             </p>
           </div>
 

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { AddressService } from '@/domains/address/services/address.service';
+import { CreationsService } from '@/domains/creations/services/creations.service';
 import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
@@ -14,7 +14,7 @@ import RecentOrdersPreview from '@/ui/components/orders/RecentOrdersPreview';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import { Card, CardContent } from '@/ui/primitives/card';
 
-export const dynamic = 'force-dynamic'; // Account data is user-specific
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   description: seo.account.description,
@@ -28,20 +28,17 @@ const Page = async () => {
     redirect(config.routes.login);
   }
 
-  const [ordersResponse, addressesResponse, wishlist] = await Promise.all([
+  const [ordersResponse, creationsCount, savedPortraitsCount] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 3 }),
-    AddressService.getCustomerAddresses({ first: 1 }),
-    WishlistService.getWishlist(),
+    CreationsService.getCreationsCount(),
+    WishlistService.getWishlistCount(),
   ]);
 
-  if (!ordersResponse || !addressesResponse) {
+  if (!ordersResponse) {
     redirect(config.routes.login);
   }
 
   const ordersCount = Number(ordersResponse?.customer?.orders?.totalCount || 0);
-  const addressesCount = addressesResponse?.customer?.addresses?.edges?.length || 0;
-  const wishlistCount = wishlist?.length || 0;
-
   const recentOrders = ordersResponse?.customer?.orders?.edges || [];
 
   return (
@@ -49,20 +46,20 @@ const Page = async () => {
       <Card>
         <CardHeaderPattern
           className="w-full"
-          title="Account Overview"
+          title="Dashboard"
           size={3}
           description={
             <>
-              Welcome <UserFullName />, your account dashboard provides access to all of your
-              important account information and features.
+              Welcome back, <UserFullName />! Here&apos;s an overview of your PetPortrait AI
+              account.
             </>
           }
         />
         <CardContent className="space-y-6">
           <AccountStats
             ordersCount={ordersCount}
-            addressesCount={addressesCount}
-            wishlistCount={wishlistCount}
+            creationsCount={creationsCount}
+            savedPortraitsCount={savedPortraitsCount}
             memberSince={user.createdAt}
           />
 
@@ -74,16 +71,16 @@ const Page = async () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-items-stretch pt-4">
             <AccountCardCTA
-              title="Personal Information"
-              description="Update your personal details and preferences"
-              buttonText="Edit Details"
-              buttonLink={config.routes.updateAccount}
+              title="My Creations"
+              description="View all the AI portraits you've generated and order them"
+              buttonText="View Creations"
+              buttonLink={config.routes.creations}
             />
             <AccountCardCTA
-              title="Addresses"
-              description="Manage your shipping and billing addresses"
-              buttonText="Edit Addresses"
-              buttonLink={config.routes.addresses}
+              title="Saved Portraits"
+              description="Your favourite portraits, ready to order whenever you like"
+              buttonText="View Favourites"
+              buttonLink={config.routes.wishlist}
             />
           </div>
         </CardContent>

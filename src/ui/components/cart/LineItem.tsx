@@ -4,6 +4,7 @@ import config from '@/core/config';
 import { type CartFieldsFragment } from '@/infra/shopify/storefront';
 import { formatPrice } from '@/lib/format';
 import OptimizedImage from '@/ui/components/media/OptimizedImage';
+import SavePortraitButton from '@/ui/components/wishlist/SavePortraitButton';
 
 import CartRemove from './CartRemove';
 import QuantityUpdatedContainer from './QuantityUpdatedContainer';
@@ -19,7 +20,16 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
   if (!('merchandise' in node)) return null;
 
   const artworkUrl = getAttribute(node, 'gelato_print_url');
+  const originalPhotoUrl = getAttribute(node, 'original_photo_url');
+  const chosenStyle = getAttribute(node, 'chosen_style');
+  const generationId = getAttribute(node, 'generation_id');
+  const variantProductHandle =
+    'product' in node.merchandise ? node.merchandise.product?.handle : undefined;
+  const gelatoProductUid = getAttribute(node, 'gelato_product_uid');
+
   const displayImage = artworkUrl ?? node.merchandise.image?.medium;
+
+  const isAiPortrait = Boolean(artworkUrl && originalPhotoUrl && chosenStyle && generationId);
 
   const unitPrice =
     typeof node.merchandise.price.amount === 'string'
@@ -42,8 +52,7 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
   const { currencyCode } = node.merchandise.price;
 
   const collectionHandle =
-    'product' in node.merchandise &&
-    node.merchandise.product?.collections?.nodes?.[0]?.handle;
+    'product' in node.merchandise && node.merchandise.product?.collections?.nodes?.[0]?.handle;
   const productHandle =
     'product' in node.merchandise && node.merchandise.product?.handle
       ? `${config.routes.collection}/${collectionHandle ?? 'all'}/${node.merchandise.product.handle}`
@@ -82,14 +91,12 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
             </Link>
             {node.merchandise.selectedOptions && node.merchandise.selectedOptions.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
-                {node.merchandise.selectedOptions.map(
-                  (option: { name: string; value: string }) => (
-                    <span key={option.name} className="text-caption text-muted-foreground">
-                      {option.name}:{' '}
-                      <span className="font-medium text-foreground">{option.value}</span>
-                    </span>
-                  ),
-                )}
+                {node.merchandise.selectedOptions.map((option: { name: string; value: string }) => (
+                  <span key={option.name} className="text-caption text-muted-foreground">
+                    {option.name}:{' '}
+                    <span className="font-medium text-foreground">{option.value}</span>
+                  </span>
+                ))}
               </div>
             )}
           </div>
@@ -119,6 +126,20 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
             )}
           </div>
         </div>
+
+        {isAiPortrait && (
+          <SavePortraitButton
+            imageUrl={artworkUrl!}
+            lineItemId={node.id}
+            originalPhotoUrl={originalPhotoUrl!}
+            styleId={chosenStyle!}
+            generationId={generationId!}
+            label={node.merchandise.product.title}
+            variantId={node.merchandise.id}
+            productHandle={variantProductHandle}
+            gelatoProductUid={gelatoProductUid ?? undefined}
+          />
+        )}
       </div>
     </div>
   );

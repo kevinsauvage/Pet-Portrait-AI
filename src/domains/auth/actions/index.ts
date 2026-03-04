@@ -54,7 +54,7 @@ export async function registerAction(
     };
   }
 
-  const { email, password, firstName, lastName } = result.data;
+  const { email, password, firstName, lastName, redirectUrl } = result.data;
 
   const serviceResult = await AuthService.register({
     email,
@@ -71,7 +71,7 @@ export async function registerAction(
     return serviceResult;
   }
 
-  redirect(config.routes.account);
+  redirect(redirectUrl || config.routes.account);
 }
 
 export async function loginAction(

@@ -21,18 +21,20 @@ export async function DELETE(
     const user = await getUser();
 
     if (!user?.id) {
-      return createErrorResponse(API_ERROR_MESSAGES.USER_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
+      return createErrorResponse(API_ERROR_MESSAGES.USER_NOT_FOUND, {
+        status: HTTP_STATUS.NOT_FOUND,
+      });
     }
 
-    const { productId: rawProductId } = await params;
-    if (!rawProductId) {
+    const { productId: rawId } = await params;
+    if (!rawId) {
       return createErrorResponse(API_ERROR_MESSAGES.MISSING_PRODUCT_ID, {
         status: HTTP_STATUS.BAD_REQUEST,
       });
     }
 
-    const productId = decodeURIComponent(rawProductId);
-    const result = await WishlistService.removeProduct(productId, user.id);
+    const portraitId = decodeURIComponent(rawId);
+    const result = await WishlistService.removePortrait(portraitId, user.id);
 
     if (!result.success) {
       return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT_FROM_WISHLIST, {
@@ -43,7 +45,7 @@ export async function DELETE(
 
     const wishlist = await WishlistService.getWishlist();
     return createSuccessResponse(wishlist, {
-      message: 'Product correctly removed from wishlist',
+      message: 'Portrait removed from favourites',
       noCache: true,
     });
   } catch (error) {
