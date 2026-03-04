@@ -76,7 +76,7 @@ const HamburgerMenu = ({
 
   const navItemClass = (href: string) =>
     cn(
-      'flex w-full cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-body-sm font-medium transition-all duration-150',
+      'flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-body-sm font-medium transition-all duration-150',
       pathname === href || (href !== '/' && pathname.startsWith(href))
         ? 'bg-primary/10 text-primary'
         : 'text-foreground hover:bg-accent/70 hover:text-foreground',
@@ -101,7 +101,7 @@ const HamburgerMenu = ({
         {/* Brand header */}
         <SheetHeader className="relative overflow-hidden border-b border-border/50 px-5 py-5">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_120%_at_0%_50%,color-mix(in_srgb,var(--primary)_8%,transparent),transparent)]" />
-          <div className="relative flex items-center gap-2.5">
+          <div className="relative flex items-center gap-3">
             <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
               <Sparkles size={14} strokeWidth={2} />
             </span>
@@ -121,7 +121,7 @@ const HamburgerMenu = ({
           {/* Primary nav links */}
           {navLinks.length > 0 && (
             <div className="space-y-1">
-              <p className="mb-2 px-3.5 text-caption-sm font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              <p className="mb-2 px-4 text-caption-sm font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 Explore
               </p>
               {navLinks.map((link) => (
@@ -153,7 +153,7 @@ const HamburgerMenu = ({
                   key={item.id}
                   type="button"
                   className={cn(
-                    'flex w-full cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-body-sm font-medium transition-all duration-150',
+                    'flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-body-sm font-medium transition-all duration-150',
                     isSignOut
                       ? 'text-destructive hover:bg-destructive/8 hover:text-destructive'
                       : navItemClass(item.link),

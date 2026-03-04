@@ -319,6 +319,14 @@ h6 {
   line-height: 1.1;
 }
 
+.text-display-lg {
+  font-family: var(--font-sans);
+  font-size: 3.5rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tighter);
+  line-height: 1.08;
+}
+
 .text-heading-1 {
   font-family: var(--font-sans);
   font-size: 2.5rem;

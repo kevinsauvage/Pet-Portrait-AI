@@ -55,7 +55,7 @@ export default function CreateProductRow({
             />
           </div>
         ) : (
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-muted text-2xl">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-muted text-heading-2">
             🖼
           </div>
         )}

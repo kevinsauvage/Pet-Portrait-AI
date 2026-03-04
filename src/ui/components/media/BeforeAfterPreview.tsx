@@ -77,7 +77,7 @@ const BeforeAfterPreview = ({
               variant={selectedStyleId === style.id ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedStyleId(style.id)}
-              className="text-xs"
+              className="text-caption-sm"
             >
               {style.label}
             </Button>

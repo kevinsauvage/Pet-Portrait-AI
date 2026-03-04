@@ -53,11 +53,11 @@ const GalleryPage = () => {
                 <Button
                   size="lg"
                   asChild
-                  className="px-8 py-6 text-base shadow-lg hover:shadow-xl transition-shadow"
+                  className="px-8 py-6 text-body shadow-lg hover:shadow-xl transition-shadow"
                 >
                   <Link href="/create">Create Your Portrait</Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="px-8 py-6 text-base">
+                <Button size="lg" variant="outline" asChild className="px-8 py-6 text-body">
                   <Link href="/gallery">See more examples</Link>
                 </Button>
               </div>

@@ -48,7 +48,7 @@ const SkipLinks = () => {
               href={link.href}
               className={cn(
                 'skip-link',
-                'inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground',
+                'inline-block rounded-md bg-primary px-4 py-2 text-body-sm font-medium text-primary-foreground',
                 'transition-all duration-200',
                 'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
                 'hover:bg-primary/90',

@@ -72,7 +72,7 @@ export default function CollectionCard({
           )}
         </div>
         <div className="flex items-center justify-between pt-4 mt-auto border-t border-border/50">
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary group-hover:gap-2 transition-all">
+          <span className="inline-flex items-center gap-2 text-body-sm font-medium text-primary transition-all">
             View options
             <ChevronRight className="h-4 w-4 shrink-0" />
           </span>

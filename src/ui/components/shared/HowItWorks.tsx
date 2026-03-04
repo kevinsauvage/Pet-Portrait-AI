@@ -42,7 +42,7 @@ const HowItWorks = ({
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-12 space-y-3 text-center md:mb-16">
           {eyebrow ? (
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/80 px-4 py-1.5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/80 px-4 py-2">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               <p className="text-caption-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
                 {eyebrow}
@@ -70,7 +70,7 @@ const HowItWorks = ({
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 transition-colors duration-300 group-hover:bg-primary/15">
                     <Icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
                   </div>
-                  <span className="text-[2rem] font-bold leading-none tracking-tighter text-border/80 transition-colors duration-300 group-hover:text-primary/20">
+                  <span className="text-heading-2 font-bold leading-none tracking-tighter text-border/80 transition-colors duration-300 group-hover:text-primary/20">
                     {stepNum}
                   </span>
                 </div>
@@ -80,7 +80,7 @@ const HowItWorks = ({
                     {step.description}
                   </p>
                 </div>
-                <div className="mt-5 flex items-center gap-1.5 border-t border-border/50 pt-4">
+                <div className="mt-5 flex items-center gap-2 border-t border-border/50 pt-4">
                   <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
                   <span className="text-caption-sm text-muted-foreground">{step.time}</span>
                 </div>

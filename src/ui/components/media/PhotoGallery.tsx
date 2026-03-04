@@ -96,7 +96,7 @@ const PhotoGallery = ({ images, className }: PhotoGalleryProps) => {
       <div className="relative aspect-square w-full rounded-lg border border-border bg-background overflow-hidden group">
         {/* Image Counter */}
         {hasMultipleImages && (
-          <div className="absolute top-4 left-4 z-10 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1.5 border border-border/50">
+          <div className="absolute top-4 left-4 z-10 bg-background/80 backdrop-blur-sm rounded-full px-3 py-2 border border-border/50">
             <span className="text-body-sm font-medium text-foreground">
               {selectedImageIndex + 1} / {images.length}
             </span>

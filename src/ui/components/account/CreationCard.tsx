@@ -52,7 +52,7 @@ const CreationCard = ({ creation }: Props) => {
             sizes="(max-width: 640px) 50vw, 25vw"
           />
           <div className="absolute bottom-1 left-1">
-            <Badge variant="secondary" className="text-caption-sm px-1.5 py-0.5">
+            <Badge variant="secondary" className="text-caption-sm px-2 py-0.5">
               Original
             </Badge>
           </div>

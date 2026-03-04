@@ -114,7 +114,7 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 50vw, 33vw"
                   />
-                  <div className="absolute bottom-3 right-3 rounded-lg bg-background/95 backdrop-blur-sm px-3 py-1.5 text-caption font-semibold shadow-lg border border-border/50 transition-all duration-300 group-hover:scale-105 z-20">
+                  <div className="absolute bottom-3 right-3 rounded-lg bg-background/95 backdrop-blur-sm px-3 py-2 text-caption font-semibold shadow-lg border border-border/50 transition-all duration-300 group-hover:scale-105 z-20">
                     #{variationNumber}
                   </div>
                   <div className="absolute inset-0 ring-4 ring-primary/0 group-hover:ring-primary/20 rounded-2xl transition-all duration-300 z-10 pointer-events-none" />

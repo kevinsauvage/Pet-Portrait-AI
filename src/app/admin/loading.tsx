@@ -8,7 +8,7 @@ const AdminLoading = () => {
         {[0, 1, 2].map((item) => (
           <Card key={item}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardTitle className="text-body-sm font-medium text-muted-foreground">
                 <Skeleton className="h-4 w-28" />
               </CardTitle>
             </CardHeader>

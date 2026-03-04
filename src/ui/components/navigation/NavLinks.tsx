@@ -31,7 +31,7 @@ const NavLinks = ({ links, className, linkClassName }: NavLinksProps) => {
                 className={
                   linkClassName ??
                   cn(
-                    'relative px-3.5 py-2 text-body-sm font-medium transition-colors duration-150 rounded-lg',
+                    'relative px-4 py-2 text-body-sm font-medium transition-colors duration-150 rounded-lg',
                     isActive
                       ? 'text-foreground'
                       : 'text-muted-foreground hover:text-foreground hover:bg-accent/70',

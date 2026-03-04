@@ -158,7 +158,7 @@ const Filters = ({
           <span className="hidden md:inline">Filters</span>
           <FilterIcon className="h-4 w-4" />
           {activeCount > 0 && (
-            <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+            <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-caption-sm font-semibold text-primary-foreground">
               {activeCount}
             </span>
           )}

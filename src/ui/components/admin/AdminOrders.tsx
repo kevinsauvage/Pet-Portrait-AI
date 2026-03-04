@@ -9,7 +9,7 @@ export default function AdminOrders() {
       <CardContent>
         <p className="text-muted-foreground">
           The Gelato Shopify app handles fulfillment automatically when orders contain the{' '}
-          <code className="text-xs bg-muted px-1 py-0.5 rounded">gelato_print_url</code> line item
+          <code className="text-caption-sm bg-muted px-1 py-0.5 rounded">gelato_print_url</code> line item
           attribute. View order status in the{' '}
           <a
             href="https://dashboard.gelato.com"

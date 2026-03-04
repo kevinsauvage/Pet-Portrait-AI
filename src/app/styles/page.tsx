@@ -33,7 +33,7 @@ const StylesPage = () => {
           <Button
             size="lg"
             asChild
-            className="px-8 py-6 text-base shadow-lg hover:shadow-xl transition-shadow"
+            className="px-8 py-6 text-body shadow-lg hover:shadow-xl transition-shadow"
           >
             <Link href="/create">Create Your Portrait</Link>
           </Button>

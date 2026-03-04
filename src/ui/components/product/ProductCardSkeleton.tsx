@@ -52,14 +52,14 @@ const ProductCardSkeleton = ({
   return (
     <li className={cn('relative overflow-hidden rounded-2xl border border-border bg-card', className)}>
       {showActions && (
-        <div className="absolute right-2.5 top-2.5 z-20">
+        <div className="absolute right-3 top-3 z-20">
           <Skeleton className="h-8 w-20 rounded-full" />
         </div>
       )}
 
       <div className="relative overflow-hidden">
         <Skeleton className="aspect-square w-full" />
-        {showBadge && <Skeleton className="absolute left-2.5 top-2.5 h-5 w-12 rounded-full" />}
+        {showBadge && <Skeleton className="absolute left-3 top-3 h-5 w-12 rounded-full" />}
       </div>
 
       <div className="space-y-2 px-4 pb-4 pt-3.5">

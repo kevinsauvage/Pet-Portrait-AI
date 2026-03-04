@@ -37,7 +37,7 @@ export default function CreateProgressBar({ currentStep }: CreateProgressBarProp
                   <div
                     aria-current={isActive ? 'step' : undefined}
                     className={cn(
-                      'relative flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all duration-300',
+                      'relative flex h-10 w-10 items-center justify-center rounded-full text-body-sm font-semibold transition-all duration-300',
                       'ring-4 ring-offset-2 ring-offset-background',
                       isCompleted &&
                         'bg-primary text-primary-foreground shadow-md shadow-primary/20',
@@ -62,7 +62,7 @@ export default function CreateProgressBar({ currentStep }: CreateProgressBarProp
                 <div className="hidden sm:block text-center space-y-1">
                   <span
                     className={cn(
-                      'block text-sm font-semibold transition-colors duration-300',
+                      'block text-body-sm font-semibold transition-colors duration-300',
                       isActive && 'text-primary',
                       isCompleted && 'text-foreground',
                       isUpcoming && 'text-muted-foreground',
@@ -73,7 +73,7 @@ export default function CreateProgressBar({ currentStep }: CreateProgressBarProp
                   {step.description && (
                     <span
                       className={cn(
-                        'block text-xs transition-colors duration-300',
+                        'block text-caption-sm transition-colors duration-300',
                         isActive && 'text-primary/80',
                         isCompleted && 'text-muted-foreground',
                         isUpcoming && 'text-muted-foreground/60',
@@ -87,7 +87,7 @@ export default function CreateProgressBar({ currentStep }: CreateProgressBarProp
                 {/* Mobile label */}
                 <span
                   className={cn(
-                    'block text-xs font-medium sm:hidden transition-colors duration-300',
+                    'block text-caption-sm font-medium sm:hidden transition-colors duration-300',
                     isActive && 'text-primary',
                     isCompleted && 'text-foreground',
                     isUpcoming && 'text-muted-foreground',

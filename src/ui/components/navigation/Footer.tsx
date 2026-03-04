@@ -62,7 +62,7 @@ const FooterLinkColumn = ({ heading, links, extraItems }: FooterLinkColumnProps)
               <Link
                 href={link.href}
                 className={cn(
-                  'group flex items-center gap-1.5 text-body-sm transition-colors duration-150',
+                  'group flex items-center gap-2 text-body-sm transition-colors duration-150',
                   isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
                 )}
               >
@@ -119,7 +119,7 @@ const Footer = ({ menuItems }: FooterProps) => {
                 <Link
                   href={href}
                   className={cn(
-                    'group flex items-center gap-1.5 text-body-sm transition-colors duration-150',
+                    'group flex items-center gap-2 text-body-sm transition-colors duration-150',
                     isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
@@ -169,14 +169,14 @@ const Footer = ({ menuItems }: FooterProps) => {
             {siteMetadata.email && (
               <a
                 href={`mailto:${siteMetadata.email}`}
-                className="inline-flex items-center gap-1.5 text-body-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="inline-flex items-center gap-2 text-body-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-primary"
               >
                 {siteMetadata.email}
               </a>
             )}
 
             {/* Social links */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-3">
               {siteMetadata.instagram && (
                 <SocialLink href={siteMetadata.instagram} label="Instagram">
                   <Instagram size={15} strokeWidth={1.75} />

@@ -53,10 +53,10 @@ const ProductCardDefault = ({
   return (
     <Component className="group">
       <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[var(--shadow-card-hover)] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-        <div className="absolute right-2.5 top-2.5 z-20 translate-y-1 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="absolute right-3 top-3 z-20 translate-y-1 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
           <Link
             href={config.routes.create}
-            className="flex items-center gap-1.5 rounded-full border border-white/20 bg-background/95 px-3 py-1.5 text-caption-sm font-semibold text-primary shadow-lg backdrop-blur-sm transition-all hover:bg-primary hover:text-primary-foreground"
+            className="flex items-center gap-2 rounded-full border border-white/20 bg-background/95 px-3 py-2 text-caption-sm font-semibold text-primary shadow-lg backdrop-blur-sm transition-all hover:bg-primary hover:text-primary-foreground"
           >
             <Sparkles className="h-3 w-3" />
             Create
@@ -83,7 +83,7 @@ const ProductCardDefault = ({
             />
             <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />
 
-            <div className="absolute left-2.5 top-2.5 z-10 flex flex-col gap-1.5">
+            <div className="absolute left-3 top-3 z-10 flex flex-col gap-2">
               {hasDiscount && (
                 <Badge
                   variant="destructive"

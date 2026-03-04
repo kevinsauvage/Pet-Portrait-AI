@@ -44,7 +44,7 @@ const PageBanner = ({
     <div className="container relative mx-auto flex flex-col items-center justify-center px-4 py-16 text-center md:px-6 md:py-24 lg:py-32">
       <div className="relative max-w-4xl space-y-5 md:space-y-7">
         {eyebrow && (
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/80 px-4 py-1.5 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/80 px-4 py-2 backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             <p className="text-caption-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
               {eyebrow}
@@ -53,7 +53,7 @@ const PageBanner = ({
         )}
         <h1
           id="page-banner-title"
-          className="text-display font-bold tracking-tight md:text-[3.5rem] md:leading-[1.08]"
+          className="text-display font-bold tracking-tight md:text-display-lg"
         >
           {title}
         </h1>
@@ -63,12 +63,12 @@ const PageBanner = ({
           </p>
         )}
         {(ctaLabel || secondaryCtaLabel) && (
-          <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
+          <div className="flex flex-col items-center justify-center gap-3 pt-4 sm:flex-row">
             {ctaLabel && ctaHref && (
               <Button
                 size="lg"
                 asChild
-                className="h-12 px-8 text-base font-semibold shadow-lg shadow-primary/20 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 active:scale-[0.98]"
+                className="h-12 px-8 text-body font-semibold shadow-lg shadow-primary/20 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 active:scale-[0.98]"
               >
                 <Link href={ctaHref} aria-label={ctaLabel}>
                   {ctaLabel}
@@ -80,7 +80,7 @@ const PageBanner = ({
                 variant="outline"
                 size="lg"
                 asChild
-                className="h-12 border-border/70 px-8 text-base font-medium transition-all duration-200 hover:border-primary/40 hover:bg-primary/5"
+                className="h-12 border-border/70 px-8 text-body font-medium transition-all duration-200 hover:border-primary/40 hover:bg-primary/5"
               >
                 <Link href={secondaryCtaHref} aria-label={secondaryCtaLabel}>
                   {secondaryCtaLabel}

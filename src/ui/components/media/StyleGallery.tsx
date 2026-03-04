@@ -57,7 +57,7 @@ const FilterGroup = ({ label, options, value, onValueChange }: FilterGroupProps)
                 key={`${label}-${filterValue}`}
                 value={filterValue}
                 className={cn(
-                  'flex-none h-9 px-4 text-sm font-medium transition-all',
+                  'flex-none h-9 px-4 text-body-sm font-medium transition-all',
                   'border border-border bg-background hover:bg-accent hover:border-primary/30',
                   'data-[state=active]:bg-primary data-[state=active]:text-primary-foreground',
                   'data-[state=active]:border-primary data-[state=active]:shadow-sm',

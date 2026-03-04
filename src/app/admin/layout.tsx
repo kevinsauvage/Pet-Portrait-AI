@@ -20,8 +20,8 @@ const AdminLayout = async ({ children }: { children: ReactNode }) => {
       <header className="space-y-3">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-2xl font-bold">AI Portrait Admin</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-heading-2 font-bold">AI Portrait Admin</h1>
+            <p className="text-body-sm text-muted-foreground">
               Internal dashboard for order handling.
             </p>
           </div>

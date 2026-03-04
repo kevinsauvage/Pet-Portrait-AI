@@ -6,13 +6,13 @@ export default function AdminOverview() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-body-sm font-medium text-muted-foreground">
               Pending Gelato
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">—</p>
-            <p className="text-xs text-muted-foreground mt-1">View in Gelato dashboard</p>
+            <p className="text-heading-2 font-bold">—</p>
+            <p className="text-caption-sm text-muted-foreground mt-1">View in Gelato dashboard</p>
           </CardContent>
         </Card>
       </div>
