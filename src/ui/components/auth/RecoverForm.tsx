@@ -3,6 +3,7 @@
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 
+import { userFeedback } from '@/core/config/userFeedback';
 import { recoverPasswordAction } from '@/domains/auth/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
 import type { CustomerUserError } from '@/infra/shopify/storefront';
@@ -42,7 +43,7 @@ const RecoverForm = () => {
   useFormStatesEffect({
     states,
     userFeedback: {
-      error: 'An error occurred while recovering the password.',
+      error: userFeedback.recover.error,
     },
   });
 

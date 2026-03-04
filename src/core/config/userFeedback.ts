@@ -18,6 +18,9 @@ export const userFeedback = {
     error: 'Unable to create account. Please try again.',
     success: 'Account created successfully',
   },
+  recover: {
+    error: 'Unable to send password reset email. Please try again.',
+  },
   removeLinesFromCart: {
     error: 'Unable to remove item from cart. Please try again.',
     success: 'Item removed from cart',

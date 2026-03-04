@@ -1,4 +1,5 @@
 import config from '@/core/config';
+import { userFeedback } from '@/core/config/userFeedback';
 import { handleCustomerUserErrors, handleUserErrors } from '@/core/utils/form-actions';
 import { logger } from '@/core/utils/logger';
 import { withRetry } from '@/core/utils/retry';
@@ -30,6 +31,17 @@ type ResetPasswordInput = {
   resetToken: string;
 };
 
+const normalizeCustomerErrors = <T extends { message?: string }>(
+  errors: T[] | null | undefined,
+  fallbackMessage: string,
+): T[] | undefined => {
+  if (!errors?.length) return errors ?? undefined;
+  return errors.map((error) => ({
+    ...error,
+    message: fallbackMessage,
+  }));
+};
+
 export class AuthService {
   static async register(input: RegisterInput) {
     const { email, password, firstName, lastName } = input;
@@ -40,7 +52,11 @@ export class AuthService {
 
     const { customerUserErrors, userErrors } = registerResponse?.customerCreate || {};
 
-    const customerErrorResult = handleCustomerUserErrors(customerUserErrors);
+    const normalizedCustomerErrors = normalizeCustomerErrors(
+      customerUserErrors,
+      userFeedback.register.error,
+    );
+    const customerErrorResult = handleCustomerUserErrors(normalizedCustomerErrors);
     if (customerErrorResult) return customerErrorResult;
 
     const userErrorResult = handleUserErrors(userErrors);
@@ -78,8 +94,15 @@ export class AuthService {
     });
 
     const { customerUserErrors, customerAccessToken } = response?.customerAccessTokenCreate || {};
+    console.log('🚀 ~ AuthService ~ login ~ customerAccessToken:', customerAccessToken);
+    console.log('🚀 ~ AuthService ~ login ~ customerUserErrors:', customerUserErrors);
 
-    const loginErrorResult = handleCustomerUserErrors(customerUserErrors);
+    // Map Shopify login errors to a friendly, consistent message
+    const normalizedCustomerErrors = normalizeCustomerErrors(
+      customerUserErrors,
+      userFeedback.login.error,
+    );
+    const loginErrorResult = handleCustomerUserErrors(normalizedCustomerErrors);
     if (loginErrorResult) return loginErrorResult;
 
     if (!customerAccessToken) {
@@ -105,7 +128,11 @@ export class AuthService {
 
     const { customerUserErrors } = response?.customerRecover || {};
 
-    const errorResult = handleCustomerUserErrors(customerUserErrors);
+    const normalizedCustomerErrors = normalizeCustomerErrors(
+      customerUserErrors,
+      userFeedback.recover.error,
+    );
+    const errorResult = handleCustomerUserErrors(normalizedCustomerErrors);
     if (errorResult) return errorResult;
 
     return { success: true };
@@ -121,7 +148,11 @@ export class AuthService {
 
     const { customerAccessToken, customerUserErrors } = response?.customerResetByUrl || {};
 
-    const errorResult = handleCustomerUserErrors(customerUserErrors);
+    const normalizedCustomerErrors = normalizeCustomerErrors(
+      customerUserErrors,
+      userFeedback.resetPassword.error,
+    );
+    const errorResult = handleCustomerUserErrors(normalizedCustomerErrors);
     if (errorResult) return errorResult;
 
     if (!customerAccessToken) {
@@ -141,7 +172,10 @@ export class AuthService {
           customerAccessToken: token,
         });
       } catch (error) {
-        logger.error('Failed to delete token during logout', { context: 'AuthService.logout', error });
+        logger.error('Failed to delete token during logout', {
+          context: 'AuthService.logout',
+          error,
+        });
       }
     }
 

@@ -63,7 +63,11 @@ export async function registerAction(
     lastName,
   });
 
-  if ('error' in serviceResult) {
+  if (
+    'error' in serviceResult ||
+    'customerUserErrors' in serviceResult ||
+    'userErrors' in serviceResult
+  ) {
     return serviceResult;
   }
 
@@ -84,7 +88,11 @@ export async function loginAction(
 
   const serviceResult = await AuthService.login({ email, password });
 
-  if ('error' in serviceResult) {
+  if (
+    'error' in serviceResult ||
+    'customerUserErrors' in serviceResult ||
+    'userErrors' in serviceResult
+  ) {
     return serviceResult;
   }
 
@@ -104,7 +112,11 @@ export async function recoverPasswordAction(
 
   const serviceResult = await AuthService.recoverPassword({ email });
 
-  if ('error' in serviceResult) {
+  if (
+    'error' in serviceResult ||
+    'customerUserErrors' in serviceResult ||
+    'userErrors' in serviceResult
+  ) {
     return serviceResult;
   }
 
@@ -127,9 +139,13 @@ export async function resetPasswordAction(
     resetToken: resetUrl,
   });
 
-  if ('error' in serviceResult) {
+  if (
+    'error' in serviceResult ||
+    'customerUserErrors' in serviceResult ||
+    'userErrors' in serviceResult
+  ) {
     const errorMessage = serviceResult.error || userFeedback.resetPassword.error;
-    return { error: errorMessage };
+    return { ...(serviceResult as ResetFieldErrors), error: errorMessage };
   }
 
   redirect(config.routes.account);
