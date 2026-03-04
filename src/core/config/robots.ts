@@ -7,6 +7,10 @@ export const ROBOTS_RULES: MetadataRoute.Robots['rules'] = {
     '/account/', // Private user account pages (orders, addresses, wishlist, etc.)
     '/api/', // API routes (not meant for search engines)
     '/search', // Dynamic search pages (not useful for SEO)
-    '/cart', // Cart pages are user-specific and not useful for SEO
+    '/create/order', // Cart/order page is user-specific and not useful for SEO
+    '/create/style', // User-specific create flow steps
+    '/create/generating', // User-specific create flow steps
+    '/create/select', // User-specific create flow steps
+    '/create/collections', // User-specific create flow steps
   ],
 };

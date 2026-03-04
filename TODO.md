@@ -16,10 +16,6 @@
       **WHY:** `e2e/cart-flow.spec.ts` has a TODO for the full flow. Current tests only verify navigation and empty cart state. No test validates AI generation → add to cart → checkout.
       **HOW:** Add a test that mocks or bypasses AI generation (e.g., uses a pre-generated image URL), adds to cart, and verifies checkout redirect. Ensure test environment has required Shopify credentials or use a test store.
 
-- [ ] **WHAT:** Update robots.txt to disallow cart route.
-      **WHY:** `src/core/config/robots.ts` disallows `/cart` but the actual cart/order page is `/create/order`. Search engines may still index the cart page.
-      **HOW:** Add `/create/order` to the `disallow` array in `ROBOTS_RULES`. Consider disallowing `/create/*` if the create flow is user-specific and not useful for SEO.
-
 - [ ] **WHAT:** Redirect unauthenticated users from account update page.
       **WHY:** `src/app/account/update/page.tsx` does not redirect when `user` is null. It renders `UpdateUserForm` which uses `useUserContext`; submitting without user returns "User not found". Poor UX and confusing state.
       **HOW:** Add `if (!user) redirect(config.routes.login);` at the top of the page, consistent with other account pages.
