@@ -12,7 +12,9 @@ function validateBaseUrl(errors: string[], warnings: string[], isProduction: boo
   try {
     const url = new URL(process.env.NEXT_PUBLIC_BASE_URL);
     if (isProduction && url.protocol === 'http:') {
-      warnings.push('NEXT_PUBLIC_BASE_URL uses HTTP. Use HTTPS in production for security.');
+      errors.push(
+        'NEXT_PUBLIC_BASE_URL uses HTTP. HTTPS is required in production for security (prevents mixed content and insecure cookies).',
+      );
     }
   } catch {
     errors.push(
@@ -86,7 +88,13 @@ function validateProductionRequirements(errors: string[]): void {
     );
   }
 
-  const requiredSmtpVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'] as const;
+  const requiredSmtpVars = [
+    'SMTP_HOST',
+    'SMTP_PORT',
+    'SMTP_USER',
+    'SMTP_PASS',
+    'SMTP_FROM',
+  ] as const;
   const missingSmtpVars = requiredSmtpVars.filter((key) => !process.env[key]);
 
   if (missingSmtpVars.length > 0) {
