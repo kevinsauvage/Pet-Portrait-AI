@@ -82,7 +82,7 @@ const Address = ({
           <div className="flex items-center gap-2">
             <p className="text-body font-semibold">{name}</p>
             {isDefault && (
-              <Badge variant="default" className="text-caption-sm">
+              <Badge variant="default" className="text-caption-sm text-primary-foreground">
                 Default
               </Badge>
             )}
