@@ -114,7 +114,7 @@ function validateProductionRecommendations(warnings: string[]): void {
 
   if (!process.env.REDIS_URL) {
     warnings.push(
-      'REDIS_URL is not set. Rate limiting will use in-memory storage, which does not work across multiple server instances.',
+      'REDIS_URL is not set. Rate limiting will use in-memory storage, which does not work across multiple server instances. This means rate limits are not shared between instances and may be bypassed in serverless/multi-instance deployments. Set REDIS_URL in production when using multiple instances (e.g., Vercel, serverless).',
     );
   }
 }

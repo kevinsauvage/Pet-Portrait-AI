@@ -26,7 +26,7 @@ Before deploying, ensure you have:
 - ✅ OpenAI API key with sufficient credits
 - ✅ UploadThing account configured
 - ✅ Sentry account (recommended for production)
-- ✅ Redis instance (recommended for production rate limiting)
+- ✅ Redis instance (required for production when using multiple server instances)
 - ✅ Domain name configured (if using custom domain)
 
 ---
@@ -72,6 +72,14 @@ ADMIN_SECRET=your_secret_token
 NEXT_PUBLIC_SENTRY_DSN=https://...@sentry.io/...
 SENTRY_ORG=your-org
 SENTRY_PROJECT=your-project
+```
+
+#### Required for Production (Multiple Instances)
+
+```env
+# Redis is REQUIRED when running multiple server instances (e.g., Vercel, serverless)
+# Without Redis, rate limits are stored in-memory per instance and are not shared,
+# which means rate limiting will not work correctly in multi-instance deployments.
 REDIS_URL=redis://...
 ```
 
@@ -185,7 +193,7 @@ Before deploying to production, verify:
 - [ ] All required environment variables are set
 - [ ] Admin authentication is configured (`ADMIN_BASIC_USER`/`ADMIN_BASIC_PASSWORD` or `ADMIN_SECRET`)
 - [ ] Sentry is configured (`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`)
-- [ ] Redis is configured (`REDIS_URL`) for distributed rate limiting
+- [ ] Redis is configured (`REDIS_URL`) for distributed rate limiting (required when using multiple server instances)
 - [ ] API protection secrets are set (`AI_API_SECRET`, `UPLOADTHING_API_SECRET`)
 - [ ] Build succeeds without errors (`yarn build`)
 - [ ] All tests pass (`yarn test`)
@@ -317,7 +325,8 @@ curl https://yourdomain.com/admin
 
 - All required variables
 - All production-required variables (admin auth)
-- All recommended variables (Sentry, Redis)
+- All recommended variables (Sentry)
+- Redis (`REDIS_URL`) is required when using multiple server instances (e.g., Vercel, serverless)
 - Optional variables as needed
 - Debug logging disabled
 - Source maps uploaded to Sentry only

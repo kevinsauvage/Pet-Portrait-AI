@@ -14,10 +14,6 @@
       **WHY:** `e2e/cart-flow.spec.ts` and `e2e/api-routes.spec.ts` exist but are commented out in `.github/workflows/ci.yml`. Critical flows (cart, API auth) are not validated on every PR.
       **HOW:** Uncomment the Playwright install and E2E test steps in CI. Add `PLAYWRIGHT_TEST_BASE_URL` secret or use `http://localhost:3000` with a dev server. Consider running E2E on a schedule or before merge to main.
 
-- [ ] **WHAT:** Document Redis requirement for rate limiting in production.
-      **WHY:** `src/infra/rate-limit/rate-limit.ts` falls back to in-memory storage when `REDIS_URL` is not set. In serverless/edge, each instance has its own memory; rate limits are not shared across instances.
-      **HOW:** Update `.env.example` and `DEPLOYMENT.md` to state that `REDIS_URL` is required for production when using multiple instances. Add a startup warning if `NODE_ENV=production` and `REDIS_URL` is missing.
-
 ## P3 — Medium Priority
 
 - [ ] **WHAT:** Implement full create → cart → checkout E2E test.
