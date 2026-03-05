@@ -40,7 +40,6 @@ const config = {
     createOrder: '/create/order',
     styles: '/styles',
     gallery: '/gallery',
-    admin: '/admin',
     cart: '/order',
     login: '/login',
     collection: '/shop',

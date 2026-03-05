@@ -87,8 +87,3 @@ export const clearShopifyToken = async (): Promise<void> => {
   cookieStore.delete(config.cookies.shopifyToken);
   cookieStore.delete(config.cookies.shopifyTokenExpire);
 };
-
-export const getShopifyCartId = async () => {
-  const cookieStore = await cookies();
-  return cookieStore.get(config.cookies.cartId)?.value;
-};

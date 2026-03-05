@@ -12,10 +12,6 @@
       **WHY:** `getClientContext` uses `x-forwarded-for` and `x-real-ip` for rate limiting. These headers can be spoofed by clients.
       **HOW:** Document in `docs/` or `src/core/utils/request-identity.ts` that when behind a trusted proxy (e.g. Vercel), `x-forwarded-for` is trusted. For stricter setups, consider using connection IP or a signed header from the proxy.
 
-- [ ] **WHAT:** Consolidate or clearly document duplicate order pages.
-      **WHY:** `src/app/order/page.tsx` and `src/app/create/order/page.tsx` are nearly identical. Risk of divergence and maintenance burden.
-      **HOW:** Either: (a) extract shared layout/content into a component and reuse; (b) redirect one to the other; or (c) document the intended difference (e.g. `/order` for direct cart, `/create/order` for create flow) and ensure they stay in sync.
-
 ## P3 — Medium Priority
 
 - [ ] **WHAT:** Strengthen CSP by replacing `'unsafe-inline'` for scripts.
@@ -43,11 +39,3 @@
 - [ ] **WHAT:** Add E2E tests for auth flows.
       **WHY:** Login, register, password reset are not E2E tested.
       **HOW:** Add Playwright specs for auth flows (may require Shopify customer account setup).
-
-- [ ] **WHAT:** Add health or readiness endpoint for production.
-      **WHY:** Useful for load balancers, Kubernetes, and monitoring.
-      **HOW:** Add `/api/health` or `/api/ready` that checks critical dependencies (Shopify connectivity, optional Redis) and returns 200/503.
-
-- [x] **WHAT:** Review and align duplicate route paths.
-      **WHY:** `config.routes.cart` is `/order` and `/create/order` now redirects to `/order`. Single canonical cart URL for better UX and SEO.
-      **HOW:** Canonical cart route is `/order`; `/create/order` redirects to `/order`, config and tests updated, and create flow now uses `/order` (with a “View cart” button on the add-to-cart island).

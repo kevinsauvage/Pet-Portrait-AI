@@ -79,15 +79,6 @@ function validateThirdPartyIntegrations(errors: string[]): void {
  * Validates production-specific requirements.
  */
 function validateProductionRequirements(errors: string[]): void {
-  const hasAdminBasicAuth = process.env.ADMIN_BASIC_USER && process.env.ADMIN_BASIC_PASSWORD;
-  const hasAdminBearerAuth = process.env.ADMIN_SECRET;
-
-  if (!hasAdminBasicAuth && !hasAdminBearerAuth) {
-    errors.push(
-      'Admin authentication is required in production. Set either ADMIN_BASIC_USER + ADMIN_BASIC_PASSWORD, or ADMIN_SECRET.',
-    );
-  }
-
   if (!process.env.RESEND_API_KEY) {
     errors.push(
       'RESEND_API_KEY is required in production for sending emails. Get your API key from https://resend.com/api-keys',
@@ -183,8 +174,6 @@ export function getConfigStatus(): {
   recommended: { [key: string]: boolean };
   optional: { [key: string]: boolean };
 } {
-  const isProduction = process.env.NODE_ENV === 'production';
-
   return {
     required: {
       NEXT_PUBLIC_BASE_URL: Boolean(process.env.NEXT_PUBLIC_BASE_URL),
@@ -197,12 +186,6 @@ export function getConfigStatus(): {
       UPLOADTHING_TOKEN: Boolean(process.env.UPLOADTHING_TOKEN),
       UPLOADTHING_SECRET: Boolean(process.env.UPLOADTHING_SECRET),
       RESEND_API_KEY: Boolean(process.env.RESEND_API_KEY),
-      ...(isProduction && {
-        ADMIN_AUTH: Boolean(
-          (process.env.ADMIN_BASIC_USER && process.env.ADMIN_BASIC_PASSWORD) ||
-          process.env.ADMIN_SECRET,
-        ),
-      }),
     },
     recommended: {
       NEXT_PUBLIC_SENTRY_DSN: Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN),

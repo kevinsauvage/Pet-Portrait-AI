@@ -41,7 +41,6 @@ export const DEFAULT_SHOP_CONFIG = {
   },
   features: {
     enableRegeneration: true,
-    enableAdminDashboard: true,
     enableGallery: true,
   },
   pagination: {
@@ -127,8 +126,6 @@ function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
     features: {
       enableRegeneration:
         parsed.features?.enableRegeneration ?? DEFAULT_SHOP_CONFIG.features.enableRegeneration,
-      enableAdminDashboard:
-        parsed.features?.enableAdminDashboard ?? DEFAULT_SHOP_CONFIG.features.enableAdminDashboard,
       enableGallery: parsed.features?.enableGallery ?? DEFAULT_SHOP_CONFIG.features.enableGallery,
     },
     pagination: {

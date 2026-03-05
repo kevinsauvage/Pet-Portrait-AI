@@ -72,7 +72,6 @@ Copy this JSON and paste it into the metafield value:
   },
   "features": {
     "enableRegeneration": true,
-    "enableAdminDashboard": true,
     "enableGallery": true
   }
 }
@@ -105,8 +104,7 @@ Copy this JSON and paste it into the metafield value:
 - **acceptedTypes**: Allowed MIME types
 
 ### `features` - Feature Flags
-- **enableRegeneration**: Enable regeneration in admin (default: true)
-- **enableAdminDashboard**: Enable admin dashboard (default: true)
+- **enableRegeneration**: Enable regeneration feature (default: true)
 - **enableGallery**: Enable gallery page (default: true)
 
 ## Common Configuration Examples

@@ -135,11 +135,7 @@ The metafield should contain a JSON object with the following structure:
 
 #### `features.enableRegeneration` (boolean)
 - **Default**: `true`
-- **Description**: Enable regeneration feature in admin dashboard
-
-#### `features.enableAdminDashboard` (boolean)
-- **Default**: `true`
-- **Description**: Enable admin dashboard access
+- **Description**: Enable regeneration feature
 
 #### `features.enableGallery` (boolean)
 - **Default**: `true`

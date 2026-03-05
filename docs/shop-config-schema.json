@@ -193,12 +193,7 @@
         "enableRegeneration": {
           "type": "boolean",
           "default": true,
-          "description": "Enable regeneration feature in admin dashboard"
-        },
-        "enableAdminDashboard": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable admin dashboard access"
+          "description": "Enable regeneration feature"
         },
         "enableGallery": {
           "type": "boolean",
@@ -206,7 +201,7 @@
           "description": "Enable gallery page"
         }
       },
-      "required": ["enableRegeneration", "enableAdminDashboard", "enableGallery"]
+      "required": ["enableRegeneration", "enableGallery"]
     },
     "pagination": {
       "type": "object",

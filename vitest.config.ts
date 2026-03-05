@@ -57,11 +57,10 @@ export default defineConfig({
         'src/app/**/loading.tsx',
         'src/app/**/error.tsx',
         'src/app/**/not-found.tsx',
-        // Next.js app-level files (robots, sitemap, global error, proxy)
+        // Next.js app-level files (robots, sitemap, global error)
         'src/app/robots.ts',
         'src/app/sitemap.tsx',
         'src/app/global-error.tsx',
-        'src/proxy.ts',
         // App API routes (covered via integration/e2e tests)
         'src/app/api/**',
         // Static type-only and config files
@@ -76,11 +75,8 @@ export default defineConfig({
         'src/infra/shopify/client.ts',
         'src/infra/shopify/helpers.ts',
         'src/infra/shopify/tokens/**',
-        'src/infra/shopify/actions.ts',
         'src/infra/shopify/sitemap.ts',
         'src/infra/shopify/webhooks.ts',
-        'src/infra/shopify/api/**',
-        'src/infra/shopify/models/**',
         'src/infra/shopify/server/**',
         'src/infra/email/**',
         'src/infra/upload/**',
@@ -130,8 +126,6 @@ export default defineConfig({
         'src/core/errors/index.ts',
         // Complex crypto auth utils (require async crypto context, e2e-tested)
         'src/core/utils/auth.ts',
-        // Admin auth reads env vars at module load time, hard to test branches
-        'src/core/utils/admin-auth.ts',
         // Rate limit - Redis path requires real Redis instance, in-memory tested separately
         'src/infra/rate-limit/rate-limit.ts',
         // Shop config service - heavily Shopify cookie context dependent

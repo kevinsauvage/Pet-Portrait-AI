@@ -1,18 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { COOKIES } from '@/core/config/constants';
-import { createAdminUnauthorizedResponse, isAdminAuthorized } from '@/core/utils/admin-auth';
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  // Protect admin routes
-  if (pathname.startsWith('/admin')) {
-    if (!isAdminAuthorized(request.headers)) {
-      return createAdminUnauthorizedResponse();
-    }
-    return NextResponse.next();
-  }
 
   // Protect customer routes - requires Shopify customer token
   const requiresCustomerToken =

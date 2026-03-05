@@ -57,8 +57,7 @@ src/
 │   ├── cn.ts
 │   └── consents.ts
 ├── types/                   # FormActionResult, globals.d.ts
-├── ui/
-└── proxy.ts                # Middleware (delegate token, cookies)
+└── ui/
 ```
 
 ---

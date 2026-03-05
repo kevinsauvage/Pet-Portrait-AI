@@ -43,7 +43,6 @@
   },
   "features": {
     "enableRegeneration": true,
-    "enableAdminDashboard": true,
     "enableGallery": true
   }
 }
@@ -86,7 +85,6 @@
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `features.enableRegeneration` | boolean | true | Enable regeneration feature |
-| `features.enableAdminDashboard` | boolean | true | Enable admin dashboard |
 | `features.enableGallery` | boolean | true | Enable gallery page |
 
 ### Pagination

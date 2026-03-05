@@ -53,7 +53,7 @@ describe('validateConfig', () => {
     process.env.OPENAI_API_KEY = 'openai-key';
     process.env.UPLOADTHING_TOKEN = 'upload-token';
     process.env.UPLOADTHING_SECRET = 'upload-secret';
-    process.env.ADMIN_SECRET = 'admin-secret';
+    process.env.RESEND_API_KEY = 'resend-key';
 
     expect(() => validateConfig()).toThrow(/NEXT_PUBLIC_BASE_URL uses HTTP/);
   });
