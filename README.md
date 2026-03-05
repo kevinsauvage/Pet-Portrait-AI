@@ -159,7 +159,6 @@ These are recommended for production deployments:
 
 - **`AI_API_SECRET`** - Protects `/api/ai/generate` endpoint
 - **`UPLOADTHING_API_SECRET`** - Protects `/api/uploadthing` endpoint
-- **`CRON_SECRET`** - Secret for cron job authentication
 
 ##### 📊 Optional Features
 

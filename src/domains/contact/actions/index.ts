@@ -2,14 +2,16 @@
 
 import { headers } from 'next/headers';
 
+import siteMetadata from '@/core/config/siteMetadata';
 import type { FormActionResult } from '@/core/types/form-actions';
 import { zodErrorsToFormActionResult } from '@/core/utils/form-actions';
 import { getClientContext } from '@/core/utils/request-identity';
+import { sendEmail } from '@/infra/email';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
-import { type ContactInput,contactSchema } from '../validation';
+import { type ContactInput, contactSchema } from '../validation';
 
-import nodemailer from 'nodemailer';
+import { logger } from '@sentry/nextjs';
 import { flattenError } from 'zod';
 
 type ContactFieldErrors = {
@@ -18,15 +20,16 @@ type ContactFieldErrors = {
   message?: string | string[];
 };
 
-const { EMAIL_ADDRESS, EMAIL_PASSWORD } = process.env;
-
 export async function contactAction(
   input: ContactInput,
 ): Promise<FormActionResult<ContactFieldErrors> & ContactFieldErrors> {
   const formData = contactSchema.safeParse(input);
   if (!formData.success) {
     const { fieldErrors } = flattenError(formData.error);
-    return { ...zodErrorsToFormActionResult(formData.error), ...(fieldErrors as ContactFieldErrors) };
+    return {
+      ...zodErrorsToFormActionResult(formData.error),
+      ...(fieldErrors as ContactFieldErrors),
+    };
   }
 
   // Rate limit check
@@ -46,24 +49,40 @@ export async function contactAction(
 
   const { name, email, message } = formData.data;
 
-  const transporter = nodemailer.createTransport({
-    auth: { pass: EMAIL_PASSWORD, user: EMAIL_ADDRESS },
-    service: 'gmail',
-  });
+  // Use CONTACT_EMAIL env var if set, otherwise fall back to siteMetadata.email
+  const recipientEmail = process.env.CONTACT_EMAIL || siteMetadata.email;
 
-  const mailOptions = {
-    from: { address: email, name },
-    subject: 'Request ECommerce _ {name shop}',
-    text: message,
-    to: 'kevinsauvage@outlook.com',
-  };
+  const subject = `Contact Request from ${name} - ${siteMetadata.companyName}`;
+
+  const htmlContent = `
+    <h2>New Contact Form Submission</h2>
+    <p><strong>From:</strong> ${name} (${email})</p>
+    <p><strong>Message:</strong></p>
+    <p>${message.replace(/\n/g, '<br>')}</p>
+  `;
+
+  const textContent = `
+New Contact Form Submission
+
+From: ${name} (${email})
+
+Message:
+${message}
+  `;
 
   try {
-    await transporter.sendMail(mailOptions);
+    await sendEmail({
+      to: recipientEmail,
+      subject,
+      html: htmlContent,
+      text: textContent,
+      replyTo: email,
+    });
     return {
       success: 'Email sent successfully',
     };
-  } catch {
+  } catch (error) {
+    logger.error('Error sending email', { error, context: 'contact-action' });
     return {
       error: 'An error occurred while sending the email',
     };

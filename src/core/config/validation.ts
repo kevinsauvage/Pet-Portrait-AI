@@ -88,20 +88,9 @@ function validateProductionRequirements(errors: string[]): void {
     );
   }
 
-  const requiredSmtpVars = [
-    'SMTP_HOST',
-    'SMTP_PORT',
-    'SMTP_USER',
-    'SMTP_PASS',
-    'SMTP_FROM',
-  ] as const;
-  const missingSmtpVars = requiredSmtpVars.filter((key) => !process.env[key]);
-
-  if (missingSmtpVars.length > 0) {
+  if (!process.env.RESEND_API_KEY) {
     errors.push(
-      `SMTP configuration is required in production for order emails. Missing: ${missingSmtpVars.join(
-        ', ',
-      )}. Set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM (and optionally SMTP_SECURE).`,
+      'RESEND_API_KEY is required in production for sending emails. Get your API key from https://resend.com/api-keys',
     );
   }
 }
@@ -207,11 +196,7 @@ export function getConfigStatus(): {
       OPENAI_API_KEY: Boolean(process.env.OPENAI_API_KEY),
       UPLOADTHING_TOKEN: Boolean(process.env.UPLOADTHING_TOKEN),
       UPLOADTHING_SECRET: Boolean(process.env.UPLOADTHING_SECRET),
-      SMTP_HOST: Boolean(process.env.SMTP_HOST),
-      SMTP_PORT: Boolean(process.env.SMTP_PORT),
-      SMTP_USER: Boolean(process.env.SMTP_USER),
-      SMTP_PASS: Boolean(process.env.SMTP_PASS),
-      SMTP_FROM: Boolean(process.env.SMTP_FROM),
+      RESEND_API_KEY: Boolean(process.env.RESEND_API_KEY),
       ...(isProduction && {
         ADMIN_AUTH: Boolean(
           (process.env.ADMIN_BASIC_USER && process.env.ADMIN_BASIC_PASSWORD) ||
@@ -224,7 +209,8 @@ export function getConfigStatus(): {
       SENTRY_ORG: Boolean(process.env.SENTRY_ORG),
       SENTRY_PROJECT: Boolean(process.env.SENTRY_PROJECT),
       REDIS_URL: Boolean(process.env.REDIS_URL),
-      SMTP_SECURE: Boolean(process.env.SMTP_SECURE),
+      RESEND_FROM: Boolean(process.env.RESEND_FROM),
+      CONTACT_EMAIL: Boolean(process.env.CONTACT_EMAIL),
     },
     optional: {
       NEXT_PUBLIC_SITE_NAME: Boolean(process.env.NEXT_PUBLIC_SITE_NAME),

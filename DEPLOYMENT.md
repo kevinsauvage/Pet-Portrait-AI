@@ -56,12 +56,14 @@ UPLOADTHING_SECRET=sk_live_...
 Choose one authentication method:
 
 **Option 1: HTTP Basic Auth**
+
 ```env
 ADMIN_BASIC_USER=admin
 ADMIN_BASIC_PASSWORD=secure_password
 ```
 
 **Option 2: Bearer Token**
+
 ```env
 ADMIN_SECRET=your_secret_token
 ```
@@ -88,7 +90,6 @@ REDIS_URL=redis://...
 ```env
 AI_API_SECRET=secret_for_ai_endpoint
 UPLOADTHING_API_SECRET=secret_for_upload_endpoint
-CRON_SECRET=secret_for_cron_jobs
 ```
 
 ### Environment Validation
@@ -230,10 +231,12 @@ yarn build
 ### 2. Deploy
 
 **Vercel:**
+
 - Push to `main` branch (automatic deployment)
 - Or use Vercel CLI: `vercel --prod`
 
 **Manual:**
+
 ```bash
 # Build production bundle
 yarn build
