@@ -17,7 +17,6 @@ export function proxy(request: NextRequest) {
   // Protect customer routes - requires Shopify customer token
   const requiresCustomerToken =
     pathname.startsWith('/create') || pathname === '/account' || pathname.startsWith('/account/');
-  console.log('🚀 ~ proxy ~ requiresCustomerToken:', requiresCustomerToken);
 
   if (requiresCustomerToken) {
     const token = request.cookies.get(COOKIES.shopifyToken)?.value;

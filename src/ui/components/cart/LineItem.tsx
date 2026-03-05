@@ -129,11 +129,11 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
 
         {isAiPortrait && (
           <SavePortraitButton
-            imageUrl={artworkUrl!}
+            imageUrl={artworkUrl ?? ''}
             lineItemId={node.id}
-            originalPhotoUrl={originalPhotoUrl!}
-            styleId={chosenStyle!}
-            generationId={generationId!}
+            originalPhotoUrl={originalPhotoUrl ?? ''}
+            styleId={chosenStyle ?? ''}
+            generationId={generationId ?? ''}
             label={node.merchandise.product.title}
             variantId={node.merchandise.id}
             productHandle={variantProductHandle}
