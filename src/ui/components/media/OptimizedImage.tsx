@@ -3,7 +3,7 @@
 import { startTransition, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import { Skeleton } from '@/ui/primitives/skeleton';
 
 type OptimizedImageProps = {

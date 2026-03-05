@@ -1,6 +1,6 @@
 import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import PhotoGallery from '@/ui/components/media/PhotoGallery';
 
 import ProductDescriptionClient from './ProductDescriptionClient';

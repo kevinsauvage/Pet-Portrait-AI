@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import config from '@/core/config';
 import siteMetadata from '@/core/config/siteMetadata';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import type { NavLink } from '@/ui/components/navigation/nav-links-utils';
 import {
   Sheet,

@@ -9,7 +9,7 @@ import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/creat
 import { validateImageDimensions } from '@/domains/ai/ai-portrait/validation';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 import { useUploadThing } from '@/infra/upload/uploadthing';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import { Button } from '@/ui/primitives/button';
 
 import { ImageIcon, Sparkles, Upload } from 'lucide-react';

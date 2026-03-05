@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
 import { Card, CardContent } from '@/ui/primitives/card';
 

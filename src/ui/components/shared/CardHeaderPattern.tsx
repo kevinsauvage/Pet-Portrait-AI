@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import { CardHeader } from '@/ui/primitives/card';
 
 type CardHeaderPatternProps = {

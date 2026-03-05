@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { sanitizeHtml } from '@/core/utils/sanitize';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 
 interface ProductDescriptionHtmlProps extends React.ComponentPropsWithoutRef<'div'> {
   html: string;

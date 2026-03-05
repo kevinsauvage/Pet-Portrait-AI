@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import FormFieldError from '@/ui/components/shared/FormFieldError';
 import { Button } from '@/ui/primitives/button';
 import { Input } from '@/ui/primitives/input';

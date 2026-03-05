@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import { Badge } from '@/ui/primitives/badge';
 
 export type GalleryItem = {

@@ -16,10 +16,9 @@ import GtmScript from '@/ui/components/consent/GtmScript';
 import Footer from '@/ui/components/navigation/Footer';
 import Header from '@/ui/components/navigation/Header';
 import SkipLinks from '@/ui/components/navigation/SkipLinks';
+import RouteGradient from '@/ui/components/shared/RouteGradient';
 import { Toaster } from '@/ui/primitives/sonner';
 import { ThemeProvider } from '@/ui/providers/theme-provider';
-
-import RouteGradient from '../ui/components/shared/RouteGradient';
 
 import '../globals.css';
 

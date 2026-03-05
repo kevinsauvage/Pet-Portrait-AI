@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import { AI_ART_STYLES, type ArtStyleId } from '@/domains/ai/ai-portrait/types';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import { STYLE_TRANSFORMATIONS } from '@/ui/content/marketing';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 
 import ThemeToggle from './ThemeToggle';
 
