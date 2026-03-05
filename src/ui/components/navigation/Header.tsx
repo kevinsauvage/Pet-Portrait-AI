@@ -31,9 +31,9 @@ const Header = async ({
           {/* Left: logo + nav */}
           <div className="flex items-center gap-8">
             <Logo />
-            <nav className="hidden md:block" aria-label="Main navigation">
+            <div className="hidden md:block">
               <NavLinks links={navLinks} />
-            </nav>
+            </div>
           </div>
 
           {/* Right: actions */}

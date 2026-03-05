@@ -27,20 +27,10 @@ const PageBanner = ({
   secondaryCtaHref,
 }: PageBannerProps) => (
   <section
+    role="banner"
     aria-labelledby="page-banner-title"
-    className={cn(
-      'relative isolate overflow-hidden bg-background',
-      className,
-    )}
+    className={cn('relative isolate overflow-hidden', className)}
   >
-    <div
-      className="pointer-events-none absolute inset-0"
-      aria-hidden
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,color-mix(in_srgb,var(--primary)_8%,transparent),transparent)]" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[linear-gradient(to_right,transparent,var(--border),transparent)]" />
-    </div>
-
     <div className="container relative mx-auto flex flex-col items-center justify-center px-4 py-16 text-center md:px-6 md:py-24 lg:py-32">
       <div className="relative max-w-4xl space-y-5 md:space-y-7">
         {eyebrow && (
@@ -70,7 +60,7 @@ const PageBanner = ({
                 asChild
                 className="h-12 px-8 text-body font-semibold shadow-lg shadow-primary/20 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 active:scale-[0.98]"
               >
-                <Link href={ctaHref} aria-label={ctaLabel}>
+                <Link href={ctaHref}>
                   {ctaLabel}
                 </Link>
               </Button>
@@ -82,7 +72,7 @@ const PageBanner = ({
                 asChild
                 className="h-12 border-border/70 px-8 text-body font-medium transition-all duration-200 hover:border-primary/40 hover:bg-primary/5"
               >
-                <Link href={secondaryCtaHref} aria-label={secondaryCtaLabel}>
+                <Link href={secondaryCtaHref}>
                   {secondaryCtaLabel}
                 </Link>
               </Button>
@@ -90,11 +80,7 @@ const PageBanner = ({
           </div>
         )}
       </div>
-      {children && (
-        <div className="mt-12 w-full max-w-5xl flex justify-center">
-          {children}
-        </div>
-      )}
+      {children && <div className="mt-12 w-full max-w-5xl flex justify-center">{children}</div>}
     </div>
   </section>
 );

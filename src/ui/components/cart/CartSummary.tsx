@@ -17,7 +17,7 @@ const CartSummary = () => {
   const { currencyCode } = cart.cost.subtotalAmount;
 
   return (
-    <Card className="border-border/70 lg:sticky lg:top-24">
+    <Card className="border-border/70 lg:top-24">
       <CardHeaderPattern className="pb-3" title="Order Summary" size={4} />
       <CardContent className="space-y-4 pt-0">
         <div className="space-y-2.5">

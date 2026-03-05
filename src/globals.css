@@ -73,8 +73,8 @@
 
   --primary: #d97706;
   --sidebar-primary: #d97706;
-  --primary-foreground: #1a1714;
-  --sidebar-primary-foreground: #1a1714;
+  --primary-foreground: #f5f0eb;
+  --sidebar-primary-foreground: #f5f0eb;
 
   --secondary: #2d2822;
   --accent: #2d2822;
@@ -433,6 +433,10 @@ h6 {
 
 .text-accent {
   color: var(--primary);
+}
+
+.text-primary-foreground {
+  color: var(--primary-foreground);
 }
 
 .link {

@@ -69,7 +69,8 @@ const BeforeAfterPreview = ({
   return (
     <div className={cn('w-full', className)}>
       {showStyleSelector && (
-        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+        <fieldset className="mb-6 flex flex-wrap items-center justify-center gap-2 border-0 p-0">
+          <legend className="sr-only">Style selector</legend>
           <span className="text-body-sm font-medium text-muted-foreground">Style:</span>
           {AI_ART_STYLES.map((style) => (
             <Button
@@ -78,11 +79,12 @@ const BeforeAfterPreview = ({
               size="sm"
               onClick={() => setSelectedStyleId(style.id)}
               className="text-caption-sm"
+              aria-pressed={selectedStyleId === style.id}
             >
               {style.label}
             </Button>
           ))}
-        </div>
+        </fieldset>
       )}
       <div className="relative overflow-hidden rounded-3xl border border-border bg-muted/50 shadow-md">
         <div className={cn('relative w-full overflow-hidden', aspectClassName)}>
@@ -117,14 +119,6 @@ const BeforeAfterPreview = ({
             aria-hidden="true"
           >
             <div className="h-full w-0.5 bg-white/80 shadow-[0_0_10px_rgba(0,0,0,0.2)]" />
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="h-10 w-10 rounded-full border border-white/70 bg-white/80 backdrop-blur-sm shadow-md flex items-center justify-center">
-                <div className="flex gap-1">
-                  <span className="h-3 w-0.5 rounded-full bg-muted-foreground/70" />
-                  <span className="h-3 w-0.5 rounded-full bg-muted-foreground/70" />
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="absolute left-4 top-4">
@@ -135,7 +129,12 @@ const BeforeAfterPreview = ({
           </div>
         </div>
         <div className="px-4 pb-4 pt-3">
+          <label id="before-after-slider-label" htmlFor="before-after-slider" className="sr-only">
+            Reveal before and after image
+          </label>
           <Slider
+            id="before-after-slider"
+            aria-labelledby="before-after-slider-label"
             value={sliderValue}
             min={0}
             max={100}
@@ -143,7 +142,6 @@ const BeforeAfterPreview = ({
               if (!Array.isArray(nextValue)) return;
               setValue(clamp(nextValue[0] ?? 50));
             }}
-            aria-label="Reveal before and after image"
           />
         </div>
       </div>

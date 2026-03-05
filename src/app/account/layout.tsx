@@ -6,12 +6,14 @@ import { Card, CardContent } from '@/ui/primitives/card';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="max-w-7xl pb-8 md:pb-12 mx-auto">
-      <PageBanner
-        title="My Account"
-        description="Manage your PetPortrait AI account — view your AI creations, saved favourites, order history, and personal details all in one place."
-      />
-      <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="relative max-w-7xl pb-8 md:pb-12 mx-auto">
+      <div className="relative z-10">
+        <PageBanner
+          title="My Account"
+          description="Manage your PetPortrait AI account — view your AI creations, saved favourites, order history, and personal details all in one place."
+        />
+      </div>
+      <div className="relative z-10 container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="hidden md:block h-fit">
           <CardHeaderPattern
             className="mb-4 md:mb-6"

@@ -12,7 +12,7 @@ import { useUploadThing } from '@/infra/upload/uploadthing';
 import { cn } from '@/lib/cn';
 import { Button } from '@/ui/primitives/button';
 
-import { ImageIcon, Sparkles,Upload } from 'lucide-react';
+import { ImageIcon, Sparkles, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface UploadIslandProps {
@@ -62,7 +62,7 @@ export default function UploadIsland({ initialStyleId }: UploadIslandProps) {
   });
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6 py-12">
       <div className="text-center space-y-3 mb-8">
         <h2 className="text-heading-3 font-semibold">Start Your Portrait Journey</h2>
         <p className="text-body text-muted-foreground max-w-lg mx-auto">
@@ -76,7 +76,7 @@ export default function UploadIsland({ initialStyleId }: UploadIslandProps) {
           isDragActive
             ? 'border-primary bg-primary/5 shadow-2xl scale-[1.02]'
             : 'border-border/60 bg-gradient-to-br from-card via-card to-muted/20 hover:border-primary/50 hover:shadow-xl',
-          isUploading && 'pointer-events-none'
+          isUploading && 'pointer-events-none',
         )}
       >
         {/* Animated background gradient on drag */}
@@ -89,7 +89,7 @@ export default function UploadIsland({ initialStyleId }: UploadIslandProps) {
           className={cn(
             'relative flex min-h-[400px] cursor-pointer flex-col items-center justify-center gap-6 p-12',
             'transition-all duration-300',
-            isDragActive && 'scale-[1.01]'
+            isDragActive && 'scale-[1.01]',
           )}
         >
           <input {...getInputProps()} />
@@ -115,13 +115,13 @@ export default function UploadIsland({ initialStyleId }: UploadIslandProps) {
                   'relative rounded-3xl p-6 transition-all duration-300',
                   isDragActive
                     ? 'bg-primary/20 scale-110 shadow-lg'
-                    : 'bg-gradient-to-br from-primary/10 via-primary/5 to-primary/5'
+                    : 'bg-gradient-to-br from-primary/10 via-primary/5 to-primary/5',
                 )}
               >
                 <Upload
                   className={cn(
                     'h-12 w-12 text-primary transition-all duration-300',
-                    isDragActive && 'scale-110'
+                    isDragActive && 'scale-110',
                   )}
                   strokeWidth={1.5}
                 />
@@ -163,7 +163,7 @@ export default function UploadIsland({ initialStyleId }: UploadIslandProps) {
                 size="lg"
                 className={cn(
                   'mt-4 gap-2 transition-all duration-300',
-                  isDragActive && 'shadow-lg scale-105'
+                  isDragActive && 'shadow-lg scale-105',
                 )}
               >
                 <ImageIcon className="h-4 w-4" />

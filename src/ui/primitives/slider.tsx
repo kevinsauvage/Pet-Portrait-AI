@@ -14,6 +14,8 @@ const Slider = ({
   max = 100,
   ...properties
 }: React.ComponentProps<typeof SliderPrimitive.Root>) => {
+  const { ['aria-label']: ariaLabel, ['aria-labelledby']: ariaLabelledBy, ...restProperties } =
+    properties;
   const _values = React.useMemo(
     () => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
     [value, defaultValue, min, max],
@@ -30,7 +32,7 @@ const Slider = ({
         'relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col',
         className,
       )}
-      {...properties}
+      {...restProperties}
     >
       <SliderPrimitive.Track
         data-slot="slider-track"
@@ -50,6 +52,12 @@ const Slider = ({
           data-slot="slider-thumb"
           key={index}
           className="border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          {...(index === 0
+            ? {
+                'aria-label': ariaLabel,
+                'aria-labelledby': ariaLabelledBy,
+              }
+            : undefined)}
         />
       ))}
     </SliderPrimitive.Root>

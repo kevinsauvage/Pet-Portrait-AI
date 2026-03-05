@@ -19,6 +19,8 @@ import SkipLinks from '@/ui/components/navigation/SkipLinks';
 import { Toaster } from '@/ui/primitives/sonner';
 import { ThemeProvider } from '@/ui/providers/theme-provider';
 
+import RouteGradient from '../ui/components/shared/RouteGradient';
+
 import '../globals.css';
 
 import * as Sentry from '@sentry/nextjs';
@@ -94,10 +96,6 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           }}
         />
 
-        <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute -top-40 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_top,rgba(194,65,12,0.08)_0%,transparent_70%)] blur-3xl" />
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent" />
-        </div>
         <GtmScript />
         <CookieBannerWrapper />
         <ThemeProvider
@@ -109,6 +107,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           <CartProvider initialCart={initialCart}>
             <UserProvider user={user}>
               <SkipLinks />
+              <RouteGradient />
               <div className="relative z-10 flex min-h-screen flex-col">
                 <Header headerMenu={menus.headerMenu} />
                 <main id="main-content" className="flex-1" tabIndex={-1}>

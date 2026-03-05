@@ -18,7 +18,7 @@ const NavLinks = ({ links, className, linkClassName }: NavLinksProps) => {
   if (!links.length) return null;
 
   return (
-    <nav className={className} aria-label="Main navigation">
+    <nav className={className} aria-label="Primary navigation">
       <ul className="flex items-center gap-0.5 list-none p-0 m-0">
         {links.map((link) => {
           const isActive =

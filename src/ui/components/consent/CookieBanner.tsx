@@ -140,8 +140,8 @@ const CookieBanner = ({ cookieExpiryDays }: CookieBannerProps) => {
             <p id="cookie-banner-description" className="text-body-sm text-secondary">
               We use cookies to enhance your browsing experience and analyze site traffic. By
               clicking &quot;Accept All&quot;, you consent to our use of cookies.{' '}
-              <Link href={config.routes.privacy} className="link">
-                Learn more
+              <Link href={config.routes.privacy} className="link font-medium">
+                Learn more about our cookie policy
               </Link>
             </p>
           </div>

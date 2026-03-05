@@ -120,7 +120,7 @@ const HamburgerMenu = ({
 
           {/* Primary nav links */}
           {navLinks.length > 0 && (
-            <div className="space-y-1">
+            <nav aria-label="Mobile navigation" className="space-y-1">
               <p className="mb-2 px-4 text-caption-sm font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 Explore
               </p>
@@ -134,7 +134,7 @@ const HamburgerMenu = ({
                   {link.label}
                 </button>
               ))}
-            </div>
+            </nav>
           )}
 
           {/* Divider */}
