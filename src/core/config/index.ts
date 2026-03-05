@@ -41,7 +41,7 @@ const config = {
     styles: '/styles',
     gallery: '/gallery',
     admin: '/admin',
-    cart: '/create/order',
+    cart: '/order',
     login: '/login',
     collection: '/shop',
     contact: '/contact',

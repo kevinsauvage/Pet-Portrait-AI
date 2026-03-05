@@ -1,6 +1,3 @@
-import Link from 'next/link';
-
-import config from '@/core/config';
 import { getShopifyToken } from '@/infra/shopify/server';
 import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Logo from '@/ui/components/navigation/Logo';
@@ -8,9 +5,8 @@ import { getNavLinks } from '@/ui/components/navigation/nav-links-utils';
 import NavLinks from '@/ui/components/navigation/NavLinks';
 import UserButtons from '@/ui/components/navigation/UserButtons';
 
+import CartIcon from './CartIcon';
 import HamburgerMenu from './HamburgerMenu';
-
-import { ShoppingBag } from 'lucide-react';
 
 const Header = async ({
   headerMenu,
@@ -27,7 +23,6 @@ const Header = async ({
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 w-full items-center justify-between md:h-[68px]">
-
           {/* Left: logo + nav */}
           <div className="flex items-center gap-8">
             <Logo />
@@ -41,20 +36,13 @@ const Header = async ({
             <UserButtons className="hidden md:flex" />
 
             {/* Cart — slightly elevated pill style */}
-            <Link
-              href={config.routes.cart}
-              aria-label="Shopping cart"
-              className="group relative ml-1 flex h-9 w-9 items-center justify-center rounded-xl border border-transparent text-muted-foreground transition-all duration-200 hover:border-border/60 hover:bg-accent hover:text-foreground"
-            >
-              <ShoppingBag size={18} strokeWidth={1.75} />
-            </Link>
+            <CartIcon />
 
             {/* Mobile menu */}
             <div className="ml-1 md:hidden">
               <HamburgerMenu navLinks={navLinks} shopifyToken={shopifyToken || null} />
             </div>
           </div>
-
         </div>
       </div>
     </header>

@@ -107,40 +107,40 @@ const SavedPortraitCard = ({ portrait, defaultProduct }: Props) => {
           alt={label ?? `${styleLabel} portrait`}
           fill
           className="object-cover"
-          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
         />
       </div>
 
-      <CardContent className="px-3 pt-3 pb-2 flex-1">
-        <div className="flex items-center justify-between gap-2">
-          <Badge variant="outline" className="text-caption-sm">
+      <CardContent className="px-2 pt-2 pb-1.5 flex-1">
+        <div className="flex items-center justify-between gap-1.5">
+          <Badge variant="outline" className="text-caption-sm px-1.5 py-0">
             {styleLabel}
           </Badge>
-          <span className="text-caption-sm text-muted-foreground">{date}</span>
+          <span className="text-caption-xs text-muted-foreground">{date}</span>
         </div>
-        {label && <p className="text-body-sm font-medium mt-1.5 truncate">{label}</p>}
+        {label && <p className="text-body-xs font-medium mt-1 truncate">{label}</p>}
       </CardContent>
 
-      <CardFooter className="px-3 pb-3 gap-2 flex-col">
+      <CardFooter className="px-2 pb-2 gap-1.5 flex-col">
         {(portrait.variantId && portrait.productHandle) ||
         defaultProduct?.variant.availableForSale ? (
           <Button
             size="sm"
-            className="w-full gap-2"
+            className="w-full gap-1.5 text-xs h-8"
             onClick={handleAddToCart}
             disabled={adding}
           >
             {adding ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Loader2 className="h-3 w-3 animate-spin" />
             ) : (
-              <ShoppingBag className="h-3.5 w-3.5" />
+              <ShoppingBag className="h-3 w-3" />
             )}
             Add to cart
           </Button>
         ) : (
-          <Button asChild size="sm" className="w-full gap-2">
+          <Button asChild size="sm" className="w-full gap-1.5 text-xs h-8">
             <Link href={orderHref}>
-              <ShoppingBag className="h-3.5 w-3.5" />
+              <ShoppingBag className="h-3 w-3" />
               Choose product
             </Link>
           </Button>
@@ -148,14 +148,14 @@ const SavedPortraitCard = ({ portrait, defaultProduct }: Props) => {
         <Button
           variant="outline"
           size="sm"
-          className="w-full gap-2"
+          className="w-full gap-1.5 text-xs h-8"
           onClick={handleRemove}
           disabled={removing}
         >
           {removing ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <Loader2 className="h-3 w-3 animate-spin" />
           ) : (
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className="h-3 w-3" />
           )}
           Remove
         </Button>

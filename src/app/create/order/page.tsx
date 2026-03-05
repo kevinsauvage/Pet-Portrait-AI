@@ -6,6 +6,7 @@ import { getDefaultAiPortraitProduct } from '@/domains/ai/ai-portrait/get-ai-por
 import { CartService } from '@/domains/cart/services/cart.service';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import SavedPortraitsList from '@/ui/components/account/SavedPortraitsList';
+import AddMoreProductsActions from '@/ui/components/cart/AddMoreProductsActions';
 import CartEmptyState from '@/ui/components/cart/CartEmptyState';
 import CartHeader from '@/ui/components/cart/CartHeader';
 import CartItemsList from '@/ui/components/cart/CartItemsList';
@@ -70,6 +71,14 @@ const OrderPage = async ({
           {!isEmpty && <CartHeader />}
         </div>
 
+        <AddMoreProductsActions
+          artwork={artwork}
+          photo={photo}
+          styleId={styleId}
+          generationId={generationId}
+          urls={urls}
+        />
+
         {isEmpty ? (
           <CartEmptyState />
         ) : (
@@ -86,11 +95,11 @@ const OrderPage = async ({
         )}
 
         {savedPortraits.length > 0 && (
-          <section className="mt-10">
+          <section className="mt-6">
             <Card>
               <CardHeaderPattern
                 title={`Saved for later (${savedPortraits.length})`}
-                size={3}
+                size={4}
                 as="h2"
                 description={
                   savedPortraits.length === 1
@@ -98,7 +107,7 @@ const OrderPage = async ({
                     : `You have ${savedPortraits.length} portraits saved for later. Tap any portrait to add it back to your cart.`
                 }
               />
-              <CardContent>
+              <CardContent className="pt-0">
                 <SavedPortraitsList
                   portraits={savedPortraits}
                   defaultProduct={
