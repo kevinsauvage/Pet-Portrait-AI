@@ -7,12 +7,11 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { generatePortraitAction } from '@/domains/ai/actions';
-import { isValidStyleId } from '@/domains/ai/ai-portrait/types';
+import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
+import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
+import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
-import { Button } from '@/ui/primitives/button';
-
-import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.generating.title,
@@ -24,18 +23,18 @@ export const metadata: Metadata = generateMetadataUtil({
 export const maxDuration = 300;
 
 interface GeneratingPageProps {
-  searchParams: Promise<{
-    photo?: string;
-    styleId?: string;
-    generationId?: string;
-    urls?: string;
-  }>;
+  searchParams: Promise<CreateFlowParams>;
 }
 
 export default async function GeneratingPage({ searchParams }: GeneratingPageProps) {
-  const { photo, styleId, generationId, urls } = await searchParams;
+  const params = await searchParams;
+  const { photo, styleId, generationId, urls } = params;
 
-  if (!photo || !styleId || !isValidStyleId(styleId)) {
+  // Validate and redirect if needed
+  validateAndRedirect('generating', params);
+
+  // After validation, we know photo and styleId are defined
+  if (!photo || !styleId) {
     redirect(config.routes.create);
   }
 
@@ -66,19 +65,12 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
     return null;
   }
 
-  const backHref = `${config.routes.createStyle}${buildCreateFlowQueryString({ photo })}`;
-
   return (
     <>
       <CreateProgressBar currentStep="generating" />
 
       <div className="space-y-8">
-        <Button variant="ghost" size="sm" asChild className="gap-2 -ml-2">
-          <Link href={backHref}>
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Link>
-        </Button>
+        <CreateFlowBackButton target="style" photo={photo} />
 
         <div className="space-y-6">
           <div className="space-y-3">

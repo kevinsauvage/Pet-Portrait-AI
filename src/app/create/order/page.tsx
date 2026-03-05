@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
-import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAiPortraitProductByHandle } from '@/domains/ai/ai-portrait/get-ai-portrait-product.service';
-import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
+import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
+import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
 import AddMoreProductsActions from '@/ui/components/cart/AddMoreProductsActions';
+import CreateFlowArtworkPreview from '@/ui/components/create/CreateFlowArtworkPreview';
+import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
 import AddToCartIsland from '@/ui/components/create/islands/AddToCartIsland';
-import OrderBackButton from '@/ui/components/create/OrderBackButton';
 import ProductDescriptionHtml from '@/ui/components/product/ProductDescriptionHtml';
 import { Card, CardContent } from '@/ui/primitives/card';
 
@@ -25,33 +25,20 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function CreateOrderPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    artwork?: string;
-    photo?: string;
-    styleId?: string;
-    generationId?: string;
-    productHandle?: string;
-    urls?: string;
-  }>;
-}) {
-  const { artwork, photo, styleId, generationId, productHandle, urls } = await searchParams;
+interface CreateOrderPageProps {
+  searchParams: Promise<CreateFlowParams & { productHandle?: string }>;
+}
 
-  if (!artwork) {
-    redirect(config.routes.create);
-  }
-  if (!productHandle) {
-    redirect(
-      `${config.routes.createCollections}${buildCreateFlowQueryString({
-        artwork,
-        photo,
-        styleId,
-        generationId,
-        urls,
-      })}`,
-    );
+export default async function CreateOrderPage({ searchParams }: CreateOrderPageProps) {
+  const params = await searchParams;
+  const { artwork, photo, styleId, generationId, productHandle, urls } = params;
+
+  // Validate and redirect if needed
+  validateAndRedirect('order', params);
+
+  // After validation, we know artwork and productHandle are defined
+  if (!artwork || !productHandle) {
+    notFound();
   }
 
   const product = await getAiPortraitProductByHandle(productHandle);
@@ -64,7 +51,8 @@ export default async function CreateOrderPage({
       <div className="relative z-10 container mx-auto px-4 md:px-6 py-8 md:py-12">
         <div className="mx-auto  space-y-8">
           <CreateProgressBar currentStep="product" />
-          <OrderBackButton
+          <CreateFlowBackButton
+            target="collections"
             artwork={artwork}
             photo={photo}
             styleId={styleId}
@@ -73,17 +61,7 @@ export default async function CreateOrderPage({
           />
 
           <div className="flex items-start gap-6">
-            {artwork && (
-              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border shadow-sm">
-                <Image
-                  src={artwork}
-                  alt="Your selected portrait"
-                  fill
-                  className="object-cover"
-                  sizes="96px"
-                />
-              </div>
-            )}
+            {artwork && <CreateFlowArtworkPreview artwork={artwork} size="md" />}
             <div className="min-w-0 flex-1">
               <h1 className="text-heading-2">{product.title}</h1>
               <p className="text-body-sm text-muted-foreground mt-1">

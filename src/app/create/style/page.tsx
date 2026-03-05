@@ -7,11 +7,13 @@ import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { AI_ART_STYLES } from '@/domains/ai/ai-portrait/types';
+import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
+import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
+import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
-import { Button } from '@/ui/primitives/button';
 
-import { ArrowLeft, Palette } from 'lucide-react';
+import { Palette } from 'lucide-react';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.style.title,
@@ -21,13 +23,20 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 interface StylePageProps {
-  searchParams: Promise<{ photo?: string; styleId?: string }>;
+  searchParams: Promise<Pick<CreateFlowParams, 'photo' | 'styleId'>>;
 }
 
 export default async function StylePage({ searchParams }: StylePageProps) {
-  const { photo, styleId } = await searchParams;
+  const params = await searchParams;
+  const { photo, styleId } = params;
 
-  if (!photo) redirect(config.routes.create);
+  // Validate and redirect if needed
+  validateAndRedirect('style', params);
+
+  // After validation, we know photo is defined
+  if (!photo) {
+    redirect(config.routes.create);
+  }
 
   // If styleId is already selected, redirect directly to generating
   if (styleId) {
@@ -47,12 +56,7 @@ export default async function StylePage({ searchParams }: StylePageProps) {
       <CreateProgressBar currentStep="style" />
 
       <div className="space-y-8">
-        <Button variant="ghost" size="sm" asChild className="gap-2 -ml-2">
-          <Link href={`${config.routes.create}${buildCreateFlowQueryString({ styleId })}`}>
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Link>
-        </Button>
+        <CreateFlowBackButton target="create" styleId={styleId} />
 
         <div className="flex flex-col items-start gap-10 lg:flex-row lg:gap-12">
           {/* Photo Preview */}

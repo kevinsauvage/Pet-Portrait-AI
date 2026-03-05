@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAiPortraitCollections } from '@/domains/ai/ai-portrait/get-ai-portrait-collections.service';
+import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
-import CollectionsBackButton from '@/ui/components/create/CollectionsBackButton';
+import CreateFlowArtworkPreview from '@/ui/components/create/CreateFlowArtworkPreview';
+import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.collections.title,
@@ -17,13 +18,7 @@ export const metadata: Metadata = generateMetadataUtil({
 });
 
 interface CollectionsPageProps {
-  searchParams: Promise<{
-    artwork?: string;
-    photo?: string;
-    styleId?: string;
-    generationId?: string;
-    urls?: string;
-  }>;
+  searchParams: Promise<CreateFlowParams>;
 }
 
 export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
@@ -46,7 +41,8 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
   // Empty state - this will be shown in the layout's children area
   return (
     <div className="space-y-6">
-      <CollectionsBackButton
+      <CreateFlowBackButton
+        target="generating"
         photo={photo}
         styleId={styleId}
         generationId={generationId}
@@ -54,17 +50,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
       />
 
       <div className="flex items-center gap-4">
-        {artwork && (
-          <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border shadow-sm">
-            <Image
-              src={artwork}
-              alt="Your selected portrait"
-              fill
-              className="object-cover"
-              sizes="64px"
-            />
-          </div>
-        )}
+        {artwork && <CreateFlowArtworkPreview artwork={artwork} size="sm" />}
         <div className="space-y-2">
           <h2 className="text-heading-2 tracking-tight">Choose Your Product</h2>
           <p className="text-body-sm text-muted-foreground max-w-2xl">

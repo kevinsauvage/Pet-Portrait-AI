@@ -1,22 +1,17 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAiPortraitProductsByCollection } from '@/domains/ai/ai-portrait/get-ai-portrait-product.service';
-import CollectionsBackButton from '@/ui/components/create/CollectionsBackButton';
+import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
+import CreateFlowArtworkPreview from '@/ui/components/create/CreateFlowArtworkPreview';
+import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
 import CreateProductRow from '@/ui/components/create/islands/CreateProductRow';
 
 interface CollectionPageProps {
   params: Promise<{ collection: string }>;
-  searchParams: Promise<{
-    artwork?: string;
-    photo?: string;
-    styleId?: string;
-    generationId?: string;
-    urls?: string;
-  }>;
+  searchParams: Promise<CreateFlowParams>;
 }
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
@@ -41,7 +36,8 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
   return (
     <div className="space-y-6">
-      <CollectionsBackButton
+      <CreateFlowBackButton
+        target="generating"
         photo={photo}
         styleId={styleId}
         generationId={generationId}
@@ -49,17 +45,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
       />
 
       <div className="flex items-center gap-4">
-        {artwork && (
-          <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border shadow-sm">
-            <Image
-              src={artwork}
-              alt="Your selected portrait"
-              fill
-              className="object-cover"
-              sizes="64px"
-            />
-          </div>
-        )}
+        {artwork && <CreateFlowArtworkPreview artwork={artwork} size="sm" />}
         <div>
           <h2 className="text-heading-3">{data.collectionTitle}</h2>
           <p className="text-body-sm text-muted-foreground">
