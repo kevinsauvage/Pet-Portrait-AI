@@ -16,10 +16,6 @@
       **WHY:** `src/app/order/page.tsx` and `src/app/create/order/page.tsx` are nearly identical. Risk of divergence and maintenance burden.
       **HOW:** Either: (a) extract shared layout/content into a component and reuse; (b) redirect one to the other; or (c) document the intended difference (e.g. `/order` for direct cart, `/create/order` for create flow) and ensure they stay in sync.
 
-- [ ] **WHAT:** Remove non-existent file from vitest config exclude list.
-      **WHY:** `vitest.config.ts` line 81 excludes `src/infra/shopify/webhooks.ts`, which does not exist.
-      **HOW:** Remove both `webhooks.ts` entries from the exclude array (lines 81 and 147).
-
 - [ ] **WHAT:** Ensure production config validation does not block contact form.
       **WHY:** `validateProductionRequirements` requires SMTP for "order emails". Contact form uses different vars. If contact is required for production, validation should align.
       **HOW:** Clarify in validation whether contact form is required. If yes, add contact-specific vars (SMTP or EMAIL\_\*) to production requirements.

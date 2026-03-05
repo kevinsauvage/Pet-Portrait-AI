@@ -144,7 +144,6 @@ export default defineConfig({
         'src/domains/ai/services/portrait-generation.service.ts',
         // Infra sitemap, webhooks (Next.js routing, e2e-tested)
         'src/infra/shopify/sitemap.ts',
-        'src/infra/shopify/webhooks.ts',
       ],
       thresholds: {
         lines: 80,
