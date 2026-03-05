@@ -3,19 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-import { sanitizeHtml } from '@/core/utils/sanitize';
 import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/products';
 import { getLowestPrice } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { formatPrice } from '@/lib/format';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/ui/primitives/sheet';
 
-import AddToCartIsland from './AddToCartIsland';
+import ProductSelectSheet from './ProductSelectSheet';
 
 interface CreateProductRowProps {
   product: AiPortraitProduct;
@@ -39,7 +31,7 @@ export default function CreateProductRow({
   const formattedPrice = formatPrice(lowestPrice, currency);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <>
       <button
         onClick={() => setOpen(true)}
         className="group flex w-full items-center gap-3 rounded-xl border bg-card p-3 text-left transition-all hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -70,49 +62,15 @@ export default function CreateProductRow({
         <span className="shrink-0 text-caption-sm font-medium text-primary">Select →</span>
       </button>
 
-      <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
-        <SheetHeader className="pb-2">
-          <SheetTitle>{product.title}</SheetTitle>
-          {product.description && (
-            <SheetDescription asChild>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
-              />
-            </SheetDescription>
-          )}
-        </SheetHeader>
-
-        <div className="flex flex-col gap-6 px-4 pb-6">
-          {product.image && (
-            <div className="relative aspect-square w-full overflow-hidden rounded-xl border">
-              <Image
-                src={product.image}
-                alt={product.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, 448px"
-              />
-            </div>
-          )}
-
-          {artworkUrl && product.variants.length > 0 ? (
-            <AddToCartIsland
-              product={product}
-              artworkUrl={artworkUrl}
-              originalPhotoUrl={originalPhotoUrl}
-              styleId={styleId}
-              generationId={generationId}
-            />
-          ) : (
-            <p className="text-body-sm text-muted-foreground">
-              {!artworkUrl
-                ? 'No artwork selected. Please go back and select an image first.'
-                : 'No variants available for this product.'}
-            </p>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
+      <ProductSelectSheet
+        product={product}
+        artworkUrl={artworkUrl}
+        originalPhotoUrl={originalPhotoUrl}
+        styleId={styleId}
+        generationId={generationId}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </>
   );
 }

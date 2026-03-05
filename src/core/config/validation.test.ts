@@ -54,11 +54,6 @@ describe('validateConfig', () => {
     process.env.UPLOADTHING_TOKEN = 'upload-token';
     process.env.UPLOADTHING_SECRET = 'upload-secret';
     process.env.ADMIN_SECRET = 'admin-secret';
-    process.env.SMTP_HOST = 'smtp.example.com';
-    process.env.SMTP_PORT = '587';
-    process.env.SMTP_USER = 'user';
-    process.env.SMTP_PASS = 'pass';
-    process.env.SMTP_FROM = 'from@example.com';
 
     expect(() => validateConfig()).toThrow(/NEXT_PUBLIC_BASE_URL uses HTTP/);
   });

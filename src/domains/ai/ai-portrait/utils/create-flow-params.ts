@@ -8,6 +8,7 @@ export interface CreateFlowParams {
   styleId?: string;
   generationId?: string;
   urls?: string;
+  productHandle?: string;
 }
 
 /**
@@ -22,6 +23,7 @@ export function buildCreateFlowParams(params: CreateFlowParams): URLSearchParams
   if (params.styleId && params.styleId.trim()) searchParams.set('styleId', params.styleId);
   if (params.generationId) searchParams.set('generationId', params.generationId);
   if (params.urls) searchParams.set('urls', params.urls);
+  if (params.productHandle) searchParams.set('productHandle', params.productHandle);
 
   return searchParams;
 }

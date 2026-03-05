@@ -70,6 +70,20 @@ export async function getAiPortraitProductsByCollection(
   };
 }
 
+export async function getAiPortraitProductByHandle(
+  handle: string,
+): Promise<AiPortraitProduct | null> {
+  const response = await storefrontSdk().getProductByHandle({
+    handle,
+    identifiers: [],
+  });
+
+  const { product } = response;
+  if (!product) return null;
+
+  return mapProduct(product);
+}
+
 export async function getDefaultAiPortraitProduct(): Promise<{
   product: AiPortraitProduct;
   variant: AiPortraitProductVariant;

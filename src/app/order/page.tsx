@@ -6,7 +6,6 @@ import { getDefaultAiPortraitProduct } from '@/domains/ai/ai-portrait/get-ai-por
 import { CartService } from '@/domains/cart/services/cart.service';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import SavedPortraitsList from '@/ui/components/account/SavedPortraitsList';
-import AddMoreProductsActions from '@/ui/components/cart/AddMoreProductsActions';
 import CartEmptyState from '@/ui/components/cart/CartEmptyState';
 import CartHeader from '@/ui/components/cart/CartHeader';
 import CartItemsList from '@/ui/components/cart/CartItemsList';
@@ -26,18 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const OrderPage = async ({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    artwork?: string;
-    photo?: string;
-    styleId?: string;
-    generationId?: string;
-    urls?: string;
-  }>;
-}) => {
-  const { artwork, photo, styleId, generationId, urls } = await searchParams;
+const OrderPage = async () => {
   const [cartId, savedPortraits, defaultProduct] = await Promise.all([
     CartService.getCartId(),
     WishlistService.getWishlist(),
@@ -67,14 +55,6 @@ const OrderPage = async ({
               </div>
               {!isEmpty && <CartHeader />}
             </div>
-
-            <AddMoreProductsActions
-              artwork={artwork}
-              photo={photo}
-              styleId={styleId}
-              generationId={generationId}
-              urls={urls}
-            />
 
             {isEmpty ? (
               <CartEmptyState />

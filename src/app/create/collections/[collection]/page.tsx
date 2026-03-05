@@ -63,7 +63,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         <div>
           <h2 className="text-heading-3">{data.collectionTitle}</h2>
           <p className="text-body-sm text-muted-foreground">
-            Tap a product to see details and add to cart.
+            Select a product to choose size and add to cart.
           </p>
         </div>
       </div>

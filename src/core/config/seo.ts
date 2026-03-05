@@ -58,6 +58,11 @@ const seo = {
       description:
         'Select how you want your portrait — digital download, canvas, poster, and more.',
     },
+    order: {
+      title: 'Add to Cart',
+      description:
+        'Choose size, quantity, and add your custom portrait to cart. Review and complete your order.',
+    },
   },
   gallery: {
     description:

@@ -4,9 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import config from '@/core/config';
-import { sanitizeHtml } from '@/core/utils/sanitize';
 import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
 import { formatPrice } from '@/lib/format';
+import ProductDescriptionHtml from '@/ui/components/product/ProductDescriptionHtml';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';
 import { Separator } from '@/ui/primitives/separator';
@@ -88,10 +88,7 @@ const ProductDescriptionClient = ({
           </TabsList>
           <TabsContent value="details" className="mt-4 space-y-4">
             {descriptionHtml ? (
-              <div
-                className="product-description prose prose-sm max-w-none dark:prose-invert"
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(descriptionHtml) }}
-              />
+              <ProductDescriptionHtml html={descriptionHtml} />
             ) : (
               <p className="text-body text-secondary">
                 Experience premium quality and exceptional design with this product.
