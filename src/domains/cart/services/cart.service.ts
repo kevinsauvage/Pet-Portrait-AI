@@ -52,7 +52,7 @@ export class CartService {
       return response?.cart || null;
     } catch (error) {
       logger.error('Failed to get cart', { context: 'CartService.getCart', error });
-      return null;
+      throw error;
     }
   }
 
@@ -93,9 +93,19 @@ export class CartService {
     const cartId = await this.getCartId();
 
     if (cartId) {
-      const cart = await this.getCart(cartId);
-      if (cart) {
-        return cart;
+      try {
+        const cart = await this.getCart(cartId);
+        if (cart) {
+          return cart;
+        }
+      } catch (error) {
+        // If fetching the cart fails, propagate the error rather than silently creating a new cart
+        // This prevents hiding transient failures (network errors, API issues, etc.)
+        logger.error('Failed to fetch existing cart, not creating new one', {
+          context: 'CartService.getOrCreateCart',
+          error,
+        });
+        throw error;
       }
     }
 
@@ -114,7 +124,17 @@ export class CartService {
 
   static async getExistingCart(): Promise<CartFieldsFragment | null> {
     const cartId = await this.getCartId();
-    return cartId ? this.getCart(cartId) : null;
+    if (!cartId) {
+      return null;
+    }
+    try {
+      return await this.getCart(cartId);
+    } catch (error) {
+      // If fetching cart fails, return null rather than propagating error
+      // This allows callers to handle "no cart" vs "error" as they see fit
+      logger.error('Failed to get existing cart', { context: 'CartService.getExistingCart', error });
+      return null;
+    }
   }
 
   static async addLines(

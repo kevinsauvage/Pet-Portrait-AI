@@ -37,9 +37,24 @@ describe('/api/cart route', () => {
     expect(body.data).toEqual(mockCart);
   });
 
-  it('GET returns 404 when no cart exists', async () => {
+  it('GET returns 404 when no cart id exists', async () => {
     const getCartIdMock = CartService.getCartId as unknown as ReturnType<typeof vi.fn>;
     getCartIdMock.mockResolvedValue(null);
+
+    const response = await GET();
+
+    expect(response.status).toBe(404);
+    const body = (await (response as any).json()) as any;
+    expect(body.error).toBeDefined();
+    expect(body.success).toBeUndefined();
+  });
+
+  it('GET returns 404 when cart does not exist', async () => {
+    const getCartIdMock = CartService.getCartId as unknown as ReturnType<typeof vi.fn>;
+    getCartIdMock.mockResolvedValue('cart-123');
+
+    const getCartMock = CartService.getCart as unknown as ReturnType<typeof vi.fn>;
+    getCartMock.mockResolvedValue(null);
 
     const response = await GET();
 

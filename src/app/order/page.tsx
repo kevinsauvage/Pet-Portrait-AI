@@ -43,7 +43,14 @@ const OrderPage = async ({
     WishlistService.getWishlist(),
     getDefaultAiPortraitProduct(),
   ]);
-  const cart = cartId ? await CartService.getCart(cartId) : null;
+  let cart = null;
+  if (cartId) {
+    try {
+      cart = await CartService.getCart(cartId);
+    } catch {
+      cart = null;
+    }
+  }
   const isEmpty = !cart?.lines?.edges || cart.lines.edges.length === 0;
 
   return (

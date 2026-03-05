@@ -18,11 +18,13 @@ export async function GET() {
 
     const cart = await CartService.getCart(cartId);
     if (!cart) {
-      throw new Error(API_ERROR_MESSAGES.FAILED_TO_FETCH_CART);
+      // Cart doesn't exist (legitimate null response)
+      return createErrorResponse(API_ERROR_MESSAGES.CART_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
     }
 
     return createSuccessResponse(cart);
   } catch (error) {
+    // Error fetching cart (network error, API failure, etc.)
     return handleApiError('GET /api/cart', error, API_ERROR_MESSAGES.FAILED_TO_FETCH_CART);
   }
 }

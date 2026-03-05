@@ -87,10 +87,10 @@ describe('CartService', () => {
       expect(mockGetCart).toHaveBeenCalledWith({ cartId: 'cart-123', first: 100 });
     });
 
-    it('returns null when storefront throws', async () => {
-      mockGetCart.mockRejectedValueOnce(new Error('Network error'));
-      const cart = await CartService.getCart('cart-123');
-      expect(cart).toBeNull();
+    it('throws error when storefront throws', async () => {
+      const networkError = new Error('Network error');
+      mockGetCart.mockRejectedValueOnce(networkError);
+      await expect(CartService.getCart('cart-123')).rejects.toThrow('Network error');
     });
 
     it('returns null when cart is not found', async () => {
@@ -146,6 +146,13 @@ describe('CartService', () => {
       expect(cart.id).toBe('new-cart');
       expect(mockCartCreate).toHaveBeenCalled();
     });
+
+    it('throws error when fetching existing cart fails', async () => {
+      const networkError = new Error('Network error');
+      mockGetCart.mockRejectedValueOnce(networkError);
+      await expect(CartService.getOrCreateCart()).rejects.toThrow('Network error');
+      expect(mockCartCreate).not.toHaveBeenCalled();
+    });
   });
 
   describe('getExistingCart', () => {
@@ -157,6 +164,13 @@ describe('CartService', () => {
 
     it('returns null when no cart id exists', async () => {
       mockCookies.get.mockReturnValue(undefined);
+      const cart = await CartService.getExistingCart();
+      expect(cart).toBeNull();
+    });
+
+    it('returns null when fetching cart fails', async () => {
+      const networkError = new Error('Network error');
+      mockGetCart.mockRejectedValueOnce(networkError);
       const cart = await CartService.getExistingCart();
       expect(cart).toBeNull();
     });

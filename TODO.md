@@ -6,15 +6,7 @@
       **WHY:** `.env.example` states "Browser flows receive a signed session cookie from middleware when visiting /create", but no middleware sets `pp_ai_session` or `pp_upload_session`. When `AI_API_SECRET` or `UPLOADTHING_API_SECRET` is set, same-origin requests will fail `isApiSessionValid` and return 401.
       **HOW:** Add middleware that, when visiting `/create` (or `/create/*`), sets session cookies via `auth.ts` helpers (or create `setApiSessionCookie`). Ensure cookies are HttpOnly, Secure, SameSite, and have appropriate expiry.
 
-- [ ] **WHAT:** Add contact form env vars to `.env.example` and validation for production.
-      **WHY:** Contact form uses `EMAIL_ADDRESS` and `EMAIL_PASSWORD` but these are not documented. Production validation requires SMTP for "order emails" but contact form uses different vars.
-      **HOW:** Either (a) migrate contact to SMTP and add `CONTACT_EMAIL` for recipient, or (b) document `EMAIL_ADDRESS`/`EMAIL_PASSWORD` in `.env.example` and add to `validateProductionRequirements` if contact is required in prod.
-
 ## P2 — High Priority
-
-- [ ] **WHAT:** Improve CartService.getCart error handling.
-      **WHY:** `getCart` returns `null` on error (line 55). Callers cannot distinguish "no cart" from "failed to load cart". `getOrCreateCart` will create a new cart on `null`, which may hide transient failures.
-      **HOW:** Consider: (a) throw on error and let callers handle, or (b) return a structured result `{ cart: null, error: string }` so callers can retry or show appropriate UI.
 
 - [ ] **WHAT:** Document rate limit identifier spoofing risk.
       **WHY:** `getClientContext` uses `x-forwarded-for` and `x-real-ip` for rate limiting. These headers can be spoofed by clients.
