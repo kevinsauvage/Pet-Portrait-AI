@@ -62,9 +62,11 @@ const CartSummary = () => {
           </div>
         )}
       </CardContent>
-      <CardFooter className="pt-2">
-        <CheckoutButton checkoutUrl={String(cart.checkoutUrl)} />
-      </CardFooter>
+      {cart.checkoutUrl && cart.totalQuantity > 0 && (
+        <CardFooter className="pt-2">
+          <CheckoutButton checkoutUrl={String(cart.checkoutUrl)} />
+        </CardFooter>
+      )}
     </Card>
   );
 };

@@ -12,10 +12,6 @@
 
 ## P2 — High Priority
 
-- [ ] **WHAT:** Disable or hide checkout button when cart is empty or `checkoutUrl` is falsy.
-      **WHY:** `CartSummary` passes `checkoutUrl={String(cart.checkoutUrl)}` to `CheckoutButton`. When cart is `cartMock` (e.g. during loading) or Shopify returns empty `checkoutUrl`, the link becomes `href=""` which can confuse users and hurt accessibility.
-      **HOW:** In `CheckoutButton` or `CartSummary`, conditionally render `disabled` or hide the button when `!checkoutUrl || cart.totalQuantity === 0`.
-
 - [ ] **WHAT:** Improve CartService.getCart error handling.
       **WHY:** `getCart` returns `null` on error (line 55). Callers cannot distinguish "no cart" from "failed to load cart". `getOrCreateCart` will create a new cart on `null`, which may hide transient failures.
       **HOW:** Consider: (a) throw on error and let callers handle, or (b) return a structured result `{ cart: null, error: string }` so callers can retry or show appropriate UI.
@@ -38,17 +34,13 @@
 
 ## P3 — Medium Priority
 
-- [ ] **WHAT:** Revisit `images.unoptimized: true` in next.config.
-      **WHY:** Disables Next.js image optimization. Results in larger images and slower loads.
-      **HOW:** Set `unoptimized: false` and ensure `remotePatterns` cover all image domains (Shopify, UploadThing, Cloudinary, etc.). Verify no build or runtime errors.
-
 - [ ] **WHAT:** Strengthen CSP by replacing `'unsafe-inline'` for scripts.
       **WHY:** `script-src` includes `'unsafe-inline'` which weakens XSS protection.
       **HOW:** Use nonces or hashes for inline scripts if Next.js and third-party scripts support it. Otherwise document the trade-off.
 
 - [ ] **WHAT:** Add sitemap failure alerting or monitoring.
       **WHY:** `sitemap.ts` falls back to `baseSitemap` on Shopify failure. Products and collections are missing from sitemap without visibility.
-      **HOW:** Log with Sentry or add a health check that alerts when sitemap fails. Consider adding a metrics/monitoring endpoint.
+      **HOW:** Log with Sentry.
 
 - [ ] **WHAT:** Improve API client error response parsing.
       **WHY:** `api-client.ts` uses `response.json().catch(() => ({}))` on error responses. Non-JSON error bodies may not be surfaced.
