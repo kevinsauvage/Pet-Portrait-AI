@@ -12,6 +12,7 @@ import type {
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getFirstAvailableVariant } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { getStyleName } from '@/domains/ai/ai-portrait/utils/style-utils';
+import { api } from '@/infra/http/api-client';
 import { formatPrice } from '@/lib/format';
 import { Button } from '@/ui/primitives/button';
 import { Label } from '@/ui/primitives/label';
@@ -101,6 +102,11 @@ export default function AddToCartIsland({
     setIsLoading(true);
     try {
       await handleAddToCart(selectedVariantId, quantity, attributes);
+      try {
+        await api.delete('/api/create-flow');
+      } catch {
+        // Ignore - create flow clear is best-effort
+      }
     } catch {
       toast.error('Failed to add to cart. Please try again.');
     } finally {

@@ -24614,7 +24614,7 @@ export enum InventoryAdjustQuantitiesUserErrorCode {
   AdjustQuantitiesFailed = 'ADJUST_QUANTITIES_FAILED',
   /** The changeFromQuantity argument no longer matches the persisted quantity. */
   ChangeFromQuantityStale = 'CHANGE_FROM_QUANTITY_STALE',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25020,7 +25020,10 @@ export type InventoryLevel = Node & {
    * [name](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps#inventory-states).
    */
   quantities: Array<InventoryQuantity>;
-  /** Scheduled changes for the requested quantity names. */
+  /**
+   * Scheduled changes for the requested quantity names.
+   * @deprecated Scheduled changes will be phased out in a future version.
+   */
   scheduledChanges: InventoryScheduledChangeConnection;
   /** The date and time when the inventory level was updated. */
   updatedAt: Scalars['DateTime']['output'];
@@ -25136,7 +25139,7 @@ export enum InventoryMoveQuantitiesUserErrorCode {
   ChangeFromQuantityStale = 'CHANGE_FROM_QUANTITY_STALE',
   /** The quantities can't be moved between different locations. */
   DifferentLocations = 'DIFFERENT_LOCATIONS',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25434,7 +25437,7 @@ export enum InventorySetOnHandQuantitiesUserErrorCode {
   ChangeFromQuantityStale = 'CHANGE_FROM_QUANTITY_STALE',
   /** The compareQuantity value does not match persisted value. */
   CompareQuantityStale = 'COMPARE_QUANTITY_STALE',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25520,7 +25523,7 @@ export enum InventorySetQuantitiesUserErrorCode {
   CompareQuantityRequired = 'COMPARE_QUANTITY_REQUIRED',
   /** The compareQuantity value does not match persisted value. */
   CompareQuantityStale = 'COMPARE_QUANTITY_STALE',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25615,7 +25618,7 @@ export enum InventorySetScheduledChangesUserErrorCode {
   DuplicateToName = 'DUPLICATE_TO_NAME',
   /** There was an error updating the scheduled changes. */
   ErrorUpdatingScheduled = 'ERROR_UPDATING_SCHEDULED',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25719,7 +25722,7 @@ export enum InventoryShipmentAddItemsUserErrorCode {
   ActivationFailed = 'ACTIVATION_FAILED',
   /** A single item can't be listed twice. */
   DuplicateItem = 'DUPLICATE_ITEM',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25778,7 +25781,7 @@ export enum InventoryShipmentCreateInTransitUserErrorCode {
   DuplicateItem = 'DUPLICATE_ITEM',
   /** The shipment input cannot be empty. */
   EmptyShipmentInput = 'EMPTY_SHIPMENT_INPUT',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -25850,7 +25853,7 @@ export enum InventoryShipmentCreateUserErrorCode {
   DuplicateItem = 'DUPLICATE_ITEM',
   /** The shipment input cannot be empty. */
   EmptyShipmentInput = 'EMPTY_SHIPMENT_INPUT',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -26040,7 +26043,7 @@ export type InventoryShipmentReceiveUserError = DisplayableError & {
 
 /** Possible error codes that can be returned by `InventoryShipmentReceiveUserError`. */
 export enum InventoryShipmentReceiveUserErrorCode {
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -26472,7 +26475,7 @@ export enum InventoryTransferCreateAsReadyToShipUserErrorCode {
   BundledItem = 'BUNDLED_ITEM',
   /** A single item can't be listed twice. */
   DuplicateItem = 'DUPLICATE_ITEM',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -26546,7 +26549,7 @@ export enum InventoryTransferCreateUserErrorCode {
   BundledItem = 'BUNDLED_ITEM',
   /** A single item can't be listed twice. */
   DuplicateItem = 'DUPLICATE_ITEM',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -26620,7 +26623,7 @@ export type InventoryTransferDuplicateUserError = DisplayableError & {
 
 /** Possible error codes that can be returned by `InventoryTransferDuplicateUserError`. */
 export enum InventoryTransferDuplicateUserErrorCode {
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -26881,7 +26884,7 @@ export enum InventoryTransferSetItemsUserErrorCode {
   BundledItem = 'BUNDLED_ITEM',
   /** A single item can't be listed twice. */
   DuplicateItem = 'DUPLICATE_ITEM',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -28147,7 +28150,7 @@ export enum LocationActivateUserErrorCode {
   HasNonUniqueName = 'HAS_NON_UNIQUE_NAME',
   /** This location currently cannot be activated as inventory, pending orders or transfers are being relocated from this location. */
   HasOngoingRelocation = 'HAS_ONGOING_RELOCATION',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -28337,7 +28340,7 @@ export enum LocationDeactivateUserErrorCode {
   HasIncomingMovementsError = 'HAS_INCOMING_MOVEMENTS_ERROR',
   /** Location could not be deactivated because it has open purchase orders. */
   HasOpenPurchaseOrdersError = 'HAS_OPEN_PURCHASE_ORDERS_ERROR',
-  /** This request is currently inprogress, please try again. */
+  /** This request is currently in progress, please try again. */
   IdempotencyConcurrentRequest = 'IDEMPOTENCY_CONCURRENT_REQUEST',
   /** The same idempotency key cannot be used with different operation parameters. */
   IdempotencyKeyParameterMismatch = 'IDEMPOTENCY_KEY_PARAMETER_MISMATCH',
@@ -69049,6 +69052,13 @@ export type MetafieldsSetMutationVariables = Exact<{
 
 export type MetafieldsSetMutation = { __typename?: 'Mutation', metafieldsSet?: { __typename?: 'MetafieldsSetPayload', metafields?: Array<{ __typename?: 'Metafield', key: string, namespace: string, value: string, createdAt: string, updatedAt: string }> | null, userErrors: Array<{ __typename?: 'MetafieldsSetUserError', field?: Array<string> | null, message: string }> } | null };
 
+export type MetafieldsDeleteMutationVariables = Exact<{
+  metafields: Array<MetafieldIdentifierInput> | MetafieldIdentifierInput;
+}>;
+
+
+export type MetafieldsDeleteMutation = { __typename?: 'Mutation', metafieldsDelete?: { __typename?: 'MetafieldsDeletePayload', deletedMetafields?: Array<{ __typename?: 'MetafieldIdentifier', key: string, namespace: string, ownerId: string } | null> | null, userErrors: Array<{ __typename?: 'UserError', field?: Array<string> | null, message: string }> } | null };
+
 export type UserErrorsFieldsFragment = { __typename?: 'UserError', field?: Array<string> | null, message: string };
 
 export type GetProductsQueryVariables = Exact<{
@@ -69150,6 +69160,21 @@ export const MetafieldsSetDocument = gql`
   }
 }
     `;
+export const MetafieldsDeleteDocument = gql`
+    mutation MetafieldsDelete($metafields: [MetafieldIdentifierInput!]!) {
+  metafieldsDelete(metafields: $metafields) {
+    deletedMetafields {
+      key
+      namespace
+      ownerId
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+    `;
 export const GetProductsDocument = gql`
     query getProducts($first: Int!, $after: String) {
   products(first: $first, after: $after) {
@@ -69225,6 +69250,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     MetafieldsSet(variables: MetafieldsSetMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<MetafieldsSetMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<MetafieldsSetMutation>({ document: MetafieldsSetDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'MetafieldsSet', 'mutation', variables);
+    },
+    MetafieldsDelete(variables: MetafieldsDeleteMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<MetafieldsDeleteMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MetafieldsDeleteMutation>({ document: MetafieldsDeleteDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'MetafieldsDelete', 'mutation', variables);
     },
     getProducts(variables: GetProductsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetProductsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProductsQuery>({ document: GetProductsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'getProducts', 'query', variables);
