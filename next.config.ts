@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
+  // Exclude jsdom and isomorphic-dompurify from server bundle
+  // jsdom cannot be bundled for serverless environments due to ESM/CommonJS compatibility issues
+  serverExternalPackages: ['isomorphic-dompurify', 'jsdom'],
 
   headers() {
     const isProduction = process.env.NODE_ENV === 'production';
