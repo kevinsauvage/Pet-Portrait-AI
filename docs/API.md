@@ -34,12 +34,6 @@ curl -u "admin:password" https://yourdomain.com/admin
 curl -H "Authorization: Bearer your_admin_secret" https://yourdomain.com/admin
 ```
 
-**Environment Variables:**
-- `ADMIN_BASIC_USER` + `ADMIN_BASIC_PASSWORD` (HTTP Basic Auth)
-- OR `ADMIN_SECRET` (Bearer token)
-
-**Note:** Admin authentication is required in production (`NODE_ENV=production`).
-
 ### 2. API Endpoint Protection
 
 Protected endpoints (`/api/ai/generate`, `/api/uploadthing`) support two authentication methods:
@@ -61,6 +55,7 @@ curl -X POST https://yourdomain.com/api/ai/generate \
 ```
 
 **Environment Variables:**
+
 - `AI_API_SECRET` - For `/api/ai/generate`
 - `UPLOADTHING_API_SECRET` - For `/api/uploadthing`
 
@@ -69,6 +64,7 @@ curl -X POST https://yourdomain.com/api/ai/generate \
 When making requests from the same origin (browser), session cookies are automatically used. No headers required.
 
 **How it works:**
+
 1. User visits the site
 2. Session cookie is issued automatically
 3. Subsequent API calls include the session cookie
@@ -100,6 +96,7 @@ Generate AI pet portrait variations.
 **Rate Limiting:** Yes (5 requests per minute per IP)
 
 **Request Body:**
+
 ```json
 {
   "originalPhotoUrl": "https://cdn.example.com/photo.jpg",
@@ -108,6 +105,7 @@ Generate AI pet portrait variations.
 ```
 
 **Style IDs:**
+
 - `pixar` - Pixar-style animation
 - `watercolor` - Watercolor painting
 - `anime` - Anime style
@@ -118,6 +116,7 @@ Generate AI pet portrait variations.
 - `minimalist` - Minimalist design
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -134,6 +133,7 @@ Generate AI pet portrait variations.
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` - Invalid request body or image URL
 - `401 Unauthorized` - Missing or invalid authentication
 - `403 Forbidden` - Cross-origin request without auth
@@ -141,6 +141,7 @@ Generate AI pet portrait variations.
 - `429 Too Many Requests` - Rate limit exceeded
 
 **Example:**
+
 ```bash
 curl -X POST https://yourdomain.com/api/ai/generate \
   -H "Authorization: Bearer $AI_API_SECRET" \
@@ -189,6 +190,7 @@ Get current cart.
 **Authentication:** Not required (uses Shopify cart cookies)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -209,15 +211,14 @@ Add items to cart.
 **Authentication:** Not required (uses Shopify cart cookies)
 
 **Request Body:**
+
 ```json
 {
   "lines": [
     {
       "merchandiseId": "gid://shopify/ProductVariant/123",
       "quantity": 1,
-      "attributes": [
-        {"key": "gelato_print_url", "value": "https://..."}
-      ]
+      "attributes": [{ "key": "gelato_print_url", "value": "https://..." }]
     }
   ]
 }
@@ -258,9 +259,11 @@ Remove product from wishlist.
 Predictive search suggestions.
 
 **Query Parameters:**
+
 - `q` - Search query
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -301,12 +304,14 @@ Rate limiting is enforced on protected endpoints:
 - **Upload** (`/api/uploadthing`): 12 requests per minute per IP
 
 **Rate Limit Headers:**
+
 - `X-RateLimit-Limit` - Maximum requests per window
 - `X-RateLimit-Remaining` - Remaining requests in current window
 - `X-RateLimit-Reset` - Unix timestamp when limit resets
 - `Retry-After` - Seconds to wait before retrying (when limit exceeded)
 
 **Rate Limit Response:**
+
 ```json
 {
   "success": false,
@@ -317,6 +322,7 @@ Rate limiting is enforced on protected endpoints:
 ```
 
 **Configuration:**
+
 - Uses Redis for distributed rate limiting (if `REDIS_URL` is set)
 - Falls back to in-memory storage if Redis unavailable
 - Configurable via `RATE_LIMIT_WINDOW_MS` and `RATE_LIMIT_MAX_REQUESTS`
@@ -352,6 +358,7 @@ All API endpoints return consistent error responses:
 ### Error Types
 
 Common error messages:
+
 - `INVALID_REQUEST_BODY` - Request body validation failed
 - `UNAUTHORIZED` - Authentication required
 - `FORBIDDEN` - Access denied
@@ -367,6 +374,7 @@ Common error messages:
 ### Request Headers
 
 **Common Headers:**
+
 ```
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -376,6 +384,7 @@ X-API-Key: <key>
 ### Response Format
 
 **Success Response:**
+
 ```json
 {
   "success": true,
@@ -384,6 +393,7 @@ X-API-Key: <key>
 ```
 
 **Error Response:**
+
 ```json
 {
   "success": false,

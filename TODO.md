@@ -12,14 +12,6 @@
       **WHY:** `script-src` includes `'unsafe-inline'` which weakens XSS protection.
       **HOW:** Use nonces or hashes for inline scripts if Next.js and third-party scripts support it. Otherwise document the trade-off.
 
-- [ ] **WHAT:** Improve API client error response parsing.
-      **WHY:** `api-client.ts` uses `response.json().catch(() => ({}))` on error responses. Non-JSON error bodies may not be surfaced.
-      **HOW:** Log parse failures and optionally rethrow with a clearer message. Preserve original error in `cause`.
-
-- [ ] **WHAT:** Replace TODO placeholder in marketing content.
-      **WHY:** `src/ui/content/marketing.ts` line 94 has `TODO: Replace placeholder after images with actual style-specific transformations`.
-      **HOW:** Implement or remove the TODO. If deferred, track in a separate ticket.
-
 ## P4 — Low Priority
 
 - [ ] **WHAT:** Add E2E tests for create flow.

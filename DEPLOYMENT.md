@@ -51,23 +51,6 @@ UPLOADTHING_TOKEN=sk_live_...
 UPLOADTHING_SECRET=sk_live_...
 ```
 
-#### Production Security (Required in Production)
-
-Choose one authentication method:
-
-**Option 1: HTTP Basic Auth**
-
-```env
-ADMIN_BASIC_USER=admin
-ADMIN_BASIC_PASSWORD=secure_password
-```
-
-**Option 2: Bearer Token**
-
-```env
-ADMIN_SECRET=your_secret_token
-```
-
 #### Recommended for Production
 
 ```env
@@ -192,7 +175,6 @@ CMD ["yarn", "start"]
 Before deploying to production, verify:
 
 - [ ] All required environment variables are set
-- [ ] Admin authentication is configured (`ADMIN_BASIC_USER`/`ADMIN_BASIC_PASSWORD` or `ADMIN_SECRET`)
 - [ ] Sentry is configured (`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`)
 - [ ] Redis is configured (`REDIS_URL`) for distributed rate limiting (required when using multiple server instances)
 - [ ] API protection secrets are set (`AI_API_SECRET`, `UPLOADTHING_API_SECRET`)

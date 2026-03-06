@@ -29,18 +29,25 @@ src/
 
   domains/                # Domain logic (actions, services, validation)
     address/              # actions/, services/, validation/
-    auth/                 # actions/, services/, validation/
-    user/                 # get-user, actions/, services/, validation/
-    cart/                 # actions/, services/, mocks/
     ai/                   # actions/, ai-portrait/, repositories/, services/
+    auth/                 # actions/, services/, validation/
+    cart/                 # actions/, services/, mocks/
+    collections/          # services/
     contact/              # actions/, validation/
-    search/               # actions/
-    wishlist/             # client.ts, services/
+    create-flow/          # Create wizard flow logic
+    creations/            # User creations management
+    home/                 # services/
+    legal/                # services/
+    navigation/           # services/
     orders/               # services/, models/, repositories/
-    products/             # services/, models/, repositories/
+    products/             # services/, models/, repositories/, mappers/
+    search/               # actions/
+    shop/                 # Shop page logic
+    user/                 # get-user, actions/, services/, validation/
+    wishlist/             # client.ts, services/
 
   infra/                  # Infrastructure (Shopify, upload, email, cache, http, rate-limit)
-    shopify/              # client, storefront, admin, helpers, images, tokens
+    shopify/              # Shopify client, helpers, .graphql documents, generated SDKs
     upload/               # UploadThing router & client
     email/
     cache/
@@ -70,7 +77,7 @@ src/
 8. Fulfillment             → Gelato Shopify app reads gelato_print_url, prints & ships
 ```
 
-See [GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for the full Gelato integration guide.
+See [GELATO_SHOPIFY_INTEGRATION.md](./docs/GELATO_SHOPIFY_INTEGRATION.md) for the full Gelato integration guide.
 
 ---
 
@@ -86,7 +93,7 @@ See [GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for the ful
 | Validation  | Zod v4                                        |
 | GraphQL     | graphql-request, GraphQL Codegen              |
 | Uploads     | UploadThing                                   |
-| Email       | Nodemailer                                    |
+| Email       | Resend                                        |
 | Monitoring  | Sentry                                        |
 
 ---
@@ -100,6 +107,7 @@ See [GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for the ful
 - Shopify store (+ custom app credentials)
 - OpenAI API key
 - UploadThing account
+- Resend account (for transactional emails in production)
 - Gelato account with Shopify app installed
 
 ### Installation
@@ -142,9 +150,7 @@ These variables are required for the application to function:
 
 These are required when `NODE_ENV=production`:
 
-- **Admin Authentication** (choose one):
-  - `ADMIN_BASIC_USER` + `ADMIN_BASIC_PASSWORD` - HTTP Basic auth for `/admin` routes
-  - OR `ADMIN_SECRET` - Bearer token for API access
+- **`RESEND_API_KEY`** - Resend API key for sending transactional emails (contact forms, order confirmations, etc.)
 
 ##### ⚠️ Recommended for Production
 
@@ -193,18 +199,16 @@ console.log(status);
 **Development:**
 
 - Only required variables needed
-- Admin auth optional (defaults to allowing access)
 
 **Staging:**
 
 - All required variables
 - Recommended variables (Sentry, Redis) for testing
-- Admin auth recommended
 
 **Production:**
 
 - All required variables
-- All production-required variables (admin auth)
+- All production-required variables (RESEND_API_KEY)
 - All recommended variables (Sentry, Redis)
 - Optional variables as needed
 
@@ -214,7 +218,7 @@ See `.env.example` for detailed descriptions of each variable.
 
 ```bash
 yarn dev          # Start development server
-yarn codegen      # Generate GraphQL types
+yarn codegen      # Generate Shopify Storefront/Admin GraphQL SDKs into src/infra/shopify/generated/
 yarn build        # Production build
 yarn type-check   # TypeScript validation
 yarn lint         # ESLint
@@ -232,6 +236,13 @@ yarn lint         # ESLint
 6. **React Server Components by default** — Client Components only where required.
 7. **UI has zero business logic** — Components are strictly for presentation.
 8. **No direct Gelato API calls** — The Gelato Shopify app handles fulfillment automatically.
+
+---
+
+## Security & Hardening Notes
+
+- **Rate limiting identity**: The rate limiter derives client identity from `x-forwarded-for` / `x-real-ip` headers. When running behind a trusted proxy (e.g. Vercel), these headers are treated as authoritative. In stricter environments you may want to rely on the connection IP or a signed header from the proxy to avoid spoofing.
+- **Content Security Policy**: The default `script-src` currently relies on `'unsafe-inline'` for certain inline scripts. For stronger XSS protection, prefer nonces or hashes for any inline scripts where supported by Next.js and third‑party libraries. If you keep `'unsafe-inline'`, treat it as an explicit trade‑off between compatibility and security and review regularly.
 
 ---
 

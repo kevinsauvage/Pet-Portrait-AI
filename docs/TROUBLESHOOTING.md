@@ -23,6 +23,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Build Fails
 
 **Symptoms:**
+
 - Build fails during `yarn build`
 - TypeScript errors
 - Missing dependencies
@@ -30,11 +31,13 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 **Solutions:**
 
 1. **Check Node.js version:**
+
    ```bash
    node --version  # Should be 20+
    ```
 
 2. **Clear cache and reinstall:**
+
    ```bash
    rm -rf node_modules .next
    yarn install
@@ -42,6 +45,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
    ```
 
 3. **Check TypeScript errors:**
+
    ```bash
    yarn type-check
    ```
@@ -55,6 +59,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Deployment Succeeds but Site Doesn't Load
 
 **Symptoms:**
+
 - Deployment completes successfully
 - Site returns 500 error or blank page
 
@@ -86,12 +91,14 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Missing Required Variables
 
 **Symptoms:**
+
 - Application won't start
 - Error messages about missing variables
 
 **Solutions:**
 
 1. **Check validation output:**
+
    ```bash
    yarn dev  # Shows validation errors
    ```
@@ -107,13 +114,13 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Production Validation Fails
 
 **Symptoms:**
+
 - App starts in development but fails in production
 - Admin routes not protected
 
 **Solutions:**
 
 1. **Check production-specific requirements:**
-   - `ADMIN_BASIC_USER` + `ADMIN_BASIC_PASSWORD` OR `ADMIN_SECRET` must be set
    - Verify `NODE_ENV=production` is set
 
 2. **Review validation warnings:**
@@ -127,12 +134,14 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### 401 Unauthorized
 
 **Symptoms:**
+
 - API returns 401 Unauthorized
 - Authentication errors
 
 **Solutions:**
 
 1. **Check authentication method:**
+
    ```bash
    # Verify Bearer token
    curl -H "Authorization: Bearer $AI_API_SECRET" \
@@ -142,7 +151,6 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 2. **Verify environment variables:**
    - `AI_API_SECRET` for `/api/ai/generate`
    - `UPLOADTHING_API_SECRET` for `/api/uploadthing`
-   - `ADMIN_SECRET` or `ADMIN_BASIC_USER`/`ADMIN_BASIC_PASSWORD` for admin routes
 
 3. **Check session cookies:**
    - For browser requests, ensure session cookies are present
@@ -151,12 +159,14 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### 403 Forbidden
 
 **Symptoms:**
+
 - API returns 403 Forbidden
 - Cross-origin request blocked
 
 **Solutions:**
 
 1. **Use Bearer token for cross-origin requests:**
+
    ```bash
    curl -H "Authorization: Bearer $AI_API_SECRET" \
      https://yourdomain.com/api/ai/generate
@@ -169,6 +179,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### 429 Too Many Requests
 
 **Symptoms:**
+
 - Rate limit exceeded errors
 - `Retry-After` header present
 
@@ -189,6 +200,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### 500 Internal Server Error
 
 **Symptoms:**
+
 - Generic server errors
 - No specific error message
 
@@ -214,25 +226,24 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Admin Routes Not Protected
 
 **Symptoms:**
+
 - Admin routes accessible without authentication
 - No 401/403 errors
 
 **Solutions:**
 
 1. **Verify production environment:**
+
    ```bash
    echo $NODE_ENV  # Should be "production"
    ```
 
-2. **Check admin auth configuration:**
-   - `ADMIN_BASIC_USER` + `ADMIN_BASIC_PASSWORD` OR `ADMIN_SECRET` must be set
-   - Verify variables are set in production environment
+2. **Test authentication:**
 
-3. **Test authentication:**
    ```bash
    # Should return 401 without auth
    curl https://yourdomain.com/admin
-   
+
    # Should work with auth
    curl -u "admin:password" https://yourdomain.com/admin
    ```
@@ -240,6 +251,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Session-Based Auth Not Working
 
 **Symptoms:**
+
 - Browser requests fail with 401
 - Session cookies not being issued
 
@@ -264,6 +276,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Shopify API Errors
 
 **Symptoms:**
+
 - Failed to fetch products
 - Cart operations fail
 - GraphQL errors
@@ -289,6 +302,7 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
 ### Gelato Integration Issues
 
 **Symptoms:**
+
 - Orders not being fulfilled
 - Missing `gelato_print_url` attribute
 
@@ -315,6 +329,7 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 ### OpenAI API Errors
 
 **Symptoms:**
+
 - AI generation fails
 - Timeout errors
 - Invalid image errors
@@ -322,6 +337,7 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 **Solutions:**
 
 1. **Verify OpenAI API key:**
+
    ```bash
    curl https://api.openai.com/v1/models \
      -H "Authorization: Bearer $OPENAI_API_KEY"
@@ -343,12 +359,14 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 ### Image Validation Fails
 
 **Symptoms:**
+
 - "Invalid image" error
 - Image URL not accessible
 
 **Solutions:**
 
 1. **Verify image URL:**
+
    ```bash
    curl -I https://cdn.example.com/image.jpg
    # Should return 200 OK
@@ -369,6 +387,7 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 ### Slow Page Loads
 
 **Symptoms:**
+
 - Pages load slowly
 - High Time to First Byte (TTFB)
 
@@ -393,12 +412,14 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 ### High Memory Usage
 
 **Symptoms:**
+
 - Server memory warnings
 - OOM errors
 
 **Solutions:**
 
 1. **Review bundle size:**
+
    ```bash
    yarn build
    # Check .next/analyze output
@@ -419,12 +440,14 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 ### Rate Limiting Not Working
 
 **Symptoms:**
+
 - Rate limits not enforced
 - Multiple requests allowed
 
 **Solutions:**
 
 1. **Verify Redis configuration:**
+
    ```bash
    # Check Redis connection
    redis-cli -u $REDIS_URL ping
@@ -446,18 +469,21 @@ See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for de
 ### Redis Connection Issues
 
 **Symptoms:**
+
 - Rate limiting falls back to in-memory
 - Redis connection errors
 
 **Solutions:**
 
 1. **Verify Redis URL:**
+
    ```bash
    echo $REDIS_URL
    # Should be valid Redis URL
    ```
 
 2. **Test Redis connection:**
+
    ```bash
    redis-cli -u $REDIS_URL ping
    # Should return PONG
@@ -477,12 +503,14 @@ See [docs/REDIS_SETUP.md](./REDIS_SETUP.md) for details.
 ### Sentry Not Receiving Errors
 
 **Symptoms:**
+
 - Errors not appearing in Sentry
 - No error tracking
 
 **Solutions:**
 
 1. **Verify Sentry configuration:**
+
    ```bash
    echo $NEXT_PUBLIC_SENTRY_DSN
    echo $SENTRY_ORG
@@ -494,6 +522,7 @@ See [docs/REDIS_SETUP.md](./REDIS_SETUP.md) for details.
    - Check `enabled` flag is true
 
 3. **Test error reporting:**
+
    ```typescript
    import * as Sentry from '@sentry/nextjs';
    Sentry.captureException(new Error('Test error'));
@@ -506,6 +535,7 @@ See [docs/REDIS_SETUP.md](./REDIS_SETUP.md) for details.
 ### Missing Performance Data
 
 **Symptoms:**
+
 - No performance traces in Sentry
 - Missing transaction data
 
