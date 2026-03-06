@@ -1,11 +1,11 @@
 import { storefrontSdk } from '@/infra/shopify/client';
-import { adjustPaginationVariables } from '@/infra/shopify/helpers';
-import { getShopifyToken } from '@/infra/shopify/server';
 import {
   type GetCustomerOrdersQuery,
   LanguageCode,
   OrderSortKeys,
-} from '@/infra/shopify/storefront';
+} from '@/infra/shopify/generated/storefront/index';
+import { adjustPaginationVariables } from '@/infra/shopify/helpers';
+import { getShopifyToken } from '@/infra/shopify/server';
 
 type CustomerOrdersInput = {
   customerAccessToken?: string;

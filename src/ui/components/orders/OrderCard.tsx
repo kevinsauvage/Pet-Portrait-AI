@@ -8,7 +8,7 @@ import type {
   OrderFieldsFragment,
   OrderFinancialStatus,
   OrderFulfillmentStatus,
-} from '@/infra/shopify/storefront';
+} from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 import { Badge } from '@/ui/primitives/badge';
 import { Card, CardContent, CardHeader } from '@/ui/primitives/card';

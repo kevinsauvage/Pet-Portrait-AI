@@ -1,4 +1,4 @@
-import { ProductCollectionSortKeys } from '@/infra/shopify/storefront';
+import { ProductCollectionSortKeys } from '@/infra/shopify/generated/storefront/index';
 
 export const COLLECTION_SORT_OPTIONS = [
   {

@@ -1,5 +1,5 @@
 import type { Product } from '@/domains/products/models';
-import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
 export function mapShopifyProductToDomain(raw: ProductFieldsFragment): Product {
   const firstVariant = raw.variants?.edges?.[0]?.node;

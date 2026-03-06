@@ -75,8 +75,6 @@
     "node_modules",
     "codegen.admin.ts",
     "codegen.storefront.ts",
-    "src/infra/shopify/admin/index.ts",
-    "src/infra/shopify/storefront/index.ts",
     ".next"
   ]
 }

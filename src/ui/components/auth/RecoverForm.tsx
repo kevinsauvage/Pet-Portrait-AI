@@ -6,7 +6,9 @@ import { useFormStatus } from 'react-dom';
 import { userFeedback } from '@/core/config/userFeedback';
 import { recoverPasswordAction } from '@/domains/auth/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/infra/shopify/storefront';
+import type {
+  CustomerUserError,
+} from '@/infra/shopify/generated/storefront/index';
 import Form from '@/ui/components/shared/Form';
 import FormFieldError from '@/ui/components/shared/FormFieldError';
 import { Button } from '@/ui/primitives/button';

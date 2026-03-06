@@ -4,7 +4,7 @@ import {
   type CollectionsQuery,
   type GetProductsQuery,
   ProductSortKeys,
-} from '@/infra/shopify/storefront';
+} from '@/infra/shopify/generated/storefront/index';
 
 type CollectionEdge = CollectionsQuery['collections']['edges'][number];
 

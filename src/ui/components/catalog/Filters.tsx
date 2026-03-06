@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import type { Filter } from '@/infra/shopify/storefront';
+import type { Filter } from '@/infra/shopify/generated/storefront/index';
 import {
   Accordion,
   AccordionContent,

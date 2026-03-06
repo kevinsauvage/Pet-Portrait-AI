@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 
 import { logger } from '@/core/utils/logger';
-import type { CartUserError, CustomerUserError, UserError } from '@/infra/shopify/storefront';
+import type {
+  CartUserError,
+  CustomerUserError,
+  UserError,
+} from '@/infra/shopify/generated/storefront/index';
 
 export type ApiErrorResponse = {
   error: string;

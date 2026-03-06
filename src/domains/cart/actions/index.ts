@@ -1,6 +1,6 @@
 'use server';
 
-import type { CartFieldsFragment } from '@/infra/shopify/storefront';
+import type { CartFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
 import { CartService } from '../services/cart.service';
 

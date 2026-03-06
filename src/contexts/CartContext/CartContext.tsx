@@ -7,7 +7,7 @@ import { createCartAction } from '@/domains/cart/actions';
 import cartMock from '@/domains/cart/mocks/cart';
 import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
 import { api } from '@/infra/http/api-client';
-import type { CartFieldsFragment } from '@/infra/shopify/storefront';
+import type { CartFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
 import { toast } from 'sonner';
 

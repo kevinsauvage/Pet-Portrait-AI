@@ -1,4 +1,4 @@
-import type { FilterValue } from '@/infra/shopify/storefront';
+import type { FilterValue } from '@/infra/shopify/generated/storefront/index';
 
 const colors = new Set([
   'black',

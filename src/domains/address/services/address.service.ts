@@ -4,9 +4,9 @@ import config from '@/core/config';
 import { handleCustomerUserErrors } from '@/core/utils/form-actions';
 import { logger } from '@/core/utils/logger';
 import { storefrontSdk } from '@/infra/shopify/client';
+import type { GetCustomerAddressesQuery } from '@/infra/shopify/generated/storefront/index';
 import { adjustPaginationVariables } from '@/infra/shopify/helpers';
 import { getShopifyToken } from '@/infra/shopify/server';
-import type { GetCustomerAddressesQuery } from '@/infra/shopify/storefront';
 
 type AddressInput = {
   address1: string;

@@ -1,5 +1,8 @@
 import type { FormActionResult } from '@/core/types/form-actions';
-import type { CustomerUserError, UserError } from '@/infra/shopify/storefront';
+import type {
+  CustomerUserError,
+  UserError,
+} from '@/infra/shopify/generated/storefront/index';
 
 import { flattenError } from 'zod';
 

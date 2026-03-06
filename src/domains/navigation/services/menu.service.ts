@@ -1,6 +1,6 @@
 import config from '@/core/config';
 import { storefrontSdk } from '@/infra/shopify/client';
-import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/generated/storefront/index';
 
 type MenuResult = {
   headerMenu: GetMenuByHandleQuery['menu'] | null;

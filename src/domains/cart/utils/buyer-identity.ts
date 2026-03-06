@@ -1,4 +1,4 @@
-import type { CartBuyerIdentityInput } from '@/infra/shopify/storefront';
+import type { CartBuyerIdentityInput } from '@/infra/shopify/generated/storefront/index';
 
 type BuyerIdentitySource = {
   customerAccessToken: string;

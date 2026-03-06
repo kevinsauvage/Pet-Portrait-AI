@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import type { GetCustomerOrdersQuery } from '@/infra/shopify/storefront';
+import type { GetCustomerOrdersQuery } from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 import { Button } from '@/ui/primitives/button';
 import { Card, CardContent } from '@/ui/primitives/card';

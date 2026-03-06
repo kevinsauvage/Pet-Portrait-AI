@@ -1,4 +1,4 @@
-import type { GetCustomerOrdersQuery } from '@/infra/shopify/storefront';
+import type { GetCustomerOrdersQuery } from '@/infra/shopify/generated/storefront/index';
 
 import OrderCard from './OrderCard';
 

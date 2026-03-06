@@ -1,4 +1,4 @@
-import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
 import {
   generateBreadcrumbSchema,

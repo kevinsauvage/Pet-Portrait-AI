@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { CartFieldsFragment } from '@/infra/shopify/storefront';
+import type { CartFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
 const USD = 'USD' as const;
 

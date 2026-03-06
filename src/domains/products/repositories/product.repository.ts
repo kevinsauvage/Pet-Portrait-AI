@@ -2,7 +2,7 @@ import { mapShopifyProductToDomain } from '@/domains/products/mappers/product-ma
 import type { Product } from '@/domains/products/models';
 import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
-import type { ProductSortKeys } from '@/infra/shopify/storefront';
+import type { ProductSortKeys } from '@/infra/shopify/generated/storefront/index';
 
 export class ShopifyProductRepository {
   private cachedFindAll = withCache(

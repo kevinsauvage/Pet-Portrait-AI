@@ -2,7 +2,7 @@
 
 import { createContext, useMemo } from 'react';
 
-import type { GetCustomerQuery } from '@/infra/shopify/storefront';
+import type { GetCustomerQuery } from '@/infra/shopify/generated/storefront/index';
 
 export const UserContext = createContext({
   user: undefined as GetCustomerQuery['customer'] | null,

@@ -30,7 +30,7 @@ async function createCodegenConfig(): Promise<CodegenConfig> {
     },
     documents: 'src/infra/shopify/admin/**/*.graphql',
     generates: {
-      'src/infra/shopify/admin/index.ts': {
+      'src/infra/shopify/generated/admin/index.ts': {
         plugins: ['typescript', 'typescript-operations', 'typescript-graphql-request'],
         config: {
           scalars: {

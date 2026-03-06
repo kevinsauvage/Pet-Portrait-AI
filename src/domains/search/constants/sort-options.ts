@@ -1,4 +1,4 @@
-import { SearchSortKeys } from '@/infra/shopify/storefront';
+import { SearchSortKeys } from '@/infra/shopify/generated/storefront/index';
 
 export const SEARCH_SORT_OPTIONS = [
   {

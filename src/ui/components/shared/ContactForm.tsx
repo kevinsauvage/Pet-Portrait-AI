@@ -5,7 +5,9 @@ import { useFormStatus } from 'react-dom';
 
 import { contactAction } from '@/domains/contact/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/infra/shopify/storefront';
+import type {
+  CustomerUserError,
+} from '@/infra/shopify/generated/storefront/index';
 import FormFieldError from '@/ui/components/shared/FormFieldError';
 import { Button } from '@/ui/primitives/button';
 import { Input } from '@/ui/primitives/input';

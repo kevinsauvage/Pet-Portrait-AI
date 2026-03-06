@@ -5,7 +5,7 @@ import type {
   GetShippingPolicyQuery,
   GetSubscriptionPolicyQuery,
   GetTermsOfServiceQuery,
-} from '@/infra/shopify/storefront';
+} from '@/infra/shopify/generated/storefront/index';
 
 type Policy =
   | GetPrivacyPolicyQuery['shop']['privacyPolicy']

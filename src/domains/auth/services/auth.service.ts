@@ -6,8 +6,8 @@ import { withRetry } from '@/core/utils/retry';
 import { getUser } from '@/domains/user/get-user';
 import { api } from '@/infra/http/api-client';
 import { storefrontSdk } from '@/infra/shopify/client';
+import type { CustomerAccessToken } from '@/infra/shopify/generated/storefront/index';
 import { clearShopifyToken, getShopifyToken, setShopifyToken } from '@/infra/shopify/server';
-import type { CustomerAccessToken } from '@/infra/shopify/storefront';
 import { delCookieAction } from '@/lib/cookies/actions';
 
 type LoginInput = {

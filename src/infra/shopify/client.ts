@@ -1,9 +1,9 @@
 import config from '@/core/config';
 import { logger } from '@/core/utils/logger';
 
-import { getSdk as getAdminSdk } from './admin/index';
-import type { SdkFunctionWrapper } from './storefront/index';
-import { getSdk as getStorefrontSdk } from './storefront/index';
+import { getSdk as getAdminSdk } from './generated/admin/index';
+import type { SdkFunctionWrapper } from './generated/storefront/index';
+import { getSdk as getStorefrontSdk } from './generated/storefront/index';
 import { getAdminAccessToken } from './tokens/admin-token';
 import { fetchWithRetry } from './tokens/fetch-with-retry';
 import { getStorefrontAccessToken } from './tokens/storefront-token';

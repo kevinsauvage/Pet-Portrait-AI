@@ -1,4 +1,4 @@
-import type { ProductRecommendationsQuery } from '@/infra/shopify/storefront';
+import type { ProductRecommendationsQuery } from '@/infra/shopify/generated/storefront/index';
 import {
   Carousel,
   CarouselContent,

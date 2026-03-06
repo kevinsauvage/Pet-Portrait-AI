@@ -1,5 +1,5 @@
+import type { GetMenuByHandleQuery } from '@/infra/shopify/generated/storefront/index';
 import { getShopifyToken } from '@/infra/shopify/server';
-import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
 import Logo from '@/ui/components/navigation/Logo';
 import { getNavLinks } from '@/ui/components/navigation/nav-links-utils';
 import NavLinks from '@/ui/components/navigation/NavLinks';

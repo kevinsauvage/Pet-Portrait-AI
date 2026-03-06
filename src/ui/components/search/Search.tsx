@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 
 import { logger } from '@/core/utils/logger';
 import useOnClickOutside from '@/hooks/useClickOutside';
-import type { PredictiveSearchQuery } from '@/infra/shopify/storefront';
+import type { PredictiveSearchQuery } from '@/infra/shopify/generated/storefront/index';
 import debounce from '@/lib/debounce';
 import SearchForm from '@/ui/components/search/SearchForm';
 

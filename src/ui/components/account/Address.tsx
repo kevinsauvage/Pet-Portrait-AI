@@ -5,7 +5,7 @@ import Link from 'next/link';
 import config from '@/core/config';
 import { logger } from '@/core/utils/logger';
 import { deleteAddressAction, setDefaultAddressAction } from '@/domains/address/actions';
-import type { MailingAddress } from '@/infra/shopify/storefront';
+import type { MailingAddress } from '@/infra/shopify/generated/storefront/index';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';
 import { Card, CardContent } from '@/ui/primitives/card';

@@ -5,7 +5,7 @@ import { storefrontSdk } from '@/infra/shopify/client';
 import type {
   GetProductByHandleQuery,
   ProductRecommendationsQuery,
-} from '@/infra/shopify/storefront';
+} from '@/infra/shopify/generated/storefront/index';
 import { stripHtmlToText } from '@/lib/html';
 
 type ProductDetails = {

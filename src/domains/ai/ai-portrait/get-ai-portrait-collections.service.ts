@@ -1,5 +1,5 @@
 import { storefrontSdk } from '@/infra/shopify/client';
-import { CollectionSortKeys } from '@/infra/shopify/storefront';
+import { CollectionSortKeys } from '@/infra/shopify/generated/storefront/index';
 
 export interface AiPortraitCollection {
   handle: string;

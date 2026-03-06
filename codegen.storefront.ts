@@ -19,7 +19,7 @@ async function createStorefrontCodegenConfig(): Promise<CodegenConfig> {
   return {
     documents: 'src/infra/shopify/storefront/**/*.graphql',
     generates: {
-      'src/infra/shopify/storefront/index.ts': {
+      'src/infra/shopify/generated/storefront/index.ts': {
         config: {
           scalars: {
             Color: 'string',

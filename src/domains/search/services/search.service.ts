@@ -1,13 +1,16 @@
 import { getShopConfig } from '@/domains/shop/services';
 import { storefrontSdk } from '@/infra/shopify/client';
+import type {
+  ProductFieldsFragment,
+  SearchProductsQuery,
+} from '@/infra/shopify/generated/storefront/index';
+import { SearchSortKeys } from '@/infra/shopify/generated/storefront/index';
 import {
   adjustPaginationVariables,
   buildShopifySearchQuery,
   parseFiltersQuery,
   resolveSortKeyFromString,
 } from '@/infra/shopify/helpers';
-import type { ProductFieldsFragment, SearchProductsQuery } from '@/infra/shopify/storefront';
-import { SearchSortKeys } from '@/infra/shopify/storefront';
 
 export type SearchParameters = {
   searchQuery: string;

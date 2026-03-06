@@ -5,7 +5,7 @@ import { getSecureCookieOptions } from '@/core/utils/cookie-security';
 import { logger } from '@/core/utils/logger';
 
 import { storefrontSdk } from '../client';
-import type { CustomerAccessToken } from '../storefront';
+import type { CustomerAccessToken } from '../generated/storefront/index';
 
 /**
  * Shopify token management helpers
@@ -49,7 +49,10 @@ const renewTokenIfNeeded = async (token: string): Promise<CustomerAccessToken | 
     const { customerAccessToken, userErrors } = response?.customerAccessTokenRenew || {};
 
     if (userErrors && userErrors.length > 0) {
-      logger.error('Token renewal failed with user errors', { context: 'renewTokenIfNeeded', metadata: { userErrors } });
+      logger.error('Token renewal failed with user errors', {
+        context: 'renewTokenIfNeeded',
+        metadata: { userErrors },
+      });
       return null;
     }
 

@@ -7,7 +7,9 @@ import useUserContext from '@/contexts/UserContext/useUserContext';
 import { userFeedback } from '@/core/config/userFeedback';
 import { updateUserAction } from '@/domains/user/actions';
 import { useFormStatesEffect } from '@/hooks/useFormStatesEffect';
-import type { CustomerUserError } from '@/infra/shopify/storefront';
+import type {
+  CustomerUserError,
+} from '@/infra/shopify/generated/storefront/index';
 import FormFieldError from '@/ui/components/shared/FormFieldError';
 import { Button } from '@/ui/primitives/button';
 import { Checkbox } from '@/ui/primitives/checkbox';

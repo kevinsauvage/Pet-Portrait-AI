@@ -24,7 +24,11 @@ export function resolveSortKeyFromString<T extends Record<string, string>>(
 
   return enumObj[defaultKey];
 }
-import type { GetMenuByHandleQuery, PageInfo, ProductFilter } from './storefront';
+import type {
+  GetMenuByHandleQuery,
+  PageInfo,
+  ProductFilter,
+} from './generated/storefront/index';
 
 interface PaginationVariables {
   after?: string;
@@ -183,6 +187,8 @@ export const getMenuItemsForCollection = (
 ): Menu['items'] => {
   if (!menu?.items?.length) return [];
 
-  const foundItem = menu.items.find((item) => menuItemContainsSlug(item, collectionSlug));
+  const foundItem = menu.items.find((item: MenuItemWithOptionalItems) =>
+    menuItemContainsSlug(item, collectionSlug),
+  );
   return (foundItem?.items ?? []) as Menu['items'];
 };

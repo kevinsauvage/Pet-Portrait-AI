@@ -1,4 +1,7 @@
-import type { MoneyV2, ProductFieldsFragment } from '@/infra/shopify/storefront';
+import type {
+  MoneyV2,
+  ProductFieldsFragment,
+} from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 
 const Price = ({

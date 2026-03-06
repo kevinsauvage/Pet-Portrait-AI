@@ -1,6 +1,6 @@
 import siteMetadata from '@/core/config/siteMetadata';
 import { getBaseUrl } from '@/core/utils/metadata';
-import type { ProductFieldsFragment } from '@/infra/shopify/storefront';
+import type { ProductFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 import { stripHtmlToText } from '@/lib/html';
 
 /**

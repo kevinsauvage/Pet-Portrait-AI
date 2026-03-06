@@ -1,5 +1,5 @@
 import config from '@/core/config';
-import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/generated/storefront/index';
 
 export type NavLink = { label: string; href: string };
 

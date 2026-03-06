@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import type { PredictiveSearchQuery } from '@/infra/shopify/storefront';
+import type { PredictiveSearchQuery } from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 import OptimizedImage from '@/ui/components/media/OptimizedImage';
 

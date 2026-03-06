@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import config from '@/core/config';
-import { type CartFieldsFragment } from '@/infra/shopify/storefront';
+import { type CartFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 import OptimizedImage from '@/ui/components/media/OptimizedImage';
 import SavePortraitButton from '@/ui/components/wishlist/SavePortraitButton';

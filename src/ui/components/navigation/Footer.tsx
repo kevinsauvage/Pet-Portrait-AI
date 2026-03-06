@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import config from '@/core/config';
 import siteMetadata from '@/core/config/siteMetadata';
-import type { GetMenuByHandleQuery } from '@/infra/shopify/storefront';
+import type { GetMenuByHandleQuery } from '@/infra/shopify/generated/storefront/index';
 import { cn } from '@/lib/utils';
 
 import { Facebook, Instagram, Sparkles, Twitter } from 'lucide-react';

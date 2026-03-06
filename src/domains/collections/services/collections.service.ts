@@ -3,18 +3,18 @@ import { logger } from '@/core/utils/logger';
 import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 import {
-  adjustPaginationVariables,
-  getMenuItemsForCollection,
-  resolveSortKeyFromString,
-} from '@/infra/shopify/helpers';
-import {
   type CollectionQuery,
   CollectionSortKeys,
   type CollectionsQuery,
   type GetCollectionSeoByHandleQuery,
   type GetMenuByHandleQuery,
   ProductCollectionSortKeys,
-} from '@/infra/shopify/storefront';
+} from '@/infra/shopify/generated/storefront/index';
+import {
+  adjustPaginationVariables,
+  getMenuItemsForCollection,
+  resolveSortKeyFromString,
+} from '@/infra/shopify/helpers';
 
 type CollectionEdge = CollectionsQuery['collections']['edges'][number];
 

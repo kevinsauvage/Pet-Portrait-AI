@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import config from '@/core/config';
-import type { GetProductByHandleQuery } from '@/infra/shopify/storefront';
+import type { GetProductByHandleQuery } from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 import ProductDescriptionHtml from '@/ui/components/product/ProductDescriptionHtml';
 import { Badge } from '@/ui/primitives/badge';
