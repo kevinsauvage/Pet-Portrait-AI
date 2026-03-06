@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import ProtectedImage from '@/ui/components/media/ProtectedImage';
 
 interface CreateFlowArtworkPreviewProps {
   artwork: string;
@@ -16,7 +16,7 @@ export default function CreateFlowArtworkPreview({
 
   return (
     <div className={`relative ${sizeClasses} shrink-0 overflow-hidden rounded-xl border shadow-sm`}>
-      <Image src={artwork} alt={alt} fill className="object-cover" sizes={sizes} />
+      <ProtectedImage src={artwork} alt={alt} fill sizes={sizes} />
     </div>
   );
 }

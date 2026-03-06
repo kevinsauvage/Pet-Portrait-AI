@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -12,6 +11,7 @@ import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/creat
 import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
 import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
+import ProtectedImage from '@/ui/components/media/ProtectedImage';
 
 export const metadata: Metadata = generateMetadataUtil({
   title: seo.create.generating.title,
@@ -30,10 +30,8 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
   const params = await searchParams;
   const { photo, styleId, generationId, urls } = params;
 
-  // Validate and redirect if needed
   validateAndRedirect('generating', params);
 
-  // After validation, we know photo and styleId are defined
   if (!photo || !styleId) {
     redirect(config.routes.create);
   }
@@ -62,7 +60,6 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
     const urlsParam = encodedUrls ? `&urls=${encodedUrls}` : '';
 
     redirect(`${config.routes.createGenerating}${queryString}${urlsParam}`);
-    return null;
   }
 
   return (
@@ -76,8 +73,8 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
           <div className="space-y-3">
             <h2 className="text-heading-3 font-semibold">Choose Your Favourite</h2>
             <p className="text-body text-muted-foreground max-w-2xl">
-              Select the portrait you love most to continue. Your creation is automatically saved
-              to your account — you can save any variation to your favourites from the cart.
+              Select the portrait you love most to continue. Your creation is automatically saved to
+              your account — you can save any variation to your favourites from the cart.
             </p>
           </div>
 
@@ -99,7 +96,7 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
                   className="group relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-border transition-all duration-300 hover:border-primary hover:shadow-xl hover:-translate-y-1"
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
-                  <Image
+                  <ProtectedImage
                     src={url}
                     alt={`Variation ${variationNumber}`}
                     fill

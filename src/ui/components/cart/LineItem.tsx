@@ -4,6 +4,7 @@ import config from '@/core/config';
 import { type CartFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 import { formatPrice } from '@/lib/format';
 import OptimizedImage from '@/ui/components/media/OptimizedImage';
+import ProtectedImage from '@/ui/components/media/ProtectedImage';
 import SavePortraitButton from '@/ui/components/wishlist/SavePortraitButton';
 
 import CartRemove from './CartRemove';
@@ -65,15 +66,27 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
         className="shrink-0 overflow-hidden rounded-lg transition-opacity hover:opacity-80"
       >
         {displayImage ? (
-          <OptimizedImage
-            src={String(displayImage)}
-            alt={node.merchandise.product.title}
-            width={96}
-            height={96}
-            quality={75}
-            sizes="96px"
-            className="h-24 w-24 rounded-lg object-cover"
-          />
+          isAiPortrait ? (
+            <ProtectedImage
+              src={String(displayImage)}
+              alt={node.merchandise.product.title}
+              width={96}
+              height={96}
+              quality={75}
+              sizes="96px"
+              className="h-24 w-24 rounded-lg object-cover"
+            />
+          ) : (
+            <OptimizedImage
+              src={String(displayImage)}
+              alt={node.merchandise.product.title}
+              width={96}
+              height={96}
+              quality={75}
+              sizes="96px"
+              className="h-24 w-24 rounded-lg object-cover"
+            />
+          )
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-muted">
             <span className="text-caption-sm text-muted-foreground">No image</span>

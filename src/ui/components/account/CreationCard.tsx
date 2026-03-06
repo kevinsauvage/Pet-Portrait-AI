@@ -5,6 +5,7 @@ import config from '@/core/config';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getStyleLabel } from '@/domains/ai/ai-portrait/utils/style-utils';
 import type { UserCreation } from '@/domains/creations/services/creations.service';
+import ProtectedImage from '@/ui/components/media/ProtectedImage';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';
 import { Card, CardContent, CardFooter } from '@/ui/primitives/card';
@@ -60,10 +61,9 @@ const CreationCard = ({ creation }: Props) => {
 
         {generatedUrls.slice(0, 3).map((url, i) => (
           <div key={url} className="relative aspect-square rounded-lg overflow-hidden">
-            <Image
+            <ProtectedImage
               src={url}
               alt={`Portrait variation ${i + 1}`}
-              fill
               className="object-cover"
               sizes="(max-width: 640px) 50vw, 25vw"
             />
