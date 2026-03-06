@@ -1,6 +1,7 @@
-import type { NextRequest } from 'next/server';
+import type { NextRequest, NextResponse } from 'next/server';
 
 import { createErrorResponse, HTTP_STATUS } from '@/core/utils/api-responses';
+import { getSecureCookieOptions } from '@/core/utils/cookie-security';
 import { getClientContext } from '@/core/utils/request-identity';
 
 import { timingSafeEqual } from 'crypto';
@@ -107,6 +108,14 @@ async function hmacSha256Hex(secret: string, value: string): Promise<string> {
   return toHex(signature);
 }
 
+function base64UrlEncode(value: string): string {
+  return Buffer.from(value, 'utf8')
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
+
 function base64UrlDecode(value: string): string {
   const padded = value.replace(/-/g, '+').replace(/_/g, '/');
   const padLength = (4 - (padded.length % 4)) % 4;
@@ -149,6 +158,69 @@ export async function isApiSessionValid(
 
   const fingerprint = await sha256Hex(getClientContext(request.headers).identifier);
   return safeEqual(payload.fp, fingerprint);
+}
+
+/**
+ * Creates a signed API session cookie value
+ * @param request The incoming request to generate fingerprint from
+ * @param scope The session scope (ai or upload)
+ * @param expiresInMs Expiry time in milliseconds (default: 24 hours)
+ * @returns The signed cookie value, or null if secret is not configured
+ */
+export async function createApiSessionCookie(
+  request: NextRequest,
+  scope: ApiSessionScope,
+  expiresInMs: number = 24 * 60 * 60 * 1000, // 24 hours default
+): Promise<string | null> {
+  const secret = getSecret(scope);
+  if (!secret) return null;
+
+  const fingerprint = await sha256Hex(getClientContext(request.headers).identifier);
+  const exp = Date.now() + expiresInMs;
+
+  const payload: SessionPayload = {
+    v: SESSION_VERSION,
+    exp,
+    fp: fingerprint,
+  };
+
+  const encoded = base64UrlEncode(JSON.stringify(payload));
+  const signature = await hmacSha256Hex(secret, encoded);
+
+  return `${encoded}.${signature}`;
+}
+
+/**
+ * Sets API session cookies on a NextResponse for configured scopes
+ * Only sets cookies if the corresponding secret environment variable is configured
+ * @param response The NextResponse to set cookies on
+ * @param request The incoming request to generate fingerprints from
+ */
+export async function setApiSessionCookies(
+  response: NextResponse,
+  request: NextRequest,
+): Promise<void> {
+  // Set AI session cookie if AI_API_SECRET is configured
+  if (isApiAuthConfigured('AI_API_SECRET')) {
+    const aiCookieValue = await createApiSessionCookie(request, 'ai');
+    if (aiCookieValue) {
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+      response.cookies.set(COOKIE_NAMES.ai, aiCookieValue, {
+        ...getSecureCookieOptions({ expires }),
+      });
+    }
+  }
+
+  // Set upload session cookie if UPLOADTHING_API_SECRET is configured
+  if (isApiAuthConfigured('UPLOADTHING_API_SECRET')) {
+    const uploadCookieValue = await createApiSessionCookie(request, 'upload');
+    if (uploadCookieValue) {
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+      response.cookies.set(COOKIE_NAMES.upload, uploadCookieValue, {
+        ...getSecureCookieOptions({ expires }),
+      });
+    }
+  }
 }
 
 /**

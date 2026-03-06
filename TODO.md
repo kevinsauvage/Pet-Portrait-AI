@@ -1,11 +1,5 @@
 # TODO — Production Readiness Audit
 
-## P1 — Critical (Launch Blockers)
-
-- [ ] **WHAT:** Implement API session cookie issuance for `/create` flows.
-      **WHY:** `.env.example` states "Browser flows receive a signed session cookie from middleware when visiting /create", but no middleware sets `pp_ai_session` or `pp_upload_session`. When `AI_API_SECRET` or `UPLOADTHING_API_SECRET` is set, same-origin requests will fail `isApiSessionValid` and return 401.
-      **HOW:** Add middleware that, when visiting `/create` (or `/create/*`), sets session cookies via `auth.ts` helpers (or create `setApiSessionCookie`). Ensure cookies are HttpOnly, Secure, SameSite, and have appropriate expiry.
-
 ## P2 — High Priority
 
 - [ ] **WHAT:** Document rate limit identifier spoofing risk.

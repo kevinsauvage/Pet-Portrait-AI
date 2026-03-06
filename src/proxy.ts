@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { COOKIES } from '@/core/config/constants';
+import { setApiSessionCookies } from '@/core/utils/auth';
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect customer routes - requires Shopify customer token
@@ -19,8 +20,16 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Allow all other routes to pass through
-  return NextResponse.next();
+  // Set API session cookies when visiting /create routes
+  // This allows browser flows to authenticate with AI and upload endpoints
+  const isCreateRoute = pathname.startsWith('/create');
+  const response = NextResponse.next();
+
+  if (isCreateRoute) {
+    await setApiSessionCookies(response, request);
+  }
+
+  return response;
 }
 
 export const config = {
