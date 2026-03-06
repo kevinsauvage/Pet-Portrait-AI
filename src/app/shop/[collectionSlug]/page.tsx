@@ -106,7 +106,7 @@ const CollectionSlugPage = async ({
 
       <ProductEdgeList products={edges} layout="grid" collectionSlug={collectionSlug} />
 
-      <PageInfoPagination pageInfo={pageInfo} searchParameters={safeSearchParameters} />
+      <PageInfoPagination pageInfo={pageInfo} searchParameters={safeSearchParameters} pathname={`/shop/${collectionSlug}`} />
     </div>
   );
 };

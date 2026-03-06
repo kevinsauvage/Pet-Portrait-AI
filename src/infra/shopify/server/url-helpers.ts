@@ -1,12 +1,11 @@
-import { cookies } from 'next/headers';
-
-import config from '@/core/config';
+import { headers } from 'next/headers';
 
 /**
  * Server-side URL helpers
- * Utilities for working with URLs stored in cookies (set by middleware)
+ * Gets the current URL without query parameters from request headers
  */
 export const getCurrentUrlWithoutParameters = async () => {
-  const cookiesStore = await cookies();
-  return cookiesStore.get(config.cookies.url)?.value?.split('?')[0];
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || headersList.get('x-invoke-path') || '/';
+  return pathname;
 };

@@ -2,8 +2,6 @@ import { cookies } from 'next/headers';
 
 import config from '@/core/config';
 
-import { getCurrentUrlWithoutParameters } from './server/url-helpers';
-
 /**
  * Resolves a string sort key to a typed enum value.
  * Matches by value or key (case-insensitive). Falls back to defaultKey.
@@ -120,38 +118,40 @@ type PaginationSearchParams = {
   sort_key?: string;
 };
 
-async function buildPaginationPath(
+function buildPaginationPath(
+  pathname: string,
   searchParameters: PaginationSearchParams,
   options: { cursorKey: 'after' | 'before'; cursorValue: string },
-): Promise<string> {
-  const currentUrl = await getCurrentUrlWithoutParameters();
+): string {
   const params = new URLSearchParams();
 
   params.set(options.cursorKey, options.cursorValue);
   if (searchParameters.sort_key) params.set('sort_key', searchParameters.sort_key);
 
-  return `${currentUrl}?${params.toString()}`;
+  return `${pathname}?${params.toString()}`;
 }
 
-export const getNextPath = async (
+export const getNextPath = (
+  pathname: string,
   pageInfo: PageInfo,
   searchParameters: PaginationSearchParams,
-): Promise<string> => {
+): string => {
   if (!pageInfo.hasNextPage || !pageInfo.endCursor) return '';
 
-  return buildPaginationPath(searchParameters, {
+  return buildPaginationPath(pathname, searchParameters, {
     cursorKey: 'after',
     cursorValue: pageInfo.endCursor,
   });
 };
 
-export const getPreviousPath = async (
+export const getPreviousPath = (
+  pathname: string,
   pageInfo: PageInfo,
   searchParameters: PaginationSearchParams,
-): Promise<string> => {
+): string => {
   if (!pageInfo.hasPreviousPage || !pageInfo.startCursor) return '';
 
-  return buildPaginationPath(searchParameters, {
+  return buildPaginationPath(pathname, searchParameters, {
     cursorKey: 'before',
     cursorValue: pageInfo.startCursor,
   });

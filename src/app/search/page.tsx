@@ -45,7 +45,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
             <Filters filters={filters} query={searchParameters} />
           </ListingHeader>
           <ProductsList layout="grid" products={products} ariaLabel="Search results" />
-          <PageInfoPagination pageInfo={pageInfo} searchParameters={searchParameters} />
+          <PageInfoPagination pageInfo={pageInfo} searchParameters={searchParameters} pathname="/search" />
         </div>
       ) : (
         <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 space-y-6">

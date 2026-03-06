@@ -120,7 +120,7 @@ const Addresses = async ({
             />
           ))}
         </div>
-        <PageInfoPagination pageInfo={pageInfo} searchParameters={searchParameters} />
+        <PageInfoPagination pageInfo={pageInfo} searchParameters={searchParameters} pathname="/account/addresses" />
       </CardContent>
     </Card>
   );

@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import Link from 'next/link';
 
 import { getNextPath, getPreviousPath } from '@/infra/shopify/helpers';
@@ -7,6 +8,7 @@ import { Button } from '@/ui/primitives/button';
 const PageInfoPagination = async ({
   pageInfo,
   searchParameters,
+  pathname,
 }: {
   pageInfo: PageInfo;
   searchParameters: {
@@ -14,9 +16,16 @@ const PageInfoPagination = async ({
     before?: string;
     sort_key?: string;
   };
+  pathname?: string;
 }) => {
-  const previousPath = await getPreviousPath(pageInfo, searchParameters);
-  const nextPath = await getNextPath(pageInfo, searchParameters);
+  const currentPathname =
+    pathname ||
+    (await headers()).get('x-pathname') ||
+    (await headers()).get('x-invoke-path') ||
+    '/';
+
+  const previousPath = getPreviousPath(currentPathname, pageInfo, searchParameters);
+  const nextPath = getNextPath(currentPathname, pageInfo, searchParameters);
 
   return (
     <div className="flex items-center justify-between gap-2">
