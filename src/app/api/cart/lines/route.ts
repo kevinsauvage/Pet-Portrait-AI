@@ -4,11 +4,12 @@ import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
-  handleApiError,
   HTTP_STATUS,
   mapShopifyUserErrors,
+  parseJsonBody,
+  parseZodBody,
+  withApiHandler,
 } from '@/core/utils/api-responses';
-import { formatZodErrorMessage } from '@/core/utils/zod';
 import { CartService } from '@/domains/cart/services/cart.service';
 import { getCartPaginationParams } from '@/domains/cart/utils/pagination';
 import {
@@ -18,132 +19,144 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-export async function PATCH(request: NextRequest) {
+export const PATCH = async (request: NextRequest) => {
   const cartId = await CartService.getCartId();
 
   if (!cartId) {
     return createErrorResponse(API_ERROR_MESSAGES.CART_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
   }
 
-  try {
-    const body = await request.json();
-    const parsedBody = cartLinesOperationSchema.safeParse(body);
-    if (!parsedBody.success) {
-      return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
-        message: formatZodErrorMessage(parsedBody.error),
+  const handler = withApiHandler(
+    {
+      context: 'PATCH /api/cart/lines',
+      errorMessage: API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART_LINES,
+    },
+    async () => {
+      const body = await parseJsonBody(request);
+      const parsedBody = parseZodBody(body, cartLinesOperationSchema, {
+        errorMessage: API_ERROR_MESSAGES.INVALID_REQUEST_BODY,
         status: HTTP_STATUS.BAD_REQUEST,
       });
-    }
+      if (!parsedBody.success) {
+        return parsedBody.response;
+      }
 
-    let resolvedOperation;
-    try {
-      resolvedOperation = resolveCartLineOperation(parsedBody.data);
-    } catch (error) {
-      return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
-        message: error instanceof Error ? error.message : 'Invalid cart line operation',
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
+      let resolvedOperation;
+      try {
+        resolvedOperation = resolveCartLineOperation(parsedBody.data);
+      } catch (error) {
+        return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
+          message: error instanceof Error ? error.message : 'Invalid cart line operation',
+          status: HTTP_STATUS.BAD_REQUEST,
+        });
+      }
 
-    let cart;
-    let userErrors;
+      let cart;
+      let userErrors;
 
-    if (resolvedOperation.operation === 'add' && resolvedOperation.addLines) {
-      const response = await CartService.addLines(
-        cartId,
-        resolvedOperation.addLines,
-        getCartPaginationParams(request.nextUrl.searchParams),
-      );
+      if (resolvedOperation.operation === 'add' && resolvedOperation.addLines) {
+        const response = await CartService.addLines(
+          cartId,
+          resolvedOperation.addLines,
+          getCartPaginationParams(request.nextUrl.searchParams),
+        );
 
-      cart = response?.cart;
-      userErrors = response?.userErrors;
-    } else if (resolvedOperation.lines) {
-      const response = await CartService.updateLines(
-        cartId,
-        resolvedOperation.lines,
-        getCartPaginationParams(request.nextUrl.searchParams),
-      );
+        cart = response?.cart;
+        userErrors = response?.userErrors;
+      } else if (resolvedOperation.lines) {
+        const response = await CartService.updateLines(
+          cartId,
+          resolvedOperation.lines,
+          getCartPaginationParams(request.nextUrl.searchParams),
+        );
 
-      cart = response?.cart;
-      userErrors = response?.userErrors;
-    }
+        cart = response?.cart;
+        userErrors = response?.userErrors;
+      }
 
-    const mappedUserErrors = mapShopifyUserErrors(userErrors);
-    if (mappedUserErrors) {
-      const errorMsg =
+      const mappedUserErrors = mapShopifyUserErrors(userErrors);
+      if (mappedUserErrors) {
+        const errorMsg =
+          resolvedOperation.operation === 'add'
+            ? API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT
+            : API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART;
+        return createErrorResponse(errorMsg, {
+          userErrors: mappedUserErrors,
+          status: HTTP_STATUS.BAD_REQUEST,
+        });
+      }
+
+      if (!cart) {
+        const errorMsg =
+          resolvedOperation.operation === 'add'
+            ? API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT
+            : API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART;
+        return createErrorResponse(errorMsg, {
+          message: 'Cart operation did not return a valid cart',
+          status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        });
+      }
+
+      CartService.revalidate();
+      const successMsg =
         resolvedOperation.operation === 'add'
-          ? API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT
-          : API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART;
-      return createErrorResponse(errorMsg, {
-        userErrors: mappedUserErrors,
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
+          ? 'Product added successfully'
+          : 'Cart updated successfully';
+      return createSuccessResponse(cart, { message: successMsg, noCache: true });
+    },
+  );
 
-    if (!cart) {
-      const errorMsg =
-        resolvedOperation.operation === 'add'
-          ? API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT
-          : API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART;
-      return createErrorResponse(errorMsg, {
-        message: 'Cart operation did not return a valid cart',
-        status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-      });
-    }
+  return handler();
+};
 
-    CartService.revalidate();
-    const successMsg =
-      resolvedOperation.operation === 'add'
-        ? 'Product added successfully'
-        : 'Cart updated successfully';
-    return createSuccessResponse(cart, { message: successMsg, noCache: true });
-  } catch (error) {
-    return handleApiError('PATCH /api/cart/lines', error, API_ERROR_MESSAGES.FAILED_TO_UPDATE_CART_LINES);
-  }
-}
-
-export async function DELETE(request: NextRequest) {
+export const DELETE = async (request: NextRequest) => {
   const cartId = await CartService.getCartId();
 
   if (!cartId) {
     return createErrorResponse(API_ERROR_MESSAGES.CART_NOT_FOUND, { status: HTTP_STATUS.NOT_FOUND });
   }
 
-  try {
-    const { searchParams } = request.nextUrl;
-    const lineItemId = searchParams.get('lineItemId');
-    if (!lineItemId) {
-      return createErrorResponse(API_ERROR_MESSAGES.MISSING_LINE_ITEM_ID, {
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
+  const handler = withApiHandler(
+    {
+      context: 'DELETE /api/cart/lines',
+      errorMessage: API_ERROR_MESSAGES.FAILED_TO_REMOVE_CART_LINE,
+    },
+    async () => {
+      const { searchParams } = request.nextUrl;
+      const lineItemId = searchParams.get('lineItemId');
+      if (!lineItemId) {
+        return createErrorResponse(API_ERROR_MESSAGES.MISSING_LINE_ITEM_ID, {
+          status: HTTP_STATUS.BAD_REQUEST,
+        });
+      }
 
-    const response = await CartService.removeLines(
-      cartId,
-      [lineItemId],
-      getCartPaginationParams(searchParams),
-    );
+      const response = await CartService.removeLines(
+        cartId,
+        [lineItemId],
+        getCartPaginationParams(searchParams),
+      );
 
-    const { cart, userErrors } = response || {};
+      const { cart, userErrors } = response || {};
 
-    const mappedUserErrors = mapShopifyUserErrors(userErrors);
-    if (mappedUserErrors) {
-      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT, {
-        userErrors: mappedUserErrors,
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
-    }
+      const mappedUserErrors = mapShopifyUserErrors(userErrors);
+      if (mappedUserErrors) {
+        return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT, {
+          userErrors: mappedUserErrors,
+          status: HTTP_STATUS.BAD_REQUEST,
+        });
+      }
 
-    if (!cart) {
-      return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT, {
-        message: 'Cart operation did not return a valid cart',
-        status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-      });
-    }
+      if (!cart) {
+        return createErrorResponse(API_ERROR_MESSAGES.FAILED_TO_REMOVE_PRODUCT, {
+          message: 'Cart operation did not return a valid cart',
+          status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        });
+      }
 
-    CartService.revalidate();
-    return createSuccessResponse(cart, { message: 'Product removed successfully' });
-  } catch (error) {
-    return handleApiError('DELETE /api/cart/lines', error, API_ERROR_MESSAGES.FAILED_TO_REMOVE_CART_LINE);
-  }
-}
+      CartService.revalidate();
+      return createSuccessResponse(cart, { message: 'Product removed successfully' });
+    },
+  );
+
+  return handler();
+};

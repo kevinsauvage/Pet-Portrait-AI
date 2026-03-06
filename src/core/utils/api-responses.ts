@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 
 import { logger } from '@/core/utils/logger';
+import { formatZodErrorMessage } from '@/core/utils/zod';
 import type {
   CartUserError,
   CustomerUserError,
   UserError,
 } from '@/infra/shopify/generated/storefront/index';
+
+import type { ZodError, ZodSchema } from 'zod';
 
 export type ApiErrorResponse = {
   error: string;
@@ -130,4 +133,66 @@ export function handleApiError(context: string, error: unknown, defaultMessage: 
     message: error instanceof Error ? error.message : 'An unexpected error occurred',
     status,
   });
+}
+
+type ApiHandler<TArgs extends unknown[]> = (...args: TArgs) => Promise<Response> | Response;
+
+export function withApiHandler<TArgs extends unknown[]>(
+  options: {
+    context: string;
+    errorMessage: string;
+    onError?: (error: unknown) => Response | undefined;
+  },
+  handler: ApiHandler<TArgs>,
+) {
+  return async (...args: TArgs) => {
+    try {
+      return await handler(...args);
+    } catch (error) {
+      const customResponse = options.onError?.(error);
+      if (customResponse) return customResponse;
+      return handleApiError(options.context, error, options.errorMessage);
+    }
+  };
+}
+
+export type ParsedZodBody<T> =
+  | { success: true; data: T }
+  | { success: false; response: NextResponse<ApiErrorResponse> };
+
+export function parseZodBody<T>(
+  data: unknown,
+  schema: ZodSchema<T>,
+  options: {
+    errorMessage: string;
+    status?: number;
+    formatError?: (error: ZodError) => string;
+  },
+): ParsedZodBody<T> {
+  const parsed = schema.safeParse(data);
+  if (parsed.success) {
+    return { success: true, data: parsed.data };
+  }
+
+  const message = options.formatError
+    ? options.formatError(parsed.error)
+    : formatZodErrorMessage(parsed.error);
+
+  return {
+    success: false,
+    response: createErrorResponse(options.errorMessage, {
+      message,
+      status: options.status ?? HTTP_STATUS.BAD_REQUEST,
+    }),
+  };
+}
+
+export async function parseJsonBody<T = unknown>(request: Request): Promise<T> {
+  try {
+    return (await request.json()) as T;
+  } catch (error) {
+    const parseError = new Error('Invalid JSON body');
+    (parseError as Error & { cause?: unknown }).cause = error;
+    throw parseError;
+  }
 }

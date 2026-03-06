@@ -3,8 +3,9 @@ import { type NextRequest } from 'next/server';
 import {
   createErrorResponse,
   createSuccessResponse,
-  handleApiError,
   HTTP_STATUS,
+  parseJsonBody,
+  withApiHandler,
 } from '@/core/utils/api-responses';
 import {
   clearCreateFlowUrl,
@@ -15,17 +16,17 @@ import { getUser } from '@/domains/user/get-user';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
-  try {
+export const GET = withApiHandler(
+  { context: 'GET /api/create-flow', errorMessage: 'Failed to get create flow' },
+  async () => {
     const url = await getCreateFlowUrl();
     return createSuccessResponse({ url });
-  } catch (error) {
-    return handleApiError('GET /api/create-flow', error, 'Failed to get create flow');
-  }
-}
+  },
+);
 
-export async function POST(request: NextRequest) {
-  try {
+export const POST = withApiHandler(
+  { context: 'POST /api/create-flow', errorMessage: 'Failed to save create flow' },
+  async (request: NextRequest) => {
     const user = await getUser();
     if (!user?.id) {
       return createErrorResponse('User not authenticated', {
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const body = await request.json();
+    const body = await parseJsonBody<{ url?: string }>(request);
     const url = typeof body?.url === 'string' ? body.url : '';
 
     const result = await setCreateFlowUrl(user.id, url);
@@ -45,13 +46,12 @@ export async function POST(request: NextRequest) {
     }
 
     return createSuccessResponse({ success: true }, { noCache: true });
-  } catch (error) {
-    return handleApiError('POST /api/create-flow', error, 'Failed to save create flow');
-  }
-}
+  },
+);
 
-export async function DELETE() {
-  try {
+export const DELETE = withApiHandler(
+  { context: 'DELETE /api/create-flow', errorMessage: 'Failed to clear create flow' },
+  async () => {
     const user = await getUser();
     if (!user?.id) {
       return createErrorResponse('User not authenticated', {
@@ -68,7 +68,5 @@ export async function DELETE() {
     }
 
     return createSuccessResponse({ success: true }, { noCache: true });
-  } catch (error) {
-    return handleApiError('DELETE /api/create-flow', error, 'Failed to clear create flow');
-  }
-}
+  },
+);

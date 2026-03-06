@@ -4,27 +4,34 @@ import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
-  handleApiError,
   HTTP_STATUS,
+  parseJsonBody,
+  parseZodBody,
+  withApiHandler,
 } from '@/core/utils/api-responses';
-import { formatZodErrorMessage } from '@/core/utils/zod';
 import { getUser } from '@/domains/user/get-user';
 import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
 import { wishlistAddSchema } from '@/domains/wishlist/validation';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
-  try {
+export const GET = withApiHandler(
+  {
+    context: 'GET /api/wishlist',
+    errorMessage: API_ERROR_MESSAGES.FAILED_TO_FETCH_WISHLIST,
+  },
+  async () => {
     const wishlist = await WishlistService.getWishlist();
     return createSuccessResponse(wishlist);
-  } catch (error) {
-    return handleApiError('GET /api/wishlist', error, API_ERROR_MESSAGES.FAILED_TO_FETCH_WISHLIST);
-  }
-}
+  },
+);
 
-export async function POST(request: NextRequest) {
-  try {
+export const POST = withApiHandler(
+  {
+    context: 'POST /api/wishlist',
+    errorMessage: API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT_TO_WISHLIST,
+  },
+  async (request: NextRequest) => {
     await WishlistService.requireAuth();
     const user = await getUser();
 
@@ -34,14 +41,14 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const body = await request.json();
-    const parsedBody = wishlistAddSchema.safeParse(body);
+    const body = await parseJsonBody(request);
+    const parsedBody = parseZodBody(body, wishlistAddSchema, {
+      errorMessage: API_ERROR_MESSAGES.MISSING_OR_INVALID_PRODUCT_ID,
+      status: HTTP_STATUS.BAD_REQUEST,
+    });
 
     if (!parsedBody.success) {
-      return createErrorResponse(API_ERROR_MESSAGES.MISSING_OR_INVALID_PRODUCT_ID, {
-        message: formatZodErrorMessage(parsedBody.error),
-        status: HTTP_STATUS.BAD_REQUEST,
-      });
+      return parsedBody.response;
     }
 
     const result = await WishlistService.addPortrait(parsedBody.data, user.id);
@@ -62,11 +69,5 @@ export async function POST(request: NextRequest) {
       message: result.message,
       noCache: true,
     });
-  } catch (error) {
-    return handleApiError(
-      'POST /api/wishlist',
-      error,
-      API_ERROR_MESSAGES.FAILED_TO_ADD_PRODUCT_TO_WISHLIST,
-    );
-  }
-}
+  },
+);
