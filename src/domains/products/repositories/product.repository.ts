@@ -1,5 +1,5 @@
 import { mapShopifyProductToDomain } from '@/domains/products/mappers/product-mapper';
-import type { Product } from '@/domains/products/models';
+import type { Product } from '@/domains/products/validation';
 import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 import type { ProductSortKeys } from '@/infra/shopify/generated/storefront/index';

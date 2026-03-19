@@ -11,7 +11,7 @@ import {
   clearCreateFlowUrl,
   getCreateFlowUrl,
   setCreateFlowUrl,
-} from '@/domains/create-flow/services/create-flow.service';
+} from '@/domains/create-flow/create-flow.service';
 import { getUser } from '@/domains/user/get-user';
 
 export const dynamic = 'force-dynamic';

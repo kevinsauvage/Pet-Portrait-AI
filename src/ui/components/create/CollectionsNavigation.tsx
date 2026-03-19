@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 
 import config from '@/core/config';
-import type { AiPortraitCollection } from '@/domains/ai/ai-portrait/get-ai-portrait-collections.service';
+import type { AiPortraitCollection } from '@/domains/ai/ai-portrait/types';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import CollectionsSideNav from '@/ui/components/catalog/CollectionsSideNav';
 

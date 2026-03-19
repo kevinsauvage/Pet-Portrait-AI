@@ -1,15 +1,12 @@
 'use server';
 
-import { getShopConfig } from '@/domains/shop/services';
+import { getShopConfig } from '@/domains/shop/get-shop-config.service';
+
+import type { ImageValidationResult } from './types';
 
 import sharp from 'sharp';
 
-export interface ImageValidationResult {
-  valid: boolean;
-  error?: string;
-  width?: number;
-  height?: number;
-}
+export type { ImageValidationResult } from './types';
 
 /**
  * Validates that a URL is safe to fetch by checking the scheme is HTTPS.

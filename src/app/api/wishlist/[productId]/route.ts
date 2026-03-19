@@ -8,7 +8,7 @@ import {
   withApiHandler,
 } from '@/core/utils/api-responses';
 import { getUser } from '@/domains/user/get-user';
-import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { WishlistService } from '@/domains/wishlist/wishlist.service';
 
 export const dynamic = 'force-dynamic';
 

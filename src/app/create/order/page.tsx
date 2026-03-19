@@ -7,7 +7,7 @@ import { getAiPortraitProductByHandle } from '@/domains/ai/ai-portrait/get-ai-po
 import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getFirstAvailableVariant } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
-import { generatePreview } from '@/domains/printful/services/preview.service';
+import { generatePreview } from '@/domains/printful/preview.service';
 import AddMoreProductsActions from '@/ui/components/cart/AddMoreProductsActions';
 import CreateFlowArtworkPreview from '@/ui/components/create/CreateFlowArtworkPreview';
 import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';

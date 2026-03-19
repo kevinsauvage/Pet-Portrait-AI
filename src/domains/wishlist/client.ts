@@ -2,7 +2,7 @@
 
 import { api } from '@/infra/http/api-client';
 
-import type { SavedPortrait } from './services/wishlist.service';
+import type { SavedPortrait } from './types';
 import type { WishlistAddInput } from './validation';
 
 type WishlistResponse = {

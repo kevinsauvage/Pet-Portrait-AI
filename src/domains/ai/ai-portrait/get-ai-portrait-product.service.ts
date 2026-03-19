@@ -3,7 +3,7 @@ import { storefrontSdk } from '@/infra/shopify/client';
 
 import { getFirstAvailableVariant } from './utils/product-utils';
 import { getAiPortraitCollections } from './get-ai-portrait-collections.service';
-import type { AiPortraitProduct, AiPortraitProductVariant } from './products';
+import type { AiPortraitProduct, AiPortraitProductVariant } from './types';
 
 const AI_PORTRAIT_METAFIELD_IDENTIFIERS = [{ namespace: 'custom', key: 'variant_id' }];
 

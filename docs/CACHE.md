@@ -380,6 +380,5 @@ app.post('/api/webhooks/shopify/product-update', async (req) => {
 
 ## Related Documentation
 
-- [Redis Setup](./REDIS_SETUP.md) - Redis configuration guide
-- [ADR-006: Redis-Based Distributed Rate Limiting](./ADRs/006-redis-rate-limiting.md) - Rate limiting ADR
-- [Configuration](./CONFIG_USAGE_ANALYSIS.md) - Configuration usage analysis
+- [Redis Setup](./REDIS_SETUP.md) — Redis configuration for distributed cache / rate limiting
+- [Shop configuration](./SHOP_CONFIG.md) — `shop_config` metafield and cache-related defaults

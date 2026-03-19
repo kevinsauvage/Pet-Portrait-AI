@@ -10,8 +10,8 @@ import {
   parseZodBody,
   withApiHandler,
 } from '@/core/utils/api-responses';
-import { CartService } from '@/domains/cart/services/cart.service';
-import { buildBuyerIdentityInput } from '@/domains/cart/utils/buyer-identity';
+import { CartService } from '@/domains/cart/cart.service';
+import { buildBuyerIdentityInput } from '@/domains/cart/cart-buyer-identity';
 import { cartBuyerIdentitySchema } from '@/domains/cart/validation';
 
 export const dynamic = 'force-dynamic';

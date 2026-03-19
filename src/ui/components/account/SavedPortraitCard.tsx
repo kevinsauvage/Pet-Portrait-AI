@@ -9,7 +9,7 @@ import config from '@/core/config';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getStyleLabel } from '@/domains/ai/ai-portrait/utils/style-utils';
 import { removePortraitFromWishlist } from '@/domains/wishlist/client';
-import type { SavedPortrait } from '@/domains/wishlist/services/wishlist.service';
+import type { SavedPortrait } from '@/domains/wishlist/types';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';
 import { Card, CardContent, CardFooter } from '@/ui/primitives/card';

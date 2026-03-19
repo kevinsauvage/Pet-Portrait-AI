@@ -5,17 +5,11 @@ import {
   parseJsonBody,
   withApiHandler,
 } from '@/core/utils/api-responses';
-import { generatePreview } from '@/domains/printful/services/preview.service';
-
-import { z } from 'zod';
+import { generatePreview } from '@/domains/printful/preview.service';
+import { printfulPreviewRequestSchema } from '@/domains/printful/validation';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
-
-const previewRequestSchema = z.object({
-  variantId: z.number().int().positive('variantId must be a positive integer'),
-  artworkUrl: z.string().url('artworkUrl must be a valid URL'),
-});
 
 export const POST = withApiHandler(
   {
@@ -24,7 +18,7 @@ export const POST = withApiHandler(
   },
   async (request: Request) => {
     const body = await parseJsonBody(request);
-    const parsed = previewRequestSchema.safeParse(body);
+    const parsed = printfulPreviewRequestSchema.safeParse(body);
 
     if (!parsed.success) {
       return createErrorResponse('Invalid request body', {

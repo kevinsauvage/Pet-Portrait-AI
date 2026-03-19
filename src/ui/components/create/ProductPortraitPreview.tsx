@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/products';
+import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/types';
 
 interface ProductPortraitPreviewProps {
   previewUrl: string | null;

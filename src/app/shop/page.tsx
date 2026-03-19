@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { getAllCollections } from '@/domains/collections/services/collections.service';
+import { getAllCollections } from '@/domains/collections/collections.service';
 
 export const revalidate = 3600;
 

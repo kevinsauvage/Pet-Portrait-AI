@@ -4,8 +4,8 @@ import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { logger } from '@/core/utils/logger';
 import { createCartAction } from '@/domains/cart/actions';
+import { DEFAULT_CART_PAGINATION } from '@/domains/cart/cart-pagination';
 import cartMock from '@/domains/cart/mocks/cart';
-import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
 import { api } from '@/infra/http/api-client';
 import type { CartFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
@@ -84,7 +84,10 @@ export const CartProvider = ({
   const removeFromCart = useCallback(
     async (lineItemId: string) => {
       if (!lineItemId) {
-        logger.error('Missing line item ID', { context: 'cart.remove', error: new Error('Missing line item ID') });
+        logger.error('Missing line item ID', {
+          context: 'cart.remove',
+          error: new Error('Missing line item ID'),
+        });
         return;
       }
 
@@ -101,7 +104,10 @@ export const CartProvider = ({
   const handleQuantityChange = useCallback(
     async (id: string, quantity: number) => {
       if (!id || !quantity) {
-        logger.error('Missing required parameters: id or quantity', { context: 'cart.quantity', error: new Error('Missing required parameters: id or quantity') });
+        logger.error('Missing required parameters: id or quantity', {
+          context: 'cart.quantity',
+          error: new Error('Missing required parameters: id or quantity'),
+        });
         return;
       }
 
@@ -121,7 +127,10 @@ export const CartProvider = ({
   const handleAddToCart = useCallback(
     async (variantId: string, quantity = 1, attributes?: CartLineAttribute[]) => {
       if (!variantId) {
-        logger.error('Missing variant ID', { context: 'cart.add', error: new Error('Missing variant ID') });
+        logger.error('Missing variant ID', {
+          context: 'cart.add',
+          error: new Error('Missing variant ID'),
+        });
         return;
       }
 
@@ -147,7 +156,10 @@ export const CartProvider = ({
   const updateDiscountCodes = useCallback(
     async (discountCodes: string[]) => {
       if (!Array.isArray(discountCodes)) {
-        logger.error('Invalid discount codes format', { context: 'cart.discount-codes', error: new Error('Invalid discount codes format') });
+        logger.error('Invalid discount codes format', {
+          context: 'cart.discount-codes',
+          error: new Error('Invalid discount codes format'),
+        });
         return;
       }
 

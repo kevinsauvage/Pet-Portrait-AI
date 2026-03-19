@@ -1,12 +1,12 @@
 import type { NextRequest } from 'next/server';
 
-import { CartService } from '@/domains/cart/services/cart.service';
+import { CartService } from '@/domains/cart/cart.service';
 
 import { PATCH } from './route';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/domains/cart/services/cart.service', () => ({
+vi.mock('@/domains/cart/cart.service', () => ({
   CartService: {
     getCartId: vi.fn(),
     updateBuyerIdentity: vi.fn(),
@@ -14,7 +14,7 @@ vi.mock('@/domains/cart/services/cart.service', () => ({
   },
 }));
 
-vi.mock('@/domains/cart/utils/buyer-identity', () => ({
+vi.mock('@/domains/cart/cart-buyer-identity', () => ({
   buildBuyerIdentityInput: vi.fn((input) => ({
     customerAccessToken: input.customerAccessToken,
     email: input.user?.email,

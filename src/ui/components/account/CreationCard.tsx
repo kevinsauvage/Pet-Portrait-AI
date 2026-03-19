@@ -4,7 +4,7 @@ import Link from 'next/link';
 import config from '@/core/config';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getStyleLabel } from '@/domains/ai/ai-portrait/utils/style-utils';
-import type { UserCreation } from '@/domains/creations/services/creations.service';
+import type { UserCreation } from '@/domains/creations/types';
 import ProtectedImage from '@/ui/components/media/ProtectedImage';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';

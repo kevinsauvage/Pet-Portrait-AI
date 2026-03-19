@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/constants/sort-options';
 import {
   getCollectionPageData,
   getCollectionSeo,
-} from '@/domains/collections/services/collections.service';
+} from '@/domains/collections/collections.service';
+import { COLLECTION_SORT_OPTIONS } from '@/domains/collections/sort-options';
 import ListingHeader from '@/ui/components/catalog/ListingHeader';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
 import ProductEdgeList from '@/ui/components/catalog/ProductsEdgeList';

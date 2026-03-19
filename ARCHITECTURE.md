@@ -4,9 +4,9 @@ This document describes the `src/` layout after the domains + infra migration.
 
 ## Overview
 
-- **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Domains use `actions/`, `services/`, `validation/`, `models/`, `repositories/`, `mappers/` when applicable.
+- **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Each domain is mostly **flat**: `actions.ts`, `validation.ts`, and `*.service.ts` files at the root; use subfolders only when there are several concerns (e.g. `products/services`, `ai/ai-portrait`).
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
-- **core/** — App-wide config, errors, types, and shared utils (api-responses, form-actions, cookie-security).
+- **core/** — App-wide config, errors, and shared utils (api-responses, form-actions incl. `FormActionResult`, cookie-security).
 - **lib/** — Pure helpers and app infra: format, html, debounce, cn, consents, cookies (server actions), client (cookies, analytics).
 - **ui/** — Presentational components, layouts, primitives, and shared app UI building blocks (auth shell/forms, shared sections).
 - **app/** — Next.js App Router (pages, layouts, API routes).
@@ -20,26 +20,29 @@ src/
 ├── app/                    # Next.js App Router
 ├── assets/
 ├── contexts/               # React contexts (Cart, User)
-├── core/                   # Config, errors, types, utils
+├── core/                   # Config, errors, utils
 │   ├── config/
 │   ├── errors/
-│   ├── types/
 │   └── utils/              # api-responses, form-actions, cookie-security
-├── domains/                # Domain modules
-│   ├── address/            # actions/, services/, validation/, index.ts
-│   ├── ai/                  # actions/, services/, models/, repositories/, ai-portrait/, index.ts
-│   ├── auth/
-│   ├── cart/
-│   ├── collections/         # services/
-│   ├── contact/
-│   ├── home/                # services/
-│   ├── legal/               # services/
-│   ├── navigation/          # services/
-│   ├── orders/             # services/, models/, repositories/
-│   ├── products/           # services/, models/, repositories/, mappers/
-│   ├── search/
-│   ├── user/
-│   └── wishlist/           # client.ts, services/, index.ts
+├── domains/                # Domain modules (flat by default)
+│   ├── address/            # actions.ts, types.ts, address.service.ts, address-utils.ts, validation.ts
+│   ├── ai/                 # actions.ts, *.service.ts, validation.ts, ai-portrait/
+│   ├── auth/               # actions.ts, auth.service.ts, validation.ts
+│   ├── cart/               # actions.ts, types.ts, cart.service.ts, cart-pagination.ts, cart-buyer-identity.ts, mocks/
+│   ├── collections/        # collections.service.ts, sort-options.ts
+│   ├── contact/            # actions.ts, validation.ts
+│   ├── create-flow/        # create-flow.service.ts
+│   ├── creations/          # creations.service.ts, types.ts
+│   ├── home/               # home.service.ts
+│   ├── legal/              # policies.service.ts
+│   ├── navigation/         # menu.service.ts
+│   ├── orders/             # customer-orders.service.ts
+│   ├── printful/           # preview.service.ts, types.ts, utils.ts, validation.ts
+│   ├── products/           # services/, mappers/, repositories/, images.ts, inventory.ts, validation.ts
+│   ├── search/             # actions.ts, types.ts, search.service.ts, sort-options.ts
+│   ├── shop/               # get-shop-config.service.ts
+│   ├── user/               # actions.ts, user.service.ts, get-user.ts, validation.ts
+│   └── wishlist/           # wishlist.service.ts, types.ts, client.ts, validation.ts
 ├── hooks/
 ├── infra/                  # Infrastructure
 │   ├── shopify/            # storefront, admin, tokens, server (token + url helpers)
@@ -56,7 +59,7 @@ src/
 │   ├── debounce.ts
 │   ├── cn.ts
 │   └── consents.ts
-├── types/                   # FormActionResult, globals.d.ts
+├── types/                   # globals.d.ts, images.d.ts
 └── ui/
 ```
 
@@ -64,13 +67,13 @@ src/
 
 ## Domains
 
-Each domain has:
+Conventions:
 
-- **actions/** — Server actions (`"use server"`), re-exported from `index.ts` when present.
-- **services/** — Business logic (no framework).
-- **validation/** — Zod schemas (when applicable).
-- **models/**, **repositories/**, **mappers/** — When the domain has data types, external access, or adapter logic.
-- **index.ts** — Public API when the domain chooses to expose one.
+- **`actions.ts`** — Server actions (`"use server"`) when the domain exposes them.
+- **`validation.ts`** — Zod schemas (when applicable).
+- **`*.service.ts`** — Business logic (no framework); tests as `*.service.test.ts` alongside.
+- **`types.ts`** — Shared domain types/interfaces (alongside services when they grow beyond one-off literals).
+- **Subfolders** — Only when needed: e.g. **`products/services`** (multiple services), **`ai/ai-portrait`** (`types.ts`, create-flow utils), **`cart/mocks`**.
 
 Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config`, `@/core/utils`), **lib** (`@/lib/cookies`), and **types** — not from other domains when avoidable.
 
@@ -90,34 +93,4 @@ Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config
 
 - **core/config** — App config, routes, constants, seo, userFeedback.
 - **core/errors** — AppError and domain errors.
-- **core/types** — Result, PaginatedResult, Money.
-- **core/utils** — api-responses, form-actions, cookie-security, metadata (getBaseUrl, generateMetadata), retry, extract-error-message.
-
----
-
-## Lib
-
-- **lib/cookies** — Server cookie actions (used by domains and logout).
-- **lib/format** — formatPrice.
-- **lib/cn** — classnames helper.
-- **lib/debounce** — debounce.
-- **lib/consents** — Cookie/consent helpers.
-- **lib/client** — Client-side cookies/analytics.
-
----
-
-## TSConfig paths
-
-Explicit path mappings in `tsconfig.json`:
-
-- `@/app/*`, `@/domains/*`, `@/infra/*`, `@/core/*`, `@/ui/*`, `@/lib/*`, `@/hooks/*`, `@/assets/*`
-- `@/*` → `./src/*` (fallback for types, contexts, etc.)
-
----
-
-## Conventions
-
-1. Use `@/domains/...`, `@/infra/...`, `@/core/...`, `@/lib/...` for the new layout.
-2. Server actions live in `domains/<name>/actions/` and are re-exported from the domain `index.ts`.
-3. Shopify and other external services live under **infra**; domains depend on infra, not the reverse.
-4. Shared response/error and form helpers live in **core/utils**; pure helpers (format, cn, debounce) in **lib**.
+- **core/utils** — api-responses, form-actions (incl. `FormActionResult`), cookie-security, metadata (getBaseUrl, generateMetadata), retry, extract-error-message.

@@ -2,7 +2,7 @@ import { type NextRequest } from 'next/server';
 
 import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import { createSuccessResponse, withApiHandler } from '@/core/utils/api-responses';
-import { AuthService } from '@/domains/auth/services/auth.service';
+import { AuthService } from '@/domains/auth/auth.service';
 
 export const dynamic = 'force-dynamic';
 

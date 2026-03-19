@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/products';
+import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/types';
 import { getLowestPrice } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { formatPrice } from '@/lib/format';
 

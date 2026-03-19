@@ -2,16 +2,9 @@
  * Utility functions for building URL search parameters in the create flow
  */
 
-export interface CreateFlowParams {
-  artwork?: string;
-  photo?: string;
-  styleId?: string;
-  generationId?: string;
-  urls?: string;
-  productHandle?: string;
-  /** Printful product preview URL (portrait on product mockup) */
-  previewUrl?: string;
-}
+import type { CreateFlowParams } from '../types';
+
+export type { CreateFlowParams } from '../types';
 
 /**
  * Builds URLSearchParams from create flow parameters

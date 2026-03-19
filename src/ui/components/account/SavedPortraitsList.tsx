@@ -1,6 +1,6 @@
 'use client';
 
-import type { SavedPortrait } from '@/domains/wishlist/services/wishlist.service';
+import type { SavedPortrait } from '@/domains/wishlist/types';
 
 import SavedPortraitCard from './SavedPortraitCard';
 

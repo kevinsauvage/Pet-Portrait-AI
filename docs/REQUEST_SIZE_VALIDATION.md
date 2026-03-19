@@ -130,6 +130,5 @@ f({ image: { maxFileSize: '8MB', maxFileCount } })
 
 ## Related Documentation
 
-- [API Documentation](./API.md) - API endpoints and limits
-- [UploadThing Integration](./UPLOADTHING.md) - File upload configuration
-- [Security Best Practices](./SECURITY.md) - General security guidelines
+- [API Documentation](./API.md) — API endpoints and behavior
+- Upload limits are also constrained by `shop_config.image` where server-side validation runs; see [Shop configuration](./SHOP_CONFIG.md)

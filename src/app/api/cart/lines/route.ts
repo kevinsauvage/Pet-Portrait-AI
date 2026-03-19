@@ -10,8 +10,8 @@ import {
   parseZodBody,
   withApiHandler,
 } from '@/core/utils/api-responses';
-import { CartService } from '@/domains/cart/services/cart.service';
-import { getCartPaginationParams } from '@/domains/cart/utils/pagination';
+import { CartService } from '@/domains/cart/cart.service';
+import { getCartPaginationParams } from '@/domains/cart/cart-pagination';
 import {
   cartLinesOperationSchema,
   resolveCartLineOperation,

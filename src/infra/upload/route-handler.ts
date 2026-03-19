@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server';
 import { createErrorResponse, HTTP_STATUS } from '@/core/utils/api-responses';
 import { requireApiProtection } from '@/core/utils/auth';
 import { getClientContext } from '@/core/utils/request-identity';
-import { getShopConfig } from '@/domains/shop/services';
+import { getShopConfig } from '@/domains/shop/get-shop-config.service';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 import { ourFileRouter } from '@/infra/upload/core';
 

@@ -10,6 +10,7 @@ const reactHooks = require('eslint-plugin-react-hooks');
 const typescriptEslint = require('@typescript-eslint/eslint-plugin');
 const jsxA11Y = require('eslint-plugin-jsx-a11y');
 const simpleImportSort = require('eslint-plugin-simple-import-sort');
+const unusedImports = require('eslint-plugin-unused-imports');
 const js = require('@eslint/js');
 
 const { FlatCompat } = require('@eslint/eslintrc');
@@ -250,6 +251,28 @@ module.exports = defineConfig([
     ],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    // Stricter unused-import cleanup for app source; skip Shopify codegen output
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
+    ignores: ['src/infra/shopify/generated/**'],
+    plugins: {
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'error',
+        {
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          vars: 'all',
+          varsIgnorePattern: '^_',
+        },
+      ],
     },
   },
   globalIgnores([

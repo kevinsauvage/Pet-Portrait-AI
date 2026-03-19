@@ -257,6 +257,7 @@ yarn lint         # ESLint
 
 - [API Documentation](./docs/API.md) - API endpoints, authentication, and usage examples
 - [Shopify 2026+ Authentication](./docs/SHOPIFY-2026-AUTH.md) - Shopify OAuth 2.0 setup guide
+- [Shop configuration](./docs/SHOP_CONFIG.md) - `shop_config` Shopify metafield (AI, rate limits, pagination, cache defaults)
 - [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) - Print-on-demand preview and fulfillment guide
 - [Redis Setup](./docs/REDIS_SETUP.md) - Redis configuration for rate limiting
 
@@ -269,12 +270,4 @@ yarn lint         # ESLint
 
 ### Architecture
 
-- [Architecture Overview](./ARCHITECTURE.md) - Codebase structure and organization
-- [Architecture Decision Records](./docs/ADRs/) - Key architectural decisions and rationale
-  - [ADR-001: Domain-Driven Design](./docs/ADRs/001-domain-driven-design.md)
-  - [ADR-002: No Barrel Exports](./docs/ADRs/002-no-barrel-exports.md)
-  - [ADR-003: React Server Components Default](./docs/ADRs/003-react-server-components-default.md)
-  - [ADR-004: Shopify OAuth 2.0 Client Credentials](./docs/ADRs/004-shopify-oauth2-client-credentials.md)
-  - [ADR-005: Printful Shopify App Integration](./docs/ADRs/005-printful-shopify-app-integration.md)
-  - [ADR-006: Redis Rate Limiting](./docs/ADRs/006-redis-rate-limiting.md)
-  - [ADR-007: Sentry Error Monitoring](./docs/ADRs/007-sentry-error-monitoring.md)
+- [Architecture Overview](./ARCHITECTURE.md) - Codebase structure, boundaries, and conventions (includes integration and ops context)

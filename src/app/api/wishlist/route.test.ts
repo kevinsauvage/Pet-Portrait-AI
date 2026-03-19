@@ -1,13 +1,13 @@
 import type { NextRequest } from 'next/server';
 
 import { getUser } from '@/domains/user/get-user';
-import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { WishlistService } from '@/domains/wishlist/wishlist.service';
 
 import { GET, POST } from './route';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/domains/wishlist/services/wishlist.service', () => ({
+vi.mock('@/domains/wishlist/wishlist.service', () => ({
   WishlistService: {
     getWishlist: vi.fn(),
     requireAuth: vi.fn(),

@@ -1,21 +1,27 @@
-# Shop Configuration System
+# Shop configuration (`shop_config`)
 
-The shop configuration system allows you to configure AI generation settings through a Shopify metafield, eliminating the need to redeploy code for configuration changes.
+Runtime settings for AI generation, rate limits, image rules, feature flags, pagination, cache TTL hints, and cookie expiry—stored in a **Shop** metafield so you can change behavior without redeploying.
 
-## Setup
+## Create the metafield in Shopify
 
-### 1. Create Shopify Metafield
+1. **Settings** → **Custom data** → **Add definition**
+2. Resource: **Shop**
+3. **Name**: `shop_config` (or any label you prefer)
+4. **Namespace and key**: namespace `custom`, key `shop_config`
+5. **Type**: **JSON**
+6. **Description** (optional): Configuration for AI, rate limits, images, features, pagination, cache, cookies
 
-Create a metafield on your Shopify shop with the following details:
+Save, then:
 
-- **Namespace**: `custom`
-- **Key**: `shop_config`
-- **Type**: JSON
-- **Owner**: Shop
+7. **Settings** → **Store details** → **Metafields**
+8. Open `custom.shop_config` → paste JSON (see below)
+9. Save
 
-### 2. Configuration Structure
+Validated against [`shop-config-schema.json`](./shop-config-schema.json). A full starter payload is in [`shop-config-example.json`](./shop-config-example.json).
 
-The metafield should contain a JSON object with the following structure:
+## Example JSON (full)
+
+Use the file as the source of truth, or copy this:
 
 ```json
 {
@@ -23,6 +29,7 @@ The metafield should contain a JSON object with the following structure:
     "variationsCount": 3,
     "generationTimeoutSeconds": 120,
     "apiTimeoutSeconds": 60,
+    "model": "gpt-image-1.5",
     "retry": {
       "maxAttempts": 2,
       "baseDelayMs": 2000,
@@ -32,247 +39,164 @@ The metafield should contain a JSON object with the following structure:
       "minSeconds": 30,
       "maxSeconds": 60
     }
-  }
-}
-```
-
-### 3. Configuration Fields
-
-#### `ai.variationsCount` (number)
-
-- **Default**: `3`
-- **Description**: Number of portrait variations to generate
-- **Example**: `3`, `5`, `6`
-
-#### `ai.generationTimeoutSeconds` (number)
-
-- **Default**: `120`
-- **Description**: Maximum time allowed for generation in seconds
-- **Note**: Used for logging and monitoring. Next.js `maxDuration` is set to 300 seconds as a safe upper bound.
-
-#### `ai.apiTimeoutSeconds` (number)
-
-- **Default**: `60`
-- **Description**: API route timeout in seconds
-- **Note**: Used for reference. Next.js `maxDuration` is set to 300 seconds as a safe upper bound.
-
-#### `ai.retry.maxAttempts` (number)
-
-- **Default**: `2`
-- **Description**: Maximum number of retry attempts for OpenAI API calls
-- **Example**: `2`, `3`
-
-#### `ai.retry.baseDelayMs` (number)
-
-- **Default**: `2000`
-- **Description**: Base delay in milliseconds before first retry
-- **Example**: `2000` (2 seconds)
-
-#### `ai.retry.maxDelayMs` (number)
-
-- **Default**: `6000`
-- **Description**: Maximum delay in milliseconds between retries
-- **Example**: `6000` (6 seconds)
-
-#### `ai.timeEstimate.minSeconds` (number)
-
-- **Default**: `30`
-- **Description**: Minimum estimated time shown to users
-- **Example**: `30`, `45`
-
-#### `ai.timeEstimate.maxSeconds` (number)
-
-- **Default**: `60`
-- **Description**: Maximum estimated time shown to users
-- **Example**: `60`, `90`
-
-#### `ai.model` (string)
-
-- **Default**: `"gpt-image-1.5"`
-- **Description**: OpenAI model name to use for image generation
-- **Example**: `"gpt-image-1.5"`
-
-#### `rateLimit.ai.maxRequests` (number)
-
-- **Default**: `5`
-- **Description**: Maximum requests per window for AI generation endpoint
-- **Example**: `5`, `10`
-
-#### `rateLimit.ai.windowMs` (number)
-
-- **Default**: `60000`
-- **Description**: Time window in milliseconds (60000 = 1 minute)
-- **Example**: `60000`, `120000`
-
-#### `rateLimit.upload.maxRequests` (number)
-
-- **Default**: `12`
-- **Description**: Maximum requests per window for upload endpoint
-- **Example**: `12`, `20`
-
-#### `rateLimit.upload.windowMs` (number)
-
-- **Default**: `60000`
-- **Description**: Time window in milliseconds
-- **Example**: `60000`, `120000`
-
-#### `image.maxFileSize` (number)
-
-- **Default**: `8388608` (8MB)
-- **Description**: Maximum file size in bytes
-- **Example**: `8388608`, `15728640` (15MB)
-
-#### `image.minDimension` (number)
-
-- **Default**: `200`
-- **Description**: Minimum image dimension in pixels
-- **Example**: `200`, `300`
-
-#### `image.maxDimension` (number)
-
-- **Default**: `10000`
-- **Description**: Maximum image dimension in pixels
-- **Example**: `10000`, `15000`
-
-#### `image.minAspectRatio` (number)
-
-- **Default**: `0.5`
-- **Description**: Minimum aspect ratio (width/height)
-- **Example**: `0.5`, `0.75`
-
-#### `image.maxAspectRatio` (number)
-
-- **Default**: `2.0`
-- **Description**: Maximum aspect ratio (width/height)
-- **Example**: `2.0`, `3.0`
-
-#### `image.acceptedTypes` (array)
-
-- **Default**: `["image/jpeg", "image/png", "image/webp"]`
-- **Description**: Allowed MIME types for image uploads
-- **Example**: `["image/jpeg", "image/png"]`
-
-#### `features.enableRegeneration` (boolean)
-
-- **Default**: `true`
-- **Description**: Enable regeneration feature
-
-#### `features.enableGallery` (boolean)
-
-- **Default**: `true`
-- **Description**: Enable gallery page
-
-## Usage in Code
-
-### Server Components
-
-```typescript
-import { getShopConfig } from '@/domains/shop/services';
-
-export default async function MyPage() {
-  const shopConfig = await getShopConfig();
-  const variationsCount = shopConfig.ai.variationsCount;
-  // Use config...
-}
-```
-
-### Services
-
-```typescript
-import { getShopConfig } from '@/domains/shop/services';
-
-export async function myService() {
-  const shopConfig = await getShopConfig();
-  const retryConfig = shopConfig.ai.retry;
-  // Use config...
-}
-```
-
-## Default Values
-
-If the metafield is not set or invalid, the system falls back to default values defined in `src/domains/shop/services/get-shop-config.service.ts`:
-
-```typescript
-export const DEFAULT_SHOP_CONFIG = {
-  ai: {
-    variationsCount: 3,
-    generationTimeoutSeconds: 120,
-    apiTimeoutSeconds: 60,
-    retry: {
-      maxAttempts: 2,
-      baseDelayMs: 2000,
-      maxDelayMs: 6000,
-    },
-    timeEstimate: {
-      minSeconds: 30,
-      maxSeconds: 60,
-    },
   },
-};
+  "rateLimit": {
+    "ai": { "maxRequests": 5, "windowMs": 60000 },
+    "upload": { "maxRequests": 12, "windowMs": 60000 }
+  },
+  "image": {
+    "maxFileSize": 8388608,
+    "minDimension": 200,
+    "maxDimension": 10000,
+    "minAspectRatio": 0.5,
+    "maxAspectRatio": 2.0,
+    "acceptedTypes": ["image/jpeg", "image/png", "image/webp"]
+  },
+  "features": {
+    "enableRegeneration": true,
+    "enableGallery": true
+  },
+  "pagination": { "productsPerPage": 16 },
+  "cache": {
+    "revalidate": {
+      "catalog": 3600,
+      "search": 300,
+      "product": 3600,
+      "shopify": 600
+    }
+  },
+  "cookies": { "expiryDays": 182 }
+}
 ```
 
-## Where Configuration is Used
+## Field reference
 
-1. **Portrait Generation Service** (`src/domains/ai/services/portrait-generation.service.ts`)
-   - `variationsCount`: Controls how many images to generate
-   - `retry.*`: Controls retry behavior for OpenAI API calls
+### `ai`
 
-2. **UI Components**
-   - `src/app/create/generating/loading.tsx`: Shows dynamic variation count and time estimates
+| Field | Default | Notes |
+| --- | --- | --- |
+| `variationsCount` | `3` | Number of portrait variants (1–10) |
+| `generationTimeoutSeconds` | `120` | Logging / UX; route `maxDuration` is capped separately in code |
+| `apiTimeoutSeconds` | `60` | Reference timeout for API work |
+| `model` | `gpt-image-1.5` | OpenAI image model id |
+| `retry.maxAttempts` | `2` | |
+| `retry.baseDelayMs` | `2000` | |
+| `retry.maxDelayMs` | `6000` | |
+| `timeEstimate.minSeconds` / `maxSeconds` | `30` / `60` | Shown in UI |
 
-3. **API Routes**
-   - `src/app/api/ai/generate/route.ts`: Uses config for generation
+### `rateLimit`
 
-## Caching
+| Field | Default | Notes |
+| --- | --- | --- |
+| `ai.maxRequests` / `ai.windowMs` | `5` / `60000` | `/api/ai/generate` |
+| `upload.maxRequests` / `upload.windowMs` | `12` / `60000` | Upload route handler |
 
-The configuration is fetched from Shopify on each request. Shopify's cache settings (`config.constants.revalidate.shopify`) apply, so changes may take up to 10 minutes to propagate (default Shopify revalidation time).
+### `image`
 
-## Error Handling
+Server-side validation for uploads (bytes, dimensions, aspect ratio, MIME types). Defaults include `maxFileSize` **8388608** (8MB).
 
-- If the metafield is missing: Falls back to defaults
-- If the metafield is invalid JSON: Logs a warning and falls back to defaults
-- If Shopify API fails: Logs an error and falls back to defaults
+### `features`
 
-## Example Configuration
+| Field | Default |
+| --- | --- |
+| `enableRegeneration` | `true` |
+| `enableGallery` | `true` |
 
-### High Volume (More Variations)
+### `pagination`
+
+| Field | Default | Notes |
+| --- | --- | --- |
+| `productsPerPage` | `16` | Search / catalog page size |
+
+### `cache.revalidate` (seconds)
+
+Used where the app reads shop config for Shopify client / data caching—not for Next.js `export const revalidate` on pages (those stay static).
+
+| Field | Default |
+| --- | --- |
+| `catalog` | `3600` |
+| `search` | `300` |
+| `product` | `3600` |
+| `shopify` | `600` |
+
+### `cookies`
+
+| Field | Default | Notes |
+| --- | --- | --- |
+| `expiryDays` | `182` | Consent / analytics cookie max-age |
+
+## Partial overrides
+
+All keys are optional. Omitted sections use defaults from code.
+
+## Usage in code
+
+```typescript
+import { getShopConfig } from '@/domains/shop/get-shop-config.service';
+
+const shopConfig = await getShopConfig();
+```
+
+`ShopConfig` and `DEFAULT_SHOP_CONFIG` live in the same module.
+
+## Where values are read
+
+- `src/domains/shop/get-shop-config.service.ts` — fetch, merge with defaults, in-memory cache (~10 minutes)
+- `src/domains/ai/portrait-generation.service.ts` — AI counts, retries, model
+- `src/app/api/ai/generate/route.ts` — rate limits
+- `src/infra/upload/route-handler.ts` — upload rate limits
+- `src/domains/ai/ai-portrait/validate-image.ts` — image rules
+- `src/domains/search/search.service.ts` — `pagination.productsPerPage`
+- `src/app/create/generating/loading.tsx` — time estimates / variation count
+- `src/ui/components/consent/CookieBannerWrapper.tsx` — cookie expiry
+
+## Defaults
+
+Authoritative defaults: `DEFAULT_SHOP_CONFIG` in `src/domains/shop/get-shop-config.service.ts` (keep docs and `shop-config-example.json` aligned when you change defaults).
+
+## Caching and propagation
+
+- Parsed config is cached in the app (~10 minutes) via `withCache` on `getShopConfig`.
+- After changing the metafield, allow up to that TTL (and any CDN edge cache) before expecting new values everywhere.
+
+## Error handling
+
+- Missing metafield → defaults
+- Invalid JSON → warning log + defaults
+- Shopify failure → error log + defaults
+
+## More examples
+
+**Stricter AI rate limit**
+
+```json
+{ "rateLimit": { "ai": { "maxRequests": 3, "windowMs": 60000 } } }
+```
+
+**More products per page**
+
+```json
+{ "pagination": { "productsPerPage": 24 } } }
+```
+
+**Shorter cookie lifetime (e.g. compliance)**
+
+```json
+{ "cookies": { "expiryDays": 90 } } }
+```
+
+**Longer Shopify-side revalidation (seconds)**
 
 ```json
 {
-  "ai": {
-    "variationsCount": 6,
-    "timeEstimate": {
-      "minSeconds": 60,
-      "maxSeconds": 120
-    }
+  "cache": {
+    "revalidate": { "catalog": 7200, "search": 600, "product": 7200, "shopify": 1200 }
   }
 }
 ```
 
-### Fast Generation (Fewer Variations)
+## Troubleshooting
 
-```json
-{
-  "ai": {
-    "variationsCount": 2,
-    "timeEstimate": {
-      "minSeconds": 20,
-      "maxSeconds": 40
-    }
-  }
-}
-```
-
-### Aggressive Retries
-
-```json
-{
-  "ai": {
-    "retry": {
-      "maxAttempts": 3,
-      "baseDelayMs": 1000,
-      "maxDelayMs": 10000
-    }
-  }
-}
-```
+- **Changes not visible** — wait for app config cache TTL; redeploy not required for metafield edits.
+- **Defaults always used** — check logs for parse errors; validate JSON against `shop-config-schema.json`.
+- **Out-of-range values** — invalid fields fall back to defaults with a warning where validation runs.

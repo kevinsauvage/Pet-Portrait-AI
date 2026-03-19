@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { CreationsService } from '@/domains/creations/services/creations.service';
+import { CreationsService } from '@/domains/creations/creations.service';
 import { noFavoriteIllustration } from '@/lib/illustrations';
 import CreationCard from '@/ui/components/account/CreationCard';
 import BackButton from '@/ui/components/shared/BackButton';

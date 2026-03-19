@@ -15,8 +15,8 @@ import { enforceBodySizeLimit, enforceRequestSizeLimit } from '@/core/utils/requ
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
-import { generatePetPortraitVariations } from '@/domains/ai/services';
-import { getShopConfig } from '@/domains/shop/services';
+import { generatePetPortraitVariations } from '@/domains/ai/portrait-generation.service';
+import { getShopConfig } from '@/domains/shop/get-shop-config.service';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
 export const dynamic = 'force-dynamic';

@@ -1,4 +1,4 @@
-import { mapShopifyImagesToImageFields } from '@/domains/products/utils/images';
+import { mapShopifyImagesToImageFields } from '@/domains/products/images';
 import type { GetProductByHandleQuery } from '@/infra/shopify/generated/storefront/index';
 import { cn } from '@/lib/utils';
 import PhotoGallery from '@/ui/components/media/PhotoGallery';

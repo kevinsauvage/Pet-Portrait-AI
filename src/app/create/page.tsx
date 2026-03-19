@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import { getCreateFlowUrl } from '@/domains/create-flow/services/create-flow.service';
+import { getCreateFlowUrl } from '@/domains/create-flow/create-flow.service';
 import CreatePageWithEntryDialog from '@/ui/components/create/CreatePageWithEntryDialog';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
 

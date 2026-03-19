@@ -1,24 +1,4 @@
-import {
-  Camera,
-  ImageIcon,
-  Palette,
-  ShieldCheck,
-  ShoppingBag,
-  Sparkles,
-  Truck,
-} from 'lucide-react';
-
-export const HOME_HERO_PERKS = [
-  { icon: Sparkles, label: 'Museum-grade prints' },
-  { icon: ShieldCheck, label: 'Satisfaction guaranteed' },
-  { icon: Truck, label: 'Free worldwide shipping' },
-] as const;
-
-export const SHOP_PERKS = [
-  { label: 'Museum-grade materials', icon: Sparkles },
-  { label: 'Multiple print sizes', icon: ImageIcon },
-  { label: 'Fast worldwide shipping', icon: ShoppingBag },
-] as const;
+import { Camera, Palette, ShoppingBag, Sparkles } from 'lucide-react';
 
 export const CREATE_HOW_IT_WORKS = [
   {
@@ -46,47 +26,6 @@ export const CREATE_HOW_IT_WORKS = [
     time: '2 minutes',
   },
 ] as const;
-
-export const SHOP_HOW_IT_WORKS = [
-  {
-    icon: ImageIcon,
-    title: 'Browse Collections',
-    description: 'Find the print format that fits your space.',
-    time: '1 minute',
-  },
-  {
-    icon: Camera,
-    title: 'Add Your Photo',
-    description: 'Upload your pet photo for personalization.',
-    time: '1 minute',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Review & Approve',
-    description: 'Confirm the preview before you check out.',
-    time: '1-2 minutes',
-  },
-  {
-    icon: Truck,
-    title: 'Checkout & Delivery',
-    description: 'Complete your order and track delivery.',
-    time: '2 minutes',
-  },
-] as const;
-
-export const TRANSFORMATION_SAMPLE = {
-  before: {
-    src: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200',
-    alt: 'Original pet photo of a golden retriever',
-    label: 'Original photo',
-  },
-  after: {
-    src: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200',
-    alt: 'Stylized pet portrait of a poodle',
-    label: 'AI portrait',
-  },
-  caption: 'Drag the slider to reveal the transformation.',
-} as const;
 
 /**
  * Before/After transformation samples for each AI art style

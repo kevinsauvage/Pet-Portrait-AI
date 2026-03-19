@@ -7,7 +7,7 @@ import {
   HTTP_STATUS,
   withApiHandler,
 } from '@/core/utils/api-responses';
-import { getPredictiveSearch } from '@/domains/search/services/search.service';
+import { getPredictiveSearch } from '@/domains/search/search.service';
 
 export const dynamic = 'force-dynamic';
 

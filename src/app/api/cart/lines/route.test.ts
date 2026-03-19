@@ -1,12 +1,12 @@
 import type { NextRequest } from 'next/server';
 
-import { CartService } from '@/domains/cart/services/cart.service';
+import { CartService } from '@/domains/cart/cart.service';
 
 import { DELETE, PATCH } from './route';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/domains/cart/services/cart.service', () => ({
+vi.mock('@/domains/cart/cart.service', () => ({
   CartService: {
     getCartId: vi.fn(),
     addLines: vi.fn(),

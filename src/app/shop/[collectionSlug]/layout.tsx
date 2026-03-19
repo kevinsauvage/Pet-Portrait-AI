@@ -1,4 +1,4 @@
-import { getCollectionLayoutData } from '@/domains/collections/services/collections.service';
+import { getCollectionLayoutData } from '@/domains/collections/collections.service';
 import CollectionLayoutContent from '@/ui/components/catalog/CollectionLayoutContent';
 
 const Layout = async ({

@@ -9,7 +9,7 @@ import config from '@/core/config';
 import type {
   AiPortraitProduct,
   AiPortraitProductVariant,
-} from '@/domains/ai/ai-portrait/products';
+} from '@/domains/ai/ai-portrait/types';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getFirstAvailableVariant } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { getStyleName } from '@/domains/ai/ai-portrait/utils/style-utils';

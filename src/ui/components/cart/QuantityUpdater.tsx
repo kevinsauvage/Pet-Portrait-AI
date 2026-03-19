@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react';
 
-import { isInventoryTracked } from '@/domains/products/utils/inventory';
+import { isInventoryTracked } from '@/domains/products/inventory';
 import SpinnerLoader from '@/ui/components/shared/SpinnerLoader';
 import { Button } from '@/ui/primitives/button';
 

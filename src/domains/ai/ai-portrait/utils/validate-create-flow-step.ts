@@ -2,11 +2,12 @@ import { redirect } from 'next/navigation';
 
 import config from '@/core/config';
 
+import type { CreateFlowParams, CreateFlowStep } from '../types';
 import { isValidStyleId } from '../types';
 
-import { buildCreateFlowQueryString, type CreateFlowParams } from './create-flow-params';
+import { buildCreateFlowQueryString } from './create-flow-params';
 
-export type CreateFlowStep = 'style' | 'generating' | 'collections' | 'order';
+export type { CreateFlowStep } from '../types';
 
 interface ValidationResult {
   isValid: boolean;

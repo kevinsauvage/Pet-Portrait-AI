@@ -4,7 +4,7 @@ import Link from 'next/link';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { getDefaultAiPortraitProduct } from '@/domains/ai/ai-portrait/get-ai-portrait-product.service';
-import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { WishlistService } from '@/domains/wishlist/wishlist.service';
 import { noFavoriteIllustration } from '@/lib/illustrations';
 import SavedPortraitsList from '@/ui/components/account/SavedPortraitsList';
 import BackButton from '@/ui/components/shared/BackButton';

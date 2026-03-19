@@ -1,5 +1,5 @@
-import type { Product } from '@/domains/products/models';
 import { ShopifyProductRepository } from '@/domains/products/repositories/product.repository';
+import type { Product } from '@/domains/products/validation';
 import { storefrontSdk } from '@/infra/shopify/client';
 
 const productRepo = new ShopifyProductRepository();

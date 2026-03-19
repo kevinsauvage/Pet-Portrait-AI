@@ -1,3 +1,5 @@
+import type { PrintfulVariantIdSource } from './types';
+
 /**
  * Printful catalog variant ID extraction from Shopify product data.
  * Printful sync adds SKU as {product_id}_{variant_id} (e.g. 6868817_22791).
@@ -20,11 +22,6 @@ export function getPrintfulVariantIdFromSku(
   if (!lastPart) return undefined;
   const id = parseInt(lastPart, 10);
   return Number.isNaN(id) ? undefined : id;
-}
-
-export interface PrintfulVariantIdSource {
-  metafields?: Array<{ namespace: string; key: string; value: string } | null>;
-  sku?: string | null;
 }
 
 /**

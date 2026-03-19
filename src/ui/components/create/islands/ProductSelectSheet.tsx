@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import config from '@/core/config';
-import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/products';
+import type { AiPortraitProduct } from '@/domains/ai/ai-portrait/types';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getLowestPrice } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { formatPrice } from '@/lib/format';

@@ -1,10 +1,23 @@
-import type { FormActionResult } from '@/core/types/form-actions';
 import type {
   CustomerUserError,
   UserError,
 } from '@/infra/shopify/generated/storefront/index';
 
 import { flattenError } from 'zod';
+
+/**
+ * Standardized return type for all form actions
+ * Ensures consistent error handling and state management across all forms
+ */
+export type FormActionResult<
+  TFieldErrors extends Record<string, string | string[]> = Record<string, string | string[]>,
+> = {
+  error?: string;
+  success?: string;
+  customerUserErrors?: CustomerUserError[];
+  userErrors?: UserError[];
+  fieldErrors?: TFieldErrors;
+};
 
 /**
  * Converts Zod validation errors to standardized form action result format

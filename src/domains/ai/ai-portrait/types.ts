@@ -87,6 +87,11 @@ export function validStyleIdsLabel(): string {
   return STYLE_IDS.join(', ');
 }
 
+export interface PortraitGenerationRequest {
+  originalPhotoUrl: string;
+  styleId: ArtStyleId;
+}
+
 export interface ArtworkGenerationInput {
   originalPhotoUrl: string;
   styleId: ArtStyleId;
@@ -105,6 +110,53 @@ export interface CartLineArtworkAttributes {
   chosen_style: string;
   generation_id: string;
   product_type?: string;
+}
+
+export interface CreateFlowParams {
+  artwork?: string;
+  photo?: string;
+  styleId?: string;
+  generationId?: string;
+  urls?: string;
+  productHandle?: string;
+  /** Printful product preview URL (portrait on product mockup) */
+  previewUrl?: string;
+}
+
+export type CreateFlowStep = 'style' | 'generating' | 'collections' | 'order';
+
+export interface AiPortraitCollection {
+  handle: string;
+  title: string;
+  description: string;
+  image?: string;
+}
+
+export interface AiPortraitProductVariant {
+  id: string;
+  title: string;
+  sku: string;
+  price: number;
+  currencyCode: string;
+  availableForSale: boolean;
+  /** Printful variant ID for mockup generation */
+  printfulVariantId?: number;
+}
+
+export interface AiPortraitProduct {
+  shopifyProductId: string;
+  handle: string;
+  title: string;
+  description: string;
+  image?: string;
+  variants: AiPortraitProductVariant[];
+}
+
+export interface ImageValidationResult {
+  valid: boolean;
+  error?: string;
+  width?: number;
+  height?: number;
 }
 
 /**

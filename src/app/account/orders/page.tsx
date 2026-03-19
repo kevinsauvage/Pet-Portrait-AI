@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import seo from '@/core/config/seo';
-import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
+import { CustomerOrdersService } from '@/domains/orders/customer-orders.service';
 import PageInfoPagination from '@/ui/components/catalog/PageInfoPagination';
 import Orders from '@/ui/components/orders/Orders';
 import BackButton from '@/ui/components/shared/BackButton';

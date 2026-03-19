@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { AddressService } from '@/domains/address/services/address.service';
-import { isDefaultAddress, mapAddressEdgesToList } from '@/domains/address/utils/address-utils';
+import { AddressService } from '@/domains/address/address.service';
+import { isDefaultAddress, mapAddressEdgesToList } from '@/domains/address/address-utils';
 import { getUser } from '@/domains/user/get-user';
 import { noAddressIllustration } from '@/lib/illustrations';
 import Address from '@/ui/components/account/Address';

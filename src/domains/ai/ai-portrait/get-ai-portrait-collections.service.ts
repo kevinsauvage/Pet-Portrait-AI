@@ -1,12 +1,9 @@
 import { storefrontSdk } from '@/infra/shopify/client';
 import { CollectionSortKeys } from '@/infra/shopify/generated/storefront/index';
 
-export interface AiPortraitCollection {
-  handle: string;
-  title: string;
-  description: string;
-  image?: string;
-}
+import type { AiPortraitCollection } from './types';
+
+export type { AiPortraitCollection } from './types';
 
 export async function getAiPortraitCollections(): Promise<AiPortraitCollection[]> {
   const response = await storefrontSdk().collections({

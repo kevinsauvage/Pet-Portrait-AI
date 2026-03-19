@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import config from '@/core/config';
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import { getRefundPolicy } from '@/domains/legal/services/policies.service';
+import { getRefundPolicy } from '@/domains/legal/policies.service';
 import LegalContent from '@/ui/components/legal/LegalContent';
 import PageBanner from '@/ui/components/shared/PageBanner';
 import MainContent from '@/ui/layouts/MainContent';

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { getAllCollections } from '@/domains/collections/services/collections.service';
+import { getAllCollections } from '@/domains/collections/collections.service';
 import CollectionsSideNav from '@/ui/components/catalog/CollectionsSideNav';
 import { Card, CardContent, CardHeader } from '@/ui/primitives/card';
 

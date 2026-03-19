@@ -1,4 +1,4 @@
-import type { Product } from '@/domains/products/models';
+import type { Product } from '@/domains/products/validation';
 import type { ProductFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 
 export function mapShopifyProductToDomain(raw: ProductFieldsFragment): Product {

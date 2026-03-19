@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 
 import config from '@/core/config';
 import seo from '@/core/config/seo';
-import { CreationsService } from '@/domains/creations/services/creations.service';
-import { CustomerOrdersService } from '@/domains/orders/services/customer-orders.service';
+import { CreationsService } from '@/domains/creations/creations.service';
+import { CustomerOrdersService } from '@/domains/orders/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
-import { WishlistService } from '@/domains/wishlist/services/wishlist.service';
+import { WishlistService } from '@/domains/wishlist/wishlist.service';
 import AccountCardCTA from '@/ui/components/account/AccountCardCTA';
 import AccountStats from '@/ui/components/account/AccountStats';
 import UserFullName from '@/ui/components/account/UserFullName';

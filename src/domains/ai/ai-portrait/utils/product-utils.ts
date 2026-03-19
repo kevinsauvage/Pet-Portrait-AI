@@ -1,4 +1,4 @@
-import type { AiPortraitProductVariant } from '../products';
+import type { AiPortraitProductVariant } from '../types';
 
 /**
  * Finds the lowest price among product variants

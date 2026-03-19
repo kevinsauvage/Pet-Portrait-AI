@@ -1,4 +1,4 @@
-import { getShopConfig } from '@/domains/shop/services';
+import { getShopConfig } from '@/domains/shop/get-shop-config.service';
 import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
 
 import { Sparkles } from 'lucide-react';

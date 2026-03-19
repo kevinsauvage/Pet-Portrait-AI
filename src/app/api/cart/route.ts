@@ -5,7 +5,7 @@ import {
   HTTP_STATUS,
   withApiHandler,
 } from '@/core/utils/api-responses';
-import { CartService } from '@/domains/cart/services/cart.service';
+import { CartService } from '@/domains/cart/cart.service';
 
 export const dynamic = 'force-dynamic';
 

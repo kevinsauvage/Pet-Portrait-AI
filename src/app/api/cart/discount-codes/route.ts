@@ -10,8 +10,8 @@ import {
   parseZodBody,
   withApiHandler,
 } from '@/core/utils/api-responses';
-import { CartService } from '@/domains/cart/services/cart.service';
-import { DEFAULT_CART_PAGINATION } from '@/domains/cart/utils/pagination';
+import { CartService } from '@/domains/cart/cart.service';
+import { DEFAULT_CART_PAGINATION } from '@/domains/cart/cart-pagination';
 import { cartDiscountCodesSchema } from '@/domains/cart/validation';
 
 export const dynamic = 'force-dynamic';

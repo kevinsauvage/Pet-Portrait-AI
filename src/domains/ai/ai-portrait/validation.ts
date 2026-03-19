@@ -1,6 +1,39 @@
-import { IMAGE_CONSTRAINTS } from './types';
+import {
+  type ArtStyleId,
+  IMAGE_CONSTRAINTS,
+  isValidStyleId,
+  type PortraitGenerationRequest,
+  validStyleIdsLabel,
+} from './types';
 
 import { z } from 'zod';
+
+const styleIdOptionsLabel = validStyleIdsLabel();
+
+export const portraitGenerationRequestSchema = z.object({
+  originalPhotoUrl: z.string().min(1, 'originalPhotoUrl is required'),
+  styleId: z
+    .string()
+    .min(1, 'styleId is required')
+    .refine(isValidStyleId, { message: `styleId must be one of: ${styleIdOptionsLabel}` }),
+});
+
+export function parsePortraitGenerationRequest(
+  data: unknown,
+): { success: true; data: PortraitGenerationRequest } | { success: false; error: z.ZodError } {
+  const result = portraitGenerationRequestSchema.safeParse(data);
+  if (!result.success) {
+    return result;
+  }
+
+  return {
+    success: true,
+    data: {
+      originalPhotoUrl: result.data.originalPhotoUrl,
+      styleId: result.data.styleId as ArtStyleId,
+    },
+  };
+}
 
 export const petPhotoSchema = z.object({
   file: z
@@ -26,7 +59,10 @@ export async function validateImageDimensions(
       const { minDimension, maxDimension, minAspectRatio, maxAspectRatio } = IMAGE_CONSTRAINTS;
 
       if (width < minDimension || height < minDimension) {
-        resolve({ valid: false, error: `Image must be at least ${minDimension}x${minDimension}px` });
+        resolve({
+          valid: false,
+          error: `Image must be at least ${minDimension}x${minDimension}px`,
+        });
         return;
       }
       if (width > maxDimension || height > maxDimension) {

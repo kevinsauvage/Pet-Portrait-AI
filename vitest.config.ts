@@ -64,7 +64,6 @@ export default defineConfig({
         // App API routes (covered via integration/e2e tests)
         'src/app/api/**',
         // Static type-only and config files
-        'src/core/types/**',
         'src/core/constants/**',
         'src/core/config/siteMetadata.ts',
         'src/core/config/robots.ts',
@@ -97,17 +96,17 @@ export default defineConfig({
         'src/domains/**/get-user.ts',
         'src/contexts/**',
         'src/app/contexts/**',
-        // Domain mappers, models (data shapes only), repositories needing DB
+        // Domain mappers, repositories needing DB
         'src/domains/**/mappers/**',
-        'src/domains/**/models/**',
         'src/domains/**/repositories/**',
-        // Domain utils that are used by external services
-        'src/domains/address/utils/**',
+        // Domain helpers (covered via consumers / e2e)
+        'src/domains/address/address-utils.ts',
         'src/domains/ai/ai-portrait/**',
-        'src/domains/products/utils/**',
-        'src/domains/cart/utils/buyer-identity.ts',
+        'src/domains/products/images.ts',
+        'src/domains/products/inventory.ts',
+        'src/domains/cart/cart-buyer-identity.ts',
         // Validation schemas (type-level, covered when used in service tests)
-        'src/domains/**/validation/**',
+        'src/domains/**/validation.ts',
         // Domain constants (pure data, no logic)
         'src/domains/**/constants/**',
         // Domain mocks
@@ -129,13 +128,13 @@ export default defineConfig({
         // Rate limit - Redis path requires real Redis instance, in-memory tested separately
         'src/infra/rate-limit/rate-limit.ts',
         // Shop config service - heavily Shopify cookie context dependent
-        'src/domains/shop/services/get-shop-config.service.ts',
+        'src/domains/shop/get-shop-config.service.ts',
         // HTTP api-client - internal retry/error branches need integration testing
         'src/infra/http/api-client.ts',
         // lib/cn is a pure tailwind utility wrapper, no testable logic
         'src/lib/cn.ts',
         // Portrait generation (OpenAI-dependent, integration-tested)
-        'src/domains/ai/services/portrait-generation.service.ts',
+        'src/domains/ai/portrait-generation.service.ts',
         // Infra sitemap, webhooks (Next.js routing, e2e-tested)
         'src/infra/shopify/sitemap.ts',
       ],

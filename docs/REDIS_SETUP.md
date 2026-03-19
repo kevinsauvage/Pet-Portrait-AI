@@ -112,9 +112,8 @@ The old `RATE_LIMIT_REDIS_URL` and `RATE_LIMIT_REDIS_TOKEN` variables have been 
 
 ## Related Documentation
 
-- [Cache Documentation](./CACHE.md) - Application cache module (available but not currently used)
-- [ADR-006: Redis-Based Distributed Rate Limiting](./ADRs/006-redis-rate-limiting.md) - Rate limiting architecture decision
-- [Deployment Guide](../DEPLOYMENT.md) - Redis setup for production deployments
+- [Cache Documentation](./CACHE.md) — Application cache module
+- [Deployment Guide](../DEPLOYMENT.md) — Redis setup for production deployments
 
 ## Future Use
 

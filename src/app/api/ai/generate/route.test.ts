@@ -1,14 +1,14 @@
 import type { NextRequest } from 'next/server';
 
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
-import { generatePetPortraitVariations } from '@/domains/ai/services';
+import { generatePetPortraitVariations } from '@/domains/ai/portrait-generation.service';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
 
 import { POST } from './route';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/domains/ai/services', () => ({
+vi.mock('@/domains/ai/portrait-generation.service', () => ({
   generatePetPortraitVariations: vi.fn(),
 }));
 
