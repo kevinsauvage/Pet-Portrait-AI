@@ -17,7 +17,7 @@ import { Card, CardContent, CardFooter } from '@/ui/primitives/card';
 import { Loader2, ShoppingBag, Trash2 } from 'lucide-react';
 
 type DefaultProduct = {
-  product: { handle: string; gelatoProductUid?: string };
+  product: { handle: string };
   variant: { id: string; availableForSale: boolean };
 };
 

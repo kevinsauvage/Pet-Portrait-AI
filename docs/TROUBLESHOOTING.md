@@ -299,28 +299,28 @@ Common issues and solutions for the PetPortrait AI ecommerce platform.
    - Admin API tokens expire after 24 hours
    - Verify token refresh is working
 
-### Gelato Integration Issues
+### Printful Integration Issues
 
 **Symptoms:**
 
 - Orders not being fulfilled
-- Missing `gelato_print_url` attribute
+- Missing `printful_print_url` attribute
 
 **Solutions:**
 
-1. **Verify Gelato app is installed:**
+1. **Verify Printful app is installed:**
    - Check Shopify Admin → Apps
-   - Ensure Gelato app is active
+   - Ensure Printful app is active
 
 2. **Check cart attributes:**
-   - Verify `gelato_print_url` is included in cart line items
+   - Verify `printful_print_url` is included in cart line items
    - Ensure URL is public and permanent
 
 3. **Review product configuration:**
    - Check product variants have SKUs
-   - Verify `gelato.productUid` metafield is set
+   - Verify `custom.variant_id` metafield is set on variants
 
-See [docs/GELATO_SHOPIFY_INTEGRATION.md](./GELATO_SHOPIFY_INTEGRATION.md) for details.
+See [docs/PRINTFUL_PORTRAIT_PREVIEW.md](./PRINTFUL_PORTRAIT_PREVIEW.md) for details.
 
 ---
 

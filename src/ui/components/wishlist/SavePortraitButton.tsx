@@ -20,7 +20,6 @@ type Props = {
   /** When saving from cart: pass variant info so we can add back with same product */
   variantId?: string;
   productHandle?: string;
-  gelatoProductUid?: string;
 };
 
 const SavePortraitButton = ({
@@ -33,7 +32,6 @@ const SavePortraitButton = ({
   lineItemId,
   variantId,
   productHandle,
-  gelatoProductUid,
 }: Props) => {
   const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'saved' | 'error'>('idle');
@@ -55,7 +53,6 @@ const SavePortraitButton = ({
       ...(variantId && productHandle && {
         variantId,
         productHandle,
-        gelatoProductUid,
       }),
     });
 

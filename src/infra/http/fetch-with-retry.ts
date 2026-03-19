@@ -13,36 +13,38 @@ const TRANSIENT_CODES = new Set([
 function isTransientError(error: unknown): boolean {
   if (!(error instanceof Error)) return false;
 
-  // Check error code
   const code =
     (error as NodeJS.ErrnoException).code ?? (error.cause as NodeJS.ErrnoException)?.code;
   if (code && TRANSIENT_CODES.has(code)) return true;
 
-  // Check for "fetch failed" errors (common in Node.js fetch)
   if (error.message === 'fetch failed' || error.message.includes('fetch failed')) {
     return true;
   }
 
-  // Check for network-related error messages
   const networkErrors = ['network', 'timeout', 'connection', 'ECONN', 'ETIMEDOUT'];
   const lowerMessage = error.message.toLowerCase();
   return networkErrors.some((keyword) => lowerMessage.includes(keyword));
 }
 
+export interface FetchWithRetryOptions {
+  maxAttempts?: number;
+  initialDelayMs?: number;
+  timeoutMs?: number;
+}
+
 export async function fetchWithRetry(
   input: RequestInfo | URL,
   init?: RequestInit,
-  options?: { maxAttempts?: number; initialDelayMs?: number; timeoutMs?: number },
+  options?: FetchWithRetryOptions,
 ): Promise<Response> {
   const maxAttempts = options?.maxAttempts ?? 3;
   const initialDelayMs = options?.initialDelayMs ?? 500;
-  const timeoutMs = options?.timeoutMs ?? 30000; // 30 seconds default
+  const timeoutMs = options?.timeoutMs ?? 30000;
 
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      // Add timeout to prevent hanging requests (only if no signal already provided)
       const fetchOptions: RequestInit = { ...init };
       if (!fetchOptions.signal && typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
         fetchOptions.signal = AbortSignal.timeout(timeoutMs);
@@ -54,12 +56,10 @@ export async function fetchWithRetry(
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
 
-      // Don't retry on last attempt or if error is not transient
       if (attempt === maxAttempts || !isTransientError(err)) {
         throw lastError;
       }
 
-      // Exponential backoff
       const delay = initialDelayMs * Math.pow(2, attempt - 1);
       // eslint-disable-next-line no-await-in-loop -- intentional backoff between retries
       await new Promise<void>((resolve) => {

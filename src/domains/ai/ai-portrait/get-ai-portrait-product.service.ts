@@ -1,8 +1,11 @@
+import { getPrintfulVariantId } from '@/domains/printful/utils';
 import { storefrontSdk } from '@/infra/shopify/client';
 
 import { getFirstAvailableVariant } from './utils/product-utils';
 import { getAiPortraitCollections } from './get-ai-portrait-collections.service';
 import type { AiPortraitProduct, AiPortraitProductVariant } from './products';
+
+const AI_PORTRAIT_METAFIELD_IDENTIFIERS = [{ namespace: 'custom', key: 'variant_id' }];
 
 function mapVariant(node: {
   id: string;
@@ -10,14 +13,23 @@ function mapVariant(node: {
   sku?: string | null;
   availableForSale: boolean;
   price: { amount: string; currencyCode: string };
-}): AiPortraitProductVariant {
+  metafields?: Array<{ namespace: string; key: string; value: string } | null>;
+}): AiPortraitProductVariant | null {
+  const printfulVariantId = getPrintfulVariantId({
+    metafields: node.metafields,
+    sku: node.sku,
+  });
+  if (!printfulVariantId) return null;
+
+  const sku = node.sku ?? '';
   return {
     id: node.id,
     title: node.title,
-    sku: node.sku ?? '',
+    sku,
     price: Number(node.price.amount),
     currencyCode: node.price.currencyCode,
     availableForSale: node.availableForSale,
+    printfulVariantId,
   };
 }
 
@@ -30,14 +42,15 @@ function mapProduct(node: {
   images?: { edges: { node: { url: string } }[] };
   metafields?: ({ namespace: string; key: string; value: string } | null)[];
   variants?: { edges: { node: Parameters<typeof mapVariant>[0] }[] };
-}): AiPortraitProduct {
-  const variants =
-    node.variants?.edges?.map((edge) => mapVariant(edge.node)).filter((v) => v.sku.trim() !== '') ??
-    [];
+}): AiPortraitProduct | null {
+  const mappedVariants =
+    node.variants?.edges
+      ?.map((edge) => mapVariant(edge.node))
+      .filter((v): v is AiPortraitProductVariant => v !== null && v.sku.trim() !== '') ?? [];
 
-  const gelatoMetafield = node.metafields?.find(
-    (mf) => mf?.namespace === 'gelato' && mf?.key === 'productUid',
-  );
+  if (mappedVariants.length === 0) {
+    return null;
+  }
 
   return {
     shopifyProductId: node.id,
@@ -45,8 +58,7 @@ function mapProduct(node: {
     title: node.title,
     description: node.descriptionHtml ?? '',
     image: node.featuredImage?.url ?? node.images?.edges?.[0]?.node?.url,
-    gelatoProductUid: gelatoMetafield?.value ?? undefined,
-    variants,
+    variants: mappedVariants,
   };
 }
 
@@ -56,13 +68,16 @@ export async function getAiPortraitProductsByCollection(
   const response = await storefrontSdk().collection({
     handle: collectionHandle,
     first: 50,
-    identifiers: [],
+    identifiers: AI_PORTRAIT_METAFIELD_IDENTIFIERS,
   });
 
   const { collection } = response;
   if (!collection) return null;
 
-  const products = collection.products?.edges?.map((edge) => mapProduct(edge.node)) ?? [];
+  const products =
+    collection.products?.edges
+      ?.map((edge) => mapProduct(edge.node))
+      .filter((p): p is AiPortraitProduct => p !== null) ?? [];
 
   return {
     collectionTitle: collection.title,
@@ -75,13 +90,13 @@ export async function getAiPortraitProductByHandle(
 ): Promise<AiPortraitProduct | null> {
   const response = await storefrontSdk().getProductByHandle({
     handle,
-    identifiers: [],
+    identifiers: AI_PORTRAIT_METAFIELD_IDENTIFIERS,
   });
 
   const { product } = response;
   if (!product) return null;
 
-  return mapProduct(product);
+  return mapProduct(product) ?? null;
 }
 
 export async function getDefaultAiPortraitProduct(): Promise<{

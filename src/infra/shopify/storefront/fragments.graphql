@@ -91,6 +91,9 @@ fragment ProductVariantFields on ProductVariant {
     name
     value
   }
+  metafields(identifiers: $identifiers) {
+    ...MetafieldFields
+  }
   image {
     ...ImageFields
   }

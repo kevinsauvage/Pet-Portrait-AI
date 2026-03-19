@@ -3,7 +3,7 @@
  * Tokens are cached with a 1-minute expiry buffer.
  */
 
-import { fetchWithRetry } from './fetch-with-retry';
+import { fetchWithRetry } from '@/infra/http/fetch-with-retry';
 
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
 

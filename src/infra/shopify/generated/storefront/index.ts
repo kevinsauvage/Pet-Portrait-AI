@@ -12913,28 +12913,6 @@ export type CollectionQuery = {
                   name: string;
                   value: string;
                 }>;
-                image?: {
-                  __typename?: 'Image';
-                  url: string;
-                  src: string;
-                  altText?: string | null;
-                  width?: number | null;
-                  height?: number | null;
-                  small: string;
-                  medium: string;
-                  large: string;
-                  blurDataURL: string;
-                } | null;
-                price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-                product: {
-                  __typename?: 'Product';
-                  handle: string;
-                  title: string;
-                  collections: {
-                    __typename?: 'CollectionConnection';
-                    nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-                  };
-                };
                 metafields: Array<{
                   __typename?: 'Metafield';
                   id: string;
@@ -12973,6 +12951,28 @@ export type CollectionQuery = {
                     | { __typename?: 'SellingPlan'; id: string }
                     | { __typename?: 'Shop'; id: string };
                 } | null>;
+                image?: {
+                  __typename?: 'Image';
+                  url: string;
+                  src: string;
+                  altText?: string | null;
+                  width?: number | null;
+                  height?: number | null;
+                  small: string;
+                  medium: string;
+                  large: string;
+                  blurDataURL: string;
+                } | null;
+                price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+                product: {
+                  __typename?: 'Product';
+                  handle: string;
+                  title: string;
+                  collections: {
+                    __typename?: 'CollectionConnection';
+                    nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+                  };
+                };
               };
             }>;
           };
@@ -13251,28 +13251,6 @@ export type CollectionsQuery = {
                       name: string;
                       value: string;
                     }>;
-                    image?: {
-                      __typename?: 'Image';
-                      url: string;
-                      src: string;
-                      altText?: string | null;
-                      width?: number | null;
-                      height?: number | null;
-                      small: string;
-                      medium: string;
-                      large: string;
-                      blurDataURL: string;
-                    } | null;
-                    price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-                    product: {
-                      __typename?: 'Product';
-                      handle: string;
-                      title: string;
-                      collections: {
-                        __typename?: 'CollectionConnection';
-                        nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-                      };
-                    };
                     metafields: Array<{
                       __typename?: 'Metafield';
                       id: string;
@@ -13311,6 +13289,28 @@ export type CollectionsQuery = {
                         | { __typename?: 'SellingPlan'; id: string }
                         | { __typename?: 'Shop'; id: string };
                     } | null>;
+                    image?: {
+                      __typename?: 'Image';
+                      url: string;
+                      src: string;
+                      altText?: string | null;
+                      width?: number | null;
+                      height?: number | null;
+                      small: string;
+                      medium: string;
+                      large: string;
+                      blurDataURL: string;
+                    } | null;
+                    price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+                    product: {
+                      __typename?: 'Product';
+                      handle: string;
+                      title: string;
+                      collections: {
+                        __typename?: 'CollectionConnection';
+                        nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+                      };
+                    };
                   };
                 }>;
               };
@@ -14534,28 +14534,6 @@ export type ProductVariantFieldsFragment = {
   weightUnit: WeightUnit;
   compareAtPrice?: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode } | null;
   selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-  image?: {
-    __typename?: 'Image';
-    url: string;
-    src: string;
-    altText?: string | null;
-    width?: number | null;
-    height?: number | null;
-    small: string;
-    medium: string;
-    large: string;
-    blurDataURL: string;
-  } | null;
-  price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-  product: {
-    __typename?: 'Product';
-    handle: string;
-    title: string;
-    collections: {
-      __typename?: 'CollectionConnection';
-      nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-    };
-  };
   metafields: Array<{
     __typename?: 'Metafield';
     id: string;
@@ -14594,6 +14572,28 @@ export type ProductVariantFieldsFragment = {
       | { __typename?: 'SellingPlan'; id: string }
       | { __typename?: 'Shop'; id: string };
   } | null>;
+  image?: {
+    __typename?: 'Image';
+    url: string;
+    src: string;
+    altText?: string | null;
+    width?: number | null;
+    height?: number | null;
+    small: string;
+    medium: string;
+    large: string;
+    blurDataURL: string;
+  } | null;
+  price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+  product: {
+    __typename?: 'Product';
+    handle: string;
+    title: string;
+    collections: {
+      __typename?: 'CollectionConnection';
+      nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+    };
+  };
 };
 
 export type ProductDetailsFragment = {
@@ -15058,28 +15058,6 @@ export type ProductVariantConnectionFragment = {
         currencyCode: CurrencyCode;
       } | null;
       selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-      image?: {
-        __typename?: 'Image';
-        url: string;
-        src: string;
-        altText?: string | null;
-        width?: number | null;
-        height?: number | null;
-        small: string;
-        medium: string;
-        large: string;
-        blurDataURL: string;
-      } | null;
-      price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-      product: {
-        __typename?: 'Product';
-        handle: string;
-        title: string;
-        collections: {
-          __typename?: 'CollectionConnection';
-          nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-        };
-      };
       metafields: Array<{
         __typename?: 'Metafield';
         id: string;
@@ -15118,6 +15096,28 @@ export type ProductVariantConnectionFragment = {
           | { __typename?: 'SellingPlan'; id: string }
           | { __typename?: 'Shop'; id: string };
       } | null>;
+      image?: {
+        __typename?: 'Image';
+        url: string;
+        src: string;
+        altText?: string | null;
+        width?: number | null;
+        height?: number | null;
+        small: string;
+        medium: string;
+        large: string;
+        blurDataURL: string;
+      } | null;
+      price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+      product: {
+        __typename?: 'Product';
+        handle: string;
+        title: string;
+        collections: {
+          __typename?: 'CollectionConnection';
+          nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+        };
+      };
     };
   }>;
 };
@@ -15207,28 +15207,6 @@ export type ProductFieldsFragment = {
           currencyCode: CurrencyCode;
         } | null;
         selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-        image?: {
-          __typename?: 'Image';
-          url: string;
-          src: string;
-          altText?: string | null;
-          width?: number | null;
-          height?: number | null;
-          small: string;
-          medium: string;
-          large: string;
-          blurDataURL: string;
-        } | null;
-        price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-        product: {
-          __typename?: 'Product';
-          handle: string;
-          title: string;
-          collections: {
-            __typename?: 'CollectionConnection';
-            nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-          };
-        };
         metafields: Array<{
           __typename?: 'Metafield';
           id: string;
@@ -15267,6 +15245,28 @@ export type ProductFieldsFragment = {
             | { __typename?: 'SellingPlan'; id: string }
             | { __typename?: 'Shop'; id: string };
         } | null>;
+        image?: {
+          __typename?: 'Image';
+          url: string;
+          src: string;
+          altText?: string | null;
+          width?: number | null;
+          height?: number | null;
+          small: string;
+          medium: string;
+          large: string;
+          blurDataURL: string;
+        } | null;
+        price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+        product: {
+          __typename?: 'Product';
+          handle: string;
+          title: string;
+          collections: {
+            __typename?: 'CollectionConnection';
+            nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+          };
+        };
       };
     }>;
   };
@@ -15793,28 +15793,6 @@ export type GetProductByHandleQuery = {
             currencyCode: CurrencyCode;
           } | null;
           selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-          image?: {
-            __typename?: 'Image';
-            url: string;
-            src: string;
-            altText?: string | null;
-            width?: number | null;
-            height?: number | null;
-            small: string;
-            medium: string;
-            large: string;
-            blurDataURL: string;
-          } | null;
-          price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-          product: {
-            __typename?: 'Product';
-            handle: string;
-            title: string;
-            collections: {
-              __typename?: 'CollectionConnection';
-              nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-            };
-          };
           metafields: Array<{
             __typename?: 'Metafield';
             id: string;
@@ -15853,6 +15831,28 @@ export type GetProductByHandleQuery = {
               | { __typename?: 'SellingPlan'; id: string }
               | { __typename?: 'Shop'; id: string };
           } | null>;
+          image?: {
+            __typename?: 'Image';
+            url: string;
+            src: string;
+            altText?: string | null;
+            width?: number | null;
+            height?: number | null;
+            small: string;
+            medium: string;
+            large: string;
+            blurDataURL: string;
+          } | null;
+          price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+          product: {
+            __typename?: 'Product';
+            handle: string;
+            title: string;
+            collections: {
+              __typename?: 'CollectionConnection';
+              nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+            };
+          };
         };
       }>;
     };
@@ -16007,28 +16007,6 @@ export type ProductRecommendationsQuery = {
             currencyCode: CurrencyCode;
           } | null;
           selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-          image?: {
-            __typename?: 'Image';
-            url: string;
-            src: string;
-            altText?: string | null;
-            width?: number | null;
-            height?: number | null;
-            small: string;
-            medium: string;
-            large: string;
-            blurDataURL: string;
-          } | null;
-          price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-          product: {
-            __typename?: 'Product';
-            handle: string;
-            title: string;
-            collections: {
-              __typename?: 'CollectionConnection';
-              nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-            };
-          };
           metafields: Array<{
             __typename?: 'Metafield';
             id: string;
@@ -16067,6 +16045,28 @@ export type ProductRecommendationsQuery = {
               | { __typename?: 'SellingPlan'; id: string }
               | { __typename?: 'Shop'; id: string };
           } | null>;
+          image?: {
+            __typename?: 'Image';
+            url: string;
+            src: string;
+            altText?: string | null;
+            width?: number | null;
+            height?: number | null;
+            small: string;
+            medium: string;
+            large: string;
+            blurDataURL: string;
+          } | null;
+          price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+          product: {
+            __typename?: 'Product';
+            handle: string;
+            title: string;
+            collections: {
+              __typename?: 'CollectionConnection';
+              nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+            };
+          };
         };
       }>;
     };
@@ -16226,28 +16226,6 @@ export type GetProductsQuery = {
                 name: string;
                 value: string;
               }>;
-              image?: {
-                __typename?: 'Image';
-                url: string;
-                src: string;
-                altText?: string | null;
-                width?: number | null;
-                height?: number | null;
-                small: string;
-                medium: string;
-                large: string;
-                blurDataURL: string;
-              } | null;
-              price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-              product: {
-                __typename?: 'Product';
-                handle: string;
-                title: string;
-                collections: {
-                  __typename?: 'CollectionConnection';
-                  nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-                };
-              };
               metafields: Array<{
                 __typename?: 'Metafield';
                 id: string;
@@ -16286,6 +16264,28 @@ export type GetProductsQuery = {
                   | { __typename?: 'SellingPlan'; id: string }
                   | { __typename?: 'Shop'; id: string };
               } | null>;
+              image?: {
+                __typename?: 'Image';
+                url: string;
+                src: string;
+                altText?: string | null;
+                width?: number | null;
+                height?: number | null;
+                small: string;
+                medium: string;
+                large: string;
+                blurDataURL: string;
+              } | null;
+              price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+              product: {
+                __typename?: 'Product';
+                handle: string;
+                title: string;
+                collections: {
+                  __typename?: 'CollectionConnection';
+                  nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+                };
+              };
             };
           }>;
         };
@@ -16371,28 +16371,6 @@ export type GetProductWithVariantQuery = {
         currencyCode: CurrencyCode;
       } | null;
       selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-      image?: {
-        __typename?: 'Image';
-        url: string;
-        src: string;
-        altText?: string | null;
-        width?: number | null;
-        height?: number | null;
-        small: string;
-        medium: string;
-        large: string;
-        blurDataURL: string;
-      } | null;
-      price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-      product: {
-        __typename?: 'Product';
-        handle: string;
-        title: string;
-        collections: {
-          __typename?: 'CollectionConnection';
-          nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-        };
-      };
       metafields: Array<{
         __typename?: 'Metafield';
         id: string;
@@ -16431,6 +16409,28 @@ export type GetProductWithVariantQuery = {
           | { __typename?: 'SellingPlan'; id: string }
           | { __typename?: 'Shop'; id: string };
       } | null>;
+      image?: {
+        __typename?: 'Image';
+        url: string;
+        src: string;
+        altText?: string | null;
+        width?: number | null;
+        height?: number | null;
+        small: string;
+        medium: string;
+        large: string;
+        blurDataURL: string;
+      } | null;
+      price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+      product: {
+        __typename?: 'Product';
+        handle: string;
+        title: string;
+        collections: {
+          __typename?: 'CollectionConnection';
+          nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+        };
+      };
     } | null;
     featuredImage?: {
       __typename?: 'Image';
@@ -16505,28 +16505,6 @@ export type GetProductWithVariantQuery = {
             currencyCode: CurrencyCode;
           } | null;
           selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-          image?: {
-            __typename?: 'Image';
-            url: string;
-            src: string;
-            altText?: string | null;
-            width?: number | null;
-            height?: number | null;
-            small: string;
-            medium: string;
-            large: string;
-            blurDataURL: string;
-          } | null;
-          price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-          product: {
-            __typename?: 'Product';
-            handle: string;
-            title: string;
-            collections: {
-              __typename?: 'CollectionConnection';
-              nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-            };
-          };
           metafields: Array<{
             __typename?: 'Metafield';
             id: string;
@@ -16565,6 +16543,28 @@ export type GetProductWithVariantQuery = {
               | { __typename?: 'SellingPlan'; id: string }
               | { __typename?: 'Shop'; id: string };
           } | null>;
+          image?: {
+            __typename?: 'Image';
+            url: string;
+            src: string;
+            altText?: string | null;
+            width?: number | null;
+            height?: number | null;
+            small: string;
+            medium: string;
+            large: string;
+            blurDataURL: string;
+          } | null;
+          price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+          product: {
+            __typename?: 'Product';
+            handle: string;
+            title: string;
+            collections: {
+              __typename?: 'CollectionConnection';
+              nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+            };
+          };
         };
       }>;
     };
@@ -16733,28 +16733,6 @@ export type GetProductsByIdsQuery = {
                 name: string;
                 value: string;
               }>;
-              image?: {
-                __typename?: 'Image';
-                url: string;
-                src: string;
-                altText?: string | null;
-                width?: number | null;
-                height?: number | null;
-                small: string;
-                medium: string;
-                large: string;
-                blurDataURL: string;
-              } | null;
-              price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-              product: {
-                __typename?: 'Product';
-                handle: string;
-                title: string;
-                collections: {
-                  __typename?: 'CollectionConnection';
-                  nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-                };
-              };
               metafields: Array<{
                 __typename?: 'Metafield';
                 id: string;
@@ -16793,6 +16771,28 @@ export type GetProductsByIdsQuery = {
                   | { __typename?: 'SellingPlan'; id: string }
                   | { __typename?: 'Shop'; id: string };
               } | null>;
+              image?: {
+                __typename?: 'Image';
+                url: string;
+                src: string;
+                altText?: string | null;
+                width?: number | null;
+                height?: number | null;
+                small: string;
+                medium: string;
+                large: string;
+                blurDataURL: string;
+              } | null;
+              price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+              product: {
+                __typename?: 'Product';
+                handle: string;
+                title: string;
+                collections: {
+                  __typename?: 'CollectionConnection';
+                  nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+                };
+              };
             };
           }>;
         };
@@ -17006,28 +17006,6 @@ export type PredictiveSearchQuery = {
               currencyCode: CurrencyCode;
             } | null;
             selectedOptions: Array<{ __typename?: 'SelectedOption'; name: string; value: string }>;
-            image?: {
-              __typename?: 'Image';
-              url: string;
-              src: string;
-              altText?: string | null;
-              width?: number | null;
-              height?: number | null;
-              small: string;
-              medium: string;
-              large: string;
-              blurDataURL: string;
-            } | null;
-            price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-            product: {
-              __typename?: 'Product';
-              handle: string;
-              title: string;
-              collections: {
-                __typename?: 'CollectionConnection';
-                nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-              };
-            };
             metafields: Array<{
               __typename?: 'Metafield';
               id: string;
@@ -17066,6 +17044,28 @@ export type PredictiveSearchQuery = {
                 | { __typename?: 'SellingPlan'; id: string }
                 | { __typename?: 'Shop'; id: string };
             } | null>;
+            image?: {
+              __typename?: 'Image';
+              url: string;
+              src: string;
+              altText?: string | null;
+              width?: number | null;
+              height?: number | null;
+              small: string;
+              medium: string;
+              large: string;
+              blurDataURL: string;
+            } | null;
+            price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+            product: {
+              __typename?: 'Product';
+              handle: string;
+              title: string;
+              collections: {
+                __typename?: 'CollectionConnection';
+                nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+              };
+            };
           };
         }>;
       };
@@ -17230,28 +17230,6 @@ export type SearchProductsQuery = {
                     name: string;
                     value: string;
                   }>;
-                  image?: {
-                    __typename?: 'Image';
-                    url: string;
-                    src: string;
-                    altText?: string | null;
-                    width?: number | null;
-                    height?: number | null;
-                    small: string;
-                    medium: string;
-                    large: string;
-                    blurDataURL: string;
-                  } | null;
-                  price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
-                  product: {
-                    __typename?: 'Product';
-                    handle: string;
-                    title: string;
-                    collections: {
-                      __typename?: 'CollectionConnection';
-                      nodes: Array<{ __typename?: 'Collection'; handle: string }>;
-                    };
-                  };
                   metafields: Array<{
                     __typename?: 'Metafield';
                     id: string;
@@ -17290,6 +17268,28 @@ export type SearchProductsQuery = {
                       | { __typename?: 'SellingPlan'; id: string }
                       | { __typename?: 'Shop'; id: string };
                   } | null>;
+                  image?: {
+                    __typename?: 'Image';
+                    url: string;
+                    src: string;
+                    altText?: string | null;
+                    width?: number | null;
+                    height?: number | null;
+                    small: string;
+                    medium: string;
+                    large: string;
+                    blurDataURL: string;
+                  } | null;
+                  price: { __typename?: 'MoneyV2'; amount: string; currencyCode: CurrencyCode };
+                  product: {
+                    __typename?: 'Product';
+                    handle: string;
+                    title: string;
+                    collections: {
+                      __typename?: 'CollectionConnection';
+                      nodes: Array<{ __typename?: 'Collection'; handle: string }>;
+                    };
+                  };
                 };
               }>;
             };
@@ -17934,17 +17934,6 @@ export const ProductOptionFieldsFragmentDoc = gql`
     }
   }
 `;
-export const ProductDetailsFragmentDoc = gql`
-  fragment ProductDetails on Product {
-    handle
-    title
-    collections(first: 1) {
-      nodes {
-        handle
-      }
-    }
-  }
-`;
 export const MetafieldFieldsFragmentDoc = gql`
   fragment MetafieldFields on Metafield {
     id
@@ -18011,6 +18000,17 @@ export const MetafieldFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ProductDetailsFragmentDoc = gql`
+  fragment ProductDetails on Product {
+    handle
+    title
+    collections(first: 1) {
+      nodes {
+        handle
+      }
+    }
+  }
+`;
 export const ProductVariantFieldsFragmentDoc = gql`
   fragment ProductVariantFields on ProductVariant {
     id
@@ -18027,6 +18027,9 @@ export const ProductVariantFieldsFragmentDoc = gql`
       name
       value
     }
+    metafields(identifiers: $identifiers) {
+      ...MetafieldFields
+    }
     image {
       ...ImageFields
     }
@@ -18041,9 +18044,9 @@ export const ProductVariantFieldsFragmentDoc = gql`
     }
   }
   ${MoneyFieldsFragmentDoc}
+  ${MetafieldFieldsFragmentDoc}
   ${ImageFieldsFragmentDoc}
   ${ProductDetailsFragmentDoc}
-  ${MetafieldFieldsFragmentDoc}
 `;
 export const ProductVariantConnectionFragmentDoc = gql`
   fragment ProductVariantConnection on ProductVariantConnection {

@@ -218,7 +218,7 @@ Add items to cart.
     {
       "merchandiseId": "gid://shopify/ProductVariant/123",
       "quantity": 1,
-      "attributes": [{ "key": "gelato_print_url", "value": "https://..." }]
+      "attributes": [{ "key": "printful_print_url", "value": "https://..." }]
     }
   ]
 }
@@ -440,7 +440,7 @@ fetch('/api/cart/lines', {
       merchandiseId: "gid://shopify/ProductVariant/123",
       quantity: 1,
       attributes: [
-        {key: "gelato_print_url", value: "https://..."}
+        {key: "printful_print_url", value: "https://..."}
       ]
     }]
   })

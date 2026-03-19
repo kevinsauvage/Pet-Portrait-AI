@@ -5,7 +5,9 @@ import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { getAiPortraitProductByHandle } from '@/domains/ai/ai-portrait/get-ai-portrait-product.service';
 import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
+import { getFirstAvailableVariant } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
+import { generatePreview } from '@/domains/printful/services/preview.service';
 import AddMoreProductsActions from '@/ui/components/cart/AddMoreProductsActions';
 import CreateFlowArtworkPreview from '@/ui/components/create/CreateFlowArtworkPreview';
 import CreateFlowBackButton from '@/ui/components/create/CreateFlowBackButton';
@@ -31,7 +33,7 @@ interface CreateOrderPageProps {
 
 export default async function CreateOrderPage({ searchParams }: CreateOrderPageProps) {
   const params = await searchParams;
-  const { artwork, photo, styleId, generationId, productHandle, urls } = params;
+  const { artwork, photo, styleId, generationId, productHandle, urls, previewUrl } = params;
 
   // Validate and redirect if needed
   validateAndRedirect('order', params);
@@ -45,6 +47,15 @@ export default async function CreateOrderPage({ searchParams }: CreateOrderPageP
   if (!product || product.variants.length === 0) {
     notFound();
   }
+
+  const firstVariant = getFirstAvailableVariant(product.variants) ?? product.variants[0];
+  const serverPreview =
+    firstVariant?.printfulVariantId && artwork
+      ? await generatePreview({
+          variantId: firstVariant.printfulVariantId,
+          artworkUrl: artwork,
+        })
+      : null;
 
   return (
     <div className="relative">
@@ -81,6 +92,11 @@ export default async function CreateOrderPage({ searchParams }: CreateOrderPageP
                 originalPhotoUrl={photo}
                 styleId={styleId}
                 generationId={generationId}
+                urls={urls}
+                initialPreviewUrl={previewUrl ?? serverPreview?.previewUrl ?? undefined}
+                initialPreviewVariantId={
+                  !previewUrl && serverPreview?.previewUrl ? firstVariant?.id : undefined
+                }
               />
             </CardContent>
           </Card>

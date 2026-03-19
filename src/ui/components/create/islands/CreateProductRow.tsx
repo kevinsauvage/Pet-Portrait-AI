@@ -15,6 +15,7 @@ interface CreateProductRowProps {
   originalPhotoUrl?: string;
   styleId?: string;
   generationId?: string;
+  urls?: string;
 }
 
 export default function CreateProductRow({
@@ -23,6 +24,7 @@ export default function CreateProductRow({
   originalPhotoUrl,
   styleId,
   generationId,
+  urls,
 }: CreateProductRowProps) {
   const [open, setOpen] = useState(false);
 
@@ -68,6 +70,7 @@ export default function CreateProductRow({
         originalPhotoUrl={originalPhotoUrl}
         styleId={styleId}
         generationId={generationId}
+        urls={urls}
         open={open}
         onOpenChange={setOpen}
       />

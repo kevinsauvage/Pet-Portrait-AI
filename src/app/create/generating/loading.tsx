@@ -26,11 +26,11 @@ export default async function GeneratingLoading() {
           </p>
         </div>
         <div className="flex items-center gap-2 mt-10">
-          {Array.from({ length: variationsCount }).map((_, i) => (
+          {Array.from({ length: variationsCount }, (_, i) => ({ id: `bounce-dot-${i}`, delay: i * 0.15 })).map(({ id, delay }) => (
             <div
-              key={i}
+              key={id}
               className="h-3 w-3 animate-bounce rounded-full bg-primary"
-              style={{ animationDelay: `${i * 0.15}s` }}
+              style={{ animationDelay: `${delay}s` }}
             />
           ))}
         </div>

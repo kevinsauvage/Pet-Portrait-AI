@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+**Deprecated** — Replaced by [ADR-005: Printful Shopify App Integration](./005-printful-shopify-app-integration.md)
 
 ## Context
 

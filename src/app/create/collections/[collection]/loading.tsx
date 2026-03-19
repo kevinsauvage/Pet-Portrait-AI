@@ -1,5 +1,7 @@
 import { Skeleton } from '@/ui/primitives/skeleton';
 
+const PRODUCT_SKELETON_IDS = ['product-skeleton-a', 'product-skeleton-b', 'product-skeleton-c', 'product-skeleton-d', 'product-skeleton-e'] as const;
+
 export default function CollectionLoading() {
   return (
     <div className="space-y-8">
@@ -20,8 +22,8 @@ export default function CollectionLoading() {
 
           {/* Product Rows */}
           <div className="flex flex-col gap-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-xl border bg-card p-3">
+            {PRODUCT_SKELETON_IDS.map((id) => (
+              <div key={id} className="flex items-center gap-3 rounded-xl border bg-card p-3">
                 <Skeleton className="h-14 w-14 shrink-0 rounded-lg" />
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-5 w-48" />

@@ -18,7 +18,6 @@ export type SavedPortrait = {
   /** When saved from cart: variant and product info for one-click add back */
   variantId?: string;
   productHandle?: string;
-  gelatoProductUid?: string;
 };
 
 export type WishlistData = SavedPortrait[];

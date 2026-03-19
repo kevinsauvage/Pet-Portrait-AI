@@ -22,7 +22,7 @@ Before deploying, ensure you have:
 
 - ✅ Node.js 20+ installed
 - ✅ All required environment variables configured (see [Environment Setup](#environment-setup))
-- ✅ Shopify store configured with Gelato app installed
+- ✅ Shopify store configured with Printful app installed
 - ✅ OpenAI API key with sufficient credits
 - ✅ UploadThing account configured
 - ✅ Sentry account (recommended for production)
@@ -183,7 +183,7 @@ Before deploying to production, verify:
 - [ ] Type checking passes (`yarn type-check`)
 - [ ] Linting passes (`yarn lint`)
 - [ ] GraphQL codegen runs successfully (`yarn codegen`)
-- [ ] Shopify store is configured and Gelato app is installed
+- [ ] Shopify store is configured and Printful app is installed
 - [ ] OpenAI API key has sufficient credits
 - [ ] UploadThing account is active
 - [ ] Custom domain is configured (if applicable)

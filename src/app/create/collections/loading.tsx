@@ -2,6 +2,8 @@ import CreateProgressBar from '@/ui/components/create/CreateProgressBar';
 import { Card, CardContent, CardHeader } from '@/ui/primitives/card';
 import { Skeleton } from '@/ui/primitives/skeleton';
 
+const NAV_SKELETON_IDS = ['nav-skeleton-a', 'nav-skeleton-b', 'nav-skeleton-c', 'nav-skeleton-d'] as const;
+
 export default function CollectionsLoading() {
   return (
     <>
@@ -18,8 +20,8 @@ export default function CollectionsLoading() {
                 </div>
               </CardHeader>
               <CardContent className="p-0 space-y-1">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-10 mx-3 mb-1 rounded-lg" />
+                {NAV_SKELETON_IDS.map((id) => (
+                  <Skeleton key={id} className="h-10 mx-3 mb-1 rounded-lg" />
                 ))}
               </CardContent>
             </Card>

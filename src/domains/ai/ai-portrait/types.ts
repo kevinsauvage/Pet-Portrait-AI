@@ -100,8 +100,7 @@ export interface ArtworkGenerationResult {
 }
 
 export interface CartLineArtworkAttributes {
-  gelato_print_url: string;
-  gelato_product_uid?: string;
+  printful_print_url: string;
   original_photo_url: string;
   chosen_style: string;
   generation_id: string;

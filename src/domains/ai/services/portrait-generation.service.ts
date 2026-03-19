@@ -143,7 +143,9 @@ export async function generatePetPortraitVariations(
   try {
     const urls: string[] = [];
     for (let i = 0; i < variationsCount; i++) {
+      // eslint-disable-next-line no-await-in-loop
       const b64 = await editImageWithOpenAI(apiKey, prompt, originalPhotoUrl);
+      // eslint-disable-next-line no-await-in-loop
       urls.push(await uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`));
     }
     return { urls, generationId, styleId };

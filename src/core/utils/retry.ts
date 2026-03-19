@@ -6,9 +6,9 @@ type RetryOptions<T> = {
   onAttemptFailed?: (attempt: number, maxAttempts: number, error: unknown) => void;
 };
 
-function sleep(ms: number): Promise<void> {
+export function sleep(ms: number): Promise<void> {
   return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), ms);
+    setTimeout(resolve, ms);
   });
 }
 

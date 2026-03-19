@@ -9,6 +9,8 @@ export interface CreateFlowParams {
   generationId?: string;
   urls?: string;
   productHandle?: string;
+  /** Printful product preview URL (portrait on product mockup) */
+  previewUrl?: string;
 }
 
 /**
@@ -24,6 +26,7 @@ export function buildCreateFlowParams(params: CreateFlowParams): URLSearchParams
   if (params.generationId) searchParams.set('generationId', params.generationId);
   if (params.urls) searchParams.set('urls', params.urls);
   if (params.productHandle) searchParams.set('productHandle', params.productHandle);
+  if (params.previewUrl) searchParams.set('previewUrl', params.previewUrl);
 
   return searchParams;
 }

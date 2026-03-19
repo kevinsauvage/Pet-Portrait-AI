@@ -82,7 +82,7 @@ const nextConfig: NextConfig = {
           "default-src 'self'",
           `script-src ${scriptSrc.join(' ')}`,
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-          "img-src 'self' data: blob: https://cdn.shopify.com https://res.cloudinary.com https://utfs.io https://*.ufs.sh https://images.unsplash.com https://www.googletagmanager.com https://www.google-analytics.com",
+          "img-src 'self' data: blob: https://cdn.shopify.com https://res.cloudinary.com https://utfs.io https://*.ufs.sh https://images.unsplash.com https://*.gelato.com https://*.gelatoapis.com https://*.printful.com https://*.printfulproducts.com https://*.s3-accelerate.amazonaws.com https://www.googletagmanager.com https://www.google-analytics.com",
           "font-src 'self' data: https://fonts.gstatic.com https://cdn.shopify.com",
           "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.myshopify.com https://*.shopifycdn.com https://vercel.live https://uploadthing.com https://*.uploadthing.com https://*.sentry.io https://*.ingest.sentry.io",
           "frame-src 'self' https://www.googletagmanager.com https://vercel.live",
@@ -143,6 +143,26 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: 'images.unsplash.com',
+        protocol: 'https',
+      },
+      {
+        hostname: '**.gelato.com',
+        protocol: 'https',
+      },
+      {
+        hostname: '**.gelatoapis.com',
+        protocol: 'https',
+      },
+      {
+        hostname: '**.printful.com',
+        protocol: 'https',
+      },
+      {
+        hostname: '**.printfulproducts.com',
+        protocol: 'https',
+      },
+      {
+        hostname: '**.s3-accelerate.amazonaws.com',
         protocol: 'https',
       },
     ],

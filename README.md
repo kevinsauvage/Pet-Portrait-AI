@@ -1,6 +1,6 @@
 # PetPortrait AI — Custom AI Pet Portrait Ecommerce
 
-A fully automated ecommerce platform that generates and sells custom AI-created pet portraits. Built with **Next.js 16**, **Shopify Storefront & Admin GraphQL APIs**, **OpenAI** for image generation, and **Gelato** for print-on-demand fulfillment.
+A fully automated ecommerce platform that generates and sells custom AI-created pet portraits. Built with **Next.js 16**, **Shopify Storefront & Admin GraphQL APIs**, **OpenAI** for image generation, and **Printful** for print-on-demand fulfillment.
 
 ## Features
 
@@ -10,8 +10,8 @@ A fully automated ecommerce platform that generates and sells custom AI-created 
 - **Shopify Integration**
   Storefront API for products, cart, and checkout.
 
-- **Gelato Print-on-Demand**
-  The Gelato Shopify app automatically fulfills physical orders (canvas, poster, apparel) using the `gelato_print_url` line item attribute. No backend fulfillment code required.
+- **Printful Print-on-Demand**
+  The Printful Shopify app automatically fulfills physical orders (canvas, poster, apparel) using the `printful_print_url` line item attribute. No backend fulfillment code required.
 
 - **Modern UI**
   Tailwind CSS v4, Radix UI components, lucide-react icons, dark/light mode.
@@ -71,13 +71,13 @@ src/
 2. User selects art style  → Frontend only
 3. AI generates variants   → OpenAI Images API
 4. User selects final art  → Stored on CDN (public, permanent)
-5. User picks product      → Shopify Storefront API (products synced by Gelato app)
-6. Add to cart             → Shopify cart with gelato_print_url attribute
+5. User picks product      → Shopify Storefront API (products synced by Printful app)
+6. Add to cart             → Shopify cart with printful_print_url attribute
 7. Checkout & order        → Normal Shopify checkout
-8. Fulfillment             → Gelato Shopify app reads gelato_print_url, prints & ships
+8. Fulfillment             → Printful Shopify app reads printful_print_url, prints & ships
 ```
 
-See [GELATO_SHOPIFY_INTEGRATION.md](./docs/GELATO_SHOPIFY_INTEGRATION.md) for the full Gelato integration guide.
+See [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) for the Printful integration guide.
 
 ---
 
@@ -89,7 +89,7 @@ See [GELATO_SHOPIFY_INTEGRATION.md](./docs/GELATO_SHOPIFY_INTEGRATION.md) for th
 | Styling     | Tailwind CSS v4, Radix UI, lucide-react       |
 | APIs        | Shopify Storefront GraphQL, Shopify Admin API |
 | AI          | OpenAI API                                    |
-| Fulfillment | Gelato Shopify App (automatic)                |
+| Fulfillment | Printful Shopify App (automatic)                |
 | Validation  | Zod v4                                        |
 | GraphQL     | graphql-request, GraphQL Codegen              |
 | Uploads     | UploadThing                                   |
@@ -108,7 +108,7 @@ See [GELATO_SHOPIFY_INTEGRATION.md](./docs/GELATO_SHOPIFY_INTEGRATION.md) for th
 - OpenAI API key
 - UploadThing account
 - Resend account (for transactional emails in production)
-- Gelato account with Shopify app installed
+- Printful account with Shopify app installed
 
 ### Installation
 
@@ -235,7 +235,7 @@ yarn lint         # ESLint
 5. **Validation lives per domain** — Each domain includes its own Zod schemas.
 6. **React Server Components by default** — Client Components only where required.
 7. **UI has zero business logic** — Components are strictly for presentation.
-8. **No direct Gelato API calls** — The Gelato Shopify app handles fulfillment automatically.
+8. **No direct Printful API calls for fulfillment** — The Printful Shopify app handles fulfillment automatically. Printful Mockup Generator API is used only for preview generation.
 
 ---
 
@@ -257,7 +257,7 @@ yarn lint         # ESLint
 
 - [API Documentation](./docs/API.md) - API endpoints, authentication, and usage examples
 - [Shopify 2026+ Authentication](./docs/SHOPIFY-2026-AUTH.md) - Shopify OAuth 2.0 setup guide
-- [Gelato Shopify Integration](./docs/GELATO_SHOPIFY_INTEGRATION.md) - Print-on-demand fulfillment guide
+- [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) - Print-on-demand preview and fulfillment guide
 - [Redis Setup](./docs/REDIS_SETUP.md) - Redis configuration for rate limiting
 
 ### Operations
@@ -275,6 +275,6 @@ yarn lint         # ESLint
   - [ADR-002: No Barrel Exports](./docs/ADRs/002-no-barrel-exports.md)
   - [ADR-003: React Server Components Default](./docs/ADRs/003-react-server-components-default.md)
   - [ADR-004: Shopify OAuth 2.0 Client Credentials](./docs/ADRs/004-shopify-oauth2-client-credentials.md)
-  - [ADR-005: Gelato Shopify App Integration](./docs/ADRs/005-gelato-shopify-app-integration.md)
+  - [ADR-005: Printful Shopify App Integration](./docs/ADRs/005-printful-shopify-app-integration.md)
   - [ADR-006: Redis Rate Limiting](./docs/ADRs/006-redis-rate-limiting.md)
   - [ADR-007: Sentry Error Monitoring](./docs/ADRs/007-sentry-error-monitoring.md)

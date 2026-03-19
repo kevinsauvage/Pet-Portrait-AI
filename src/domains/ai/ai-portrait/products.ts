@@ -5,6 +5,8 @@ export interface AiPortraitProductVariant {
   price: number;
   currencyCode: string;
   availableForSale: boolean;
+  /** Printful variant ID for mockup generation */
+  printfulVariantId?: number;
 }
 
 export interface AiPortraitProduct {
@@ -13,6 +15,5 @@ export interface AiPortraitProduct {
   title: string;
   description: string;
   image?: string;
-  gelatoProductUid?: string;
   variants: AiPortraitProductVariant[];
 }

@@ -256,8 +256,11 @@ const OrderCard = ({ order }: { order: OrderFieldsFragment }) => {
 
                     if (!trackingInfo || trackingInfo.length === 0) return null;
 
+                    const fulfillmentKey =
+                      `${trackingCompany ?? 'carrier'}-${trackingInfo.map((t) => t.number ?? t.url).filter(Boolean).join('-')}`;
+
                     return (
-                      <div key={`fulfillment-${index}`} className="space-y-2">
+                      <div key={fulfillmentKey} className="space-y-2">
                         <div className={`flex justify-between py-1 border-b border-border `}>
                           <span className="text-body-sm text-secondary">
                             {trackingCompany || DEFAULTS.carrier}
@@ -268,30 +271,34 @@ const OrderCard = ({ order }: { order: OrderFieldsFragment }) => {
                           </span>
                         </div>
 
-                        {trackingInfo.map((trackInfo, trackIndex) => (
-                          <div
-                            key={trackInfo.number ?? `tracking-${trackIndex}`}
-                            className="flex justify-between py-1 border-b border-border"
-                          >
-                            <span className="text-body-sm text-secondary">
-                              {trackInfo.number || DEFAULTS.trackingNumber}
-                            </span>
-                            {typeof trackInfo.url === 'string' ? (
-                              <Link
-                                href={trackInfo.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-body-sm font-medium link"
-                              >
-                                Track
-                              </Link>
-                            ) : (
-                              <span className="text-body-sm font-medium text-muted">
-                                {DEFAULTS.link}
+                        {trackingInfo.map((trackInfo, trackIndex) => {
+                          const trackingKey =
+                            trackInfo.number ?? trackInfo.url ?? `tracking-fallback-${trackIndex}`;
+                          return (
+                            <div
+                              key={trackingKey}
+                              className="flex justify-between py-1 border-b border-border"
+                            >
+                              <span className="text-body-sm text-secondary">
+                                {trackInfo.number || DEFAULTS.trackingNumber}
                               </span>
-                            )}
-                          </div>
-                        ))}
+                              {typeof trackInfo.url === 'string' ? (
+                                <Link
+                                  href={trackInfo.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-body-sm font-medium link"
+                                >
+                                  Track
+                                </Link>
+                              ) : (
+                                <span className="text-body-sm font-medium text-muted">
+                                  {DEFAULTS.link}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     );
                   })}

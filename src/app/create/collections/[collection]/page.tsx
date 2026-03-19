@@ -68,6 +68,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               originalPhotoUrl={photo}
               styleId={styleId}
               generationId={generationId}
+              urls={urls}
             />
           ))}
         </div>

@@ -74,12 +74,14 @@ export const a11yTestHelpers = {
 
     for (const selector of selectors) {
       const element = page.locator(selector);
+      // eslint-disable-next-line no-await-in-loop
       const isFocused = await element.evaluate((el) => el === document.activeElement);
 
       if (!isFocused) {
         return false;
       }
 
+      // eslint-disable-next-line no-await-in-loop
       await page.keyboard.press('Tab');
     }
 

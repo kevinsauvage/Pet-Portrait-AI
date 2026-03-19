@@ -5,7 +5,7 @@ import type { SavedPortrait } from '@/domains/wishlist/services/wishlist.service
 import SavedPortraitCard from './SavedPortraitCard';
 
 type DefaultProduct = {
-  product: { handle: string; gelatoProductUid?: string };
+  product: { handle: string };
   variant: { id: string; availableForSale: boolean };
 };
 

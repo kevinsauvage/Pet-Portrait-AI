@@ -66,10 +66,7 @@ const WishlistPage = async () => {
           defaultProduct={
             defaultProduct
               ? {
-                  product: {
-                    handle: defaultProduct.product.handle,
-                    gelatoProductUid: defaultProduct.product.gelatoProductUid,
-                  },
+                  product: { handle: defaultProduct.product.handle },
                   variant: defaultProduct.variant,
                 }
               : null

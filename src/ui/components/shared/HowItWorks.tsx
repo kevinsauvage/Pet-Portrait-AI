@@ -63,7 +63,7 @@ const HowItWorks = ({
             const stepNum = String(index + 1).padStart(2, '0');
             return (
               <div
-                key={`${step.title}-${index}`}
+                key={step.title}
                 className="group relative flex flex-col rounded-2xl border border-border/70 bg-card p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[var(--shadow-card-hover)] md:p-7"
               >
                 <div className="mb-5 flex items-start justify-between">

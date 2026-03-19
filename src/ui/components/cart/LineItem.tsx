@@ -20,15 +20,17 @@ function getAttribute(node: CartLineNode, key: string): string | undefined {
 const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
   if (!('merchandise' in node)) return null;
 
-  const artworkUrl = getAttribute(node, 'gelato_print_url');
+  const artworkUrl =
+    getAttribute(node, 'printful_print_url') ?? getAttribute(node, 'gelato_print_url');
+  const previewUrl =
+    getAttribute(node, 'printful_preview_url') ?? getAttribute(node, 'gelato_preview_url');
   const originalPhotoUrl = getAttribute(node, 'original_photo_url');
   const chosenStyle = getAttribute(node, 'chosen_style');
   const generationId = getAttribute(node, 'generation_id');
   const variantProductHandle =
     'product' in node.merchandise ? node.merchandise.product?.handle : undefined;
-  const gelatoProductUid = getAttribute(node, 'gelato_product_uid');
 
-  const displayImage = artworkUrl ?? node.merchandise.image?.medium;
+  const displayImage = previewUrl ?? artworkUrl ?? node.merchandise.image?.medium;
 
   const isAiPortrait = Boolean(artworkUrl && originalPhotoUrl && chosenStyle && generationId);
 
@@ -150,7 +152,6 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
             label={node.merchandise.product.title}
             variantId={node.merchandise.id}
             productHandle={variantProductHandle}
-            gelatoProductUid={gelatoProductUid ?? undefined}
           />
         )}
       </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createPerformanceLogger, logger } from './logger';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

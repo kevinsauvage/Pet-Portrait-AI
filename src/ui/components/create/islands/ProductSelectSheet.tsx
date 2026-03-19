@@ -26,6 +26,7 @@ interface ProductSelectSheetProps {
   originalPhotoUrl?: string;
   styleId?: string;
   generationId?: string;
+  urls?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -36,6 +37,7 @@ export default function ProductSelectSheet({
   originalPhotoUrl,
   styleId,
   generationId,
+  urls,
   open,
   onOpenChange,
 }: ProductSelectSheetProps) {
@@ -51,6 +53,7 @@ export default function ProductSelectSheet({
       photo: originalPhotoUrl,
       styleId,
       generationId,
+      urls,
       productHandle: product.handle,
     });
     onOpenChange(false);

@@ -8,7 +8,6 @@ export const wishlistAddSchema = z.object({
   label: z.string().optional(),
   variantId: z.string().optional(),
   productHandle: z.string().optional(),
-  gelatoProductUid: z.string().optional(),
 });
 
 export type WishlistAddInput = z.infer<typeof wishlistAddSchema>;

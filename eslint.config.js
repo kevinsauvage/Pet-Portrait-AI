@@ -105,7 +105,7 @@ module.exports = defineConfig([
         },
       ],
 
-      'react/no-array-index-key': 'warn',
+      'react/no-array-index-key': 'error',
       'react/no-unescaped-entities': 'error',
 
       'react/self-closing-comp': [

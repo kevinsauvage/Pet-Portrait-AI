@@ -206,7 +206,7 @@ describe('CartService', () => {
         {
           merchandiseId: 'var-1',
           quantity: 1,
-          attributes: [{ key: 'gelato_print_url', value: 'https://example.com/image.png' }],
+          attributes: [{ key: 'printful_print_url', value: 'https://example.com/image.png' }],
         },
       ]);
       expect(result).not.toBeNull();
@@ -216,7 +216,7 @@ describe('CartService', () => {
             {
               merchandiseId: 'var-1',
               quantity: 1,
-              attributes: [{ key: 'gelato_print_url', value: 'https://example.com/image.png' }],
+              attributes: [{ key: 'printful_print_url', value: 'https://example.com/image.png' }],
             },
           ],
         }),
