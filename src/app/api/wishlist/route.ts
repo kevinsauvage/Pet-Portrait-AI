@@ -43,7 +43,7 @@ export const POST = withApiHandler(
 
     const body = await parseJsonBody(request);
     const parsedBody = parseZodBody(body, wishlistAddSchema, {
-      errorMessage: API_ERROR_MESSAGES.MISSING_OR_INVALID_PRODUCT_ID,
+      errorMessage: API_ERROR_MESSAGES.INVALID_REQUEST_BODY,
       status: HTTP_STATUS.BAD_REQUEST,
     });
 

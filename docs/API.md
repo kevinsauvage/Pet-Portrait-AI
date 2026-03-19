@@ -238,17 +238,21 @@ Remove items from cart.
 
 #### `GET /api/wishlist`
 
-Get user's wishlist.
+Get saved AI portraits (favourites). Each item includes artwork URL, original photo, style, generation id, and optional variant/handle for re-ordering.
 
 **Authentication:** Not required (uses Shopify customer cookies)
 
-#### `POST /api/wishlist/[productId]`
+#### `POST /api/wishlist`
 
-Add product to wishlist.
+Add a portrait to favourites. **Body (JSON):** `imageUrl`, `originalPhotoUrl`, `styleId`, `generationId`; optional `label`, `variantId`, `productHandle`.
 
-#### `DELETE /api/wishlist/[productId]`
+**Authentication:** Required (Shopify customer)
 
-Remove product from wishlist.
+#### `DELETE /api/wishlist/[portraitId]`
+
+Remove a saved portrait by its **saved entry id** (the `id` on each wishlist item), not by Shopify product id.
+
+**Authentication:** Required (Shopify customer)
 
 ---
 

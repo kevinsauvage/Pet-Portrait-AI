@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import config from '@/core/config';
 import { buildCreateFlowQueryString } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getStyleLabel } from '@/domains/ai/ai-portrait/utils/style-utils';
-import { removePortraitFromWishlist } from '@/domains/wishlist/client';
+import { removeFromWishlist } from '@/domains/wishlist/client';
 import type { SavedPortrait } from '@/domains/wishlist/types';
 import { Badge } from '@/ui/primitives/badge';
 import { Button } from '@/ui/primitives/button';
@@ -39,7 +39,8 @@ const SavedPortraitCard = ({ portrait, defaultProduct }: Props) => {
   });
 
   const productHandle = portrait.productHandle ?? defaultProduct?.product.handle;
-  const canSelect = productHandle && (portrait.variantId || defaultProduct?.variant.availableForSale);
+  const canSelect =
+    productHandle && (portrait.variantId || defaultProduct?.variant.availableForSale);
 
   const selectHref = canSelect
     ? `${config.routes.createOrder}${buildCreateFlowQueryString({
@@ -58,7 +59,7 @@ const SavedPortraitCard = ({ portrait, defaultProduct }: Props) => {
 
   const handleRemove = async () => {
     setRemoving(true);
-    await removePortraitFromWishlist(id);
+    await removeFromWishlist(id);
     router.refresh();
   };
 
@@ -98,11 +99,7 @@ const SavedPortraitCard = ({ portrait, defaultProduct }: Props) => {
           onClick={handleRemove}
           disabled={removing}
         >
-          {removing ? (
-            <Loader2 className="h-3 w-3 animate-spin" />
-          ) : (
-            <Trash2 className="h-3 w-3" />
-          )}
+          {removing ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
           Remove
         </Button>
       </CardFooter>

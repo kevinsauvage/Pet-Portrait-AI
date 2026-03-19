@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import useCartContext from '@/contexts/CartContext/useCartContext';
-import { savePortraitToWishlist } from '@/domains/wishlist/client';
+import { addToWishlist } from '@/domains/wishlist/client';
 import { Button } from '@/ui/primitives/button';
 
 import { Heart, Loader2 } from 'lucide-react';
@@ -44,16 +44,17 @@ const SavePortraitButton = ({
     setStatus('loading');
     setErrorMsg(null);
 
-    const result = await savePortraitToWishlist({
+    const result = await addToWishlist({
       imageUrl,
       originalPhotoUrl,
       styleId,
       generationId,
       label,
-      ...(variantId && productHandle && {
-        variantId,
-        productHandle,
-      }),
+      ...(variantId &&
+        productHandle && {
+          variantId,
+          productHandle,
+        }),
     });
 
     const isDuplicate = result.message?.toLowerCase().includes('already');
@@ -91,9 +92,7 @@ const SavePortraitButton = ({
         )}
         {isSaved ? 'Saved for later' : status === 'loading' ? 'Adding…' : 'Save for later'}
       </Button>
-      {errorMsg && (
-        <p className="text-caption-sm text-destructive mt-1">{errorMsg}</p>
-      )}
+      {errorMsg && <p className="text-caption-sm text-destructive mt-1">{errorMsg}</p>}
     </div>
   );
 };
