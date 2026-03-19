@@ -77,7 +77,6 @@ yarn test:e2e
 
 **Test files:**
 - `e2e/accessibility.spec.ts` - Comprehensive accessibility tests
-- `e2e/utils/accessibility.ts` - Accessibility testing utilities
 
 ### Manual Testing Checklist
 
