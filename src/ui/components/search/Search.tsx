@@ -1,16 +1,16 @@
 'use client';
 
 import type { RefObject } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import { logger } from '@/core/utils/logger';
-import useOnClickOutside from '@/hooks/useClickOutside';
 import type { PredictiveSearchQuery } from '@/infra/shopify/generated/storefront/index';
 import SearchForm from '@/ui/components/search/SearchForm';
 
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
+import { useOnClickOutside } from 'usehooks-ts';
 
 const SearchResults = dynamic(() => import('@/ui/components/search/SearchResults'));
 
@@ -34,8 +34,10 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
   const [searchValue, setSearchValue] = useState(searchQuery);
   const [debouncedSearch] = useDebounce(searchValue, 500);
   const [hidePanel, setHidePanel] = useState(false);
-  const reference = useRef<HTMLDivElement | null>(null);
-  useOnClickOutside(reference as RefObject<HTMLElement>, () => setHidePanel(true));
+  const reference = useRef<HTMLDivElement>(null);
+  const hidePanelOnOutside = useCallback(() => setHidePanel(true), []);
+  useOnClickOutside(reference as RefObject<HTMLElement>, hidePanelOnOutside, 'mousedown');
+  useOnClickOutside(reference as RefObject<HTMLElement>, hidePanelOnOutside, 'touchstart');
   const resultsId = 'predictive-search-results';
 
   const trimmed = debouncedSearch.trim();
