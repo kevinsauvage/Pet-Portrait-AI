@@ -2,23 +2,16 @@
 
 import { logger } from '@/core/utils/logger';
 
+import Cookies from 'js-cookie';
+
 /**
- * Client-side cookie utilities
- * Browser cookie manipulation helpers
+ * Client-side cookie utilities (browser).
+ * Uses js-cookie for encoding/decoding edge cases vs manual `document.cookie` parsing.
  */
 
-export const getCookieFront = (name: string) => {
+export const getCookieFront = (name: string): string => {
   if (typeof document === 'undefined') return '';
-  const cookies = document.cookie.split(';');
-
-  for (const rawCookie of cookies) {
-    const cookie = rawCookie.trim();
-    if (cookie.startsWith(`${name}=`)) {
-      return cookie.slice(Math.max(0, name.length + 1));
-    }
-  }
-
-  return '';
+  return Cookies.get(name) ?? '';
 };
 
 export const setCookieFront = (
@@ -31,23 +24,16 @@ export const setCookieFront = (
     throw new TypeError('Invalid input parameters');
   }
 
-  const date = new Date();
-  date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
-  const expires = `expires=${date.toUTCString()}`;
-
   const isProduction = process.env.NODE_ENV === 'production';
-
-  let cookie = `${cName}=${cValue}; ${expires}; path=/`;
-  if (isProduction) {
-    cookie += '; Secure';
-  }
-  if (sameSite) {
-    cookie += `; SameSite=${sameSite}`;
-  }
 
   try {
     if (typeof document !== 'undefined') {
-      document.cookie = cookie;
+      Cookies.set(cName, cValue, {
+        expires: expDays,
+        path: '/',
+        secure: isProduction,
+        ...(sameSite ? { sameSite } : {}),
+      });
     }
   } catch (error) {
     logger.error('Failed to set cookie', { context: 'cookies.set', error });
