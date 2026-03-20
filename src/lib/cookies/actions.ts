@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 
 export const delCookieAction = async (name: string) => {
   const cookieStore = await cookies();

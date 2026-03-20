@@ -107,6 +107,7 @@ function validateProductionRecommendations(warnings: string[]): void {
   }
 }
 
+// Console logger: validation runs from `core/config` which is bundled for client error UI.
 import { logger } from '../utils/logger';
 
 /**

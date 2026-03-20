@@ -1,4 +1,4 @@
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 

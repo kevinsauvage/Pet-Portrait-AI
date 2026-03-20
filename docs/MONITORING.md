@@ -139,7 +139,7 @@ Sentry automatically captures:
 Use the logger utility for structured error reporting:
 
 ```typescript
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 
 try {
   // Your code
@@ -232,7 +232,7 @@ For complete logging documentation, see [Logging Standards](./LOGGING.md).
 ### Quick Reference
 
 ```typescript
-import { logger, createPerformanceLogger } from '@/core/utils/logger';
+import { logger, createPerformanceLogger } from '@/core/utils/logger.server';
 import { withRequestContext } from '@/core/utils/api-wrapper';
 
 // In API routes

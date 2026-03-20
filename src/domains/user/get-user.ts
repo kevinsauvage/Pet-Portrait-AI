@@ -1,4 +1,4 @@
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { storefrontSdk } from '@/infra/shopify/client';
 import { clearShopifyToken, getShopifyToken } from '@/infra/shopify/server';
 

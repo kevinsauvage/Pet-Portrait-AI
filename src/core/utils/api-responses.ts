@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+// Console logger: this module is imported from Edge middleware (via auth); avoid `logger.server` / pino there.
 import { logger } from '@/core/utils/logger';
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import type {

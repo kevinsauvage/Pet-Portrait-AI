@@ -7,7 +7,7 @@ This document describes the `src/` layout after the domains + infra migration.
 - **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Each domain is mostly **flat**: `actions.ts`, `validation.ts`, and `*.service.ts` files at the root; use subfolders only when there are several concerns (e.g. `products/services`, `ai/ai-portrait`).
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
 - **core/** — App-wide config, errors, and shared utils (api-responses, form-actions incl. `FormActionResult`, cookie-security).
-- **lib/** — Pure helpers and app infra: format, html, debounce, cn, consents, cookies (server actions), client (cookies, analytics), TanStack Query client setup (`query-client.ts`).
+- **lib/** — Pure helpers and app infra: format, html, cn, consents, cookies (server actions), client (cookies, analytics), TanStack Query client setup (`query-client.ts`).
 - **ui/** — Presentational components, layouts, primitives, and shared app UI building blocks (auth shell/forms, shared sections).
 - **app/** — Next.js App Router (pages, layouts, API routes).
 
@@ -23,7 +23,7 @@ src/
 ├── core/                   # Config, errors, utils
 │   ├── config/
 │   ├── errors/
-│   └── utils/              # api-responses, form-actions, cookie-security
+│   └── utils/              # api-responses, logger (client) / logger.server (Pino), logger.shared, form-actions, cookie-security
 ├── domains/                # Domain modules (flat by default)
 │   ├── address/            # actions.ts, types.ts, address.service.ts, address-utils.ts, validation.ts
 │   ├── ai/                 # actions.ts, *.service.ts, validation.ts, ai-portrait/
@@ -55,8 +55,7 @@ src/
 │   ├── cookies/            # Server cookie actions (get/set/delete)
 │   ├── client/             # Client cookies, analytics
 │   ├── format/             # formatPrice
-│   ├── html/               # stripHtmlToText
-│   ├── debounce.ts
+│   ├── html/               # stripHtmlToText (DOMPurify via isomorphic-dompurify)
 │   ├── cn.ts
 │   └── consents.ts
 ├── types/                   # globals.d.ts, images.d.ts

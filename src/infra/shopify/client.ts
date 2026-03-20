@@ -1,5 +1,5 @@
 import config from '@/core/config';
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { fetchWithTimeout } from '@/infra/http/fetch-with-timeout';
 
 import { getSdk as getAdminSdk } from './generated/admin/index';

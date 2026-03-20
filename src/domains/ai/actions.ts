@@ -1,6 +1,6 @@
 'use server';
 
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import { CreationsService } from '@/domains/creations/creations.service';
 import { getUser } from '@/domains/user/get-user';

@@ -1,10 +1,17 @@
-/* eslint-disable no-console */
-import { createPerformanceLogger, logger } from './logger';
+ 
+import { createPerformanceLogger, logger, pinoTestSink } from './logger.server';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-describe('logger', () => {
+function parseLastPinoLine() {
+  const last = pinoTestSink.lines.at(-1);
+  expect(last).toBeDefined();
+  return JSON.parse(String(last).trim()) as Record<string, unknown>;
+}
+
+describe('logger (server / pino)', () => {
   beforeEach(() => {
+    pinoTestSink.lines.length = 0;
     vi.spyOn(console, 'debug').mockImplementation(() => {});
     vi.spyOn(console, 'info').mockImplementation(() => {});
     vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -13,65 +20,74 @@ describe('logger', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   describe('logger.info', () => {
-    it('calls console.info with the message', () => {
+    it('writes a JSON line with the message', () => {
       logger.info('Test info message');
-      expect(console.info).toHaveBeenCalledWith(expect.stringContaining('Test info message'));
+      const line = parseLastPinoLine();
+      expect(line.msg).toBe('Test info message');
+      expect(line.level).toBe(30);
     });
 
-    it('includes context in the output', () => {
+    it('includes context in the payload', () => {
       logger.info('msg', { context: 'my-service' });
-      expect(console.info).toHaveBeenCalledWith(expect.stringContaining('[my-service]'));
+      const line = parseLastPinoLine();
+      expect(line.context).toBe('my-service');
     });
 
-    it('includes stringified metadata in the output', () => {
+    it('includes metadata in the payload', () => {
       logger.info('msg', { metadata: { key: 'val' } });
-      expect(console.info).toHaveBeenCalledWith(expect.stringContaining('key'));
+      const line = parseLastPinoLine();
+      expect(line.key).toBe('val');
     });
 
     it('redacts long tokens in metadata', () => {
       logger.info('msg', { metadata: { token: 'a'.repeat(33) } });
-      const call = (console.info as ReturnType<typeof vi.spyOn>).mock.calls[0][0] as string;
-      expect(call).toContain('[REDACTED]');
+      const line = parseLastPinoLine();
+      expect(line.token).toBe('[REDACTED]');
     });
   });
 
   describe('logger.warn', () => {
-    it('calls console.warn', () => {
+    it('writes a warn-level JSON line', () => {
       logger.warn('Test warning');
-      expect(console.warn).toHaveBeenCalled();
+      const line = parseLastPinoLine();
+      expect(line.msg).toBe('Test warning');
+      expect(line.level).toBe(40);
     });
 
-    it('formats error message from an Error object', () => {
+    it('includes formatted error message when error is an Error', () => {
       const err = new Error('Something bad');
       logger.warn('msg', { error: err });
-      expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('Something bad'), err);
+      const line = parseLastPinoLine();
+      expect(line.msg).toContain('Something bad');
+      expect(line.err).toBeDefined();
     });
   });
 
   describe('logger.error', () => {
-    it('calls console.error', () => {
+    it('writes an error-level JSON line', () => {
       logger.error('Critical failure');
-      expect(console.error).toHaveBeenCalledWith(expect.stringContaining('Critical failure'));
+      const line = parseLastPinoLine();
+      expect(line.msg).toBe('Critical failure');
+      expect(line.level).toBe(50);
     });
 
-    it('handles Error objects and includes message', () => {
+    it('handles Error objects and includes serialized err', () => {
       const err = new Error('DB connection failed');
       logger.error('msg', { error: err });
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining('DB connection failed'),
-        err,
-      );
+      const line = parseLastPinoLine();
+      expect(line.msg).toContain('DB connection failed');
+      expect(line.err).toBeDefined();
     });
 
-    it('handles string errors', () => {
+    it('handles string errors via errMessage', () => {
       logger.error('msg', { error: 'plain string error' });
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining('plain string error'),
-        'plain string error',
-      );
+      const line = parseLastPinoLine();
+      expect(line.msg).toContain('plain string error');
+      expect(line.errMessage).toBe('plain string error');
     });
   });
 
@@ -79,14 +95,14 @@ describe('logger', () => {
     it('does not log in production', () => {
       vi.stubEnv('NODE_ENV', 'production');
       logger.debug('debug msg');
-      expect(console.debug).not.toHaveBeenCalled();
-      vi.unstubAllEnvs();
+      expect(pinoTestSink.lines.length).toBe(0);
     });
   });
 });
 
-describe('createPerformanceLogger', () => {
+describe('createPerformanceLogger (server / pino)', () => {
   beforeEach(() => {
+    pinoTestSink.lines.length = 0;
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.spyOn(console, 'debug').mockImplementation(() => {});
     vi.useFakeTimers();
@@ -117,10 +133,12 @@ describe('createPerformanceLogger', () => {
     expect(perf.getDuration()).toBeGreaterThanOrEqual(200);
   });
 
-  it('warns when operation exceeds threshold', () => {
+  it('writes a warn-level line when operation exceeds threshold', () => {
     const perf = createPerformanceLogger('slow-op', 100);
     vi.advanceTimersByTime(200);
     perf.end();
-    expect(console.warn).toHaveBeenCalled();
+    const line = parseLastPinoLine();
+    expect(line.level).toBe(40);
+    expect(line.msg).toContain('Slow operation detected');
   });
 });

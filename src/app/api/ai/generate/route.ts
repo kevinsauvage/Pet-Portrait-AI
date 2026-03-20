@@ -9,7 +9,7 @@ import {
   withApiHandler,
 } from '@/core/utils/api-responses';
 import { requireApiProtection } from '@/core/utils/auth';
-import { createPerformanceLogger, logger } from '@/core/utils/logger';
+import { createPerformanceLogger, logger } from '@/core/utils/logger.server';
 import { getClientContext } from '@/core/utils/request-identity';
 import { enforceBodySizeLimit, enforceRequestSizeLimit } from '@/core/utils/request-size';
 import { formatZodErrorMessage } from '@/core/utils/zod';

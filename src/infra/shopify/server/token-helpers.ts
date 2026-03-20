@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import config from '@/core/config';
 import { getSecureCookieOptions } from '@/core/utils/cookie-security';
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 
 import { storefrontSdk } from '../client';
 import type { CustomerAccessToken } from '../generated/storefront/index';

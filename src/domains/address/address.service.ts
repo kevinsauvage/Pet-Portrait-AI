@@ -2,7 +2,7 @@ import { revalidatePath } from 'next/cache';
 
 import config from '@/core/config';
 import { handleCustomerUserErrors } from '@/core/utils/form-actions';
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { storefrontSdk } from '@/infra/shopify/client';
 import type { GetCustomerAddressesQuery } from '@/infra/shopify/generated/storefront/index';
 import { adjustPaginationVariables } from '@/infra/shopify/helpers';

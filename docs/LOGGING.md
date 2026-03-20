@@ -22,6 +22,8 @@ Complete guide for logging in the application, including structured logging, req
 
 The application uses a structured logging system with:
 
+- **Server (Pino)**: JSON logs to stdout from `@/core/utils/logger.server` (API routes, services, infra)
+- **Client (console)**: Same API from `@/core/utils/logger` in `'use client'` code (avoids bundling Pino)
 - **Structured Logging**: Context-aware logging with metadata
 - **Request ID Tracking**: Automatic request tracing via AsyncLocalStorage
 - **Performance Monitoring**: Built-in slow operation detection
@@ -41,10 +43,18 @@ The application uses a structured logging system with:
 
 ## Logger API
 
-### Basic Usage
+### Import paths
+
+| Where                         | Module                         | Output                                      |
+| ----------------------------- | ------------------------------ | ------------------------------------------- |
+| Server (routes, services, infra) | `@/core/utils/logger.server`   | **Pino** JSON lines (stdout / log shipping) |
+| `'use client'` / browser-only | `@/core/utils/logger`          | Console (same sanitization + Sentry rules)  |
+| `api-responses`, `core/config/validation` | `@/core/utils/logger` | Same console logger (imported from Edge middleware and client-bundled config; no `server-only` / Pino) |
+
+### Basic Usage (server)
 
 ```typescript
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 
 // Info log
 logger.info('Operation started', {
@@ -210,7 +220,7 @@ if (context) {
 Use `createPerformanceLogger` to track slow operations:
 
 ```typescript
-import { createPerformanceLogger } from '@/core/utils/logger';
+import { createPerformanceLogger } from '@/core/utils/logger.server';
 
 export async function generatePortrait(photoUrl: string, styleId: string) {
   const perf = createPerformanceLogger('ai.generate', 2000); // Threshold: 2s
@@ -546,7 +556,7 @@ export async function slowOperation() {
 #### After
 
 ```typescript
-import { createPerformanceLogger } from '@/core/utils/logger';
+import { createPerformanceLogger } from '@/core/utils/logger.server';
 
 export async function slowOperation() {
   const perf = createPerformanceLogger('slow-operation', 1000);
@@ -572,7 +582,7 @@ export async function slowOperation() {
 ```typescript
 import { type NextRequest } from 'next/server';
 import { withRequestContext } from '@/core/utils/api-wrapper';
-import { logger, createPerformanceLogger } from '@/core/utils/logger';
+import { logger, createPerformanceLogger } from '@/core/utils/logger.server';
 import { createErrorResponse, createSuccessResponse } from '@/core/utils/api-responses';
 
 export async function POST(request: NextRequest) {
@@ -608,7 +618,7 @@ export async function POST(request: NextRequest) {
 ### Service Example
 
 ```typescript
-import { logger, createPerformanceLogger } from '@/core/utils/logger';
+import { logger, createPerformanceLogger } from '@/core/utils/logger.server';
 
 export async function generatePortrait(photoUrl: string, styleId: string) {
   const perf = createPerformanceLogger('ai.generate', 3000);

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { sitemap as sitemapConfig } from '@/core/config';
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { getBaseUrl } from '@/core/utils/metadata';
 import { fetchShopifySitemapEntries } from '@/infra/shopify/sitemap';
 

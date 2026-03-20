@@ -1,4 +1,4 @@
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { getStorefrontAccessToken } from '@/infra/shopify/tokens/storefront-token';
 
 import { GraphQLClient } from 'graphql-request';

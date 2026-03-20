@@ -1,4 +1,4 @@
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { withRetry } from '@/core/utils/retry';
 import { getShopConfig } from '@/domains/shop/get-shop-config.service';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';

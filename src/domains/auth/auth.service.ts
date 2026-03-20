@@ -1,7 +1,7 @@
 import config from '@/core/config';
 import { userFeedback } from '@/core/config/userFeedback';
 import { handleCustomerUserErrors, handleUserErrors } from '@/core/utils/form-actions';
-import { logger } from '@/core/utils/logger';
+import { logger } from '@/core/utils/logger.server';
 import { withRetry } from '@/core/utils/retry';
 import { getUser } from '@/domains/user/get-user';
 import { api } from '@/infra/http/api-client';
