@@ -1,4 +1,24 @@
+import { logger } from '@/core/utils/logger.server';
+
 import { createClient } from 'redis';
+
+let warnedProductionWithoutRedis = false;
+
+function warnProductionWithoutRedis(): void {
+  if (
+    warnedProductionWithoutRedis ||
+    process.env.NODE_ENV !== 'production' ||
+    process.env.REDIS_URL ||
+    process.env.VITEST === 'true'
+  ) {
+    return;
+  }
+  warnedProductionWithoutRedis = true;
+  logger.warn(
+    'REDIS_URL is not set in production: rate limits are in-memory per instance and not shared across instances. Set REDIS_URL for correct limiting when running multiple workers.',
+    { context: 'rate-limit' },
+  );
+}
 
 type RateLimitOptions = {
   windowMs?: number;
@@ -119,6 +139,7 @@ export async function checkRateLimit(
   options: RateLimitOptions = {},
 ): Promise<RateLimitResult> {
   if (!REDIS_URL) {
+    warnProductionWithoutRedis();
     return checkRateLimitInMemory(identifier, options);
   }
 

@@ -1,5 +1,6 @@
 'use server';
 
+import { fetchTrustedHttpsImage, isTrustedHttpsImageHost } from '@/core/utils/trusted-https-image-host';
 import { getShopConfig } from '@/domains/shop/get-shop-config.service';
 
 import type { ImageValidationResult } from './types';
@@ -8,44 +9,20 @@ import sharp from 'sharp';
 
 export type { ImageValidationResult } from './types';
 
-/**
- * Validates that a URL is safe to fetch by checking the scheme is HTTPS.
- * This prevents SSRF attacks (file://, http://internal, etc.).
- *
- * Note: Users can only upload via UploadThing, which always returns HTTPS URLs.
- * This check provides defense-in-depth against SSRF if the API is called directly.
- */
-function validateUrlScheme(url: string): { valid: boolean; error?: string } {
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(url);
-  } catch {
-    return { valid: false, error: 'Invalid URL format' };
-  }
-
-  // Only allow HTTPS URLs (prevents file://, http://internal, etc.)
-  if (parsedUrl.protocol !== 'https:') {
-    return {
-      valid: false,
-      error: `Only HTTPS URLs are allowed. Received: ${parsedUrl.protocol}`,
-    };
-  }
-
-  return { valid: true };
-}
-
 export async function validateImageFromUrl(imageUrl: string): Promise<ImageValidationResult> {
   try {
-    // Validate URL scheme before fetching (SSRF protection)
-    const urlValidation = validateUrlScheme(imageUrl);
-    if (!urlValidation.valid) {
-      return { valid: false, error: urlValidation.error };
+    if (!isTrustedHttpsImageHost(imageUrl)) {
+      return {
+        valid: false,
+        error:
+          'Only HTTPS image URLs from allowed hosts are permitted (e.g. UploadThing). Configure ALLOWED_IMAGE_URL_HOSTS to allow additional origins.',
+      };
     }
 
     const shopConfig = await getShopConfig();
     const imageConfig = shopConfig.image;
 
-    const response = await fetch(imageUrl, {
+    const response = await fetchTrustedHttpsImage(imageUrl, {
       headers: { Accept: 'image/*' },
       signal: AbortSignal.timeout(10000),
     });

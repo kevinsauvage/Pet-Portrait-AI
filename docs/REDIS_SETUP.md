@@ -52,6 +52,15 @@ The rate limiting system will automatically:
 - Fall back to in-memory storage if Redis is unavailable
 - Handle connection errors gracefully
 
+## Client IP headers (rate limiting)
+
+Rate limits key on a client identifier derived from IP + user-agent (`src/core/utils/request-identity.ts`).
+
+- **Vercel:** `VERCEL=1` is set automatically; the app uses `x-forwarded-for` (first hop) and `x-real-ip` as provided by the platform.
+- **Self-hosted / other clouds:** Set `TRUST_FORWARDED_IP_HEADERS=true` only when a reverse proxy **replaces or validates** these headers (otherwise clients can spoof them). When set, `cf-connecting-ip` is preferred if present (typical behind Cloudflare).
+
+Without either condition, IP falls back to `anonymous` (shared bucket per deployment)—acceptable for local dev, not for per-IP limits in untrusted environments.
+
 ## Configuration
 
 ### Rate Limit Settings

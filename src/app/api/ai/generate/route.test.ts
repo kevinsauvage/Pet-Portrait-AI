@@ -48,7 +48,7 @@ describe('/api/ai/generate route', () => {
       generatePetPortraitVariations as unknown as ReturnType<typeof vi.fn>;
     generatePetPortraitVariationsMock.mockResolvedValue({
       id: 'gen-123',
-      variations: ['https://example.com/image1.png'],
+      variations: ['https://utfs.io/f/image1.png'],
     });
   });
 
@@ -59,7 +59,7 @@ describe('/api/ai/generate route', () => {
   it('POST generates portrait successfully', async () => {
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://example.com/pet.jpg',
+        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -72,7 +72,7 @@ describe('/api/ai/generate route', () => {
     expect(body.success).toBe(true);
     expect(body.data.id).toBe('gen-123');
     expect(generatePetPortraitVariations).toHaveBeenCalledWith(
-      'https://example.com/pet.jpg',
+      'https://utfs.io/f/pet.jpg',
       'pixar',
     );
   });
@@ -83,7 +83,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://example.com/pet.jpg',
+        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -125,7 +125,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://invalid-url.com/image.jpg',
+        originalPhotoUrl: 'https://utfs.io/f/bad-image.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -150,7 +150,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://example.com/pet.jpg',
+        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -171,7 +171,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://example.com/pet.jpg',
+        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),

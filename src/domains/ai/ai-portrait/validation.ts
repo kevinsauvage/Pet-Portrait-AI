@@ -1,3 +1,5 @@
+import { isTrustedHttpsImageHost } from '@/core/utils/trusted-https-image-host';
+
 import {
   type ArtStyleId,
   IMAGE_CONSTRAINTS,
@@ -10,8 +12,15 @@ import { z } from 'zod';
 
 const styleIdOptionsLabel = validStyleIdsLabel();
 
+const allowedImageHostMessage =
+  'originalPhotoUrl must be HTTPS from an allowed host (UploadThing, or hosts listed in ALLOWED_IMAGE_URL_HOSTS)';
+
 export const portraitGenerationRequestSchema = z.object({
-  originalPhotoUrl: z.string().min(1, 'originalPhotoUrl is required'),
+  originalPhotoUrl: z
+    .string()
+    .min(1, 'originalPhotoUrl is required')
+    .url('originalPhotoUrl must be a valid URL')
+    .refine(isTrustedHttpsImageHost, { message: allowedImageHostMessage }),
   styleId: z
     .string()
     .min(1, 'styleId is required')

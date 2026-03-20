@@ -1,5 +1,6 @@
 import { logger } from '@/core/utils/logger.server';
 import { withRetry } from '@/core/utils/retry';
+import { fetchTrustedHttpsImage } from '@/core/utils/trusted-https-image-host';
 import { getShopConfig } from '@/domains/shop/get-shop-config.service';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 
@@ -61,7 +62,9 @@ async function editImageWithOpenAI(
 
   const b64 = await withRetry(
     async () => {
-      const imageResponse = await fetch(imageUrl);
+      const imageResponse = await fetchTrustedHttpsImage(imageUrl, {
+        signal: AbortSignal.timeout(shopConfig.ai.apiTimeoutSeconds * 1000),
+      });
       if (!imageResponse.ok)
         throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
 
@@ -150,10 +153,21 @@ export async function generatePetPortraitVariations(
     }
     return { urls, generationId, styleId };
   } catch (error) {
+    let originalPhotoUrlHost: string | undefined;
+    try {
+      originalPhotoUrlHost = new URL(originalPhotoUrl).hostname;
+    } catch {
+      originalPhotoUrlHost = undefined;
+    }
     logger.error('Pet portrait generation failed', {
       context: 'ai-portrait-generate',
       error,
-      metadata: { generationId, styleId, originalPhotoUrl },
+      metadata: {
+        generationId,
+        styleId,
+        originalPhotoUrlLength: originalPhotoUrl.length,
+        originalPhotoUrlHost,
+      },
     });
     throw error;
   }

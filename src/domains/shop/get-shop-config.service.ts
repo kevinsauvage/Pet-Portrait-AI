@@ -78,7 +78,10 @@ function parseShopConfig(value: string | null | undefined): Partial<ShopConfig> 
     logger.warn('Failed to parse shop_config metafield', {
       context: 'shop-config',
       error,
-      metadata: { value },
+      metadata: {
+        valueLength: value.length,
+        valueStartsWithBrace: value.trimStart().startsWith('{'),
+      },
     });
     return {};
   }

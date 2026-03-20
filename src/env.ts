@@ -41,6 +41,10 @@ export const env = createEnv({
     RATE_LIMIT_WINDOW_MS: z.string().optional(),
     RATE_LIMIT_MAX_REQUESTS: z.string().optional(),
     LOG_LEVEL: z.string().optional(),
+    /** Set only behind a reverse proxy that controls forwarded / CF client IP headers. */
+    TRUST_FORWARDED_IP_HEADERS: z.string().optional(),
+    /** Comma-separated hostnames; UploadThing hosts are always allowed. */
+    ALLOWED_IMAGE_URL_HOSTS: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: publicBaseUrlSchema,
@@ -80,6 +84,8 @@ export const env = createEnv({
     RATE_LIMIT_WINDOW_MS: process.env.RATE_LIMIT_WINDOW_MS,
     RATE_LIMIT_MAX_REQUESTS: process.env.RATE_LIMIT_MAX_REQUESTS,
     LOG_LEVEL: process.env.LOG_LEVEL,
+    TRUST_FORWARDED_IP_HEADERS: process.env.TRUST_FORWARDED_IP_HEADERS,
+    ALLOWED_IMAGE_URL_HOSTS: process.env.ALLOWED_IMAGE_URL_HOSTS,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL,
     NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
