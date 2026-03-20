@@ -36,4 +36,8 @@ describe('stripHtmlToText', () => {
   it('handles self-closing tags', () => {
     expect(stripHtmlToText('<br/><p>Text</p>')).toBe('Text');
   });
+
+  it('does not leak script content into plain text', () => {
+    expect(stripHtmlToText('<p>Safe</p><script>evil()</script>')).toBe('Safe');
+  });
 });
