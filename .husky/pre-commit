@@ -1,5 +1,5 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-yarn lint-staged
-
+#!/usr/bin/env sh
+# Git GUIs often strip PATH; yarn/node from Homebrew, nvm, fnm, etc. are missing otherwise.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+cd "$(dirname "$0")/.." || exit 1
+exec ./node_modules/.bin/lint-staged

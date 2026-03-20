@@ -145,6 +145,10 @@ These variables are required for the application to function:
 - **`OPENAI_API_KEY`** - OpenAI API key for AI portrait generation
 - **`UPLOADTHING_TOKEN`** - UploadThing API token
 - **`UPLOADTHING_SECRET`** - UploadThing API secret
+- **`AI_API_SECRET`** - Protects `/api/ai/generate` (session cookie on `/create` or Bearer / `x-api-key`)
+- **`UPLOADTHING_API_SECRET`** - Protects `/api/uploadthing` (same pattern)
+- **`PRINTFUL_TOKEN`** - Printful API token for mockup previews (`/create/order`)
+- **`PRINTFUL_API_SECRET`** - Protects `/api/printful/preview` (same session / header pattern)
 
 ##### 🔒 Required in Production
 
@@ -160,11 +164,6 @@ These are recommended for production deployments:
 - **`SENTRY_ORG`** - Sentry organization name
 - **`SENTRY_PROJECT`** - Sentry project name
 - **`REDIS_URL`** - Redis URL for distributed rate limiting (from Vercel integration or other provider)
-
-##### 🔐 Optional Security
-
-- **`AI_API_SECRET`** - Protects `/api/ai/generate` endpoint
-- **`UPLOADTHING_API_SECRET`** - Protects `/api/uploadthing` endpoint
 
 ##### 📊 Optional Features
 

@@ -85,4 +85,7 @@ jobs:
           UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET || 'test-upload-secret' }}
           # Build-time only vars (not used at runtime in build)
           AI_API_SECRET: ${{ secrets.AI_API_SECRET || 'test-ai-secret' }}
+          UPLOADTHING_API_SECRET: ${{ secrets.UPLOADTHING_API_SECRET || 'test-uploadthing-api-secret' }}
+          PRINTFUL_TOKEN: ${{ secrets.PRINTFUL_TOKEN || 'test-printful-token' }}
+          PRINTFUL_API_SECRET: ${{ secrets.PRINTFUL_API_SECRET || 'test-printful-api-secret' }}
           NODE_ENV: production

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--max-old-space-size=8192' next dev --turbo",
-    "build": "NODE_OPTIONS='--max-old-space-size=8192' next build --turbo",
-    "build:with-codegen": "yarn codegen && NODE_OPTIONS='--max-old-space-size=8192' next build --turbo",
+    "dev": "next dev --turbo",
+    "build": "next build --turbo",
+    "build:with-codegen": "yarn codegen && next build --turbo",
     "analyze": "next experimental-analyze",
     "start": "next start",
     "test": "vitest",

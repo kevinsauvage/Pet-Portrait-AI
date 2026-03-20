@@ -30,6 +30,10 @@ export const DEFAULT_SHOP_CONFIG = {
       maxRequests: 12,
       windowMs: 60000,
     },
+    printful: {
+      maxRequests: 30,
+      windowMs: 60000,
+    },
   },
   image: {
     maxFileSize: 8 * 1024 * 1024, // 8MB in bytes
@@ -113,6 +117,13 @@ function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
           parsed.rateLimit?.upload?.maxRequests ?? DEFAULT_SHOP_CONFIG.rateLimit.upload.maxRequests,
         windowMs:
           parsed.rateLimit?.upload?.windowMs ?? DEFAULT_SHOP_CONFIG.rateLimit.upload.windowMs,
+      },
+      printful: {
+        maxRequests:
+          parsed.rateLimit?.printful?.maxRequests ??
+          DEFAULT_SHOP_CONFIG.rateLimit.printful.maxRequests,
+        windowMs:
+          parsed.rateLimit?.printful?.windowMs ?? DEFAULT_SHOP_CONFIG.rateLimit.printful.windowMs,
       },
     },
     image: {

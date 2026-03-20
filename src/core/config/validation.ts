@@ -45,6 +45,10 @@ export function getConfigStatus(): {
       UPLOADTHING_TOKEN: Boolean(process.env.UPLOADTHING_TOKEN),
       UPLOADTHING_SECRET: Boolean(process.env.UPLOADTHING_SECRET),
       RESEND_API_KEY: Boolean(process.env.RESEND_API_KEY),
+      AI_API_SECRET: Boolean(process.env.AI_API_SECRET),
+      UPLOADTHING_API_SECRET: Boolean(process.env.UPLOADTHING_API_SECRET),
+      PRINTFUL_TOKEN: Boolean(process.env.PRINTFUL_TOKEN),
+      PRINTFUL_API_SECRET: Boolean(process.env.PRINTFUL_API_SECRET),
     },
     recommended: {
       NEXT_PUBLIC_SENTRY_DSN: Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN),
@@ -58,8 +62,6 @@ export function getConfigStatus(): {
       NEXT_PUBLIC_SITE_NAME: Boolean(process.env.NEXT_PUBLIC_SITE_NAME),
       NEXT_PUBLIC_SITE_EMAIL: Boolean(process.env.NEXT_PUBLIC_SITE_EMAIL),
       NEXT_PUBLIC_GTM_ID: Boolean(process.env.NEXT_PUBLIC_GTM_ID),
-      AI_API_SECRET: Boolean(process.env.AI_API_SECRET),
-      UPLOADTHING_API_SECRET: Boolean(process.env.UPLOADTHING_API_SECRET),
     },
   };
 }

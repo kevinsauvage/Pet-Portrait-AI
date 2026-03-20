@@ -7,6 +7,7 @@ import { getAiPortraitProductByHandle } from '@/domains/ai/ai-portrait/get-ai-po
 import type { CreateFlowParams } from '@/domains/ai/ai-portrait/utils/create-flow-params';
 import { getFirstAvailableVariant } from '@/domains/ai/ai-portrait/utils/product-utils';
 import { validateAndRedirect } from '@/domains/ai/ai-portrait/utils/validate-create-flow-step';
+import { isArtworkUrlHostnameAllowed } from '@/domains/printful/allowed-artwork-url';
 import { generatePreview } from '@/domains/printful/preview.service';
 import AddMoreProductsActions from '@/ui/components/cart/AddMoreProductsActions';
 import CreateFlowArtworkPreview from '@/ui/components/create/CreateFlowArtworkPreview';
@@ -50,7 +51,9 @@ export default async function CreateOrderPage({ searchParams }: CreateOrderPageP
 
   const firstVariant = getFirstAvailableVariant(product.variants) ?? product.variants[0];
   const serverPreview =
-    firstVariant?.printfulVariantId && artwork
+    firstVariant?.printfulVariantId &&
+    artwork &&
+    isArtworkUrlHostnameAllowed(artwork)
       ? await generatePreview({
           variantId: firstVariant.printfulVariantId,
           artworkUrl: artwork,

@@ -3,10 +3,11 @@
  * Generates dynamic product previews (portrait on product mockup).
  *
  * @see https://developers.printful.com/docs/#tag/Mockup-Generator-API
- * Requires: PRINTFUL_TOKEN (OAuth Bearer token)
+ * Requires: PRINTFUL_TOKEN (Bearer) and PRINTFUL_API_SECRET (preview route protection); both required in `src/env.ts`.
  */
 
 import { sleep } from '@/core/utils/retry';
+import { env } from '@/env';
 import { fetchWithTimeout } from '@/infra/http/fetch-with-timeout';
 
 import {
@@ -22,11 +23,6 @@ import type {
 } from './types';
 
 const PRINTFUL_API_URL = 'https://api.printful.com';
-const { PRINTFUL_TOKEN } = process.env;
-
-export function isPrintfulApiConfigured(): boolean {
-  return Boolean(PRINTFUL_TOKEN);
-}
 
 interface PrintfulApiResponse<T> {
   code: number;
@@ -39,7 +35,7 @@ async function printfulFetch<T>(path: string, options?: RequestInit): Promise<T>
     {
       ...options,
       headers: {
-        Authorization: `Bearer ${PRINTFUL_TOKEN}`,
+        Authorization: `Bearer ${env.PRINTFUL_TOKEN}`,
         'Content-Type': 'application/json',
         ...options?.headers,
       },
@@ -69,8 +65,6 @@ interface PrintfulVariantResponse {
  * Used to derive product_id from variant_id for mockup generation.
  */
 export async function getVariant(variantId: number): Promise<{ productId: number } | null> {
-  if (!isPrintfulApiConfigured()) return null;
-
   try {
     const result = await printfulFetch<PrintfulVariantResponse>(`/products/variant/${variantId}`);
     const productId = result?.variant?.product_id;
@@ -85,8 +79,6 @@ export async function getVariant(variantId: number): Promise<{ productId: number
  * Get print file dimensions for a product (needed for mockup generation)
  */
 export async function getPrintfiles(productId: number): Promise<PrintfulPrintfilesResponse | null> {
-  if (!isPrintfulApiConfigured()) return null;
-
   try {
     return await printfulFetch<PrintfulPrintfilesResponse>(
       `/mockup-generator/printfiles/${productId}`,
@@ -106,8 +98,6 @@ export async function generateProductPreview(
   variantId: number,
   artworkUrl: string,
 ): Promise<PrintfulPreviewResult | null> {
-  if (!isPrintfulApiConfigured()) return null;
-
   try {
     const variantInfo = await getVariant(variantId);
     if (!variantInfo) return null;

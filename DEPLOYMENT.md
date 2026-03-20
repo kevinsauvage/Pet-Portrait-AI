@@ -177,7 +177,7 @@ Before deploying to production, verify:
 - [ ] All required environment variables are set
 - [ ] Sentry is configured (`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`)
 - [ ] Redis is configured (`REDIS_URL`) for distributed rate limiting (required when using multiple server instances)
-- [ ] API protection secrets are set (`AI_API_SECRET`, `UPLOADTHING_API_SECRET`)
+- [ ] API protection secrets are set (`AI_API_SECRET`, `UPLOADTHING_API_SECRET`, `PRINTFUL_TOKEN`, `PRINTFUL_API_SECRET` — required everywhere including local)
 - [ ] Build succeeds without errors (`yarn build`)
 - [ ] All tests pass (`yarn test`)
 - [ ] Type checking passes (`yarn type-check`)

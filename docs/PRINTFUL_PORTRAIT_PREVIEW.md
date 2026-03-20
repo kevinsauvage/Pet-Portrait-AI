@@ -71,14 +71,17 @@ The `/create/order` page generates a **real portrait preview** showing how the u
 
 ## Setup
 
-### 1. Printful API Token
+### 1. Printful API token and preview protection (required)
 
-Add to `.env`:
+Both are required in `src/env.ts` (same as other server secrets). Add to `.env` / `.env.local`:
 ```env
-PRINTFUL_TOKEN=your_oauth_token
+PRINTFUL_TOKEN=your_api_token
+PRINTFUL_API_SECRET=long_random_secret
 ```
 
 Get your token from: [Printful Dashboard](https://www.printful.com/dashboard/) → Settings → API
+
+`PRINTFUL_API_SECRET` protects `POST /api/printful/preview` (same pattern as `AI_API_SECRET`: signed `pp_printful_session` cookie on `/create` routes, or `Authorization: Bearer` / `x-api-key` for server calls). `artworkUrl` must be HTTPS from UploadThing hosts (`utfs.io`, `*.utfs.io`, `ufs.sh`, `*.ufs.sh`).
 
 ### 2. Product Identification
 
@@ -130,7 +133,7 @@ Preview URLs are cached (Redis) to reduce API calls.
 
 ## Fallback
 
-When `PRINTFUL_TOKEN` is not set or variant lacks `custom.variant_id` metafield:
+When the variant has no usable Printful catalog id (e.g. missing `custom.variant_id` / SKU) or the mockup API fails:
 - No preview is generated
 - Product image is shown instead
 - Add to cart still works (fulfillment uses `printful_print_url`)

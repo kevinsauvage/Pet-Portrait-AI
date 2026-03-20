@@ -18,6 +18,10 @@ const requiredEnv = {
   OPENAI_API_KEY: 'openai-key',
   UPLOADTHING_TOKEN: 'upload-token',
   UPLOADTHING_SECRET: 'upload-secret',
+  AI_API_SECRET: 'test-ai-api-secret',
+  UPLOADTHING_API_SECRET: 'test-uploadthing-api-secret',
+  PRINTFUL_TOKEN: 'test-printful-token',
+  PRINTFUL_API_SECRET: 'test-printful-api-secret',
 };
 
 Object.entries(requiredEnv).forEach(([key, value]) => {

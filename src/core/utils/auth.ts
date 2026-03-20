@@ -50,18 +50,23 @@ export function isApiAuthorized(headers: Headers, envVar: string): boolean {
 // API Session Management (Cookie-based)
 // ============================================================================
 
-type ApiSessionScope = 'ai' | 'upload';
+type ApiSessionScope = 'ai' | 'upload' | 'printful';
 
 const SESSION_VERSION = 1;
 
 const COOKIE_NAMES: Record<ApiSessionScope, string> = {
   ai: 'pp_ai_session',
   upload: 'pp_upload_session',
+  printful: 'pp_printful_session',
 };
 
-const SECRET_ENV: Record<ApiSessionScope, 'AI_API_SECRET' | 'UPLOADTHING_API_SECRET'> = {
+const SECRET_ENV: Record<
+  ApiSessionScope,
+  'AI_API_SECRET' | 'UPLOADTHING_API_SECRET' | 'PRINTFUL_API_SECRET'
+> = {
   ai: 'AI_API_SECRET',
   upload: 'UPLOADTHING_API_SECRET',
+  printful: 'PRINTFUL_API_SECRET',
 };
 
 type SessionPayload = {
@@ -221,6 +226,16 @@ export async function setApiSessionCookies(
       });
     }
   }
+
+  if (isApiAuthConfigured('PRINTFUL_API_SECRET')) {
+    const printfulCookieValue = await createApiSessionCookie(request, 'printful');
+    if (printfulCookieValue) {
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      response.cookies.set(COOKIE_NAMES.printful, printfulCookieValue, {
+        ...getSecureCookieOptions({ expires }),
+      });
+    }
+  }
 }
 
 /**
@@ -259,8 +274,8 @@ export function isSameOriginRequest(request: NextRequest): boolean {
 // API Protection (Combined header + session auth)
 // ============================================================================
 
-type ProtectionScope = 'ai' | 'upload';
-type ProtectionSecret = 'AI_API_SECRET' | 'UPLOADTHING_API_SECRET';
+type ProtectionScope = 'ai' | 'upload' | 'printful';
+type ProtectionSecret = 'AI_API_SECRET' | 'UPLOADTHING_API_SECRET' | 'PRINTFUL_API_SECRET';
 
 type ProtectionOptions = {
   secretEnv: ProtectionSecret;
