@@ -1,4 +1,4 @@
-import DOMPurify from 'isomorphic-dompurify';
+import sanitize from 'sanitize-html';
 
 /** Allowed tags for rich text (legal pages, product descriptions) */
 const RICH_TEXT_TAGS = [
@@ -24,8 +24,16 @@ const RICH_TEXT_TAGS = [
   'div',
 ];
 
-/** Allowed attributes for links */
-const ALLOWED_ATTRS = ['href', 'target', 'rel', 'class'];
+function richTextAllowedAttributes(): Record<string, string[]> {
+  const map: Record<string, string[]> = {
+    a: ['href', 'target', 'rel', 'class'],
+  };
+  for (const tag of RICH_TEXT_TAGS) {
+    if (tag === 'a' || tag === 'br') continue;
+    map[tag] = ['class'];
+  }
+  return map;
+}
 
 /**
  * Sanitizes HTML content before rendering with dangerouslySetInnerHTML.
@@ -33,9 +41,10 @@ const ALLOWED_ATTRS = ['href', 'target', 'rel', 'class'];
  */
 export function sanitizeHtml(html: string): string {
   if (!html || typeof html !== 'string') return '';
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: RICH_TEXT_TAGS,
-    ALLOWED_ATTR: ALLOWED_ATTRS,
-    ADD_ATTR: ['target'],
+  return sanitize(html, {
+    allowedTags: RICH_TEXT_TAGS,
+    allowedAttributes: richTextAllowedAttributes(),
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesByTag: { a: ['http', 'https', 'mailto', 'tel'] },
   });
 }

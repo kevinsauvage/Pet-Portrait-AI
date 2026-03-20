@@ -56,7 +56,7 @@ src/
 │   ├── cookies/            # Server cookie actions (get/set/delete)
 │   ├── client/             # Client cookies, analytics
 │   ├── format/             # formatPrice
-│   ├── html/               # stripHtmlToText (DOMPurify via isomorphic-dompurify)
+│   ├── html/               # stripHtmlToText (sanitize-html)
 │   ├── cn.ts
 │   └── consents.ts
 ├── types/                   # globals.d.ts, images.d.ts
