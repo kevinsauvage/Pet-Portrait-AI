@@ -32,7 +32,7 @@ const Page = async ({ searchParams }: { searchParams: Promise<SearchParameters> 
     <div>
       <PageBanner title={seo.search.title} description={seo.search.description}>
         <div className="space-y-6">
-          <Search searchQuery={searchParameters.searchQuery} />
+          <Search key={searchParameters.searchQuery} searchQuery={searchParameters.searchQuery} />
         </div>
       </PageBanner>
       {products.length > 0 ? (

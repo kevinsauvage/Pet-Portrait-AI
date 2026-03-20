@@ -7,7 +7,7 @@ This document describes the `src/` layout after the domains + infra migration.
 - **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Each domain is mostly **flat**: `actions.ts`, `validation.ts`, and `*.service.ts` files at the root; use subfolders only when there are several concerns (e.g. `products/services`, `ai/ai-portrait`).
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
 - **core/** — App-wide config, errors, and shared utils (api-responses, form-actions incl. `FormActionResult`, cookie-security).
-- **lib/** — Pure helpers and app infra: format, html, debounce, cn, consents, cookies (server actions), client (cookies, analytics).
+- **lib/** — Pure helpers and app infra: format, html, debounce, cn, consents, cookies (server actions), client (cookies, analytics), TanStack Query client setup (`query-client.ts`).
 - **ui/** — Presentational components, layouts, primitives, and shared app UI building blocks (auth shell/forms, shared sections).
 - **app/** — Next.js App Router (pages, layouts, API routes).
 

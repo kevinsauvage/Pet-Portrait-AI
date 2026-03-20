@@ -1,7 +1,7 @@
 'use client';
 
 import type { RefObject } from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import { logger } from '@/core/utils/logger';
@@ -10,53 +10,67 @@ import type { PredictiveSearchQuery } from '@/infra/shopify/generated/storefront
 import debounce from '@/lib/debounce';
 import SearchForm from '@/ui/components/search/SearchForm';
 
+import { useQuery } from '@tanstack/react-query';
+
 const SearchResults = dynamic(() => import('@/ui/components/search/SearchResults'));
+
+async function fetchPredictiveSearch(
+  q: string,
+  signal: AbortSignal | undefined,
+): Promise<PredictiveSearchQuery['predictiveSearch'] | null> {
+  const response = await fetch(`/api/search/predictive?q=${encodeURIComponent(q)}`, { signal });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch search results');
+  }
+
+  const data = (await response.json()) as {
+    predictiveSearch?: PredictiveSearchQuery['predictiveSearch'];
+  };
+  return data?.predictiveSearch ?? null;
+}
 
 const Search = ({ searchQuery }: { searchQuery: string }) => {
   const [searchValue, setSearchValue] = useState(searchQuery);
-  const [results, setResults] = useState<PredictiveSearchQuery['predictiveSearch'] | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
+  const [hidePanel, setHidePanel] = useState(false);
   const reference = useRef<HTMLDivElement | null>(null);
-  useOnClickOutside(reference as RefObject<HTMLElement>, () => setResults(null));
+  useOnClickOutside(reference as RefObject<HTMLElement>, () => setHidePanel(true));
   const resultsId = 'predictive-search-results';
 
-  const handleChange = useCallback(async (value: string) => {
-    if (value?.trim().length < 2) {
-      setResults(null);
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/search/predictive?q=${encodeURIComponent(value.trim())}`);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch search results');
-      }
-
-      const data = await response.json();
-      setResults(data?.predictiveSearch || null);
-    } catch (error) {
-      logger.error('Search failed', { context: 'search', error });
-      setResults(null);
-    }
-  }, []);
-
-  const debouncedHandleChange = useMemo(
+  const debouncedSetQuery = useMemo(
     () =>
       debounce((value: unknown) => {
         if (typeof value !== 'string') return;
-        handleChange(value);
+        setDebouncedSearch(value);
       }, 500),
-    [handleChange],
+    [],
   );
 
   useEffect(() => {
-    return () => debouncedHandleChange.cancel();
-  }, [debouncedHandleChange]);
+    return () => debouncedSetQuery.cancel();
+  }, [debouncedSetQuery]);
+
+  const trimmed = debouncedSearch.trim();
+  const enabled = trimmed.length >= 2;
+
+  const {
+    data: queryResults,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['predictive-search', trimmed],
+    queryFn: ({ signal }) => fetchPredictiveSearch(trimmed, signal),
+    enabled,
+  });
 
   useEffect(() => {
-    setResults(null);
-    setSearchValue(searchQuery);
-  }, [searchQuery]);
+    if (isError && error) {
+      logger.error('Search failed', { context: 'search', error });
+    }
+  }, [isError, error]);
+
+  const results = hidePanel || !enabled ? null : (queryResults ?? null);
 
   return (
     <div className="relative w-full max-w-lg mx-auto" ref={reference}>
@@ -66,7 +80,8 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
         resultsOpen={Boolean(results)}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setSearchValue(event.target.value);
-          debouncedHandleChange(event.target.value);
+          setHidePanel(false);
+          debouncedSetQuery(event.target.value);
         }}
       />
 

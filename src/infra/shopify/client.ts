@@ -1,6 +1,6 @@
 import config from '@/core/config';
 import { logger } from '@/core/utils/logger';
-import { fetchWithRetry } from '@/infra/http/fetch-with-retry';
+import { fetchWithTimeout } from '@/infra/http/fetch-with-timeout';
 
 import { getSdk as getAdminSdk } from './generated/admin/index';
 import type { SdkFunctionWrapper } from './generated/storefront/index';
@@ -34,10 +34,7 @@ const createStorefrontClient = (cacheOption: 'default' | 'no-store' = 'default')
           fetchOptions.next = { revalidate: config.constants.revalidate.shopify };
         }
 
-        const response = await fetchWithRetry(url, fetchOptions, {
-          maxAttempts: 3,
-          initialDelayMs: 500,
-        });
+        const response = await fetchWithTimeout(url, fetchOptions);
 
         if (!response.ok) {
           throw new Error(`Shopify fetch failed: ${response.status} ${response.statusText}`);
@@ -97,7 +94,7 @@ const getAdminClient = () => {
       const headers = new Headers(init?.headers);
       headers.set('Content-Type', 'application/json');
       headers.set('X-Shopify-Access-Token', token);
-      return fetchWithRetry(input, { ...init, headers });
+      return fetchWithTimeout(input, { ...init, headers });
     },
   });
   return cachedAdminClient;

@@ -18,6 +18,7 @@ import Header from '@/ui/components/navigation/Header';
 import SkipLinks from '@/ui/components/navigation/SkipLinks';
 import RouteGradient from '@/ui/components/shared/RouteGradient';
 import { Toaster } from '@/ui/primitives/sonner';
+import { QueryProvider } from '@/ui/providers/query-provider';
 import { ThemeProvider } from '@/ui/providers/theme-provider';
 
 import '../globals.css';
@@ -103,20 +104,22 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           enableSystem
           disableTransitionOnChange
         >
-          <CartProvider initialCart={initialCart}>
-            <UserProvider user={user}>
-              <SkipLinks />
-              <RouteGradient />
-              <div className="relative z-10 flex min-h-screen flex-col">
-                <Header headerMenu={menus.headerMenu} />
-                <main id="main-content" className="flex-1" tabIndex={-1}>
-                  {children}
-                </main>
-                <Toaster richColors />
-                <Footer menuItems={menus.footerMenu?.items} />
-              </div>
-            </UserProvider>
-          </CartProvider>
+          <QueryProvider>
+            <CartProvider initialCart={initialCart}>
+              <UserProvider user={user}>
+                <SkipLinks />
+                <RouteGradient />
+                <div className="relative z-10 flex min-h-screen flex-col">
+                  <Header headerMenu={menus.headerMenu} />
+                  <main id="main-content" className="flex-1" tabIndex={-1}>
+                    {children}
+                  </main>
+                  <Toaster richColors />
+                  <Footer menuItems={menus.footerMenu?.items} />
+                </div>
+              </UserProvider>
+            </CartProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

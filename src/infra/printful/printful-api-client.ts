@@ -7,7 +7,7 @@
  */
 
 import { sleep } from '@/core/utils/retry';
-import { fetchWithRetry } from '@/infra/http/fetch-with-retry';
+import { fetchWithTimeout } from '@/infra/http/fetch-with-timeout';
 
 import {
   MOCKUP_INITIAL_WAIT_MS,
@@ -34,7 +34,7 @@ interface PrintfulApiResponse<T> {
 }
 
 async function printfulFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetchWithRetry(
+  const res = await fetchWithTimeout(
     `${PRINTFUL_API_URL}${path}`,
     {
       ...options,
@@ -44,7 +44,7 @@ async function printfulFetch<T>(path: string, options?: RequestInit): Promise<T>
         ...options?.headers,
       },
     },
-    { maxAttempts: 3, initialDelayMs: 500, timeoutMs: 60000 },
+    { timeoutMs: 60000 },
   );
 
   if (!res.ok) {

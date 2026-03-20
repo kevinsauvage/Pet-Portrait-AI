@@ -3,7 +3,7 @@
  * Tokens are cached with a 1-minute expiry buffer.
  */
 
-import { fetchWithRetry } from '@/infra/http/fetch-with-retry';
+import { fetchWithTimeout } from '@/infra/http/fetch-with-timeout';
 
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
 
@@ -42,19 +42,15 @@ export async function getAdminAccessToken(): Promise<string> {
 
   tokenFetchPromise = (async (): Promise<string> => {
     try {
-      const response = await fetchWithRetry(
-        tokenUrl,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            grant_type: 'client_credentials',
-            client_id: clientId,
-            client_secret: clientSecret,
-          }),
-        },
-        { maxAttempts: 3, initialDelayMs: 800 },
-      );
+      const response = await fetchWithTimeout(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          grant_type: 'client_credentials',
+          client_id: clientId,
+          client_secret: clientSecret,
+        }),
+      });
 
       if (!response.ok) {
         const text = await response.text().catch(() => '');
