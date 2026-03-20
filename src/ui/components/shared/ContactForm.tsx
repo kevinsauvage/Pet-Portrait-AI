@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useMemo } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { contactAction } from '@/domains/contact/actions';
@@ -23,29 +23,53 @@ const SubmitButton = () => {
   );
 };
 
-const ContactForm = () => {
-  const handleSubmit = async (_previousState: unknown, formData: FormData) => {
-    const email = formData.get('email') as string;
-    const name = formData.get('name') as string;
-    const message = formData.get('message') as string;
-    return contactAction({ email, message, name });
-  };
+type ContactFormState = {
+  email?: string | string[];
+  message?: string | string[];
+  name?: string | string[];
+  customerUserErrors?: CustomerUserError[];
+  error?: string;
+  success?: string;
+};
 
-  const [states, action, isPending] = useActionState<
-    {
-      email?: string | string[];
-      message?: string | string[];
-      name?: string | string[];
-      customerUserErrors?: CustomerUserError[];
-      error?: string;
-      success?: string;
-    },
-    FormData
-  >(handleSubmit, {
-    email: '',
-    message: '',
-    name: '',
-  });
+function mapContactSafeActionState(raw: unknown): ContactFormState {
+  if (!raw || typeof raw !== 'object') {
+    return {};
+  }
+
+  const record = raw as Record<string, unknown>;
+  const {validationErrors} = record;
+  const fieldErrors =
+    validationErrors &&
+    typeof validationErrors === 'object' &&
+    validationErrors !== null &&
+    'fieldErrors' in validationErrors
+      ? (validationErrors as { fieldErrors: Record<string, string[] | undefined> }).fieldErrors
+      : undefined;
+
+  const data =
+    record.data && typeof record.data === 'object' && record.data !== null
+      ? (record.data as Record<string, unknown>)
+      : undefined;
+
+  return {
+    email: fieldErrors?.email,
+    message: fieldErrors?.message,
+    name: fieldErrors?.name,
+    error:
+      typeof record.serverError === 'string'
+        ? record.serverError
+        : typeof data?.error === 'string'
+          ? data.error
+          : undefined,
+    success: typeof data?.success === 'string' ? data.success : undefined,
+    customerUserErrors: record.customerUserErrors as CustomerUserError[] | undefined,
+  };
+}
+
+const ContactForm = () => {
+  const [rawState, formAction, isPending] = useActionState(contactAction, {});
+  const states = useMemo(() => mapContactSafeActionState(rawState), [rawState]);
 
   useFormStatesEffect({
     states,
@@ -57,7 +81,7 @@ const ContactForm = () => {
 
   return (
     <form
-      action={action}
+      action={formAction}
       title="Contact Us"
       className="mx-auto w-full max-w-md space-y-5 px-4 py-8 md:px-6 md:py-12"
     >

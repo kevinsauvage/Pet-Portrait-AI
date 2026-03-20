@@ -1,15 +1,13 @@
 import type { MetadataRoute } from 'next';
 
-import { COOKIES, LOCAL_STORAGE_KEYS } from './constants';
-import { validateConfig, validateSiteMetadata } from './validation';
+import { env } from '@/env';
 
-validateConfig();
-validateSiteMetadata();
+import { COOKIES, LOCAL_STORAGE_KEYS } from './constants';
 
 const config = {
   cookies: COOKIES,
   localStorageKeys: LOCAL_STORAGE_KEYS,
-  name: process.env.NEXT_PUBLIC_SITE_NAME || 'PetPortrait AI',
+  name: env.NEXT_PUBLIC_SITE_NAME || 'PetPortrait AI',
   constants: {
     cookieExpiryDays: 182,
     delegateTokenExpirySeconds: 23 * 60 * 60,

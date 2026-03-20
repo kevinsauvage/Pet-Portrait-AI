@@ -1,150 +1,8 @@
 /**
- * Validates base URL configuration.
+ * Optional site metadata checks (warnings only).
+ * Required env validation runs via `@t3-oss/env-nextjs` in `src/env.ts` (imported from `next.config.ts`).
+ * Production email + deployment recommendations: `src/core/config/runtime-warnings.ts` (instrumentation).
  */
-function validateBaseUrl(errors: string[], warnings: string[], isProduction: boolean): void {
-  if (!process.env.NEXT_PUBLIC_BASE_URL) {
-    errors.push(
-      'NEXT_PUBLIC_BASE_URL is required. Set it in your .env.local file (e.g., NEXT_PUBLIC_BASE_URL=https://yourdomain.com)',
-    );
-    return;
-  }
-
-  try {
-    const url = new URL(process.env.NEXT_PUBLIC_BASE_URL);
-    if (isProduction && url.protocol === 'http:') {
-      errors.push(
-        'NEXT_PUBLIC_BASE_URL uses HTTP. HTTPS is required in production for security (prevents mixed content and insecure cookies).',
-      );
-    }
-  } catch {
-    errors.push(
-      `NEXT_PUBLIC_BASE_URL must be a valid URL (e.g., https://yourdomain.com). Current value: ${process.env.NEXT_PUBLIC_BASE_URL}`,
-    );
-  }
-}
-
-/**
- * Validates Shopify configuration.
- */
-function validateShopifyConfig(errors: string[]): void {
-  if (!process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL) {
-    errors.push(
-      'NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL is required. Set it to your Shopify Storefront API URL.',
-    );
-  }
-
-  if (!process.env.SHOPIFY_STORE_FRONT_ACCESS_TOKEN) {
-    errors.push(
-      'SHOPIFY_STORE_FRONT_ACCESS_TOKEN is required. Create a Storefront access token in Shopify and set it in your .env file.',
-    );
-  }
-
-  if (!process.env.SHOPIFY_CLIENT_ID) {
-    errors.push('SHOPIFY_CLIENT_ID is required. Set it to your Shopify custom app client ID.');
-  }
-
-  if (!process.env.SHOPIFY_CLIENT_SECRET) {
-    errors.push(
-      'SHOPIFY_CLIENT_SECRET is required. Set it to your Shopify custom app client secret.',
-    );
-  }
-
-  if (!process.env.SHOPIFY_ADMIN_URL) {
-    errors.push('SHOPIFY_ADMIN_URL is required. Set it to your Shopify Admin API URL.');
-  }
-}
-
-/**
- * Validates third-party integrations.
- */
-function validateThirdPartyIntegrations(errors: string[]): void {
-  if (!process.env.OPENAI_API_KEY) {
-    errors.push('OPENAI_API_KEY is required. Set it to your OpenAI API key.');
-  }
-
-  if (!process.env.UPLOADTHING_TOKEN) {
-    errors.push(
-      'UPLOADTHING_TOKEN is required when uploads are enabled. Set it to your UploadThing token.',
-    );
-  }
-
-  if (!process.env.UPLOADTHING_SECRET) {
-    errors.push(
-      'UPLOADTHING_SECRET is required when uploads are enabled. Set it to your UploadThing secret.',
-    );
-  }
-}
-
-/**
- * Validates production-specific requirements.
- */
-function validateProductionRequirements(errors: string[]): void {
-  if (!process.env.RESEND_API_KEY) {
-    errors.push(
-      'RESEND_API_KEY is required in production for sending emails. Get your API key from https://resend.com/api-keys',
-    );
-  }
-}
-
-/**
- * Validates production recommendations (warnings only).
- */
-function validateProductionRecommendations(warnings: string[]): void {
-  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
-    warnings.push(
-      'NEXT_PUBLIC_SENTRY_DSN is not set. Error monitoring is recommended for production. Set SENTRY_ORG and SENTRY_PROJECT as well.',
-    );
-  } else if (!process.env.SENTRY_ORG || !process.env.SENTRY_PROJECT) {
-    warnings.push(
-      'SENTRY_ORG and SENTRY_PROJECT should be set when using Sentry for better release tracking.',
-    );
-  }
-
-  if (!process.env.REDIS_URL) {
-    warnings.push(
-      'REDIS_URL is not set. Rate limiting will use in-memory storage, which does not work across multiple server instances. This means rate limits are not shared between instances and may be bypassed in serverless/multi-instance deployments. Set REDIS_URL in production when using multiple instances (e.g., Vercel, serverless).',
-    );
-  }
-}
-
-// Console logger: validation runs from `core/config` which is bundled for client error UI.
-import { logger } from '../utils/logger';
-
-/**
- * Validates that required environment variables are set.
- * Called during app initialization to fail fast with clear error messages.
- */
-export function validateConfig(): void {
-  if (Object.keys(process.env).length === 0) {
-    return;
-  }
-
-  const errors: string[] = [];
-  const warnings: string[] = [];
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  validateBaseUrl(errors, warnings, isProduction);
-  validateShopifyConfig(errors);
-  validateThirdPartyIntegrations(errors);
-
-  if (isProduction) {
-    validateProductionRequirements(errors);
-    validateProductionRecommendations(warnings);
-  }
-
-  if (warnings.length > 0) {
-    logger.warn('Configuration warnings detected', {
-      context: 'config-validation',
-      metadata: { warnings },
-    });
-  }
-
-  if (errors.length > 0) {
-    throw new Error(
-      `Configuration validation failed:\n${errors.map((e) => `  ✗ ${e}`).join('\n')}`,
-    );
-  }
-}
 
 /**
  * Validates optional site metadata values.
@@ -168,7 +26,7 @@ export function validateSiteMetadata(): string[] {
 
 /**
  * Returns a summary of environment configuration status.
- * Useful for debugging and deployment verification.
+ * Uses `process.env` so this stays safe if imported from modules that also run on the client.
  */
 export function getConfigStatus(): {
   required: { [key: string]: boolean };

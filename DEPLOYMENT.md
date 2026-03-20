@@ -35,7 +35,7 @@ Before deploying, ensure you have:
 
 ### Required Environment Variables
 
-All required variables must be set before deployment. See `.env.example` for complete list.
+All required variables must be set before deployment. See `.env.example` for complete list. Schemas and defaults live in **`src/env.ts`** (validated when Next starts / builds). Production **`NEXT_PUBLIC_BASE_URL`** must use **https** (enforced in `src/env.ts`).
 
 #### Core Configuration
 

@@ -7,7 +7,7 @@ vi.mock('next/cache', () => ({
   revalidateTag: vi.fn(),
 }));
 
-// Required for modules that import @/core/config (runs validateConfig on load)
+// Required env for modules that import `@/env` / `@/core/config` (T3 env validates when not in Vitest)
 const requiredEnv = {
   NEXT_PUBLIC_BASE_URL: 'https://example.com',
   NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL: 'https://shopify.example.com',
