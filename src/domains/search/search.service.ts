@@ -35,7 +35,7 @@ export async function searchProducts(searchParameters: SearchParameters): Promis
     }),
     identifiers: [],
     productFilters: parseFiltersQuery(searchParameters?.filters),
-    query: buildShopifySearchQuery(searchParameters.searchQuery),
+    query: buildShopifySearchQuery(searchParameters.searchQuery ?? ''),
     sortKey,
   });
 

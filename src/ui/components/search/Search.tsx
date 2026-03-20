@@ -30,8 +30,8 @@ async function fetchPredictiveSearch(
   return data?.predictiveSearch ?? null;
 }
 
-const Search = ({ searchQuery }: { searchQuery: string }) => {
-  const [searchValue, setSearchValue] = useState(searchQuery);
+const Search = ({ searchQuery }: { searchQuery?: string }) => {
+  const [searchValue, setSearchValue] = useState(() => searchQuery ?? '');
   const [debouncedSearch] = useDebounce(searchValue, 500);
   const [hidePanel, setHidePanel] = useState(false);
   const reference = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
   useOnClickOutside(reference as RefObject<HTMLElement>, hidePanelOnOutside, 'touchstart');
   const resultsId = 'predictive-search-results';
 
-  const trimmed = debouncedSearch.trim();
+  const trimmed = (debouncedSearch ?? '').trim();
   const enabled = trimmed.length >= 2;
 
   const {
