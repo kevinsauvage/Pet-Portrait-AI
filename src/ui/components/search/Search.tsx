@@ -1,16 +1,16 @@
 'use client';
 
 import type { RefObject } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import { logger } from '@/core/utils/logger';
 import useOnClickOutside from '@/hooks/useClickOutside';
 import type { PredictiveSearchQuery } from '@/infra/shopify/generated/storefront/index';
-import debounce from '@/lib/debounce';
 import SearchForm from '@/ui/components/search/SearchForm';
 
 import { useQuery } from '@tanstack/react-query';
+import { useDebounce } from 'use-debounce';
 
 const SearchResults = dynamic(() => import('@/ui/components/search/SearchResults'));
 
@@ -32,24 +32,11 @@ async function fetchPredictiveSearch(
 
 const Search = ({ searchQuery }: { searchQuery: string }) => {
   const [searchValue, setSearchValue] = useState(searchQuery);
-  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
+  const [debouncedSearch] = useDebounce(searchValue, 500);
   const [hidePanel, setHidePanel] = useState(false);
   const reference = useRef<HTMLDivElement | null>(null);
   useOnClickOutside(reference as RefObject<HTMLElement>, () => setHidePanel(true));
   const resultsId = 'predictive-search-results';
-
-  const debouncedSetQuery = useMemo(
-    () =>
-      debounce((value: unknown) => {
-        if (typeof value !== 'string') return;
-        setDebouncedSearch(value);
-      }, 500),
-    [],
-  );
-
-  useEffect(() => {
-    return () => debouncedSetQuery.cancel();
-  }, [debouncedSetQuery]);
 
   const trimmed = debouncedSearch.trim();
   const enabled = trimmed.length >= 2;
@@ -81,7 +68,6 @@ const Search = ({ searchQuery }: { searchQuery: string }) => {
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setSearchValue(event.target.value);
           setHidePanel(false);
-          debouncedSetQuery(event.target.value);
         }}
       />
 
