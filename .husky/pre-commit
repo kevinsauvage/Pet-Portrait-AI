@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
-# Git GUIs often strip PATH; yarn/node from Homebrew, nvm, fnm, etc. are missing otherwise.
+# Git GUIs use a minimal PATH — no yarn/node from nvm, Homebrew, etc.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
 cd "$(dirname "$0")/.." || exit 1
 exec ./node_modules/.bin/lint-staged
