@@ -9,6 +9,12 @@ import { ourFileRouter } from '@/infra/upload/core';
 
 import { createRouteHandler } from 'uploadthing/next';
 
+/** Server-to-server webhook from UploadThing (signed with API key); no browser session. */
+export function isUploadThingServerHookRequest(request: NextRequest): boolean {
+  const hook = request.headers.get('uploadthing-hook')?.toLowerCase();
+  return hook === 'callback' || hook === 'error';
+}
+
 export const uploadthingHandler = createRouteHandler({
   router: ourFileRouter,
   config: {
