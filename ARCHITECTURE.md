@@ -77,6 +77,21 @@ Conventions:
 
 Domains import from **infra** (e.g. `@/infra/shopify`), **core** (`@/core/config`, `@/core/utils`), **lib** (`@/lib/cookies`), and **types** — not from other domains when avoidable.
 
+### Cross-domain imports (explicitly allowed today)
+
+Prefer keeping new code on infra/core/lib or on the **app** layer (orchestration) instead of adding domain → domain edges. The following imports exist and are **intentional until refactored**:
+
+| From domain | To domain | Why |
+|-------------|-----------|-----|
+| **auth** | **user** | `getUser` for session-aligned identity in auth flows. |
+| **ai** | **shop** | `getShopConfig` / `ShopConfig` for generation limits and image rules. |
+| **ai** | **creations** | `CreationsService` to persist generated assets from server actions. |
+| **ai** | **user** | `getUser` to scope AI actions to the logged-in customer. |
+| **ai** | **printful** | `getPrintfulVariantId` and related helpers for portrait product wiring. |
+| **search** | **shop** | `getShopConfig` for search behavior tied to shop settings. |
+
+Anything outside this table should be treated as coupling to fix (e.g. move shared types to **core**, shared orchestration to **app** API routes / server actions that call multiple domains, or extract a small shared module with a narrow API).
+
 ---
 
 ## Infra

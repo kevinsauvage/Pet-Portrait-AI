@@ -1,13 +1,5 @@
 ## Medium
 
-### Cross-domain coupling
-
-**What:** Some domains import others (e.g. AI → creations/user) despite “avoid cross-domain imports” in `ARCHITECTURE.md`.
-
-**Why:** Refactors ripple across modules; boundaries erode and onboarding gets harder.
-
-**How:** Document explicitly allowed import edges, or introduce a thin application/orchestration layer and shared DTOs.
-
 ### Unnecessary OpenAI beta header
 
 **What:** `OpenAI-Beta: assistants=v2` is sent on the image edits request in `portrait-generation.service.ts`.
