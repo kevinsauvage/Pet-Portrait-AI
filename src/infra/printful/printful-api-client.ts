@@ -6,6 +6,7 @@
  * Requires: PRINTFUL_TOKEN (Bearer) and PRINTFUL_API_SECRET (preview route protection); both required in `src/env.ts`.
  */
 
+import { logger } from '@/core/utils/logger.server';
 import { sleep } from '@/core/utils/retry';
 import { env } from '@/env';
 import { fetchWithTimeout } from '@/infra/http/fetch-with-timeout';
@@ -70,7 +71,11 @@ export async function getVariant(variantId: number): Promise<{ productId: number
     const productId = result?.variant?.product_id;
     return productId ? { productId } : null;
   } catch (error) {
-    console.error('[Printful] Get variant failed:', error);
+    logger.error('Printful get variant failed', {
+      context: 'printful-api-client.getVariant',
+      error,
+      metadata: { variantId },
+    });
     return null;
   }
 }
@@ -84,7 +89,11 @@ export async function getPrintfiles(productId: number): Promise<PrintfulPrintfil
       `/mockup-generator/printfiles/${productId}`,
     );
   } catch (error) {
-    console.error('[Printful] Get printfiles failed:', error);
+    logger.error('Printful get printfiles failed', {
+      context: 'printful-api-client.getPrintfiles',
+      error,
+      metadata: { productId },
+    });
     return null;
   }
 }
@@ -156,7 +165,10 @@ export async function generateProductPreview(
       }
 
       if (result.status === 'failed') {
-        console.error('[Printful] Mockup task failed:', result.error);
+        logger.error('Printful mockup task failed', {
+          context: 'printful-api-client.generateProductPreview',
+          metadata: { variantId, taskError: result.error },
+        });
         return null;
       }
 
@@ -168,7 +180,11 @@ export async function generateProductPreview(
 
     return null;
   } catch (error) {
-    console.error('[Printful] Preview generation error:', error);
+    logger.error('Printful preview generation failed', {
+      context: 'printful-api-client.generateProductPreview',
+      error,
+      metadata: { variantId },
+    });
     return null;
   }
 }

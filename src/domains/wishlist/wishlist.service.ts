@@ -6,8 +6,9 @@ import { adminSdk, storefrontSdk } from '@/infra/shopify/client';
 import { getShopifyToken } from '@/infra/shopify/server';
 
 import type { SavedPortrait, WishlistData } from './types';
+import { parseWishlistMetafieldJson, WISHLIST_MAX_ITEMS } from './validation';
 
-export const WISHLIST_MAX_ITEMS = 50;
+export { WISHLIST_MAX_ITEMS };
 
 export class WishlistService {
   static async requireAuth(): Promise<string> {
@@ -33,14 +34,8 @@ export class WishlistService {
 
     if (typeof wishlistValue === 'string') {
       try {
-        const parsed = JSON.parse(wishlistValue);
-
-        if (Array.isArray(parsed)) {
-          return parsed.filter(
-            (item): item is SavedPortrait =>
-              typeof item === 'object' && item !== null && typeof item.id === 'string',
-          );
-        }
+        const parsed: unknown = JSON.parse(wishlistValue);
+        return parseWishlistMetafieldJson(parsed);
       } catch (error) {
         logger.error('Failed to parse portrait wishlist', {
           context: 'WishlistService.getWishlist',
@@ -98,9 +93,10 @@ export class WishlistService {
 
     if (value) {
       try {
-        const parsed = JSON.parse(value) as WishlistData;
+        const parsed: unknown = JSON.parse(value);
+        const data = parseWishlistMetafieldJson(parsed);
         this.revalidate();
-        return { success: true, data: parsed };
+        return { success: true, data };
       } catch (error) {
         logger.error('Failed to parse portrait wishlist response', {
           context: 'WishlistService.updateWishlist',

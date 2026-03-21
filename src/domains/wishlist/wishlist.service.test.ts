@@ -113,6 +113,36 @@ describe('WishlistService.getWishlist', () => {
     const result = await WishlistService.getWishlist();
     expect(result).toEqual([]);
   });
+
+  it('drops portraits that fail Zod validation', async () => {
+    getShopifyToken.mockResolvedValue('token');
+    const good = makeFakePortrait({ id: 'ok' });
+    const bad = { id: 'bad', notARealPortrait: true };
+    storefrontSdk.mockReturnValue({
+      getCustomerMetafields: vi.fn().mockResolvedValue({
+        customer: { metafields: [{ value: JSON.stringify([bad, good]) }] },
+      }),
+    });
+    const result = await WishlistService.getWishlist();
+    expect(result).toHaveLength(1);
+    expect(result[0]?.id).toBe('ok');
+  });
+
+  it('caps wishlist length before validating items', async () => {
+    getShopifyToken.mockResolvedValue('token');
+    const portraits = Array.from({ length: WISHLIST_MAX_ITEMS + 10 }, (_, i) =>
+      makeFakePortrait({ id: `p-${i}`, generationId: `g-${i}` }),
+    );
+    storefrontSdk.mockReturnValue({
+      getCustomerMetafields: vi.fn().mockResolvedValue({
+        customer: { metafields: [{ value: JSON.stringify(portraits) }] },
+      }),
+    });
+    const result = await WishlistService.getWishlist();
+    expect(result).toHaveLength(WISHLIST_MAX_ITEMS);
+    expect(result[0]?.id).toBe('p-0');
+    expect(result[WISHLIST_MAX_ITEMS - 1]?.id).toBe(`p-${WISHLIST_MAX_ITEMS - 1}`);
+  });
 });
 
 describe('WishlistService.removePortrait', () => {
