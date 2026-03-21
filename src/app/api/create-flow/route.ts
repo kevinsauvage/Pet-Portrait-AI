@@ -41,7 +41,7 @@ export const POST = withApiHandler(
 
     if (!result.success) {
       return createErrorResponse(result.message ?? 'Failed to save create flow', {
-        status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        status: result.invalidInput ? HTTP_STATUS.BAD_REQUEST : HTTP_STATUS.INTERNAL_SERVER_ERROR,
       });
     }
 

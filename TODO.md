@@ -1,50 +1,16 @@
-# Backlog — production & quality
-
-Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README.md` for structure and stack.
-
----
-
-## Resolved (for history)
-
-| Topic | Notes |
-|--------|--------|
-| AI / Upload API secrets | `src/env.ts`; protected routes. |
-| Printful preview | Auth + rate limit; `artworkUrl` allowlist via `trusted-https-image-host.ts`. |
-| Rate-limit identity | `request-identity.ts` + `docs/REDIS_SETUP.md`. |
-| Redis in prod | One-time warn without `REDIS_URL` (`rate-limit.ts`). |
-| AI image URLs (SSRF) | Zod URL + `fetchTrustedHttpsImage`; `ALLOWED_IMAGE_URL_HOSTS`. |
-| Sensitive logs | Portrait errors + shop_config parse warnings redacted. |
-| Predictive search API | Bounded `q` (`predictive-search-query.ts`), `checkRateLimit` prefix `search` + `rateLimit.search` in shop config, private `Cache-Control` from `cache.revalidate.search`. |
-| OpenAI portrait variations | One trusted fetch per request; `mapPool` + `ai.variationsConcurrency` (1–5, default 2); `variationCount` from Zod-validated `getShopConfig()` only (`portrait-generation.service.ts`, `shop-config`). |
-| GraphQL codegen deps | `@graphql-codegen/*` in `devDependencies`; CI runs `yarn codegen` before `yarn build` (fork PRs may skip codegen via `continue-on-error`; committed `src/infra/shopify/generated/`). |
-
----
-
 ## High
 
 ### Create-flow URL storage
 
-**What:** `POST /api/create-flow` passes a trimmed string into `setCreateFlowUrl` (`create-flow.service.ts`) with no URL or length validation before writing the customer metafield.
-
-**Why:** Invalid, huge, or malicious strings in metafields; unsafe if any client navigates to stored values without checks.
-
-**How:** Zod: `z.string().url()`, max length, optional allowlist (e.g. same origin or path prefix like `/create/...`).
+**Done:** `parseCreateFlowStoredUrl` (`validate-create-flow-stored-url.ts`) enforces max length, rejects absolute / protocol-relative URLs, requires pathname under `/create`, blocks `..` / `%2e%2e`, normalizes before metafield write; `getCreateFlowUrl` drops invalid stored values; invalid POST returns 400.
 
 ### CSP and third-party surface
 
-**What:** `next.config.ts` allows multiple wildcard `img-src` / `connect-src` entries (Shopify, UploadThing, analytics, Sentry, etc.).
-
-**Why:** A large allowlist increases blast radius if a pattern is broader than needed or a listed host is compromised.
-
-**How:** Audit real traffic and required integrations; shrink wildcards where possible; document required hosts per environment.
+**Partial:** `img-src` / `connect-src` entries in `next.config.ts` are documented inline (purpose per integration). Further tightening needs a traffic audit before replacing wildcards (UploadThing subdomains, Shopify, Sentry).
 
 ### Strict HTTPS for `NEXT_PUBLIC_BASE_URL`
 
-**What:** `src/env.ts` (T3 Env) requires HTTPS for `NEXT_PUBLIC_BASE_URL` when `NODE_ENV=production`.
-
-**Why:** Correct for public prod, but surprising for CI or local `next build` using `http://localhost`.
-
-**How:** Document the pattern in `README` / deployment docs; optional stricter validation only on real deploy targets; keep HTTPS mandatory for staging/prod URLs.
+**Done:** Documented under **Required** env vars in `README.md` (production / `next build` vs local dev; CI placeholder).
 
 ---
 
@@ -147,7 +113,7 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 ## Summary
 
 - **Open backlog:** ~17 items (6 High, 7 Medium, 4 Low).
-- **Largest remaining risks:** create-flow URL metafields; sequential OpenAI work + repeated image downloads.
+- **Largest remaining risks:** sequential OpenAI work + repeated image downloads.
 - **Health (rough):** **7.5 / 10** — Strong structure and many controls in place; gaps are concentrated in config validation, abuse limits, and operational polish.
 
 ---
@@ -157,5 +123,5 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 1. ~~Zod-validate merged `shop_config` with strict bounds; drop `as any` on `shop` via codegen.~~ Done (`shop-config.schema.ts`, typed `getShop` result).
 2. Parallelize / cap OpenAI portrait variations; cache source image bytes per request.
 3. ~~Bound and rate-limit `GET /api/search/predictive` (`q` + `checkRateLimit`).~~ Done.
-4. Validate create-flow URLs (Zod URL + max length) before metafield write.
+4. ~~Validate create-flow URLs before metafield write.~~ Done (`validate-create-flow-stored-url.ts`).
 5. Move `@graphql-codegen/*` to `devDependencies` with a verified CI/build codegen step.

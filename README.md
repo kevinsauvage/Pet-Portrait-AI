@@ -136,7 +136,7 @@ Then fill in your values. The application will validate required variables on st
 
 These variables are required for the application to function:
 
-- **`NEXT_PUBLIC_BASE_URL`** - Your site's base URL (e.g., `https://yourdomain.com`)
+- **`NEXT_PUBLIC_BASE_URL`** - Your site's base URL (e.g., `https://yourdomain.com`). When `NODE_ENV=production` (including `next build`), `src/env.ts` requires the **`https:`** scheme. CI uses an HTTPS placeholder (see `.github/workflows/ci.yml`); local dev may use `http://localhost:3000` while `NODE_ENV` is not `production`.
 - **`NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`** - Shopify Storefront API GraphQL endpoint
 - **`SHOPIFY_STORE_FRONT_ACCESS_TOKEN`** - Shopify Storefront API access token
 - **`SHOPIFY_CLIENT_ID`** - Shopify OAuth 2.0 client ID (from Dev Dashboard)

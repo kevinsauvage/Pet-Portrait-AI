@@ -80,8 +80,12 @@ const nextConfig: NextConfig = {
           "default-src 'self'",
           `script-src ${scriptSrc.join(' ')}`,
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+          // img-src: app + Shopify CDN, UploadThing (utfs.io / *.ufs.sh), style reference images,
+          // Gelato/Printful preview assets (see LineItem), AWS accelerate for mocks, GTM/GA pixels.
+          // Wildcards: shrink only after confirming real asset hosts in prod (Sentry session replay, etc.).
           "img-src 'self' data: blob: https://cdn.shopify.com https://res.cloudinary.com https://utfs.io https://*.ufs.sh https://images.unsplash.com https://*.gelato.com https://*.gelatoapis.com https://*.printful.com https://*.printfulproducts.com https://*.s3-accelerate.amazonaws.com https://www.googletagmanager.com https://www.google-analytics.com",
           "font-src 'self' data: https://fonts.gstatic.com https://cdn.shopify.com",
+          // connect-src: GTM/GA, Shopify storefront + CDN, Vercel toolbar, UploadThing API, Sentry ingest.
           "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.myshopify.com https://*.shopifycdn.com https://vercel.live https://uploadthing.com https://*.uploadthing.com https://*.sentry.io https://*.ingest.sentry.io",
           "frame-src 'self' https://www.googletagmanager.com https://vercel.live",
           "object-src 'none'",

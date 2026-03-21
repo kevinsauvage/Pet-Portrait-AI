@@ -5,6 +5,8 @@ import { logger } from '@/core/utils/logger.server';
 import { adminSdk, storefrontSdk } from '@/infra/shopify/client';
 import { getShopifyToken } from '@/infra/shopify/server';
 
+import { parseCreateFlowStoredUrl } from './validate-create-flow-stored-url';
+
 const CREATE_FLOW_METAFIELD = { key: 'create_flow_url', namespace: 'custom' };
 
 /**
@@ -25,7 +27,14 @@ export async function getCreateFlowUrl(): Promise<string | null> {
     const value = metafields?.[0]?.value;
 
     if (typeof value === 'string' && value.trim().length > 0) {
-      return value.trim();
+      const parsed = parseCreateFlowStoredUrl(value);
+      if (!parsed.ok) {
+        logger.warn('Ignoring invalid create flow URL from metafield', {
+          context: 'CreateFlowService.getCreateFlowUrl',
+        });
+        return null;
+      }
+      return parsed.value;
     }
     return null;
   } catch (error) {
@@ -44,10 +53,15 @@ export async function getCreateFlowUrl(): Promise<string | null> {
 export async function setCreateFlowUrl(
   customerId: string,
   url: string,
-): Promise<{ success: boolean; message?: string }> {
+): Promise<{ success: boolean; message?: string; invalidInput?: boolean }> {
   const trimmed = url.trim();
   if (!trimmed) {
     return clearCreateFlowUrl(customerId);
+  }
+
+  const parsed = parseCreateFlowStoredUrl(trimmed);
+  if (!parsed.ok) {
+    return { success: false, message: parsed.message, invalidInput: true };
   }
 
   try {
@@ -58,7 +72,7 @@ export async function setCreateFlowUrl(
           namespace: CREATE_FLOW_METAFIELD.namespace,
           ownerId: customerId,
           type: 'single_line_text_field',
-          value: trimmed,
+          value: parsed.value,
         },
       ],
     });
