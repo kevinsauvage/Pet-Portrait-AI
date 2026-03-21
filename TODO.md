@@ -1,19 +1,3 @@
-## High
-
-### Create-flow URL storage
-
-**Done:** `parseCreateFlowStoredUrl` (`validate-create-flow-stored-url.ts`) enforces max length, rejects absolute / protocol-relative URLs, requires pathname under `/create`, blocks `..` / `%2e%2e`, normalizes before metafield write; `getCreateFlowUrl` drops invalid stored values; invalid POST returns 400.
-
-### CSP and third-party surface
-
-**Partial:** `img-src` / `connect-src` entries in `next.config.ts` are documented inline (purpose per integration). Further tightening needs a traffic audit before replacing wildcards (UploadThing subdomains, Shopify, Sentry).
-
-### Strict HTTPS for `NEXT_PUBLIC_BASE_URL`
-
-**Done:** Documented under **Required** env vars in `README.md` (production / `next build` vs local dev; CI placeholder).
-
----
-
 ## Medium
 
 ### Cross-domain coupling
@@ -56,14 +40,6 @@
 
 **How:** Remove unless OpenAI documents it as required for that endpoint.
 
-### Images always unoptimized
-
-**What:** `images.unoptimized: true` in `next.config.ts`.
-
-**Why:** Larger LCP and bandwidth on merchandising pages versus Next.js image optimization.
-
-**How:** Re-enable optimization where `remotePatterns` and your CDN allow; measure LCP and cache behavior.
-
 ### Loose typing in API route tests
 
 **What:** Some route tests cast `Response` / `json()` as `any` (e.g. AI, cart routes).
@@ -75,22 +51,6 @@
 ---
 
 ## Low
-
-### Repo / folder name vs stack
-
-**What:** Workspace path may still suggest “Strapi”; the stack is Next.js + Shopify + Printful (`README` and package name `petportrait-ai-ecommerce` are clearer).
-
-**Why:** Onboarding confusion for new contributors.
-
-**How:** Rename the repo folder or add a prominent one-liner in `README` / contributor docs.
-
-### Boundary file naming / docs
-
-**What:** `src/proxy.ts` exists; there is no root `middleware.ts`. Knip may list `proxy` as an entry.
-
-**Why:** People migrating between Next versions may not know current boundary conventions.
-
-**How:** Document in `README.md` / `DEPLOYMENT.md`; add smoke coverage for auth redirect behavior if product-critical.
 
 ### Shopify cart / checkout edge coverage
 
@@ -109,19 +69,3 @@
 **How:** Build schemas from typed objects only; consider unicode-safe serialization if legacy browsers matter.
 
 ---
-
-## Summary
-
-- **Open backlog:** ~17 items (6 High, 7 Medium, 4 Low).
-- **Largest remaining risks:** sequential OpenAI work + repeated image downloads.
-- **Health (rough):** **7.5 / 10** — Strong structure and many controls in place; gaps are concentrated in config validation, abuse limits, and operational polish.
-
----
-
-## Next priorities (suggested order)
-
-1. ~~Zod-validate merged `shop_config` with strict bounds; drop `as any` on `shop` via codegen.~~ Done (`shop-config.schema.ts`, typed `getShop` result).
-2. Parallelize / cap OpenAI portrait variations; cache source image bytes per request.
-3. ~~Bound and rate-limit `GET /api/search/predictive` (`q` + `checkRateLimit`).~~ Done.
-4. ~~Validate create-flow URLs before metafield write.~~ Done (`validate-create-flow-stored-url.ts`).
-5. Move `@graphql-codegen/*` to `devDependencies` with a verified CI/build codegen step.

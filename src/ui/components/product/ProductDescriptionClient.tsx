@@ -123,7 +123,7 @@ const ProductDescriptionClient = ({
       <div className="flex flex-col gap-3 rounded-2xl border bg-primary/5 p-6">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-body">Personalised AI Portrait</h3>
+          <h2 className="font-semibold text-body">Personalised AI Portrait</h2>
         </div>
         <p className="text-body-sm text-muted-foreground">
           This product is made to order with your portrait. Upload your photo to start.

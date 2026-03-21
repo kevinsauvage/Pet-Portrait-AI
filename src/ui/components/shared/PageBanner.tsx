@@ -27,7 +27,6 @@ const PageBanner = ({
   secondaryCtaHref,
 }: PageBannerProps) => (
   <section
-    role="banner"
     aria-labelledby="page-banner-title"
     className={cn('relative isolate overflow-hidden', className)}
   >
@@ -58,7 +57,7 @@ const PageBanner = ({
               <Button
                 size="lg"
                 asChild
-                className="h-12 px-8 text-body font-semibold shadow-lg shadow-primary/20 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 active:scale-[0.98]"
+                className="h-12 px-8 text-body font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 active:scale-[0.98]"
               >
                 <Link href={ctaHref}>
                   {ctaLabel}

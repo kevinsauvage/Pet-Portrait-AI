@@ -107,9 +107,9 @@ const ProductCardDefault = ({
 
           <div className="flex flex-1 flex-col gap-3 px-4 pb-4 pt-3.5">
             <div className="flex-1 space-y-0.5">
-              <h3 className="line-clamp-2 text-body font-semibold leading-snug tracking-tight">
+              <p className="line-clamp-2 text-body font-semibold leading-snug tracking-tight">
                 {title}
-              </h3>
+              </p>
               <p className="text-caption text-muted-foreground">Custom pet portrait</p>
             </div>
             <Price

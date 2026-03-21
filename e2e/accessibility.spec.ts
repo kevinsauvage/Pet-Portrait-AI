@@ -8,9 +8,21 @@ import { checkA11y, injectAxe } from 'axe-playwright';
  * These tests ensure WCAG compliance and identify accessibility issues
  * that could prevent users with disabilities from using the application.
  */
+const consentCookie = {
+  name: 'localConsent',
+  value: JSON.stringify({
+    ad_storage: true,
+    analytics_storage: true,
+    functionality_storage: true,
+    personalization_storage: true,
+  }),
+  domain: 'localhost',
+  path: '/',
+};
+
 test.describe('Accessibility', () => {
-  test.beforeEach(async ({ page }) => {
-    // Set reduced motion for consistent testing
+  test.beforeEach(async ({ page, context }) => {
+    await context.addCookies([consentCookie]);
     await page.emulateMedia({ reducedMotion: 'reduce' });
   });
 
@@ -39,22 +51,25 @@ test.describe('Accessibility', () => {
   });
 
   test('product page should have no accessibility violations', async ({ page }) => {
-    // Navigate to shop first to get a product URL
     await page.goto('/shop');
     await page.waitForLoadState('networkidle');
 
-    // Try to find a product link
-    const productLink = page.locator('a[href*="/shop/"]').first();
-    const productHref = await productLink.getAttribute('href');
-
-    if (productHref) {
-      await page.goto(productHref);
-      await page.waitForLoadState('networkidle');
-      await injectAxe(page);
-      await checkA11y(page);
-    } else {
+    const productCards = page.locator('a[href^="/shop/"]').filter({ has: page.locator('article') });
+    if ((await productCards.count()) === 0) {
       test.skip();
+      return;
     }
+
+    const productHref = await productCards.first().getAttribute('href');
+    if (!productHref) {
+      test.skip();
+      return;
+    }
+
+    await page.goto(productHref);
+    await page.waitForLoadState('networkidle');
+    await injectAxe(page);
+    await checkA11y(page);
   });
 
   test('skip links should be present and functional', async ({ page }) => {
@@ -73,8 +88,8 @@ test.describe('Accessibility', () => {
     // Verify skip link text
     await expect(firstSkipLink).toHaveText('Skip to main content');
 
-    // Click skip link
-    await firstSkipLink.click();
+    // Skip links sit under the header stacking context; use keyboard activation (realistic for SR users).
+    await firstSkipLink.press('Enter');
 
     // Verify main content is focused
     const mainContent = page.locator('#main-content');

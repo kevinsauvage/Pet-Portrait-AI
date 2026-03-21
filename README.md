@@ -89,7 +89,7 @@ See [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) for the Pri
 | Styling     | Tailwind CSS v4, Radix UI, lucide-react       |
 | APIs        | Shopify Storefront GraphQL, Shopify Admin API |
 | AI          | OpenAI API                                    |
-| Fulfillment | Printful Shopify App (automatic)                |
+| Fulfillment | Printful Shopify App (automatic)              |
 | Validation  | Zod v4                                        |
 | GraphQL     | graphql-request, GraphQL Codegen              |
 | Uploads     | UploadThing                                   |
@@ -114,7 +114,7 @@ See [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) for the Pri
 
 ```bash
 git clone <repository-url>
-cd nextjs-strapi-ecommerce
+cd <repository-folder>
 yarn install
 ```
 

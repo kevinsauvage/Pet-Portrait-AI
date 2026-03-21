@@ -13,13 +13,17 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Cart Flow', () => {
   test('should navigate through create portrait flow', async ({ page }) => {
-    // Navigate to home page
     await page.goto('/');
     await expect(page).toHaveTitle(/PetPortrait/i);
 
-    // Navigate to create page
     await page.goto('/create');
-    await expect(page).toHaveURL(/\/create/);
+    // /create is auth-gated: anonymous users are sent to login with a return URL
+    await expect(page).toHaveURL(/\/(create|login)/);
+    const url = page.url();
+    if (url.includes('/login')) {
+      expect(url).toContain('redirect');
+      expect(decodeURIComponent(url)).toContain('/create');
+    }
   });
 
   test('should display cart page', async ({ page }) => {

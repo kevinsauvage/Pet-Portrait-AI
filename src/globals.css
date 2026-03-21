@@ -27,7 +27,8 @@
   --sidebar-accent-foreground: #1c1917;
 
   --muted: #f5f0eb;
-  --muted-foreground: #6b6259;
+  /* Darker than stone-500 for WCAG AA body text on --background / --card */
+  --muted-foreground: #57534e;
   --muted-text: #78716c;
 
   --success: #16a34a;
@@ -84,8 +85,8 @@
   --sidebar-accent-foreground: #f5f0eb;
 
   --muted: #2d2822;
-  --muted-foreground: #c4b9ac;
-  --muted-text: #c4b9ac;
+  --muted-foreground: #d6d0c8;
+  --muted-text: #d6d0c8;
 
   --success: #22c55e;
   --success-foreground: #052e16;

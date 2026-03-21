@@ -1,7 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const allBrowsers =
+  process.env.PW_ALL_BROWSERS === '1' || process.env.PW_ALL_BROWSERS === 'true';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
+ *
+ * Default: Chromium only (fast; matches typical CI smoke). Set PW_ALL_BROWSERS=1 to run Firefox + WebKit too
+ * (requires `yarn playwright install`).
  */
 export default defineConfig({
   testDir: './e2e',
@@ -24,33 +30,13 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
 
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-  ],
+  projects: allBrowsers
+    ? [
+        { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+        { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+        { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+      ]
+    : [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
   /* Run your local dev server before starting the tests */
   webServer: {

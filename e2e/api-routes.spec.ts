@@ -6,12 +6,18 @@ import { expect, test } from '@playwright/test';
  */
 
 test.describe('API Routes', () => {
-  test('GET /api/cart should return cart data', async ({ request }) => {
+  test('GET /api/cart returns success or 404 when there is no cart cookie', async ({ request }) => {
     const response = await request.get('/api/cart');
-    
+    const body = (await response.json()) as { success?: boolean; error?: string };
+
+    if (response.status() === 404) {
+      expect(body.error).toBeDefined();
+      expect(body.success).toBeUndefined();
+      return;
+    }
+
     expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body).toHaveProperty('success');
+    expect(body.success).toBe(true);
   });
 
   test('GET /api/wishlist should return wishlist data', async ({ request }) => {

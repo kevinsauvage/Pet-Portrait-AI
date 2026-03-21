@@ -78,7 +78,11 @@ const BeforeAfterPreview = ({
               variant={selectedStyleId === style.id ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedStyleId(style.id)}
-              className="text-caption-sm"
+              className={
+                selectedStyleId === style.id
+                  ? 'text-caption-sm text-primary-foreground'
+                  : 'text-caption-sm'
+              }
               aria-pressed={selectedStyleId === style.id}
             >
               {style.label}

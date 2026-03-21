@@ -27,7 +27,7 @@ export default async function ShopLayout({ children }: ShopLayoutProps) {
             <CardHeader className="py-4 px-4 border-b border-border">
               <div className="flex items-center gap-2">
                 <Package className="h-4 w-4 text-primary" strokeWidth={1.5} />
-                <h2 className="text-body font-semibold">Collections</h2>
+                <p className="text-body font-semibold">Collections</p>
               </div>
             </CardHeader>
             <CardContent className="p-0">

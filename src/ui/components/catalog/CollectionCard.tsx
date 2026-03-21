@@ -36,16 +36,14 @@ const CollectionCard = ({
         ) : (
           <div className="absolute inset-0 bg-muted" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/90" />
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+      <div className="absolute inset-x-0 bottom-0 bg-black/55 p-5 backdrop-blur-[2px] md:p-6">
         <div className="flex items-end justify-between gap-4">
           <div className="space-y-1">
-            <h3 className="text-heading-3 font-semibold leading-tight text-white drop-shadow-sm">
-              {title}
-            </h3>
-            <p className="text-body-sm text-white/70">Curated portraits & premium prints</p>
+            <h3 className="text-heading-3 font-semibold leading-tight text-white">{title}</h3>
+            <p className="text-body-sm text-white/95">Curated portraits & premium prints</p>
           </div>
           <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 group-hover:bg-white/20 group-hover:scale-110">
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />

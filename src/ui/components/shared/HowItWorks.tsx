@@ -67,10 +67,13 @@ const HowItWorks = ({
                 className="group relative flex flex-col rounded-2xl border border-border/70 bg-card p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[var(--shadow-card-hover)] md:p-7"
               >
                 <div className="mb-5 flex items-start justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 transition-colors duration-300 group-hover:bg-primary/15">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-muted transition-colors duration-300 group-hover:bg-muted/80">
                     <Icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
                   </div>
-                  <span className="text-heading-2 font-bold leading-none tracking-tighter text-border/80 transition-colors duration-300 group-hover:text-primary/20">
+                  <span
+                    className="text-heading-2 font-bold leading-none tracking-tighter text-muted-foreground transition-colors duration-300 group-hover:text-primary"
+                    aria-hidden="true"
+                  >
                     {stepNum}
                   </span>
                 </div>
