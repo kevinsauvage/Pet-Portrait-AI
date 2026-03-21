@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
+import { serializeJsonLd } from '@/core/utils/json-ld';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
 import { generateBreadcrumbSchema, generateProductSchema } from '@/core/utils/structured-data';
 import {
@@ -82,14 +83,14 @@ const ProductPage = async ({ params }: PageProperties) => {
         id="product-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productSchema),
+          __html: serializeJsonLd(productSchema),
         }}
       />
       <Script
         id="breadcrumb-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
+          __html: serializeJsonLd(breadcrumbSchema),
         }}
       />
 

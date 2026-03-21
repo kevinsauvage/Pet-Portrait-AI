@@ -7,6 +7,7 @@ import { CartProvider } from '@/contexts/CartContext/CartContext';
 import { UserProvider } from '@/contexts/UserContext/UserContext';
 import seo from '@/core/config/seo';
 import siteMetadata from '@/core/config/siteMetadata';
+import { serializeJsonLd } from '@/core/utils/json-ld';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/core/utils/structured-data';
 import { CartService } from '@/domains/cart/cart.service';
 import { getSiteMenus } from '@/domains/navigation/menu.service';
@@ -85,14 +86,14 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(generateOrganizationSchema()),
+            __html: serializeJsonLd(generateOrganizationSchema()),
           }}
         />
         <Script
           id="website-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(generateWebSiteSchema()),
+            __html: serializeJsonLd(generateWebSiteSchema()),
           }}
         />
 

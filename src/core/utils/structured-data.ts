@@ -1,4 +1,11 @@
 import siteMetadata from '@/core/config/siteMetadata';
+import {
+  type BreadcrumbListJsonLd,
+  type OrganizationJsonLd,
+  type ProductJsonLd,
+  SCHEMA_ORG_CONTEXT,
+  type WebSiteJsonLd,
+} from '@/core/utils/json-ld';
 import { getBaseUrl } from '@/core/utils/metadata';
 import type { ProductFieldsFragment } from '@/infra/shopify/generated/storefront/index';
 import { stripHtmlToText } from '@/lib/html';
@@ -6,11 +13,11 @@ import { stripHtmlToText } from '@/lib/html';
 /**
  * Generate Organization structured data (JSON-LD)
  */
-export function generateOrganizationSchema() {
+export function generateOrganizationSchema(): OrganizationJsonLd {
   const baseUrl = getBaseUrl();
 
   return {
-    '@context': 'https://schema.org',
+    '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'Organization',
     name: siteMetadata.companyName,
     url: baseUrl,
@@ -19,14 +26,14 @@ export function generateOrganizationSchema() {
       '@type': 'ContactPoint',
       email: siteMetadata.email,
       contactType: 'customer service',
-      ...(siteMetadata.phoneNumber && { telephone: siteMetadata.phoneNumber }),
+      ...(siteMetadata.phoneNumber ? { telephone: siteMetadata.phoneNumber } : {}),
     },
     sameAs: [
       siteMetadata.facebook,
       siteMetadata.twitter,
       siteMetadata.instagram,
       siteMetadata.linkedin,
-    ].filter(Boolean),
+    ].filter((url): url is string => Boolean(url)),
   };
 }
 
@@ -38,11 +45,9 @@ export function generateOrganizationSchema() {
 export function generateProductSchema(
   product: ProductFieldsFragment,
   productPath?: string,
-) {
+): ProductJsonLd {
   const baseUrl = getBaseUrl();
-  const collectionSlug = (
-    product as { collections?: { edges?: Array<{ node?: { handle?: string } }> } }
-  ).collections?.edges?.[0]?.node?.handle ?? 'all';
+  const collectionSlug = product.collections?.edges?.[0]?.node?.handle ?? 'all';
   const productUrl = productPath ?? `/shop/${collectionSlug}/${product.handle}`;
   const firstVariant = product.variants?.edges?.[0]?.node;
   const price = firstVariant?.price?.amount;
@@ -59,8 +64,23 @@ export function generateProductSchema(
     (product.descriptionHtml ? stripHtmlToText(product.descriptionHtml) : '') ||
     '';
 
-  const schema: Record<string, unknown> = {
-    '@context': 'https://schema.org',
+  const absoluteProductUrl = productUrl.startsWith('http') ? productUrl : `${baseUrl}${productUrl}`;
+
+  const offers: ProductJsonLd['offers'] = {
+    '@type': 'Offer',
+    url: absoluteProductUrl,
+    priceCurrency: currency,
+    availability,
+    ...(price !== undefined && price !== '' ? { price } : {}),
+    priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+    seller: {
+      '@type': 'Organization',
+      name: siteMetadata.companyName,
+    },
+  };
+
+  const schema: ProductJsonLd = {
+    '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'Product',
     name: product.title,
     description,
@@ -69,27 +89,10 @@ export function generateProductSchema(
       '@type': 'Brand',
       name: siteMetadata.companyName,
     },
-    offers: {
-      '@type': 'Offer',
-      url: productUrl.startsWith('http') ? productUrl : `${baseUrl}${productUrl}`,
-      priceCurrency: currency,
-      availability,
-      price,
-      priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      seller: {
-        '@type': 'Organization',
-        name: siteMetadata.companyName,
-      },
-    },
+    offers,
+    ...(firstVariant?.sku ? { sku: firstVariant.sku } : {}),
+    ...(product.id ? { productID: product.id } : {}),
   };
-
-  if (firstVariant?.sku) {
-    schema.sku = firstVariant.sku;
-  }
-
-  if (product.id) {
-    schema.productID = product.id;
-  }
 
   return schema;
 }
@@ -97,11 +100,13 @@ export function generateProductSchema(
 /**
  * Generate BreadcrumbList structured data (JSON-LD)
  */
-export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
+export function generateBreadcrumbSchema(
+  items: Array<{ name: string; url: string }>,
+): BreadcrumbListJsonLd {
   const baseUrl = getBaseUrl();
 
   return {
-    '@context': 'https://schema.org',
+    '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',
@@ -115,11 +120,11 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
 /**
  * Generate WebSite structured data with search action (JSON-LD)
  */
-export function generateWebSiteSchema() {
+export function generateWebSiteSchema(): WebSiteJsonLd {
   const baseUrl = getBaseUrl();
 
   return {
-    '@context': 'https://schema.org',
+    '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'WebSite',
     name: siteMetadata.companyName,
     url: baseUrl,

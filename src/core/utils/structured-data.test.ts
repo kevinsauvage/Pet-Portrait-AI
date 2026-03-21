@@ -66,13 +66,13 @@ describe('generateOrganizationSchema', () => {
   it('includes contactPoint', () => {
     const schema = generateOrganizationSchema();
     expect(schema.contactPoint).toBeDefined();
-    expect((schema.contactPoint as { '@type': string })['@type']).toBe('ContactPoint');
+    expect(schema.contactPoint['@type']).toBe('ContactPoint');
   });
 
   it('sameAs filters out empty values', () => {
     const schema = generateOrganizationSchema();
     expect(Array.isArray(schema.sameAs)).toBe(true);
-    expect((schema.sameAs as string[]).every((s) => s)).toBe(true);
+    expect(schema.sameAs.every((s) => s)).toBe(true);
   });
 });
 
@@ -96,21 +96,19 @@ describe('generateBreadcrumbSchema', () => {
       { name: 'Home', url: '/' },
       { name: 'Products', url: '/shop' },
     ]);
-    const items = schema.itemListElement as Array<{ position: number; name: string; item: string }>;
+    const items = schema.itemListElement;
     expect(items[0]?.position).toBe(1);
     expect(items[1]?.position).toBe(2);
   });
 
   it('prepends base URL to relative URLs', () => {
     const schema = generateBreadcrumbSchema([{ name: 'Shop', url: '/shop' }]);
-    const items = schema.itemListElement as Array<{ item: string }>;
-    expect(items[0]?.item).toBe('https://example.com/shop');
+    expect(schema.itemListElement[0]?.item).toBe('https://example.com/shop');
   });
 
   it('preserves absolute URLs as-is', () => {
     const schema = generateBreadcrumbSchema([{ name: 'External', url: 'https://other.com/page' }]);
-    const items = schema.itemListElement as Array<{ item: string }>;
-    expect(items[0]?.item).toBe('https://other.com/page');
+    expect(schema.itemListElement[0]?.item).toBe('https://other.com/page');
   });
 
   it('handles empty items array', () => {
@@ -133,15 +131,13 @@ describe('generateProductSchema', () => {
 
   it('includes offers with price and currency', () => {
     const schema = generateProductSchema(makeProduct());
-    const offers = schema.offers as { priceCurrency: string; price: string };
-    expect(offers.priceCurrency).toBe('USD');
-    expect(offers.price).toBe('19.99');
+    expect(schema.offers.priceCurrency).toBe('USD');
+    expect(schema.offers.price).toBe('19.99');
   });
 
   it('sets InStock availability when variant is available', () => {
     const schema = generateProductSchema(makeProduct());
-    const offers = schema.offers as { availability: string };
-    expect(offers.availability).toBe('https://schema.org/InStock');
+    expect(schema.offers.availability).toBe('https://schema.org/InStock');
   });
 
   it('sets OutOfStock when variant is not available', () => {
@@ -150,8 +146,7 @@ describe('generateProductSchema', () => {
       edges: [{ node: { availableForSale: false, price: { amount: '10', currencyCode: 'USD' } } }],
     };
     const schema = generateProductSchema(product);
-    const offers = schema.offers as { availability: string };
-    expect(offers.availability).toBe('https://schema.org/OutOfStock');
+    expect(schema.offers.availability).toBe('https://schema.org/OutOfStock');
   });
 
   it('includes sku when variant has sku', () => {
@@ -179,7 +174,7 @@ describe('generateProductSchema', () => {
   it('uses product images array', () => {
     const schema = generateProductSchema(makeProduct());
     expect(Array.isArray(schema.image)).toBe(true);
-    expect((schema.image as string[])[0]).toBe('https://example.com/image.jpg');
+    expect(schema.image[0]).toBe('https://example.com/image.jpg');
   });
 
   it('handles product with no images', () => {
@@ -205,8 +200,7 @@ describe('generateWebSiteSchema', () => {
 
   it('includes a SearchAction', () => {
     const schema = generateWebSiteSchema();
-    const action = schema.potentialAction as { '@type': string; 'query-input': string };
-    expect(action['@type']).toBe('SearchAction');
-    expect(action['query-input']).toContain('search_term_string');
+    expect(schema.potentialAction['@type']).toBe('SearchAction');
+    expect(schema.potentialAction['query-input']).toContain('search_term_string');
   });
 });
