@@ -1,6 +1,11 @@
 import type { NextRequest } from 'next/server';
 
 import { CartService } from '@/domains/cart/cart.service';
+import {
+  apiErrorBodySchema,
+  apiSuccessBodySchema,
+  parseApiRouteJson,
+} from '@/test-support/api-route-response';
 
 import { DELETE, PATCH } from './route';
 
@@ -43,7 +48,7 @@ describe('/api/cart/lines route', () => {
       const response = await PATCH(request);
 
       expect(response.status).toBe(200);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiSuccessBodySchema);
       expect(body.success).toBe(true);
       expect(body.message).toBe('Product added successfully');
       expect(addLinesMock).toHaveBeenCalled();
@@ -70,7 +75,7 @@ describe('/api/cart/lines route', () => {
       const response = await PATCH(request);
 
       expect(response.status).toBe(200);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiSuccessBodySchema);
       expect(body.success).toBe(true);
       expect(body.message).toBe('Cart updated successfully');
       expect(updateLinesMock).toHaveBeenCalled();
@@ -91,9 +96,8 @@ describe('/api/cart/lines route', () => {
       const response = await PATCH(request);
 
       expect(response.status).toBe(404);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
 
     it('returns 400 for invalid request body', async () => {
@@ -108,9 +112,8 @@ describe('/api/cart/lines route', () => {
       const response = await PATCH(request);
 
       expect(response.status).toBe(400);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
 
     it('returns 400 when Shopify returns user errors', async () => {
@@ -134,10 +137,9 @@ describe('/api/cart/lines route', () => {
       const response = await PATCH(request);
 
       expect(response.status).toBe(400);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
       expect(body.userErrors).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
 
     it('handles errors gracefully', async () => {
@@ -158,9 +160,8 @@ describe('/api/cart/lines route', () => {
       const response = await PATCH(request);
 
       expect(response.status).toBe(500);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
   });
 
@@ -184,7 +185,7 @@ describe('/api/cart/lines route', () => {
       const response = await DELETE(request);
 
       expect(response.status).toBe(200);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiSuccessBodySchema);
       expect(body.success).toBe(true);
       expect(body.message).toBe('Product removed successfully');
       expect(removeLinesMock).toHaveBeenCalledWith('cart-123', ['line-1'], expect.any(Object));
@@ -203,9 +204,8 @@ describe('/api/cart/lines route', () => {
       const response = await DELETE(request);
 
       expect(response.status).toBe(404);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
 
     it('returns 400 when lineItemId is missing', async () => {
@@ -221,9 +221,8 @@ describe('/api/cart/lines route', () => {
       const response = await DELETE(request);
 
       expect(response.status).toBe(400);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
 
     it('returns 400 when Shopify returns user errors', async () => {
@@ -245,10 +244,9 @@ describe('/api/cart/lines route', () => {
       const response = await DELETE(request);
 
       expect(response.status).toBe(400);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
       expect(body.userErrors).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
 
     it('handles errors gracefully', async () => {
@@ -267,9 +265,8 @@ describe('/api/cart/lines route', () => {
       const response = await DELETE(request);
 
       expect(response.status).toBe(500);
-      const body = (await (response as any).json()) as any;
+      const body = await parseApiRouteJson(response, apiErrorBodySchema);
       expect(body.error).toBeDefined();
-      expect(body.success).toBeUndefined();
     });
   });
 });

@@ -16,14 +16,6 @@
 
 **How:** Remove unless OpenAI documents it as required for that endpoint.
 
-### Loose typing in API route tests
-
-**What:** Some route tests cast `Response` / `json()` as `any` (e.g. AI, cart routes).
-
-**Why:** Weaker contracts when APIs evolve; regressions slip through.
-
-**How:** Shared typed test helpers or Zod-parse response bodies in tests.
-
 ---
 
 ## Low

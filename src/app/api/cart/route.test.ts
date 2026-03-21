@@ -1,4 +1,9 @@
 import { CartService } from '@/domains/cart/cart.service';
+import {
+  apiErrorBodySchema,
+  apiSuccessBodySchema,
+  parseApiRouteJson,
+} from '@/test-support/api-route-response';
 
 import { GET } from './route';
 
@@ -32,7 +37,7 @@ describe('/api/cart route', () => {
     const response = await GET();
 
     expect(response.status).toBe(200);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiSuccessBodySchema);
     expect(body.success).toBe(true);
     expect(body.data).toEqual(mockCart);
   });
@@ -44,9 +49,8 @@ describe('/api/cart route', () => {
     const response = await GET();
 
     expect(response.status).toBe(404);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 
   it('GET returns 404 when cart does not exist', async () => {
@@ -59,9 +63,8 @@ describe('/api/cart route', () => {
     const response = await GET();
 
     expect(response.status).toBe(404);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 
   it('GET handles errors gracefully', async () => {
@@ -74,8 +77,7 @@ describe('/api/cart route', () => {
     const response = await GET();
 
     expect(response.status).toBe(500);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 });

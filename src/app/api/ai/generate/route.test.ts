@@ -1,8 +1,13 @@
-import type { NextRequest } from 'next/server';
+import { type NextRequest,NextResponse } from 'next/server';
 
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
 import { generatePetPortraitVariations } from '@/domains/ai/portrait-generation.service';
 import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
+import {
+  aiPortraitSuccessBodySchema,
+  apiErrorBodySchema,
+  parseApiRouteJson,
+} from '@/test-support/api-route-response';
 
 import { POST } from './route';
 
@@ -68,7 +73,7 @@ describe('/api/ai/generate route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(200);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, aiPortraitSuccessBodySchema);
     expect(body.success).toBe(true);
     expect(body.data.id).toBe('gen-123');
     expect(generatePetPortraitVariations).toHaveBeenCalledWith(
@@ -92,10 +97,9 @@ describe('/api/ai/generate route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(429);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
     expect(body.message).toContain('Retry after');
-    expect(body.success).toBeUndefined();
     expect(generatePetPortraitVariations).not.toHaveBeenCalled();
   });
 
@@ -110,9 +114,8 @@ describe('/api/ai/generate route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(400);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
     expect(generatePetPortraitVariations).not.toHaveBeenCalled();
   });
 
@@ -134,19 +137,17 @@ describe('/api/ai/generate route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(400);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
     expect(generatePetPortraitVariations).not.toHaveBeenCalled();
   });
 
   it('POST returns 413 when request body is too large', async () => {
     const { enforceRequestSizeLimit } = await import('@/core/utils/request-size');
     const enforceRequestSizeLimitMock = vi.mocked(enforceRequestSizeLimit);
-    enforceRequestSizeLimitMock.mockReturnValueOnce({
-      status: 413,
-      json: async () => ({ error: 'Request body must be smaller than 256KB.' }),
-    } as any);
+    enforceRequestSizeLimitMock.mockReturnValueOnce(
+      NextResponse.json({ error: 'Request body must be smaller than 256KB.' }, { status: 413 }),
+    );
 
     const request = {
       json: vi.fn().mockResolvedValue({
@@ -159,7 +160,7 @@ describe('/api/ai/generate route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(413);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
     expect(generatePetPortraitVariations).not.toHaveBeenCalled();
   });
@@ -180,8 +181,7 @@ describe('/api/ai/generate route', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(500);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 });

@@ -1,6 +1,11 @@
 import type { NextRequest } from 'next/server';
 
 import { CartService } from '@/domains/cart/cart.service';
+import {
+  apiErrorBodySchema,
+  apiSuccessBodySchema,
+  parseApiRouteJson,
+} from '@/test-support/api-route-response';
 
 import { PATCH } from './route';
 
@@ -40,7 +45,7 @@ describe('/api/cart/discount-codes route', () => {
     const response = await PATCH(request);
 
     expect(response.status).toBe(200);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiSuccessBodySchema);
     expect(body.success).toBe(true);
     expect(body.message).toBe('Discount codes updated successfully');
     expect(updateDiscountCodesMock).toHaveBeenCalledWith(
@@ -62,9 +67,8 @@ describe('/api/cart/discount-codes route', () => {
     const response = await PATCH(request);
 
     expect(response.status).toBe(404);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 
   it('returns 400 for invalid request body', async () => {
@@ -79,9 +83,8 @@ describe('/api/cart/discount-codes route', () => {
     const response = await PATCH(request);
 
     expect(response.status).toBe(400);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 
   it('returns 400 when Shopify returns user errors', async () => {
@@ -105,10 +108,9 @@ describe('/api/cart/discount-codes route', () => {
     const response = await PATCH(request);
 
     expect(response.status).toBe(400);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
     expect(body.userErrors).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 
   it('handles errors gracefully', async () => {
@@ -128,8 +130,7 @@ describe('/api/cart/discount-codes route', () => {
     const response = await PATCH(request);
 
     expect(response.status).toBe(500);
-    const body = (await (response as any).json()) as any;
+    const body = await parseApiRouteJson(response, apiErrorBodySchema);
     expect(body.error).toBeDefined();
-    expect(body.success).toBeUndefined();
   });
 });
