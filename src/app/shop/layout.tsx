@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 
 import { getAllCollections } from '@/domains/collections/collections.service';
 import CollectionsSideNav from '@/ui/components/catalog/CollectionsSideNav';
+import ShopCollectionMainSkeleton from '@/ui/components/catalog/ShopCollectionMainSkeleton';
 import { Card, CardContent, CardHeader } from '@/ui/primitives/card';
 
 import { Package } from 'lucide-react';
@@ -36,7 +37,9 @@ export default async function ShopLayout({ children }: ShopLayoutProps) {
           </Card>
         </aside>
 
-        <div className="lg:col-span-3 min-w-0">{children}</div>
+        <div className="lg:col-span-3 min-w-0">
+          <Suspense fallback={<ShopCollectionMainSkeleton />}>{children}</Suspense>
+        </div>
       </div>
     </div>
   );
