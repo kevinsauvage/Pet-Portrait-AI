@@ -99,7 +99,6 @@ async function editImageWithOpenAI(
         method: 'POST',
         headers: {
           Authorization: `Bearer ${apiKey}`,
-          'OpenAI-Beta': 'assistants=v2',
         },
         body: form,
       });
