@@ -131,6 +131,27 @@
             }
           },
           "required": ["maxRequests", "windowMs"]
+        },
+        "search": {
+          "type": "object",
+          "description": "Rate limits for GET /api/search/predictive",
+          "properties": {
+            "maxRequests": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 45,
+              "description": "Maximum requests per window"
+            },
+            "windowMs": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 3600000,
+              "default": 60000,
+              "description": "Time window in milliseconds (60000 = 1 minute)"
+            }
+          },
+          "required": ["maxRequests", "windowMs"]
         }
       },
       "required": ["ai", "upload"]

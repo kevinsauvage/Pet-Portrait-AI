@@ -14,6 +14,7 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 | Redis in prod | One-time warn without `REDIS_URL` (`rate-limit.ts`). |
 | AI image URLs (SSRF) | Zod URL + `fetchTrustedHttpsImage`; `ALLOWED_IMAGE_URL_HOSTS`. |
 | Sensitive logs | Portrait errors + shop_config parse warnings redacted. |
+| Predictive search API | Bounded `q` (`predictive-search-query.ts`), `checkRateLimit` prefix `search` + `rateLimit.search` in shop config, private `Cache-Control` from `cache.revalidate.search`. |
 
 ---
 
@@ -26,14 +27,6 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 **Why:** Linear latency and repeated egress/API work; easier to hit `maxDuration` and inflate bills under load.
 
 **How:** Bounded parallelism (pool size + cap); cache downloaded image bytes for the lifetime of one generation request; enforce max variation count only after config is Zod-validated.
-
-### Predictive search abuse surface
-
-**What:** `GET /api/search/predictive` forwards an unbounded `q` from the query string (`src/app/api/search/predictive/route.ts`) with no local rate limit—only Shopify-side throttling / error handling.
-
-**Why:** Storefront API cost and throttling; degraded search for legitimate users if bots or scripts hammer the endpoint.
-
-**How:** Trim `q`, enforce a max length; add `checkRateLimit` with a dedicated prefix (e.g. `search`); align `Cache-Control` with your abuse model.
 
 ### Create-flow URL storage
 
@@ -167,8 +160,8 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 
 ## Summary
 
-- **Open backlog:** ~18 items (7 High, 7 Medium, 4 Low).
-- **Largest remaining risks:** unbounded predictive search; create-flow URL metafields; sequential OpenAI work + repeated image downloads.
+- **Open backlog:** ~17 items (6 High, 7 Medium, 4 Low).
+- **Largest remaining risks:** create-flow URL metafields; sequential OpenAI work + repeated image downloads.
 - **Health (rough):** **7.5 / 10** — Strong structure and many controls in place; gaps are concentrated in config validation, abuse limits, and operational polish.
 
 ---
@@ -177,6 +170,6 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 
 1. ~~Zod-validate merged `shop_config` with strict bounds; drop `as any` on `shop` via codegen.~~ Done (`shop-config.schema.ts`, typed `getShop` result).
 2. Parallelize / cap OpenAI portrait variations; cache source image bytes per request.
-3. Bound and rate-limit `GET /api/search/predictive` (`q` + `checkRateLimit`).
+3. ~~Bound and rate-limit `GET /api/search/predictive` (`q` + `checkRateLimit`).~~ Done.
 4. Validate create-flow URLs (Zod URL + max length) before metafield write.
 5. Move `@graphql-codegen/*` to `devDependencies` with a verified CI/build codegen step.

@@ -12,6 +12,7 @@ import {
   resolveSortKeyFromString,
 } from '@/infra/shopify/helpers';
 
+import { normalizePredictiveSearchQuery } from './predictive-search-query';
 import type { SearchParameters } from './types';
 
 export type { SearchParameters } from './types';
@@ -48,11 +49,11 @@ export async function searchProducts(searchParameters: SearchParameters): Promis
 }
 
 export async function getPredictiveSearch(query: string) {
-  const trimmed = query?.trim();
-  if (!trimmed || trimmed.length < 2) {
+  const normalized = normalizePredictiveSearchQuery(query);
+  if (!normalized || normalized.length < 2) {
     return null;
   }
 
-  const response = await storefrontSdk().predictiveSearch({ query: trimmed });
+  const response = await storefrontSdk().predictiveSearch({ query: normalized });
   return response || null;
 }

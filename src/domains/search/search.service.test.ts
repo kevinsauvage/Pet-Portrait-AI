@@ -1,3 +1,4 @@
+import { PREDICTIVE_SEARCH_QUERY_MAX_LENGTH } from './predictive-search-query';
 import { getPredictiveSearch, searchProducts } from './search.service';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -43,6 +44,14 @@ describe('search.service', () => {
     it('calls storefront when query is 2+ chars', async () => {
       await getPredictiveSearch('ab');
       expect(mockPredictiveSearch).toHaveBeenCalledWith({ query: 'ab' });
+    });
+
+    it('truncates query to max length before calling storefront', async () => {
+      const long = `${'a'.repeat(PREDICTIVE_SEARCH_QUERY_MAX_LENGTH)}xyz`;
+      await getPredictiveSearch(long);
+      expect(mockPredictiveSearch).toHaveBeenCalledWith({
+        query: 'a'.repeat(PREDICTIVE_SEARCH_QUERY_MAX_LENGTH),
+      });
     });
 
     it('returns null when predictiveSearch returns null/undefined', async () => {

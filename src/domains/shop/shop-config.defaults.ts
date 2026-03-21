@@ -18,6 +18,7 @@ export type ShopConfig = {
     ai: { maxRequests: number; windowMs: number };
     upload: { maxRequests: number; windowMs: number };
     printful: { maxRequests: number; windowMs: number };
+    search: { maxRequests: number; windowMs: number };
   };
   image: {
     maxFileSize: number;
@@ -77,6 +78,10 @@ export const DEFAULT_SHOP_CONFIG: ShopConfig = {
     },
     printful: {
       maxRequests: 30,
+      windowMs: 60000,
+    },
+    search: {
+      maxRequests: 45,
       windowMs: 60000,
     },
   },

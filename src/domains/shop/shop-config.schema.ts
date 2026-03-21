@@ -96,6 +96,7 @@ const shopConfigPartialSchema = z.preprocess(
           ai: rateLimitBucketPartial,
           upload: rateLimitBucketPartial,
           printful: rateLimitBucketPartial,
+          search: rateLimitBucketPartial,
         })
         .partial()
         .optional(),
@@ -202,6 +203,10 @@ const shopConfigMergedSchema = z
         windowMs: z.number().int().min(1000).max(3_600_000),
       }),
       printful: z.object({
+        maxRequests: z.number().int().min(1).max(100),
+        windowMs: z.number().int().min(1000).max(3_600_000),
+      }),
+      search: z.object({
         maxRequests: z.number().int().min(1).max(100),
         windowMs: z.number().int().min(1000).max(3_600_000),
       }),
@@ -341,6 +346,7 @@ export function validateMergedShopConfig(
       ai: { ...v.rateLimit.ai },
       upload: { ...v.rateLimit.upload },
       printful: { ...v.rateLimit.printful },
+      search: { ...v.rateLimit.search },
     },
     image: {
       ...v.image,

@@ -22,6 +22,10 @@
     "upload": {
       "maxRequests": 12,
       "windowMs": 60000
+    },
+    "search": {
+      "maxRequests": 45,
+      "windowMs": 60000
     }
   },
   "image": {

@@ -53,6 +53,12 @@ function mergeConfig(parsed: ShopConfigPartial): ShopConfig {
         windowMs:
           parsed.rateLimit?.printful?.windowMs ?? DEFAULT_SHOP_CONFIG.rateLimit.printful.windowMs,
       },
+      search: {
+        maxRequests:
+          parsed.rateLimit?.search?.maxRequests ?? DEFAULT_SHOP_CONFIG.rateLimit.search.maxRequests,
+        windowMs:
+          parsed.rateLimit?.search?.windowMs ?? DEFAULT_SHOP_CONFIG.rateLimit.search.windowMs,
+      },
     },
     image: {
       maxFileSize: parsed.image?.maxFileSize ?? DEFAULT_SHOP_CONFIG.image.maxFileSize,
