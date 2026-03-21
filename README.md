@@ -216,9 +216,10 @@ See `.env.example` for detailed descriptions of each variable.
 ### Development Commands
 
 ```bash
-yarn dev          # Start development server
-yarn codegen      # Generate Shopify Storefront/Admin GraphQL SDKs into src/infra/shopify/generated/
-yarn build        # Production build
+yarn dev                 # Start development server
+yarn codegen             # Generate Shopify Storefront/Admin GraphQL SDKs into src/infra/shopify/generated/
+yarn build               # Production build (uses committed generated SDKs)
+yarn build:with-codegen  # Regenerate SDKs then production build (needs Shopify env from `.env`)
 yarn type-check   # TypeScript validation
 yarn lint         # ESLint
 ```

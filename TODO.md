@@ -16,6 +16,7 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 | Sensitive logs | Portrait errors + shop_config parse warnings redacted. |
 | Predictive search API | Bounded `q` (`predictive-search-query.ts`), `checkRateLimit` prefix `search` + `rateLimit.search` in shop config, private `Cache-Control` from `cache.revalidate.search`. |
 | OpenAI portrait variations | One trusted fetch per request; `mapPool` + `ai.variationsConcurrency` (1–5, default 2); `variationCount` from Zod-validated `getShopConfig()` only (`portrait-generation.service.ts`, `shop-config`). |
+| GraphQL codegen deps | `@graphql-codegen/*` in `devDependencies`; CI runs `yarn codegen` before `yarn build` (fork PRs may skip codegen via `continue-on-error`; committed `src/infra/shopify/generated/`). |
 
 ---
 
@@ -44,14 +45,6 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 **Why:** Correct for public prod, but surprising for CI or local `next build` using `http://localhost`.
 
 **How:** Document the pattern in `README` / deployment docs; optional stricter validation only on real deploy targets; keep HTTPS mandatory for staging/prod URLs.
-
-### GraphQL codegen in runtime `dependencies`
-
-**What:** `@graphql-codegen/*` packages live under `"dependencies"` in `package.json`.
-
-**Why:** Larger production installs and dev tooling on the runtime dependency graph.
-
-**How:** Move to `devDependencies` once CI/build always runs `yarn codegen` (or equivalent) before `next build`.
 
 ---
 
