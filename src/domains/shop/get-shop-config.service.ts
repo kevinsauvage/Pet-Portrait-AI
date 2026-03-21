@@ -2,95 +2,19 @@ import { logger } from '@/core/utils/logger.server';
 import { withCache } from '@/infra/cache';
 import { storefrontSdk } from '@/infra/shopify/client';
 
-/**
- * Default configuration values used when shop_config metafield is not available
- */
-export const DEFAULT_SHOP_CONFIG = {
-  ai: {
-    variationsCount: 3,
-    generationTimeoutSeconds: 120,
-    apiTimeoutSeconds: 60,
-    model: 'gpt-image-1.5',
-    retry: {
-      maxAttempts: 2,
-      baseDelayMs: 2000,
-      maxDelayMs: 6000,
-    },
-    timeEstimate: {
-      minSeconds: 30,
-      maxSeconds: 60,
-    },
-  },
-  rateLimit: {
-    ai: {
-      maxRequests: 5,
-      windowMs: 60000,
-    },
-    upload: {
-      maxRequests: 12,
-      windowMs: 60000,
-    },
-    printful: {
-      maxRequests: 30,
-      windowMs: 60000,
-    },
-  },
-  image: {
-    maxFileSize: 8 * 1024 * 1024, // 8MB in bytes
-    minDimension: 200,
-    maxDimension: 10000,
-    minAspectRatio: 0.5,
-    maxAspectRatio: 2.0,
-    acceptedTypes: ['image/jpeg', 'image/png', 'image/webp'],
-  },
-  features: {
-    enableRegeneration: true,
-    enableGallery: true,
-  },
-  pagination: {
-    productsPerPage: 16,
-  },
-  cache: {
-    revalidate: {
-      catalog: 3600,
-      search: 300,
-      product: 3600,
-      shopify: 600,
-    },
-  },
-  cookies: {
-    expiryDays: 182,
-  },
-} as const;
+import { DEFAULT_SHOP_CONFIG, type ShopConfig } from './shop-config.defaults';
+import {
+  parseShopConfigJson,
+  type ShopConfigPartial,
+  validateMergedShopConfig,
+} from './shop-config.schema';
 
-export type ShopConfig = typeof DEFAULT_SHOP_CONFIG;
-
-/**
- * Parses the shop_config metafield JSON value
- */
-function parseShopConfig(value: string | null | undefined): Partial<ShopConfig> {
-  if (!value) return {};
-
-  try {
-    const parsed = JSON.parse(value) as Partial<ShopConfig>;
-    return parsed;
-  } catch (error) {
-    logger.warn('Failed to parse shop_config metafield', {
-      context: 'shop-config',
-      error,
-      metadata: {
-        valueLength: value.length,
-        valueStartsWithBrace: value.trimStart().startsWith('{'),
-      },
-    });
-    return {};
-  }
-}
+export { DEFAULT_SHOP_CONFIG, type ShopConfig } from './shop-config.defaults';
 
 /**
  * Merges parsed config with defaults, ensuring type safety
  */
-function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
+function mergeConfig(parsed: ShopConfigPartial): ShopConfig {
   return {
     ai: {
       variationsCount: parsed.ai?.variationsCount ?? DEFAULT_SHOP_CONFIG.ai.variationsCount,
@@ -112,7 +36,8 @@ function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
     },
     rateLimit: {
       ai: {
-        maxRequests: parsed.rateLimit?.ai?.maxRequests ?? DEFAULT_SHOP_CONFIG.rateLimit.ai.maxRequests,
+        maxRequests:
+          parsed.rateLimit?.ai?.maxRequests ?? DEFAULT_SHOP_CONFIG.rateLimit.ai.maxRequests,
         windowMs: parsed.rateLimit?.ai?.windowMs ?? DEFAULT_SHOP_CONFIG.rateLimit.ai.windowMs,
       },
       upload: {
@@ -148,13 +73,10 @@ function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
     },
     cache: {
       revalidate: {
-        catalog:
-          parsed.cache?.revalidate?.catalog ?? DEFAULT_SHOP_CONFIG.cache.revalidate.catalog,
+        catalog: parsed.cache?.revalidate?.catalog ?? DEFAULT_SHOP_CONFIG.cache.revalidate.catalog,
         search: parsed.cache?.revalidate?.search ?? DEFAULT_SHOP_CONFIG.cache.revalidate.search,
-        product:
-          parsed.cache?.revalidate?.product ?? DEFAULT_SHOP_CONFIG.cache.revalidate.product,
-        shopify:
-          parsed.cache?.revalidate?.shopify ?? DEFAULT_SHOP_CONFIG.cache.revalidate.shopify,
+        product: parsed.cache?.revalidate?.product ?? DEFAULT_SHOP_CONFIG.cache.revalidate.product,
+        shopify: parsed.cache?.revalidate?.shopify ?? DEFAULT_SHOP_CONFIG.cache.revalidate.shopify,
       },
     },
     cookies: {
@@ -163,17 +85,18 @@ function mergeConfig(parsed: Partial<ShopConfig>): ShopConfig {
   };
 }
 
+function logShopConfigWarn(message: string, metadata?: Record<string, unknown>) {
+  logger.warn(message, { context: 'shop-config', metadata });
+}
+
 async function fetchShopConfigInternal(): Promise<ShopConfig> {
   try {
     const sdk = storefrontSdk();
     const result = await sdk.getShop();
-
-    // Type assertion needed until GraphQL codegen is run to include shopConfig field
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const shop = result.shop as any;
-    const metafieldValue = shop.shopConfig?.value as string | null | undefined;
-    const parsed = parseShopConfig(metafieldValue);
-    const config = mergeConfig(parsed);
+    const metafieldValue = result.shop.shopConfig?.value;
+    const parsed = parseShopConfigJson(metafieldValue, logShopConfigWarn);
+    const merged = mergeConfig(parsed);
+    const config = validateMergedShopConfig(merged, logShopConfigWarn);
 
     logger.debug('Shop config loaded', {
       context: 'shop-config',

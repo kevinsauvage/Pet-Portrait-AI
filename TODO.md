@@ -19,14 +19,6 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 
 ## High
 
-### Untyped `shop_config` metafield
-
-**What:** Shop tuning JSON is still `JSON.parse` + `as Partial<ShopConfig>` with manual merge; GraphQL `shop` is cast `as any` in `get-shop-config.service.ts` until types include `shopConfig`.
-
-**Why:** Invalid or extreme values (e.g. huge `variationsCount`, timeouts) directly affect OpenAI cost, reliability, and UX with no schema-enforced ceiling.
-
-**How:** Add a Zod schema for parsed + merged config with hard caps; run GraphQL codegen so `shop` typing drops `any` and the metafield is part of the generated types.
-
 ### OpenAI cost and latency — portrait variations
 
 **What:** In `portrait-generation.service.ts`, variations run one-after-another and the source image is downloaded again for each call to OpenAI.
@@ -176,14 +168,14 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 ## Summary
 
 - **Open backlog:** ~18 items (7 High, 7 Medium, 4 Low).
-- **Largest remaining risks:** unvalidated `shop_config` driving cost; unbounded predictive search; create-flow URL metafields; sequential OpenAI work + repeated image downloads.
+- **Largest remaining risks:** unbounded predictive search; create-flow URL metafields; sequential OpenAI work + repeated image downloads.
 - **Health (rough):** **7.5 / 10** — Strong structure and many controls in place; gaps are concentrated in config validation, abuse limits, and operational polish.
 
 ---
 
 ## Next priorities (suggested order)
 
-1. Zod-validate merged `shop_config` with strict bounds; drop `as any` on `shop` via codegen.
+1. ~~Zod-validate merged `shop_config` with strict bounds; drop `as any` on `shop` via codegen.~~ Done (`shop-config.schema.ts`, typed `getShop` result).
 2. Parallelize / cap OpenAI portrait variations; cache source image bytes per request.
 3. Bound and rate-limit `GET /api/search/predictive` (`q` + `checkRateLimit`).
 4. Validate create-flow URLs (Zod URL + max length) before metafield write.
