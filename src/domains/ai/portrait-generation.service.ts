@@ -1,7 +1,7 @@
 import { logger } from '@/core/utils/logger.server';
 import { withRetry } from '@/core/utils/retry';
 import { fetchTrustedHttpsImage } from '@/core/utils/trusted-https-image-host';
-import { getShopConfig } from '@/domains/shop/get-shop-config.service';
+import { getShopConfig, type ShopConfig } from '@/domains/shop/get-shop-config.service';
 import { getUploadUrl } from '@/infra/upload/get-upload-url';
 
 import { AI_ART_STYLES, type ArtStyleId, type ArtworkGenerationResult } from './ai-portrait/types';
@@ -11,6 +11,32 @@ import { randomUUID } from 'crypto';
 import { UTApi, UTFile } from 'uploadthing/server';
 
 const OPENAI_EDIT_URL = 'https://api.openai.com/v1/images/edits';
+
+/**
+ * Runs `fn` for each index in `[0, length)` with at most `concurrency` in flight.
+ * Results are ordered by index.
+ */
+async function mapPool<R>(
+  length: number,
+  concurrency: number,
+  fn: (index: number) => Promise<R>,
+): Promise<R[]> {
+  if (length <= 0) return [];
+  const results: R[] = new Array(length);
+  let next = 0;
+  const workers = Math.min(Math.max(1, concurrency), length);
+
+  async function worker() {
+    while (true) {
+      const i = next++;
+      if (i >= length) return;
+      results[i] = await fn(i);
+    }
+  }
+
+  await Promise.all(Array.from({ length: workers }, () => worker()));
+  return results;
+}
 
 /**
  * Gets the style prompt suffix for a given art style ID.
@@ -44,31 +70,26 @@ async function uploadBase64ToStorage(base64Data: string, fileName: string): Prom
 
 /**
  * Edits an image using OpenAI's image editing API with retry logic.
- * Fetches the source image, sends it to OpenAI with a style prompt, and returns base64 data.
+ * Uses in-memory source bytes (one copy per attempt for safe concurrent requests).
  *
  * @param apiKey - OpenAI API key
  * @param prompt - Style prompt describing the desired transformation
- * @param imageUrl - URL of the source image to edit
+ * @param shopConfig - Validated shop config (timeouts, model, retries)
+ * @param sourceImageBytes - Raw source image bytes from trusted HTTPS fetch
  * @returns Base64-encoded image data of the edited image
- * @throws {Error} If image fetch fails, API call fails, or no image data is returned
+ * @throws {Error} If API call fails or no image data is returned
  */
 async function editImageWithOpenAI(
   apiKey: string,
   prompt: string,
-  imageUrl: string,
+  shopConfig: ShopConfig,
+  sourceImageBytes: Buffer,
 ): Promise<string> {
-  const shopConfig = await getShopConfig();
   const retryConfig = shopConfig.ai.retry;
 
   const b64 = await withRetry(
     async () => {
-      const imageResponse = await fetchTrustedHttpsImage(imageUrl, {
-        signal: AbortSignal.timeout(shopConfig.ai.apiTimeoutSeconds * 1000),
-      });
-      if (!imageResponse.ok)
-        throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
-
-      const imageBlob = await imageResponse.blob();
+      const imageBlob = new Blob([Buffer.from(sourceImageBytes)]);
       const form = new FormData();
       form.append('model', shopConfig.ai.model);
       form.append('prompt', prompt);
@@ -138,19 +159,29 @@ export async function generatePetPortraitVariations(
   if (!apiKey) throw new Error('OPENAI_API_KEY is not configured');
 
   const shopConfig = await getShopConfig();
-  const { variationsCount } = shopConfig.ai;
+  const variationCount = shopConfig.ai.variationsCount;
+  const concurrency = Math.min(shopConfig.ai.variationsConcurrency, variationCount);
 
   const generationId = randomUUID();
   const prompt = `Repaint this pet portrait ${getStylePrompt(styleId)}. Preserve the pet's breed, markings, eye color, and pose exactly. Fill the entire canvas. No text, no borders, no watermarks.`;
 
   try {
-    const urls: string[] = [];
-    for (let i = 0; i < variationsCount; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      const b64 = await editImageWithOpenAI(apiKey, prompt, originalPhotoUrl);
-      // eslint-disable-next-line no-await-in-loop
-      urls.push(await uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`));
-    }
+    const imageResponse = await fetchTrustedHttpsImage(originalPhotoUrl, {
+      signal: AbortSignal.timeout(shopConfig.ai.apiTimeoutSeconds * 1000),
+    });
+    if (!imageResponse.ok)
+      throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
+    const sourceImageBytes = Buffer.from(await imageResponse.arrayBuffer());
+
+    const b64List = await mapPool(variationCount, concurrency, () =>
+      editImageWithOpenAI(apiKey, prompt, shopConfig, sourceImageBytes),
+    );
+
+    const urls = await Promise.all(
+      b64List.map((b64, i) =>
+        uploadBase64ToStorage(b64, `generated-${generationId}-${i + 1}.png`),
+      ),
+    );
     return { urls, generationId, styleId };
   } catch (error) {
     let originalPhotoUrlHost: string | undefined;

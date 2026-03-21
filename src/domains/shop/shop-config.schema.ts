@@ -42,6 +42,7 @@ function asObjectOrUndefined(val: unknown): unknown {
 const aiPartialObject = z
   .object({
     variationsCount: optionalClampedInt(1, 10),
+    variationsConcurrency: optionalClampedInt(1, 5),
     generationTimeoutSeconds: optionalClampedInt(30, 600),
     apiTimeoutSeconds: optionalClampedInt(30, 600),
     model: z.preprocess((val: unknown) => {
@@ -180,6 +181,7 @@ const shopConfigMergedSchema = z
   .object({
     ai: z.object({
       variationsCount: z.number().int().min(1).max(10),
+      variationsConcurrency: z.number().int().min(1).max(5),
       generationTimeoutSeconds: z.number().int().min(30).max(600),
       apiTimeoutSeconds: z.number().int().min(30).max(600),
       model: z.string().min(1).max(128),
@@ -336,6 +338,7 @@ export function validateMergedShopConfig(
   return {
     ai: {
       variationsCount: v.ai.variationsCount,
+      variationsConcurrency: v.ai.variationsConcurrency,
       generationTimeoutSeconds: v.ai.generationTimeoutSeconds,
       apiTimeoutSeconds: v.ai.apiTimeoutSeconds,
       model: v.ai.model,

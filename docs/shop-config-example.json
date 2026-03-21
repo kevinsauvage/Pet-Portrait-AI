@@ -1,6 +1,7 @@
 {
   "ai": {
     "variationsCount": 3,
+    "variationsConcurrency": 2,
     "generationTimeoutSeconds": 120,
     "apiTimeoutSeconds": 60,
     "model": "gpt-image-1.5",

@@ -1,6 +1,7 @@
 export type ShopConfig = {
   ai: {
     variationsCount: number;
+    variationsConcurrency: number;
     generationTimeoutSeconds: number;
     apiTimeoutSeconds: number;
     model: string;
@@ -54,6 +55,7 @@ export type ShopConfig = {
 export const DEFAULT_SHOP_CONFIG: ShopConfig = {
   ai: {
     variationsCount: 3,
+    variationsConcurrency: 2,
     generationTimeoutSeconds: 120,
     apiTimeoutSeconds: 60,
     model: 'gpt-image-1.5',

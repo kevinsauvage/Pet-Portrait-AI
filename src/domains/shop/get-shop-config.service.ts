@@ -18,6 +18,8 @@ function mergeConfig(parsed: ShopConfigPartial): ShopConfig {
   return {
     ai: {
       variationsCount: parsed.ai?.variationsCount ?? DEFAULT_SHOP_CONFIG.ai.variationsCount,
+      variationsConcurrency:
+        parsed.ai?.variationsConcurrency ?? DEFAULT_SHOP_CONFIG.ai.variationsConcurrency,
       generationTimeoutSeconds:
         parsed.ai?.generationTimeoutSeconds ?? DEFAULT_SHOP_CONFIG.ai.generationTimeoutSeconds,
       apiTimeoutSeconds: parsed.ai?.apiTimeoutSeconds ?? DEFAULT_SHOP_CONFIG.ai.apiTimeoutSeconds,

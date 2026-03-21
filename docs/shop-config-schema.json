@@ -15,6 +15,13 @@
           "default": 3,
           "description": "Number of portrait variations to generate (1-10)"
         },
+        "variationsConcurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 2,
+          "description": "Max parallel OpenAI portrait edits per generation request (1-5)"
+        },
         "generationTimeoutSeconds": {
           "type": "integer",
           "minimum": 30,

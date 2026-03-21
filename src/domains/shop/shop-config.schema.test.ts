@@ -17,6 +17,15 @@ describe('parseShopConfigJson', () => {
     expect(parsed.ai?.variationsCount).toBe(10);
   });
 
+  it('clamps variationsConcurrency to 1–5', () => {
+    const warn = vi.fn();
+    const parsed = parseShopConfigJson(
+      JSON.stringify({ ai: { variationsConcurrency: 99 } }),
+      warn,
+    );
+    expect(parsed.ai?.variationsConcurrency).toBe(5);
+  });
+
   it('parses sibling keys when ai is not an object', () => {
     const warn = vi.fn();
     const parsed = parseShopConfigJson(

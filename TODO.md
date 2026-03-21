@@ -15,18 +15,11 @@ Living list aligned with the current codebase. See `ARCHITECTURE.md` and `README
 | AI image URLs (SSRF) | Zod URL + `fetchTrustedHttpsImage`; `ALLOWED_IMAGE_URL_HOSTS`. |
 | Sensitive logs | Portrait errors + shop_config parse warnings redacted. |
 | Predictive search API | Bounded `q` (`predictive-search-query.ts`), `checkRateLimit` prefix `search` + `rateLimit.search` in shop config, private `Cache-Control` from `cache.revalidate.search`. |
+| OpenAI portrait variations | One trusted fetch per request; `mapPool` + `ai.variationsConcurrency` (1–5, default 2); `variationCount` from Zod-validated `getShopConfig()` only (`portrait-generation.service.ts`, `shop-config`). |
 
 ---
 
 ## High
-
-### OpenAI cost and latency — portrait variations
-
-**What:** In `portrait-generation.service.ts`, variations run one-after-another and the source image is downloaded again for each call to OpenAI.
-
-**Why:** Linear latency and repeated egress/API work; easier to hit `maxDuration` and inflate bills under load.
-
-**How:** Bounded parallelism (pool size + cap); cache downloaded image bytes for the lifetime of one generation request; enforce max variation count only after config is Zod-validated.
 
 ### Create-flow URL storage
 
