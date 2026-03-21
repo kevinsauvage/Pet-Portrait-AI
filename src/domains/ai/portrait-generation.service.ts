@@ -12,6 +12,18 @@ import { UTApi, UTFile } from 'uploadthing/server';
 
 const OPENAI_EDIT_URL = 'https://api.openai.com/v1/images/edits';
 
+/** Legacy DALL·E 2 edits use a single `image` part; GPT image models require `image[]` (see OpenAI image edit API). */
+function isDalle2ImageEditModel(model: string): boolean {
+  return model.trim().toLowerCase() === 'dall-e-2';
+}
+
+function sourceImageFileInfo(contentType: string | null): { filename: string; blobType: string } {
+  const mime = ((contentType ?? '').split(';')[0] ?? '').trim().toLowerCase();
+  if (mime === 'image/png') return { filename: 'pet.png', blobType: 'image/png' };
+  if (mime === 'image/webp') return { filename: 'pet.webp', blobType: 'image/webp' };
+  return { filename: 'pet.jpg', blobType: 'image/jpeg' };
+}
+
 /**
  * Runs `fn` for each index in `[0, length)` with at most `concurrency` in flight.
  * Results are ordered by index.
@@ -76,6 +88,7 @@ async function uploadBase64ToStorage(base64Data: string, fileName: string): Prom
  * @param prompt - Style prompt describing the desired transformation
  * @param shopConfig - Validated shop config (timeouts, model, retries)
  * @param sourceImageBytes - Raw source image bytes from trusted HTTPS fetch
+ * @param sourceContentType - Response `Content-Type` from the source image fetch (for correct multipart filename / MIME)
  * @returns Base64-encoded image data of the edited image
  * @throws {Error} If API call fails or no image data is returned
  */
@@ -84,16 +97,29 @@ async function editImageWithOpenAI(
   prompt: string,
   shopConfig: ShopConfig,
   sourceImageBytes: Buffer,
+  sourceContentType: string | null,
 ): Promise<string> {
-  const retryConfig = shopConfig.ai.retry;
+  const {
+    ai: { model, retry: retryConfig },
+  } = shopConfig;
+  const dalle2 = isDalle2ImageEditModel(model);
+  const { filename, blobType } = sourceImageFileInfo(sourceContentType);
 
   const b64 = await withRetry(
     async () => {
-      const imageBlob = new Blob([Buffer.from(sourceImageBytes)]);
+      const imageBlob = new Blob([Buffer.from(sourceImageBytes)], { type: blobType });
       const form = new FormData();
-      form.append('model', shopConfig.ai.model);
+      form.append('model', model);
       form.append('prompt', prompt);
-      form.append('image', imageBlob, 'pet.png');
+      if (dalle2) {
+        form.append('image', imageBlob, filename);
+        form.append('response_format', 'b64_json');
+      } else {
+        form.append('image[]', imageBlob, filename);
+        form.append('n', '1');
+        form.append('output_format', 'png');
+        form.append('input_fidelity', 'high');
+      }
 
       const rsp = await fetch(OPENAI_EDIT_URL, {
         method: 'POST',
@@ -171,9 +197,10 @@ export async function generatePetPortraitVariations(
     if (!imageResponse.ok)
       throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
     const sourceImageBytes = Buffer.from(await imageResponse.arrayBuffer());
+    const sourceContentType = imageResponse.headers.get('content-type');
 
     const b64List = await mapPool(variationCount, concurrency, () =>
-      editImageWithOpenAI(apiKey, prompt, shopConfig, sourceImageBytes),
+      editImageWithOpenAI(apiKey, prompt, shopConfig, sourceImageBytes, sourceContentType),
     );
 
     const urls = await Promise.all(

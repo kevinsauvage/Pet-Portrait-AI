@@ -78,7 +78,7 @@ Use the file as the source of truth, or copy this:
 | `variationsCount` | `3` | Number of portrait variants (1–10) |
 | `generationTimeoutSeconds` | `120` | Logging / UX; route `maxDuration` is capped separately in code |
 | `apiTimeoutSeconds` | `60` | Reference timeout for API work |
-| `model` | `gpt-image-1.5` | OpenAI image model id |
+| `model` | `gpt-image-1.5` | OpenAI image model id for `POST /v1/images/edits`. GPT image models use the `image[]` multipart shape; `dall-e-2` uses the legacy single `image` field (see `portrait-generation.service.ts`). |
 | `retry.maxAttempts` | `2` | |
 | `retry.baseDelayMs` | `2000` | |
 | `retry.maxDelayMs` | `6000` | |
