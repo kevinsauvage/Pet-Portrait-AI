@@ -11,11 +11,6 @@ type ApiClientOptions = {
   cache?: RequestCache;
 };
 
-/**
- * Converts a relative path to an absolute URL
- * @param path - The path (relative or absolute)
- * @returns An absolute URL
- */
 function getAbsoluteUrl(path: string): string {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
@@ -65,7 +60,7 @@ export async function apiClient<T = unknown>(
     const data = (await response.json()) as ApiResponse<T> | T;
 
     if (isErrorResponse(data)) {
-      throw new Error(data.error);
+      throw new Error(extractErrorMessage(data, data.error));
     }
 
     return data as T;

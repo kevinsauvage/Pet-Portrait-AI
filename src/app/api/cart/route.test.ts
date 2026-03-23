@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 import { CartService } from '@/domains/cart/cart.service';
 import {
   apiErrorBodySchema,
@@ -8,6 +10,8 @@ import {
 import { GET } from './route';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+const cartGetRequest = () => new NextRequest('http://localhost/api/cart');
 
 vi.mock('@/domains/cart/cart.service', () => ({
   CartService: {
@@ -34,7 +38,7 @@ describe('/api/cart route', () => {
     const getCartMock = CartService.getCart as unknown as ReturnType<typeof vi.fn>;
     getCartMock.mockResolvedValue(mockCart);
 
-    const response = await GET();
+    const response = await GET(cartGetRequest());
 
     expect(response.status).toBe(200);
     const body = await parseApiRouteJson(response, apiSuccessBodySchema);
@@ -46,7 +50,7 @@ describe('/api/cart route', () => {
     const getCartIdMock = CartService.getCartId as unknown as ReturnType<typeof vi.fn>;
     getCartIdMock.mockResolvedValue(null);
 
-    const response = await GET();
+    const response = await GET(cartGetRequest());
 
     expect(response.status).toBe(404);
     const body = await parseApiRouteJson(response, apiErrorBodySchema);
@@ -60,7 +64,7 @@ describe('/api/cart route', () => {
     const getCartMock = CartService.getCart as unknown as ReturnType<typeof vi.fn>;
     getCartMock.mockResolvedValue(null);
 
-    const response = await GET();
+    const response = await GET(cartGetRequest());
 
     expect(response.status).toBe(404);
     const body = await parseApiRouteJson(response, apiErrorBodySchema);
@@ -74,7 +78,7 @@ describe('/api/cart route', () => {
     const getCartMock = CartService.getCart as unknown as ReturnType<typeof vi.fn>;
     getCartMock.mockRejectedValue(new Error('Database error'));
 
-    const response = await GET();
+    const response = await GET(cartGetRequest());
 
     expect(response.status).toBe(500);
     const body = await parseApiRouteJson(response, apiErrorBodySchema);

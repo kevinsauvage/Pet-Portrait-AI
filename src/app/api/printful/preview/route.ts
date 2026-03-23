@@ -1,5 +1,6 @@
 import { type NextRequest } from 'next/server';
 
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -8,11 +9,10 @@ import {
   withApiHandler,
 } from '@/core/utils/api-responses';
 import { requireApiProtection } from '@/core/utils/auth';
-import { getClientContext } from '@/core/utils/request-identity';
 import { generatePreview } from '@/domains/printful/preview.service';
 import { printfulPreviewRequestSchema } from '@/domains/printful/validation';
 import { getShopConfig } from '@/domains/shop/get-shop-config.service';
-import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
+import { shopRateLimitExceededResponse } from '@/infra/rate-limit/rate-limit-api-response';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -20,22 +20,16 @@ export const maxDuration = 60;
 export const POST = withApiHandler(
   {
     context: 'POST /api/printful/preview',
-    errorMessage: 'Failed to generate product preview',
+    errorMessage: API_ERROR_MESSAGES.FAILED_TO_GENERATE_PRINTFUL_PREVIEW,
   },
   async (request: NextRequest) => {
-    const { identifier } = getClientContext(request.headers);
     const shopConfig = await getShopConfig();
-    const rateLimit = await checkRateLimit(identifier, {
-      prefix: 'printful',
-      maxRequests: shopConfig.rateLimit.printful.maxRequests,
-      windowMs: shopConfig.rateLimit.printful.windowMs,
-    });
-    if (!rateLimit.allowed) {
-      return createErrorResponse('Too many preview requests. Please try again later.', {
-        status: HTTP_STATUS.TOO_MANY_REQUESTS,
-        message: `Retry after ${rateLimit.retryAfter} seconds`,
-      });
-    }
+    const rateLimitResponse = await shopRateLimitExceededResponse(
+      request.headers,
+      shopConfig,
+      'printful',
+    );
+    if (rateLimitResponse) return rateLimitResponse;
 
     const authError = await requireApiProtection(request, {
       secretEnv: 'PRINTFUL_API_SECRET',
@@ -47,7 +41,7 @@ export const POST = withApiHandler(
     const parsed = printfulPreviewRequestSchema.safeParse(body);
 
     if (!parsed.success) {
-      return createErrorResponse('Invalid request body', {
+      return createErrorResponse(API_ERROR_MESSAGES.INVALID_REQUEST_BODY, {
         status: HTTP_STATUS.BAD_REQUEST,
         message: parsed.error.issues.map((e) => e.message).join(', '),
       });

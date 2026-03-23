@@ -2,6 +2,12 @@ import { ClientError } from 'graphql-request';
 
 const SHOPIFY_FETCH_UNAUTHORIZED_PREFIX = 'Shopify fetch failed: 401';
 
+const CUSTOMER_AUTH_EXTENSION_CODES = new Set([
+  'UNAUTHENTICATED',
+  'ACCESS_DENIED',
+  'FORBIDDEN',
+]);
+
 function graphqlExtensionCodes(error: ClientError): string[] {
   const { errors } = error.response;
   if (!Array.isArray(errors)) return [];
@@ -14,19 +20,12 @@ function graphqlExtensionCodes(error: ClientError): string[] {
   });
 }
 
-/**
- * True when the Storefront request failed due to an invalid/expired customer token or auth.
- * Uses graphql-request {@link ClientError} status and GraphQL `extensions.code`, not API message text.
- */
+/** Customer token invalid/expired: ClientError status / GraphQL extensions.code, or 401 fetch message. */
 export function isShopifyCustomerAuthFailure(error: unknown): boolean {
   if (error instanceof ClientError) {
     if (error.response.status === 401) return true;
     const codes = graphqlExtensionCodes(error);
-    if (
-      codes.some((c) =>
-        ['UNAUTHENTICATED', 'ACCESS_DENIED', 'FORBIDDEN'].includes(c),
-      )
-    ) {
+    if (codes.some((c) => CUSTOMER_AUTH_EXTENSION_CODES.has(c))) {
       return true;
     }
   }

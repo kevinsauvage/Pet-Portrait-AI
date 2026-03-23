@@ -23,44 +23,32 @@ A fully automated ecommerce platform that generates and sells custom AI-created 
 
 ## Architecture Overview
 
+High-level layout (see [ARCHITECTURE.md](./ARCHITECTURE.md) for conventions and boundaries):
+
 ```txt
 src/
-  app/                    # Next.js App Router (pages, layouts, API routes)
+  app/                    # Next.js App Router (routes, layouts, API routes)
+  env.ts                  # Validated env (@t3-oss/env-nextjs) — server + client schema
 
-  domains/                # Domain logic (actions, services, validation)
-    address/              # actions/, services/, validation/
-    ai/                   # actions/, ai-portrait/, repositories/, services/
-    auth/                 # actions/, services/, validation/
-    cart/                 # actions/, services/, mocks/
-    collections/          # services/
-    contact/              # actions/, validation/
-    create-flow/          # Create wizard flow logic
-    creations/            # User creations management
-    home/                 # services/
-    legal/                # services/
-    navigation/           # services/
-    orders/               # services/, models/, repositories/
-    products/             # services/, models/, repositories/, mappers/
-    search/               # actions/
-    shop/                 # Shop page logic
-    user/                 # get-user, actions/, services/, validation/
-    wishlist/             # client.ts, services/
+  domains/                # Business logic (flat by default: actions, *.service.ts, validation.ts)
+    address/ auth/ cart/ collections/ contact/ create-flow/ creations/
+    home/ legal/ navigation/ orders/ products/ search/ shop/ user/ wishlist/
+    ai/                     # Portrait generation, ai-portrait/ types & flows
+    printful/               # Preview service, artwork URL rules, Printful helpers
 
-  infra/                  # Infrastructure (Shopify, upload, email, cache, http, rate-limit)
-    shopify/              # Shopify client, helpers, .graphql documents, generated SDKs
-    upload/               # UploadThing router & client
-    email/
-    cache/
-    http/                 # API client (api-client.ts)
-    rate-limit/
+  infra/                  # Technical plumbing only (no domain rules)
+    shopify/                # Storefront + Admin clients, .graphql, generated SDKs
+    upload/                 # UploadThing router & client
+    email/ cache/ http/ rate-limit/
 
-  core/                   # Config, errors, types, shared utils
-  lib/                    # Pure helpers & app infra
+  core/                   # Config, errors, shared utils (loggers, form-actions, API responses)
+  lib/                    # Pure helpers, cookies, format, TanStack Query, next-safe-action
   ui/                     # Components, layouts, primitives
-  types/                  # FormActionResult, globals.d.ts
-  hooks/
-  contexts/
+  types/ hooks/ contexts/
+  assets/
 ```
+
+Committed GraphQL types live under `src/infra/shopify/generated/` so CI and fresh clones can build without Shopify credentials; run `yarn codegen` when the schema changes.
 
 ---
 
@@ -83,18 +71,21 @@ See [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) for the Pri
 
 ## Tech Stack
 
-| Category    | Technology                                    |
-| ----------- | --------------------------------------------- |
-| Framework   | Next.js 16, React 19, TypeScript 5            |
-| Styling     | Tailwind CSS v4, Radix UI, lucide-react       |
-| APIs        | Shopify Storefront GraphQL, Shopify Admin API |
-| AI          | OpenAI API                                    |
-| Fulfillment | Printful Shopify App (automatic)              |
-| Validation  | Zod v4                                        |
-| GraphQL     | graphql-request, GraphQL Codegen              |
-| Uploads     | UploadThing                                   |
-| Email       | Resend                                        |
-| Monitoring  | Sentry                                        |
+| Category     | Technology |
+| ------------ | ---------- |
+| Framework    | Next.js 16 (Turbopack: `yarn dev` / `yarn build`), React 19, TypeScript 5 |
+| Styling      | Tailwind CSS v4, Radix UI, lucide-react |
+| APIs         | Shopify Storefront GraphQL, Shopify Admin API (OAuth 2.0 app on the store) |
+| AI           | OpenAI Images API (portrait edits) |
+| Fulfillment  | Printful Shopify app (automatic); Mockup API for on-site previews |
+| Validation   | Zod v4, `@t3-oss/env-nextjs` (`src/env.ts`) |
+| GraphQL      | graphql-request, GraphQL Codegen (`yarn codegen`) |
+| Uploads      | UploadThing |
+| Email        | Resend (required when `NODE_ENV=production`) |
+| Cache / limits | Optional Redis (`REDIS_URL`) for shared rate limits and caching |
+| Monitoring   | Sentry (optional DSN) |
+| Testing      | Vitest, Playwright (e2e + a11y), Testing Library |
+| Git hooks    | Husky + lint-staged (via `yarn install` → `prepare`) |
 
 ---
 
@@ -102,33 +93,34 @@ See [Printful Portrait Preview](./docs/PRINTFUL_PORTRAIT_PREVIEW.md) for the Pri
 
 ### Prerequisites
 
-- Node.js 20+
-- Yarn or npm
-- Shopify store (+ custom app credentials)
-- OpenAI API key
-- UploadThing account
-- Resend account (for transactional emails in production)
-- Printful account with Shopify app installed
+- **Node.js 20+** (matches [CI](.github/workflows/ci.yml))
+- **Yarn** (lockfile: `yarn.lock`)
+- **Git**
+- Accounts / credentials: **Shopify** store with a **custom app** installed, **OpenAI**, **UploadThing**, **Printful** (API token + Shopify app for fulfillment), **Resend** for production email
 
 ### Installation
 
 ```bash
 git clone <repository-url>
-cd <repository-folder>
-yarn install
+cd nextjs-strapi-ecommerce   # or your checkout folder name
+yarn install                 # runs Husky `prepare` for git hooks
 ```
 
 ### Environment Variables
 
-#### Quick Setup
+#### Quick setup
 
-Copy `.env.example` to `.env.local`:
+1. Copy the template and edit locally (never commit secrets):
 
 ```bash
 cp .env.example .env.local
 ```
 
-Then fill in your values. The application will validate required variables on startup and show clear error messages if anything is missing.
+2. Fill **all variables marked required** in `.env.example`. Validation runs when Next loads config via **`src/env.ts`** (`@t3-oss/env-nextjs`). Missing required keys fail fast with explicit errors.
+
+3. **Shopify API URLs** in `.env.example` use the **`2026-01`** API version as the documented minimum; adjust if your app uses another supported version, keeping Storefront and Admin URLs in sync.
+
+4. For **tests** or tooling that should not load full env validation, the repo sets `VITEST=true` in Vitest, or you can use `SKIP_ENV_VALIDATION=1` where appropriate (see `.env.example` header).
 
 #### Environment Setup Checklist
 
@@ -137,11 +129,10 @@ Then fill in your values. The application will validate required variables on st
 These variables are required for the application to function:
 
 - **`NEXT_PUBLIC_BASE_URL`** - Your site's base URL (e.g., `https://yourdomain.com`). When `NODE_ENV=production` (including `next build`), `src/env.ts` requires the **`https:`** scheme. CI uses an HTTPS placeholder (see `.github/workflows/ci.yml`); local dev may use `http://localhost:3000` while `NODE_ENV` is not `production`.
-- **`NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`** - Shopify Storefront API GraphQL endpoint
-- **`SHOPIFY_STORE_FRONT_ACCESS_TOKEN`** - Shopify Storefront API access token
-- **`SHOPIFY_CLIENT_ID`** - Shopify OAuth 2.0 client ID (from Dev Dashboard)
-- **`SHOPIFY_CLIENT_SECRET`** - Shopify OAuth 2.0 client secret (from Dev Dashboard)
-- **`SHOPIFY_ADMIN_URL`** - Shopify Admin API GraphQL endpoint
+- **`NEXT_PUBLIC_SHOPIFY_STOREFRONT_URL`** - Storefront GraphQL endpoint (e.g. `https://<store>.myshopify.com/api/2026-01/graphql.json`)
+- **`SHOPIFY_STORE_FRONT_ACCESS_TOKEN`** - Storefront access token
+- **`SHOPIFY_CLIENT_ID`** / **`SHOPIFY_CLIENT_SECRET`** - Custom app OAuth credentials (Shopify Dev Dashboard)
+- **`SHOPIFY_ADMIN_URL`** - Admin GraphQL endpoint (same API version as Storefront)
 - **`OPENAI_API_KEY`** - OpenAI API key for AI portrait generation
 - **`UPLOADTHING_TOKEN`** - UploadThing API token
 - **`UPLOADTHING_SECRET`** - UploadThing API secret
@@ -163,18 +154,14 @@ These are recommended for production deployments:
 - **`NEXT_PUBLIC_SENTRY_DSN`** - Sentry DSN for error monitoring
 - **`SENTRY_ORG`** - Sentry organization name
 - **`SENTRY_PROJECT`** - Sentry project name
-- **`REDIS_URL`** - Redis URL for distributed rate limiting (from Vercel integration or other provider)
+- **`REDIS_URL`** - Redis for shared rate limiting and server-side cache (`src/infra/rate-limit/`, `src/infra/cache/`); use a managed URL (e.g. Vercel Redis / Upstash) in multi-instance production
 
 ##### 📊 Optional Features
 
-- **`NEXT_PUBLIC_GTM_ID`** - Google Tag Manager container ID
-- **`NEXT_PUBLIC_SITE_NAME`** - Site name (for SEO)
-- **`NEXT_PUBLIC_SITE_EMAIL`** - Contact email
-- **`NEXT_PUBLIC_SITE_PHONE`** - Contact phone
-- **`NEXT_PUBLIC_SITE_LOGO`** - Logo URL
-- **`NEXT_PUBLIC_SITE_LOGO_SQUARE`** - Square logo URL
-- Social media links (`NEXT_PUBLIC_SITE_FACEBOOK`, `NEXT_PUBLIC_SITE_INSTAGRAM`, etc.)
-- AI product variant IDs (`NEXT_PUBLIC_AI_DIGITAL_VARIANT_ID`, etc.)
+- **`NEXT_PUBLIC_GTM_ID`** — Google Tag Manager container ID
+- **`NEXT_PUBLIC_SITE_DOMAIN`** — Cookie/site domain hints where used
+- **SEO / branding** — Names, logos, social links, AI variant IDs: see **`.env.example`** and `src/core/config/siteMetadata.ts`
+- **Also whitelisted in `src/env.ts`** (optional): `NEXT_PUBLIC_SITE_LOGO_DARK`, `NEXT_PUBLIC_SITE_OG_IMAGE`, `NEXT_PUBLIC_SITE_FACEBOOK_URL`, `NEXT_PUBLIC_SITE_INSTAGRAM_URL`, `NEXT_PUBLIC_SITE_TWITTER_HANDLE`
 
 #### Validation
 
@@ -213,16 +200,29 @@ console.log(status);
 
 See `.env.example` for detailed descriptions of each variable.
 
-### Development Commands
+### Development commands
 
-```bash
-yarn dev                 # Start development server
-yarn codegen             # Generate Shopify Storefront/Admin GraphQL SDKs into src/infra/shopify/generated/
-yarn build               # Production build (uses committed generated SDKs)
-yarn build:with-codegen  # Regenerate SDKs then production build (needs Shopify env from `.env`)
-yarn type-check   # TypeScript validation
-yarn lint         # ESLint
-```
+| Command | Purpose |
+| -------- | -------- |
+| `yarn dev` | Dev server (Turbopack) |
+| `yarn build` | Production build (Turbopack) |
+| `yarn start` | Run production server locally (after `yarn build`) |
+| `yarn codegen` | Regenerate Shopify GraphQL SDKs → `src/infra/shopify/generated/` |
+| `yarn codegen:watch` | Codegen in watch mode |
+| `yarn build:with-codegen` | `yarn codegen` then `yarn build` (needs Shopify env) |
+| `yarn lint` | ESLint |
+| `yarn lint-ts` / `yarn type-check` | `tsc --noEmit` |
+| `yarn lint:css` | Stylelint (SCSS/CSS) |
+| `yarn test` | Vitest (watch) |
+| `yarn coverage` | Vitest with coverage (used in CI) |
+| `yarn test:e2e` | Playwright |
+| `yarn test:e2e:ui` | Playwright UI mode |
+| `yarn test:a11y` | Playwright accessibility spec |
+| `yarn knip` | Find unused files/dependencies |
+
+### CI
+
+On pull requests and pushes to `main` / `master`, [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs: install (`yarn install --frozen-lockfile`), ESLint, TypeScript, Stylelint, Vitest coverage, Shopify codegen (best-effort if secrets present), and a production `yarn build`. End-to-end tests are **not** enabled in that workflow by default (see commented steps in the file). A separate Codacy workflow may run on `main` / `develop` (`.github/workflows/codacy-analysis.yaml`).
 
 ---
 
@@ -267,6 +267,11 @@ yarn lint         # ESLint
 - [Troubleshooting Guide](./docs/TROUBLESHOOTING.md) - Common issues and solutions
 - [Runbook](./docs/RUNBOOK.md) - Operational procedures and emergency response
 - [Rollback Procedures](./docs/ROLLBACK.md) - Step-by-step rollback guide
+- [Cost cutting checklist](./docs/COST-CUTTING-TODO.md) - Spend and CI/tooling reduction ideas
+
+### Quality & testing
+
+- [Testing](./docs/TESTING.md) - Vitest, Playwright, and coverage conventions
 
 ### Architecture
 

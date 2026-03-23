@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
-// Console logger: this module is imported from Edge middleware (via auth); avoid `logger.server` / pino there.
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import { logger } from '@/core/utils/logger';
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import type {
@@ -102,6 +102,44 @@ export function mapShopifyUserErrors(
   }));
 }
 
+type CartMutationPayload<TCart> = {
+  cart?: TCart | null;
+  userErrors?: Array<UserError | CartUserError | CustomerUserError> | null;
+};
+
+/**
+ * Normalizes Shopify cart mutations: userErrors → 400, missing cart → 500, otherwise the cart payload.
+ */
+export function evaluateCartMutation<TCart>(
+  result: CartMutationPayload<TCart> | null | undefined,
+  error: string,
+  options?: { detailMessage?: string },
+): { ok: true; cart: TCart } | { ok: false; response: NextResponse<ApiErrorResponse> } {
+  const { cart, userErrors } = result ?? {};
+  const mappedUserErrors = mapShopifyUserErrors(userErrors);
+  if (mappedUserErrors) {
+    return {
+      ok: false,
+      response: createErrorResponse(error, {
+        userErrors: mappedUserErrors,
+        status: HTTP_STATUS.BAD_REQUEST,
+      }),
+    };
+  }
+
+  if (cart == null) {
+    return {
+      ok: false,
+      response: createErrorResponse(error, {
+        message: options?.detailMessage ?? API_ERROR_MESSAGES.CART_MUTATION_INCOMPLETE,
+        status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      }),
+    };
+  }
+
+  return { ok: true, cart };
+}
+
 const ERROR_STATUS_MAP: Array<[RegExp, number]> = [
   [/\b(not found|Not Found)\b/i, HTTP_STATUS.NOT_FOUND],
   [/\b(unauthorized|Unauthorized|not authenticated)\b/i, HTTP_STATUS.UNAUTHORIZED],
@@ -138,10 +176,13 @@ export function handleApiError(context: string, error: unknown, defaultMessage: 
 
 type ApiHandler<TArgs extends unknown[]> = (...args: TArgs) => Promise<Response> | Response;
 
+export type WithApiHandlerBaseOptions = {
+  context: string;
+  errorMessage: string;
+};
+
 export function withApiHandler<TArgs extends unknown[]>(
-  options: {
-    context: string;
-    errorMessage: string;
+  options: WithApiHandlerBaseOptions & {
     onError?: (error: unknown) => Response | undefined;
   },
   handler: ApiHandler<TArgs>,
@@ -154,6 +195,22 @@ export function withApiHandler<TArgs extends unknown[]>(
       if (customResponse) return customResponse;
       return handleApiError(options.context, error, options.errorMessage);
     }
+  };
+}
+
+/**
+ * Resolves a prerequisite (e.g. cart id, user id); on failure returns that response.
+ * Otherwise runs the handler inside {@link withApiHandler}.
+ */
+export function withResolvedApiHandler(
+  options: WithApiHandlerBaseOptions,
+  resolve: () => Promise<string | NextResponse<ApiErrorResponse>>,
+  handler: (resolved: string, request: NextRequest) => Promise<Response>,
+) {
+  return async (request: NextRequest) => {
+    const resolved = await resolve();
+    if (typeof resolved !== 'string') return resolved;
+    return withApiHandler(options, () => handler(resolved, request))();
   };
 }
 

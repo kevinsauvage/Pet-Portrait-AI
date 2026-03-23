@@ -1,12 +1,18 @@
+import { NextRequest } from 'next/server';
+
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
+
 import {
   createErrorResponse,
   createSuccessResponse,
+  evaluateCartMutation,
   getErrorStatus,
   HTTP_STATUS,
   mapShopifyUserErrors,
+  withResolvedApiHandler,
 } from './api-responses';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('HTTP_STATUS', () => {
   it('has correct numeric values', () => {
@@ -101,6 +107,86 @@ describe('mapShopifyUserErrors', () => {
     const errors = [{ field: null, message: 'Already exists', __typename: 'UserError' as const }];
     const result = mapShopifyUserErrors(errors);
     expect(result?.[0]?.message).toBe('Already exists');
+  });
+});
+
+describe('evaluateCartMutation', () => {
+  it('returns cart when there are no user errors', () => {
+    const cart = { id: 'c1' };
+    const outcome = evaluateCartMutation({ cart, userErrors: [] }, 'User-facing error');
+    expect(outcome.ok).toBe(true);
+    if (outcome.ok) expect(outcome.cart).toEqual(cart);
+  });
+
+  it('returns 400 when userErrors are present', async () => {
+    const userErrors = [{ field: ['x'], message: 'bad', __typename: 'UserError' as const }];
+    const outcome = evaluateCartMutation({ cart: null, userErrors }, 'User-facing error');
+    expect(outcome.ok).toBe(false);
+    if (!outcome.ok) {
+      expect(outcome.response.status).toBe(400);
+      const body = await outcome.response.json();
+      expect(body.error).toBe('User-facing error');
+      expect(body.userErrors).toHaveLength(1);
+    }
+  });
+
+  it('returns 500 when cart is missing and there are no user errors', async () => {
+    const outcome = evaluateCartMutation({ userErrors: [] }, 'User-facing error');
+    expect(outcome.ok).toBe(false);
+    if (!outcome.ok) {
+      expect(outcome.response.status).toBe(500);
+      const body = await outcome.response.json();
+      expect(body.message).toBe(API_ERROR_MESSAGES.CART_MUTATION_INCOMPLETE);
+    }
+  });
+
+  it('uses custom detail message when cart is missing', async () => {
+    const outcome = evaluateCartMutation(undefined, 'err', { detailMessage: 'custom' });
+    expect(outcome.ok).toBe(false);
+    if (!outcome.ok) {
+      const body = await outcome.response.json();
+      expect(body.message).toBe('custom');
+    }
+  });
+});
+
+describe('withResolvedApiHandler', () => {
+  it('returns the resolve response when resolve does not return a string id', async () => {
+    const err = createErrorResponse('missing', { status: HTTP_STATUS.NOT_FOUND });
+    const handler = vi.fn();
+    const wrapped = withResolvedApiHandler(
+      { context: 'test', errorMessage: 'fail' },
+      async () => err,
+      handler,
+    );
+    const res = await wrapped(new NextRequest('http://localhost/api'));
+    expect(handler).not.toHaveBeenCalled();
+    expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+  });
+
+  it('calls the handler with the resolved id and request', async () => {
+    const handler = vi.fn().mockResolvedValue(createSuccessResponse({ ok: true }));
+    const wrapped = withResolvedApiHandler(
+      { context: 'test', errorMessage: 'fail' },
+      async () => 'resolved-id',
+      handler,
+    );
+    const req = new NextRequest('http://localhost/api');
+    await wrapped(req);
+    expect(handler).toHaveBeenCalledWith('resolved-id', req);
+  });
+
+  it('uses withApiHandler error handling when the handler throws', async () => {
+    const handler = vi.fn().mockRejectedValue(new Error('boom'));
+    const wrapped = withResolvedApiHandler(
+      { context: 'test', errorMessage: 'outer fail' },
+      async () => 'id',
+      handler,
+    );
+    const res = await wrapped(new NextRequest('http://localhost/api'));
+    expect(res.status).toBe(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+    const body = await res.json();
+    expect(body.error).toBe('outer fail');
   });
 });
 

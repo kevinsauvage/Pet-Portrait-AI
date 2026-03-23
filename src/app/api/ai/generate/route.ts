@@ -10,17 +10,16 @@ import {
 } from '@/core/utils/api-responses';
 import { requireApiProtection } from '@/core/utils/auth';
 import { createPerformanceLogger, logger } from '@/core/utils/logger.server';
-import { getClientContext } from '@/core/utils/request-identity';
 import { enforceBodySizeLimit, enforceRequestSizeLimit } from '@/core/utils/request-size';
 import { formatZodErrorMessage } from '@/core/utils/zod';
 import { parsePortraitGenerationRequest } from '@/domains/ai/ai-portrait/request';
 import { validateImageFromUrl } from '@/domains/ai/ai-portrait/validate-image';
 import { generatePetPortraitVariations } from '@/domains/ai/portrait-generation.service';
 import { getShopConfig } from '@/domains/shop/get-shop-config.service';
-import { checkRateLimit } from '@/infra/rate-limit/rate-limit';
+import { shopRateLimitExceededResponse } from '@/infra/rate-limit/rate-limit-api-response';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300; // 5 minutes max (safe upper bound)
+export const maxDuration = 300;
 
 export const POST = withApiHandler(
   {
@@ -28,7 +27,8 @@ export const POST = withApiHandler(
     errorMessage: API_ERROR_MESSAGES.AI_PORTRAIT_GENERATION_FAILED,
   },
   async (request: NextRequest) => {
-    const perf = createPerformanceLogger('ai.generate', 2000); // Log if > 2s
+    const perf = createPerformanceLogger('ai.generate', 2000);
+    const perfMeta: Record<string, unknown> = { success: false };
 
     try {
       const sizeError = enforceRequestSizeLimit(request, {
@@ -38,19 +38,13 @@ export const POST = withApiHandler(
       });
       if (sizeError) return sizeError;
 
-      const { identifier } = getClientContext(request.headers);
       const shopConfig = await getShopConfig();
-      const rateLimit = await checkRateLimit(identifier, {
-        prefix: 'ai',
-        maxRequests: shopConfig.rateLimit.ai.maxRequests,
-        windowMs: shopConfig.rateLimit.ai.windowMs,
-      });
-      if (!rateLimit.allowed) {
-        return createErrorResponse(API_ERROR_MESSAGES.TOO_MANY_REQUESTS, {
-          status: HTTP_STATUS.TOO_MANY_REQUESTS,
-          message: `Retry after ${rateLimit.retryAfter} seconds`,
-        });
-      }
+      const rateLimitResponse = await shopRateLimitExceededResponse(
+        request.headers,
+        shopConfig,
+        'ai',
+      );
+      if (rateLimitResponse) return rateLimitResponse;
 
       const authError = await requireApiProtection(request, {
         secretEnv: 'AI_API_SECRET',
@@ -93,11 +87,11 @@ export const POST = withApiHandler(
       }
 
       const result = await generatePetPortraitVariations(originalPhotoUrl, styleId);
-      perf.end({ styleId, success: true });
+      perfMeta.styleId = styleId;
+      perfMeta.success = true;
       return createSuccessResponse(result);
-    } catch (error) {
-      perf.end({ success: false });
-      throw error;
+    } finally {
+      perf.end(perfMeta);
     }
   },
 );

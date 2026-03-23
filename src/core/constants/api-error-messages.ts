@@ -6,6 +6,7 @@
 export const API_ERROR_MESSAGES = {
   CART_NOT_FOUND: 'Your cart could not be found. Please try adding items again.',
   USER_NOT_FOUND: 'User account not found.',
+  USER_NOT_AUTHENTICATED: 'You must be signed in to continue.',
   INVALID_REQUEST_BODY: 'The request is invalid. Please check your input and try again.',
   MISSING_PRODUCT_ID: 'Product ID is required.',
   MISSING_OR_INVALID_PRODUCT_ID: 'A valid product ID is required.',
@@ -27,4 +28,10 @@ export const API_ERROR_MESSAGES = {
   AI_PORTRAIT_GENERATION_FAILED: 'Unable to generate portrait. Please try again or contact support if the issue persists.',
   RATE_LIMIT_EXCEEDED: 'Too many requests. Please wait a moment and try again.',
   TOO_MANY_REQUESTS: 'Too many requests. Please wait a moment and try again.',
+  /** Internal detail when Shopify returns no cart after a mutation (logged in API `message`). */
+  CART_MUTATION_INCOMPLETE: 'Cart operation did not return a valid cart.',
+  FAILED_TO_GET_CREATE_FLOW: 'Unable to load your design session. Please try again.',
+  FAILED_TO_SAVE_CREATE_FLOW: 'Unable to save your design session. Please try again.',
+  FAILED_TO_CLEAR_CREATE_FLOW: 'Unable to clear your design session. Please try again.',
+  FAILED_TO_GENERATE_PRINTFUL_PREVIEW: 'Unable to generate product preview. Please try again.',
 } as const;

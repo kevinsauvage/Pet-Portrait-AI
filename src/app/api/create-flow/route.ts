@@ -1,5 +1,4 @@
-import { type NextRequest } from 'next/server';
-
+import { API_ERROR_MESSAGES } from '@/core/constants/api-error-messages';
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -12,35 +11,34 @@ import {
   getCreateFlowUrl,
   setCreateFlowUrl,
 } from '@/domains/create-flow/create-flow.service';
-import { getUser } from '@/domains/user/get-user';
+import { withAuthenticatedApiHandler } from '@/domains/user/with-authenticated-api-handler';
 
 export const dynamic = 'force-dynamic';
 
 export const GET = withApiHandler(
-  { context: 'GET /api/create-flow', errorMessage: 'Failed to get create flow' },
+  {
+    context: 'GET /api/create-flow',
+    errorMessage: API_ERROR_MESSAGES.FAILED_TO_GET_CREATE_FLOW,
+  },
   async () => {
     const url = await getCreateFlowUrl();
     return createSuccessResponse({ url });
   },
 );
 
-export const POST = withApiHandler(
-  { context: 'POST /api/create-flow', errorMessage: 'Failed to save create flow' },
-  async (request: NextRequest) => {
-    const user = await getUser();
-    if (!user?.id) {
-      return createErrorResponse('User not authenticated', {
-        status: HTTP_STATUS.UNAUTHORIZED,
-      });
-    }
-
+export const POST = withAuthenticatedApiHandler(
+  {
+    context: 'POST /api/create-flow',
+    errorMessage: API_ERROR_MESSAGES.FAILED_TO_SAVE_CREATE_FLOW,
+  },
+  async (userId, request) => {
     const body = await parseJsonBody<{ url?: string }>(request);
     const url = typeof body?.url === 'string' ? body.url : '';
 
-    const result = await setCreateFlowUrl(user.id, url);
+    const result = await setCreateFlowUrl(userId, url);
 
     if (!result.success) {
-      return createErrorResponse(result.message ?? 'Failed to save create flow', {
+      return createErrorResponse(result.message ?? API_ERROR_MESSAGES.FAILED_TO_SAVE_CREATE_FLOW, {
         status: result.invalidInput ? HTTP_STATUS.BAD_REQUEST : HTTP_STATUS.INTERNAL_SERVER_ERROR,
       });
     }
@@ -49,20 +47,16 @@ export const POST = withApiHandler(
   },
 );
 
-export const DELETE = withApiHandler(
-  { context: 'DELETE /api/create-flow', errorMessage: 'Failed to clear create flow' },
-  async () => {
-    const user = await getUser();
-    if (!user?.id) {
-      return createErrorResponse('User not authenticated', {
-        status: HTTP_STATUS.UNAUTHORIZED,
-      });
-    }
-
-    const result = await clearCreateFlowUrl(user.id);
+export const DELETE = withAuthenticatedApiHandler(
+  {
+    context: 'DELETE /api/create-flow',
+    errorMessage: API_ERROR_MESSAGES.FAILED_TO_CLEAR_CREATE_FLOW,
+  },
+  async (userId, _request) => {
+    const result = await clearCreateFlowUrl(userId);
 
     if (!result.success) {
-      return createErrorResponse(result.message ?? 'Failed to clear create flow', {
+      return createErrorResponse(result.message ?? API_ERROR_MESSAGES.FAILED_TO_CLEAR_CREATE_FLOW, {
         status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
       });
     }
