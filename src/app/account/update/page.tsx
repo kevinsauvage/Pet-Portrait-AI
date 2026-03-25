@@ -4,7 +4,6 @@ import seo from '@/core/config/seo';
 import { CreationsService } from '@/domains/creations/creations.service';
 import { CustomerOrdersService } from '@/domains/orders/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
-import { WishlistService } from '@/domains/wishlist/wishlist.service';
 import AccountStats from '@/ui/components/account/AccountStats';
 import UpdateUserForm from '@/ui/components/account/UpdateUserForm';
 import BackButton from '@/ui/components/shared/BackButton';
@@ -21,10 +20,9 @@ export const metadata: Metadata = {
 const Page = async () => {
   const user = await getUser();
 
-  const [ordersResponse, creationsCount, savedPortraitsCount] = await Promise.all([
+  const [ordersResponse, creationsCount] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 1 }),
     CreationsService.getCreationsCount(),
-    WishlistService.getWishlistCount(),
   ]);
 
   const ordersCount = Number(ordersResponse?.customer?.orders?.totalCount || 0);
@@ -54,7 +52,6 @@ const Page = async () => {
             <AccountStats
               ordersCount={ordersCount}
               creationsCount={creationsCount}
-              savedPortraitsCount={savedPortraitsCount}
               memberSince={user.createdAt}
             />
           </CardContent>

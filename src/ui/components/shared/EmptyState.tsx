@@ -21,7 +21,7 @@ type EmptyStateProps = {
   /** Tips list - only shown for error variant */
   tips?: string[];
   /** Variant type */
-  variant?: 'default' | 'cart' | 'search' | 'wishlist' | 'orders' | 'addresses' | 'error';
+  variant?: 'default' | 'cart' | 'search' | 'orders' | 'addresses' | 'error';
 };
 
 const animationClasses = {

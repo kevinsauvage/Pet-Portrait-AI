@@ -280,7 +280,7 @@ curl https://yourdomain.com/api/health
 curl -X POST https://yourdomain.com/api/ai/generate \
   -H "Authorization: Bearer $AI_API_SECRET" \
   -H "Content-Type: application/json" \
-  -d '{"originalPhotoUrl":"...","styleId":"pixar"}'
+  -d '{"imageUrl":"...","styleId":"pixar"}'
 
 # Check admin protection
 curl https://yourdomain.com/admin

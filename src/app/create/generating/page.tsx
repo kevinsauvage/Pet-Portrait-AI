@@ -32,14 +32,17 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
 
   validateAndRedirect('generating', params);
 
-  if (!photo || !styleId) {
-    redirect(config.routes.create);
-  }
-
   const artworkUrls = urls ? urls.split('|').filter(Boolean) : [];
   const hasGeneratedImages = artworkUrls.length > 0 && generationId;
 
+  if (!hasGeneratedImages && (!photo || !styleId)) {
+    redirect(config.routes.create);
+  }
+
   if (!hasGeneratedImages) {
+    if (!photo || !styleId) {
+      redirect(config.routes.create);
+    }
     const result = await generatePortraitAction(photo, styleId);
 
     if (!result.success) {
@@ -73,8 +76,8 @@ export default async function GeneratingPage({ searchParams }: GeneratingPagePro
           <div className="space-y-3">
             <h2 className="text-heading-3 font-semibold">Choose Your Favourite</h2>
             <p className="text-body text-muted-foreground max-w-2xl">
-              Select the portrait you love most to continue. Your creation is automatically saved to
-              your account — you can save any variation to your favourites from the cart.
+              Select the portrait you love most to continue. If you are signed in, your generation is
+              saved under My creations in your account.
             </p>
           </div>
 

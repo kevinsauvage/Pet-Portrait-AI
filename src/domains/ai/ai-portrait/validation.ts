@@ -13,13 +13,13 @@ import { z } from 'zod';
 const styleIdOptionsLabel = validStyleIdsLabel();
 
 const allowedImageHostMessage =
-  'originalPhotoUrl must be HTTPS from an allowed host (UploadThing, or hosts listed in ALLOWED_IMAGE_URL_HOSTS)';
+  'imageUrl must be HTTPS from an allowed host (UploadThing, or hosts listed in ALLOWED_IMAGE_URL_HOSTS)';
 
 export const portraitGenerationRequestSchema = z.object({
-  originalPhotoUrl: z
+  imageUrl: z
     .string()
-    .min(1, 'originalPhotoUrl is required')
-    .url('originalPhotoUrl must be a valid URL')
+    .min(1, 'imageUrl is required')
+    .url('imageUrl must be a valid URL')
     .refine(isTrustedHttpsImageHost, { message: allowedImageHostMessage }),
   styleId: z
     .string()
@@ -38,7 +38,7 @@ export function parsePortraitGenerationRequest(
   return {
     success: true,
     data: {
-      originalPhotoUrl: result.data.originalPhotoUrl,
+      imageUrl: result.data.imageUrl,
       styleId: result.data.styleId as ArtStyleId,
     },
   };

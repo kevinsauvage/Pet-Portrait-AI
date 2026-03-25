@@ -12,7 +12,7 @@ import ProductSelectSheet from './ProductSelectSheet';
 interface CreateProductRowProps {
   product: AiPortraitProduct;
   artworkUrl?: string;
-  originalPhotoUrl?: string;
+  photo?: string;
   styleId?: string;
   generationId?: string;
   urls?: string;
@@ -21,7 +21,7 @@ interface CreateProductRowProps {
 export default function CreateProductRow({
   product,
   artworkUrl,
-  originalPhotoUrl,
+  photo,
   styleId,
   generationId,
   urls,
@@ -67,7 +67,7 @@ export default function CreateProductRow({
       <ProductSelectSheet
         product={product}
         artworkUrl={artworkUrl}
-        originalPhotoUrl={originalPhotoUrl}
+        photo={photo}
         styleId={styleId}
         generationId={generationId}
         urls={urls}

@@ -52,8 +52,9 @@ describe('/api/ai/generate route', () => {
     const generatePetPortraitVariationsMock =
       generatePetPortraitVariations as unknown as ReturnType<typeof vi.fn>;
     generatePetPortraitVariationsMock.mockResolvedValue({
-      id: 'gen-123',
-      variations: ['https://utfs.io/f/image1.png'],
+      urls: ['https://utfs.io/f/image1.png'],
+      generationId: 'gen-123',
+      styleId: 'pixar',
     });
   });
 
@@ -64,7 +65,7 @@ describe('/api/ai/generate route', () => {
   it('POST generates portrait successfully', async () => {
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
+        imageUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -75,7 +76,9 @@ describe('/api/ai/generate route', () => {
     expect(response.status).toBe(200);
     const body = await parseApiRouteJson(response, aiPortraitSuccessBodySchema);
     expect(body.success).toBe(true);
-    expect(body.data.id).toBe('gen-123');
+    expect(body.data.generationId).toBe('gen-123');
+    expect(body.data.styleId).toBe('pixar');
+    expect(body.data.urls).toEqual(['https://utfs.io/f/image1.png']);
     expect(generatePetPortraitVariations).toHaveBeenCalledWith(
       'https://utfs.io/f/pet.jpg',
       'pixar',
@@ -88,7 +91,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
+        imageUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -128,7 +131,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://utfs.io/f/bad-image.jpg',
+        imageUrl: 'https://utfs.io/f/bad-image.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -151,7 +154,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
+        imageUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),
@@ -172,7 +175,7 @@ describe('/api/ai/generate route', () => {
 
     const request = {
       json: vi.fn().mockResolvedValue({
-        originalPhotoUrl: 'https://utfs.io/f/pet.jpg',
+        imageUrl: 'https://utfs.io/f/pet.jpg',
         styleId: 'pixar',
       }),
       headers: new Headers(),

@@ -27,7 +27,7 @@ const CreationsPage = async () => {
       <Card>
         <CardContent>
           <EmptyState
-            variant="wishlist"
+            variant="default"
             image={noFavoriteIllustration}
             title="No creations yet"
             subtitle="Upload a pet photo and choose an art style to generate your first AI portrait. Your creations will appear here."
@@ -49,7 +49,7 @@ const CreationsPage = async () => {
         title={`My Creations (${creations.length})`}
         size={3}
         actions={<BackButton />}
-        description="All the AI portraits you've generated. Click a creation to order it or create a new variation."
+        description="All the AI portraits you've generated. Open a creation to order products or start a new portrait from the home flow."
       />
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

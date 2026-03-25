@@ -2,17 +2,12 @@ import type { Metadata } from 'next';
 
 import seo from '@/core/config/seo';
 import { generateMetadata as generateMetadataUtil } from '@/core/utils/metadata';
-import { getDefaultAiPortraitProduct } from '@/domains/ai/ai-portrait/get-ai-portrait-product.service';
 import { CartService } from '@/domains/cart/cart.service';
-import { WishlistService } from '@/domains/wishlist/wishlist.service';
-import SavedPortraitsList from '@/ui/components/account/SavedPortraitsList';
 import CartEmptyState from '@/ui/components/cart/CartEmptyState';
 import CartHeader from '@/ui/components/cart/CartHeader';
 import CartItemsList from '@/ui/components/cart/CartItemsList';
 import CartPromoCode from '@/ui/components/cart/CartPromoCode';
 import CartSummary from '@/ui/components/cart/CartSummary';
-import CardHeaderPattern from '@/ui/components/shared/CardHeaderPattern';
-import { Card, CardContent } from '@/ui/primitives/card';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,11 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const OrderPage = async () => {
-  const [cartId, savedPortraits, defaultProduct] = await Promise.all([
-    CartService.getCartId(),
-    WishlistService.getWishlist(),
-    getDefaultAiPortraitProduct(),
-  ]);
+  const cartId = await CartService.getCartId();
   let cart = null;
   if (cartId) {
     try {
@@ -69,36 +60,6 @@ const OrderPage = async () => {
                   <CartPromoCode />
                 </div>
               </div>
-            )}
-
-            {savedPortraits.length > 0 && (
-              <section className="mt-6">
-                <Card>
-                  <CardHeaderPattern
-                    title={`Saved for later (${savedPortraits.length})`}
-                    size={4}
-                    as="h2"
-                    description={
-                      savedPortraits.length === 1
-                        ? 'You have 1 portrait saved for later. Tap it to add it back to your cart.'
-                        : `You have ${savedPortraits.length} portraits saved for later. Tap any portrait to add it back to your cart.`
-                    }
-                  />
-                  <CardContent className="pt-0">
-                    <SavedPortraitsList
-                      portraits={savedPortraits}
-                      defaultProduct={
-                        defaultProduct
-                          ? {
-                              product: { handle: defaultProduct.product.handle },
-                              variant: defaultProduct.variant,
-                            }
-                          : null
-                      }
-                    />
-                  </CardContent>
-                </Card>
-              </section>
             )}
           </div>
         </div>

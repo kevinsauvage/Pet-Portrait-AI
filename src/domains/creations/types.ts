@@ -1,6 +1,5 @@
 export type UserCreation = {
   id: string;
-  originalPhotoUrl: string;
   generatedUrls: string[];
   styleId: string;
   generationId: string;

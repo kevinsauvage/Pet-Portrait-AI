@@ -45,13 +45,13 @@ Protected endpoints (`/api/ai/generate`, `/api/uploadthing`) support two authent
 curl -X POST https://yourdomain.com/api/ai/generate \
   -H "Authorization: Bearer your_secret" \
   -H "Content-Type: application/json" \
-  -d '{"originalPhotoUrl":"...","styleId":"pixar"}'
+  -d '{"imageUrl":"...","styleId":"pixar"}'
 
 # Using X-API-Key header
 curl -X POST https://yourdomain.com/api/ai/generate \
   -H "X-API-Key: your_secret" \
   -H "Content-Type: application/json" \
-  -d '{"originalPhotoUrl":"...","styleId":"pixar"}'
+  -d '{"imageUrl":"...","styleId":"pixar"}'
 ```
 
 **Environment Variables:**
@@ -99,7 +99,7 @@ Generate AI pet portrait variations.
 
 ```json
 {
-  "originalPhotoUrl": "https://cdn.example.com/photo.jpg",
+  "imageUrl": "https://cdn.example.com/photo.jpg",
   "styleId": "pixar"
 }
 ```
@@ -121,13 +121,12 @@ Generate AI pet portrait variations.
 {
   "success": true,
   "data": {
-    "variations": [
-      {
-        "url": "https://cdn.example.com/generated-1.jpg",
-        "styleId": "pixar"
-      }
+    "urls": [
+      "https://cdn.example.com/generated-1.png",
+      "https://cdn.example.com/generated-2.png"
     ],
-    "generationId": "gen_123"
+    "generationId": "gen_123",
+    "styleId": "pixar"
   }
 }
 ```
@@ -147,7 +146,7 @@ curl -X POST https://yourdomain.com/api/ai/generate \
   -H "Authorization: Bearer $AI_API_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
-    "originalPhotoUrl": "https://cdn.example.com/pet.jpg",
+    "imageUrl": "https://cdn.example.com/pet.jpg",
     "styleId": "pixar"
   }'
 ```
@@ -231,28 +230,6 @@ Update cart line items.
 #### `DELETE /api/cart/lines`
 
 Remove items from cart.
-
----
-
-### Wishlist
-
-#### `GET /api/wishlist`
-
-Get saved AI portraits (favourites). Each item includes artwork URL, original photo, style, generation id, and optional variant/handle for re-ordering.
-
-**Authentication:** Not required (uses Shopify customer cookies)
-
-#### `POST /api/wishlist`
-
-Add a portrait to favourites. **Body (JSON):** `imageUrl`, `originalPhotoUrl`, `styleId`, `generationId`; optional `label`, `variantId`, `productHandle`.
-
-**Authentication:** Required (Shopify customer)
-
-#### `DELETE /api/wishlist/[portraitId]`
-
-Remove a saved portrait by its **saved entry id** (the `id` on each wishlist item), not by Shopify product id.
-
-**Authentication:** Required (Shopify customer)
 
 ---
 
@@ -430,7 +407,7 @@ curl -X POST https://yourdomain.com/api/ai/generate \
   -H "Authorization: Bearer $AI_API_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
-    "originalPhotoUrl": "https://cdn.example.com/pet.jpg",
+    "imageUrl": "https://cdn.example.com/pet.jpg",
     "styleId": "pixar"
   }'
 

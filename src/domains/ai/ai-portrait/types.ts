@@ -88,12 +88,12 @@ export function validStyleIdsLabel(): string {
 }
 
 export interface PortraitGenerationRequest {
-  originalPhotoUrl: string;
+  imageUrl: string;
   styleId: ArtStyleId;
 }
 
 export interface ArtworkGenerationInput {
-  originalPhotoUrl: string;
+  imageUrl: string;
   styleId: ArtStyleId;
   generationId: string;
 }
@@ -106,7 +106,6 @@ export interface ArtworkGenerationResult {
 
 export interface CartLineArtworkAttributes {
   printful_print_url: string;
-  original_photo_url: string;
   chosen_style: string;
   generation_id: string;
   product_type?: string;

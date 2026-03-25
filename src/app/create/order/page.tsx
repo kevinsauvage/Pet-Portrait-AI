@@ -92,7 +92,7 @@ export default async function CreateOrderPage({ searchParams }: CreateOrderPageP
               <AddToCartIsland
                 product={product}
                 artworkUrl={artwork}
-                originalPhotoUrl={photo}
+                photo={photo}
                 styleId={styleId}
                 generationId={generationId}
                 urls={urls}

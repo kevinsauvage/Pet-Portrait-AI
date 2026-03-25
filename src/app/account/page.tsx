@@ -5,7 +5,6 @@ import seo from '@/core/config/seo';
 import { CreationsService } from '@/domains/creations/creations.service';
 import { CustomerOrdersService } from '@/domains/orders/customer-orders.service';
 import { getUser } from '@/domains/user/get-user';
-import { WishlistService } from '@/domains/wishlist/wishlist.service';
 import AccountCardCTA from '@/ui/components/account/AccountCardCTA';
 import AccountStats from '@/ui/components/account/AccountStats';
 import UserFullName from '@/ui/components/account/UserFullName';
@@ -23,10 +22,9 @@ export const metadata: Metadata = {
 const Page = async () => {
   const user = await getUser();
 
-  const [ordersResponse, creationsCount, savedPortraitsCount] = await Promise.all([
+  const [ordersResponse, creationsCount] = await Promise.all([
     CustomerOrdersService.getCustomerOrders({ first: 3 }),
     CreationsService.getCreationsCount(),
-    WishlistService.getWishlistCount(),
   ]);
 
   const ordersCount = Number(ordersResponse?.customer?.orders?.totalCount || 0);
@@ -47,12 +45,7 @@ const Page = async () => {
           }
         />
         <CardContent className="space-y-6">
-          <AccountStats
-            ordersCount={ordersCount}
-            creationsCount={creationsCount}
-            savedPortraitsCount={savedPortraitsCount}
-            memberSince={user?.createdAt}
-          />
+          <AccountStats ordersCount={ordersCount} creationsCount={creationsCount} memberSince={user?.createdAt} />
 
           {recentOrders.length > 0 && (
             <div className="pt-4 border-t">
@@ -68,10 +61,10 @@ const Page = async () => {
               buttonLink={config.routes.creations}
             />
             <AccountCardCTA
-              title="Saved Portraits"
-              description="Your favourite portraits, ready to order whenever you like"
-              buttonText="View Favourites"
-              buttonLink={config.routes.wishlist}
+              title="My Orders"
+              description="Track shipments and view your order history"
+              buttonText="View Orders"
+              buttonLink={config.routes.orders}
             />
           </div>
         </CardContent>

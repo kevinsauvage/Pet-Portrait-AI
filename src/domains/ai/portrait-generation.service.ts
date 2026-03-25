@@ -162,7 +162,7 @@ async function editImageWithOpenAI(
  * Generates multiple portrait variations of a pet photo in a specified art style.
  * Creates variations based on shop config, uploads them to storage, and logs the results.
  *
- * @param originalPhotoUrl - URL of the original pet photo
+ * @param imageUrl - HTTPS URL of the source pet photo (fetched once per request; not stored on the customer)
  * @param styleId - Art style to apply (e.g., 'pixar', 'watercolor')
  * @returns Object containing the generated image URLs, generation ID, and style ID
  * @throws {Error} If OPENAI_API_KEY is not configured, generation fails, or upload fails
@@ -177,7 +177,7 @@ async function editImageWithOpenAI(
  * ```
  */
 export async function generatePetPortraitVariations(
-  originalPhotoUrl: string,
+  imageUrl: string,
   styleId: ArtStyleId,
 ): Promise<ArtworkGenerationResult> {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -191,7 +191,7 @@ export async function generatePetPortraitVariations(
   const prompt = `Repaint this pet portrait ${getStylePrompt(styleId)}. Preserve the pet's breed, markings, eye color, and pose exactly. Fill the entire canvas. No text, no borders, no watermarks.`;
 
   try {
-    const imageResponse = await fetchTrustedHttpsImage(originalPhotoUrl, {
+    const imageResponse = await fetchTrustedHttpsImage(imageUrl, {
       signal: AbortSignal.timeout(shopConfig.ai.apiTimeoutSeconds * 1000),
     });
     if (!imageResponse.ok)
@@ -210,11 +210,11 @@ export async function generatePetPortraitVariations(
     );
     return { urls, generationId, styleId };
   } catch (error) {
-    let originalPhotoUrlHost: string | undefined;
+    let imageUrlHost: string | undefined;
     try {
-      originalPhotoUrlHost = new URL(originalPhotoUrl).hostname;
+      imageUrlHost = new URL(imageUrl).hostname;
     } catch {
-      originalPhotoUrlHost = undefined;
+      imageUrlHost = undefined;
     }
     logger.error('Pet portrait generation failed', {
       context: 'ai-portrait-generate',
@@ -222,8 +222,8 @@ export async function generatePetPortraitVariations(
       metadata: {
         generationId,
         styleId,
-        originalPhotoUrlLength: originalPhotoUrl.length,
-        originalPhotoUrlHost,
+        imageUrlLength: imageUrl.length,
+        imageUrlHost,
       },
     });
     throw error;

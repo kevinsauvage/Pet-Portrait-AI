@@ -32,7 +32,7 @@ src/
 
   domains/                # Business logic (flat by default: actions, *.service.ts, validation.ts)
     address/ auth/ cart/ collections/ contact/ create-flow/ creations/
-    home/ legal/ navigation/ orders/ products/ search/ shop/ user/ wishlist/
+    home/ legal/ navigation/ orders/ products/ search/ shop/ user/ creations/
     ai/                     # Portrait generation, ai-portrait/ types & flows
     printful/               # Preview service, artwork URL rules, Printful helpers
 

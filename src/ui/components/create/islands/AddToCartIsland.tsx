@@ -29,7 +29,8 @@ const PREVIEW_ERROR_MESSAGE = 'Preview generation failed. Please try again.';
 interface AddToCartIslandProps {
   product: AiPortraitProduct;
   artworkUrl: string;
-  originalPhotoUrl?: string;
+  /** Transient upload URL for create-flow navigation only; not stored on cart lines. */
+  photo?: string;
   styleId?: string;
   generationId?: string;
   urls?: string;
@@ -42,7 +43,7 @@ interface AddToCartIslandProps {
 export default function AddToCartIsland({
   product,
   artworkUrl,
-  originalPhotoUrl,
+  photo,
   styleId,
   generationId,
   urls,
@@ -83,7 +84,7 @@ export default function AddToCartIsland({
     (newPreviewUrl: string | null) => {
       const params = buildCreateFlowQueryString({
         artwork: artworkUrl,
-        photo: originalPhotoUrl,
+        photo,
         styleId,
         generationId,
         urls,
@@ -92,7 +93,7 @@ export default function AddToCartIsland({
       });
       router.replace(`${config.routes.createOrder}${params}`, { scroll: false });
     },
-    [artworkUrl, generationId, originalPhotoUrl, product.handle, router, styleId, urls],
+    [artworkUrl, generationId, photo, product.handle, router, styleId, urls],
   );
 
   useEffect(() => {
@@ -151,7 +152,7 @@ export default function AddToCartIsland({
 
   const cartHref = `${config.routes.cart}${buildCreateFlowQueryString({
     artwork: artworkUrl,
-    photo: originalPhotoUrl,
+    photo,
     styleId,
     generationId,
   })}`;
@@ -167,12 +168,11 @@ export default function AddToCartIsland({
     if (previewUrl) {
       attributes.push({ key: 'printful_preview_url', value: previewUrl });
     }
-    if (originalPhotoUrl) attributes.push({ key: 'original_photo_url', value: originalPhotoUrl });
     if (styleName) attributes.push({ key: 'chosen_style', value: styleName });
     if (generationId) attributes.push({ key: 'generation_id', value: generationId });
 
     return attributes;
-  }, [artworkUrl, generationId, originalPhotoUrl, previewUrl, product.handle, styleId]);
+  }, [artworkUrl, generationId, previewUrl, product.handle, styleId]);
 
   const decrementQuantity = () => {
     setQuantity((current) => (current > 1 ? current - 1 : current));

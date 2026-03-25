@@ -29,11 +29,19 @@ export function validateCreateFlowStep(
       }
       break;
 
-    case 'generating':
+    case 'generating': {
+      const hasCompletedRun =
+        typeof params.urls === 'string' &&
+        params.urls.trim().length > 0 &&
+        Boolean(params.generationId) &&
+        Boolean(params.styleId) &&
+        isValidStyleId(params.styleId);
+      if (hasCompletedRun) break;
       if (!params.photo || !params.styleId || !isValidStyleId(params.styleId)) {
         return { isValid: false, redirectTo: config.routes.create };
       }
       break;
+    }
 
     case 'collections':
       // Collections page doesn't require specific params - it can show empty state

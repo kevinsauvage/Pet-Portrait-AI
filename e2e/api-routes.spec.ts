@@ -20,22 +20,14 @@ test.describe('API Routes', () => {
     expect(body.success).toBe(true);
   });
 
-  test('GET /api/wishlist should return wishlist data', async ({ request }) => {
-    const response = await request.get('/api/wishlist');
-    
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body).toHaveProperty('success');
-  });
-
   test('POST /api/ai/generate should require authentication', async ({ request }) => {
     const response = await request.post('/api/ai/generate', {
       data: {
-        originalPhotoUrl: 'https://example.com/image.jpg',
+        imageUrl: 'https://example.com/image.jpg',
         styleId: 'pixar',
       },
     });
-    
+
     // Should return 401 Unauthorized without proper auth
     expect([401, 403]).toContain(response.status());
   });
@@ -48,7 +40,7 @@ test.describe('API Routes', () => {
         addLines: [{ merchandiseId: 'test-variant', quantity: 1 }],
       },
     });
-    
+
     // Should return 404 if no cart cookie exists
     expect([404, 400]).toContain(response.status());
   });

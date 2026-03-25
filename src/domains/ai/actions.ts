@@ -17,11 +17,11 @@ import * as Sentry from '@sentry/nextjs';
  * This can be called directly from server components or client components
  */
 export async function generatePortraitAction(
-  originalPhotoUrl: string,
+  imageUrl: string,
   styleId: string,
 ): Promise<{ success: true; data: ArtworkGenerationResult } | { success: false; error: string }> {
   const parsed = parsePortraitGenerationRequest({
-    originalPhotoUrl,
+    imageUrl,
     styleId,
   });
 
@@ -33,7 +33,7 @@ export async function generatePortraitAction(
   }
 
   try {
-    const validation = await validateImageFromUrl(parsed.data.originalPhotoUrl);
+    const validation = await validateImageFromUrl(parsed.data.imageUrl);
     if (!validation.valid) {
       return {
         success: false,
@@ -42,7 +42,7 @@ export async function generatePortraitAction(
     }
 
     const result = await generatePetPortraitVariations(
-      parsed.data.originalPhotoUrl,
+      parsed.data.imageUrl,
       parsed.data.styleId,
     );
 
@@ -52,7 +52,6 @@ export async function generatePortraitAction(
         if (!user?.id) return;
         return CreationsService.addCreation(
           {
-            originalPhotoUrl: parsed.data.originalPhotoUrl,
             generatedUrls: result.urls,
             styleId: result.styleId,
             generationId: result.generationId,

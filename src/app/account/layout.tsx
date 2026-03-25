@@ -10,7 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="relative z-10">
         <PageBanner
           title="My Account"
-          description="Manage your PetPortrait AI account — view your AI creations, saved favourites, order history, and personal details all in one place."
+          description="Manage your PetPortrait AI account — view your AI creations, order history, and personal details all in one place."
         />
       </div>
       <div className="relative z-10 container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-6">

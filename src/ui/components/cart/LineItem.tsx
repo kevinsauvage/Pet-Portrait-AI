@@ -5,7 +5,6 @@ import { type CartFieldsFragment } from '@/infra/shopify/generated/storefront/in
 import { formatPrice } from '@/lib/format';
 import OptimizedImage from '@/ui/components/media/OptimizedImage';
 import ProtectedImage from '@/ui/components/media/ProtectedImage';
-import SavePortraitButton from '@/ui/components/wishlist/SavePortraitButton';
 
 import CartRemove from './CartRemove';
 import QuantityUpdatedContainer from './QuantityUpdatedContainer';
@@ -24,15 +23,12 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
     getAttribute(node, 'printful_print_url') ?? getAttribute(node, 'gelato_print_url');
   const previewUrl =
     getAttribute(node, 'printful_preview_url') ?? getAttribute(node, 'gelato_preview_url');
-  const originalPhotoUrl = getAttribute(node, 'original_photo_url');
   const chosenStyle = getAttribute(node, 'chosen_style');
   const generationId = getAttribute(node, 'generation_id');
-  const variantProductHandle =
-    'product' in node.merchandise ? node.merchandise.product?.handle : undefined;
 
   const displayImage = previewUrl ?? artworkUrl ?? node.merchandise.image?.medium;
 
-  const isAiPortrait = Boolean(artworkUrl && originalPhotoUrl && chosenStyle && generationId);
+  const isAiPortrait = Boolean(artworkUrl && chosenStyle && generationId);
 
   const unitPrice =
     typeof node.merchandise.price.amount === 'string'
@@ -141,19 +137,6 @@ const LineItem: React.FC<{ node: CartLineNode }> = ({ node }) => {
             )}
           </div>
         </div>
-
-        {isAiPortrait && (
-          <SavePortraitButton
-            imageUrl={artworkUrl ?? ''}
-            lineItemId={node.id}
-            originalPhotoUrl={originalPhotoUrl ?? ''}
-            styleId={chosenStyle ?? ''}
-            generationId={generationId ?? ''}
-            label={node.merchandise.product.title}
-            variantId={node.merchandise.id}
-            productHandle={variantProductHandle}
-          />
-        )}
       </div>
     </div>
   );

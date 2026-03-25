@@ -6,7 +6,7 @@ const seo = {
       title: 'My Addresses',
     },
     description:
-      'Manage your PetPortrait AI account — view your AI creations, saved portraits, orders, and personal details.',
+      'Manage your PetPortrait AI account — view your AI creations, orders, and personal details.',
     logout: {
       title: 'Sign Out',
     },
@@ -20,11 +20,6 @@ const seo = {
       description:
         'Update your account details — name, email, and preferences for your PetPortrait AI experience.',
       title: 'My Details',
-    },
-    wishlist: {
-      description:
-        'Your saved AI pet portraits, ready to order as a print or digital download whenever you like.',
-      title: 'Saved Portraits',
     },
     creations: {
       description:
@@ -123,7 +118,7 @@ const seo = {
   },
   register: {
     description:
-      'Create a PetPortrait AI account to save your portraits, track orders, and unlock exclusive member pricing.',
+      'Create a PetPortrait AI account to keep a history of your AI creations, track orders, and unlock exclusive member pricing.',
     title: 'Create Account',
   },
   reset: {

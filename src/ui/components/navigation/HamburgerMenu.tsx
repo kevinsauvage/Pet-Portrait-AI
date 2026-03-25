@@ -16,7 +16,7 @@ import {
   SheetTrigger,
 } from '@/ui/primitives/sheet';
 
-import { Heart, LogOut, Menu, Search, ShoppingBag, Sparkles, User } from 'lucide-react';
+import { LogOut, Menu, Search, ShoppingBag, Sparkles, User } from 'lucide-react';
 
 const HamburgerMenu = ({
   navLinks,
@@ -41,12 +41,6 @@ const HamburgerMenu = ({
       id: 'nav-account',
       link: shopifyToken ? config.routes.account : config.routes.login,
       text: shopifyToken ? 'My Account' : 'Sign In',
-    },
-    {
-      icon: Heart,
-      id: 'nav-wishlist',
-      link: config.routes.wishlist,
-      text: 'Wishlist',
     },
     {
       icon: ShoppingBag,

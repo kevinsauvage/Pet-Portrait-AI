@@ -32,7 +32,6 @@ Integration tests test API routes and service interactions.
 **Coverage:**
 - Cart API routes (`/api/cart`, `/api/cart/lines`, `/api/cart/discount-codes`, `/api/cart/buyer-identity`)
 - AI generation API (`/api/ai/generate`)
-- Wishlist API (`/api/wishlist`)
 
 ### E2E Tests (Playwright)
 
@@ -67,7 +66,6 @@ yarn test:e2e:headed    # Run in headed mode (see browser)
 2. **API Routes** (`src/app/api/**`)
    - ✅ Cart routes
    - ✅ AI generation route
-   - ✅ Wishlist routes
    - ⚠️ Search routes (needs tests)
    - ⚠️ Admin routes (needs tests)
 

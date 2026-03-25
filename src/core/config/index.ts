@@ -46,7 +46,6 @@ const config = {
     account: '/account',
     addresses: '/account/addresses',
     updateAccount: '/account/update',
-    wishlist: '/account/wishlist',
     creations: '/account/creations',
     updateAddress: '/account/addresses',
     createAddress: '/account/addresses/create',
@@ -71,7 +70,6 @@ export const accountNav = [
   { title: 'Address book', url: config.routes.addresses },
   { title: 'My orders', url: config.routes.orders },
   { title: 'My creations', url: config.routes.creations },
-  { title: 'Buy later', url: config.routes.wishlist },
   { title: 'Sign out', url: config.routes.logout },
 ];
 
@@ -111,7 +109,6 @@ export const sitemap: MetadataRoute.Sitemap = [
     config.routes.editAddress,
     config.routes.updateAddress,
     config.routes.addresses,
-    config.routes.wishlist,
     config.routes.creations,
     config.routes.orders,
   ].map((url) => sitemapEntry(url)),

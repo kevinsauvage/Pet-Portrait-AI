@@ -26,7 +26,7 @@ export default function AddMoreProductsActions({
   artwork,
 }: AddMoreProductsActionsProps) {
   // Only show if we have the necessary params to go back to collections
-  const hasCreateFlowParams = Boolean(artwork && photo && styleId && generationId);
+  const hasCreateFlowParams = Boolean(artwork && styleId && generationId);
 
   if (!hasCreateFlowParams) {
     return null;
@@ -34,7 +34,7 @@ export default function AddMoreProductsActions({
 
   const collectionsHref = `${config.routes.createCollections}${buildCreateFlowQueryString({
     artwork,
-    photo,
+    photo: photo ?? undefined,
     styleId,
     generationId,
     urls,

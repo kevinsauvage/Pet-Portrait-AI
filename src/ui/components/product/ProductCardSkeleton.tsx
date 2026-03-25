@@ -3,7 +3,7 @@ import { Skeleton } from '@/ui/primitives/skeleton';
 
 type ProductCardSkeletonProps = {
   /**
-   * Show action buttons (wishlist/quick view) - typically for product grid cards
+   * Show action buttons (e.g. quick view) — typically for product grid cards
    */
   showActions?: boolean;
   /**

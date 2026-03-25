@@ -68,25 +68,25 @@ export const POST = withApiHandler(
         });
       }
 
-      const { originalPhotoUrl, styleId } = parsedBody.data;
+      const { imageUrl, styleId } = parsedBody.data;
 
       logger.info('Starting AI portrait generation', {
         context: 'ai.generate',
         metadata: { styleId },
       });
 
-      const validation = await validateImageFromUrl(originalPhotoUrl);
+      const validation = await validateImageFromUrl(imageUrl);
       if (!validation.valid) {
         logger.warn('Image validation failed', {
           context: 'ai.generate',
-          metadata: { originalPhotoUrl: '[REDACTED]' },
+          metadata: { imageUrl: '[REDACTED]' },
         });
         return createErrorResponse(validation.error ?? 'Invalid image', {
           status: HTTP_STATUS.BAD_REQUEST,
         });
       }
 
-      const result = await generatePetPortraitVariations(originalPhotoUrl, styleId);
+      const result = await generatePetPortraitVariations(imageUrl, styleId);
       perfMeta.styleId = styleId;
       perfMeta.success = true;
       return createSuccessResponse(result);

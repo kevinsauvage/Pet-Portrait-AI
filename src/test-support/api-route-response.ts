@@ -32,8 +32,9 @@ export function apiSuccessBodyWithData<T extends z.ZodTypeAny>(dataSchema: T) {
 }
 
 export const aiPortraitGenerationResultSchema = z.object({
-  id: z.string(),
-  variations: z.array(z.string()),
+  urls: z.array(z.string()),
+  generationId: z.string(),
+  styleId: z.string(),
 });
 
 export const aiPortraitSuccessBodySchema = apiSuccessBodyWithData(aiPortraitGenerationResultSchema);

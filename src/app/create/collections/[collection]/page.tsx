@@ -65,7 +65,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               key={product.shopifyProductId}
               product={product}
               artworkUrl={artwork}
-              originalPhotoUrl={photo}
+              photo={photo}
               styleId={styleId}
               generationId={generationId}
               urls={urls}

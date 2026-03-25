@@ -23,7 +23,7 @@ import { ChevronRight } from 'lucide-react';
 interface ProductSelectSheetProps {
   product: AiPortraitProduct;
   artworkUrl?: string;
-  originalPhotoUrl?: string;
+  photo?: string;
   styleId?: string;
   generationId?: string;
   urls?: string;
@@ -34,7 +34,7 @@ interface ProductSelectSheetProps {
 export default function ProductSelectSheet({
   product,
   artworkUrl,
-  originalPhotoUrl,
+  photo,
   styleId,
   generationId,
   urls,
@@ -50,7 +50,7 @@ export default function ProductSelectSheet({
   const handleSelect = () => {
     const queryString = buildCreateFlowQueryString({
       artwork: artworkUrl,
-      photo: originalPhotoUrl,
+      photo,
       styleId,
       generationId,
       urls,

@@ -4,7 +4,7 @@ This document describes the `src/` layout after the domains + infra migration.
 
 ## Overview
 
-- **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, wishlist, orders, products). Each domain is mostly **flat**: `actions.ts`, `validation.ts`, and `*.service.ts` files at the root; use subfolders only when there are several concerns (e.g. `products/services`, `ai/ai-portrait`).
+- **domains/** — Domain logic (auth, user, address, cart, ai, collections, contact, home, legal, navigation, search, orders, products). Each domain is mostly **flat**: `actions.ts`, `validation.ts`, and `*.service.ts` files at the root; use subfolders only when there are several concerns (e.g. `products/services`, `ai/ai-portrait`).
 - **infra/** — Infrastructure: Shopify client (storefront + admin), upload (Uploadthing), email, cache, http (API client), rate-limit. No business logic.
 - **core/** — App-wide config, errors, and shared utils (api-responses, form-actions incl. `FormActionResult`, cookie-security).
 - **lib/** — Pure helpers and app infra: format, html, cn, consents, cookies (server actions), client (cookies, analytics), TanStack Query (`query-client.ts`), `safe-action.ts` (next-safe-action client).
@@ -42,8 +42,7 @@ src/
 │   ├── products/           # services/, mappers/, repositories/, images.ts, inventory.ts, validation.ts
 │   ├── search/             # actions.ts, types.ts, search.service.ts, sort-options.ts
 │   ├── shop/               # get-shop-config.service.ts
-│   ├── user/               # actions.ts, user.service.ts, get-user.ts, validation.ts
-│   └── wishlist/           # wishlist.service.ts, types.ts, client.ts, validation.ts
+│   └── user/               # actions.ts, user.service.ts, get-user.ts, validation.ts
 ├── hooks/
 ├── infra/                  # Infrastructure
 │   ├── shopify/            # storefront, admin, tokens, server (token + url helpers)
@@ -96,10 +95,10 @@ Anything outside this table should be treated as coupling to fix (e.g. move shar
 
 ## Infra
 
-- **infra/shopify** — Storefront + Admin SDK, token/URL helpers. Used by domains (address, user, auth, cart, wishlist, products, etc.) and app. Product mappers/repositories live in the products domain.
+- **infra/shopify** — Storefront + Admin SDK, token/URL helpers. Used by domains (address, user, auth, cart, products, etc.) and app. Product mappers/repositories live in the products domain.
 - **infra/upload** — Uploadthing (used by create flow).
 - **infra/email** — Email sending (e.g. order confirmation).
-- **infra/http** — Shared API client for client-side calls (wishlist, cart context, create wizard).
+- **infra/http** — Shared API client for client-side calls (cart context, create wizard).
 - **infra/rate-limit** — AI generation rate limiting.
 
 ---

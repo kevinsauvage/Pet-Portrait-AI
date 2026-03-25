@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { accountNav } from '@/core/config';
 import { cn } from '@/lib/utils';
 
-import { BookText, BookUser, Heart, LogOut, Package, Sparkles, User } from 'lucide-react';
+import { BookText, BookUser, LogOut, Package, Sparkles, User } from 'lucide-react';
 
 const getLinkIcon = (title: string) => {
   const icons = {
@@ -15,7 +15,6 @@ const getLinkIcon = (title: string) => {
     'My details': <BookText size={16} className="text-secondary shrink-0" />,
     'My orders': <Package size={16} className="text-secondary shrink-0" />,
     'My creations': <Sparkles size={16} className="text-secondary shrink-0" />,
-    'Buy later': <Heart size={16} className="text-secondary shrink-0" />,
     'Sign out': <LogOut size={16} className="text-secondary shrink-0" />,
   };
 
